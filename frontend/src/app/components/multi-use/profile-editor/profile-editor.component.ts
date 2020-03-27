@@ -93,10 +93,6 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     user.password = this.registerForm.controls.password.value;
     user.zipCode = this.registerForm.controls.zipCode.value;
     user.canton = this.registerForm.controls.canton.value;
-    // TODO update canton based on zipCode if nothing is selected -> todo needs to be changed depending on the backend
-    if (user.canton === undefined) {
-      user.canton = 1;
-    }
     user.notCH = this.registerForm.controls.notCH.value;
     if (this.registerForm.valid) {
       if (this.isNewUser) {
