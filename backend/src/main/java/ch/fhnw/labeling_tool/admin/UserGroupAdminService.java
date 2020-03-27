@@ -20,6 +20,9 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.jooq.DSLContext;
+import org.jooq.Record5;
+import org.jooq.SelectOrderByStep;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +61,7 @@ public class UserGroupAdminService {
         this.userDao = userDao;
     }
 
-    public void postOriginalText(long groupId, long domainId, MultipartFile[] files) {
+    public void postOriginalText(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
         isAllowed(groupId);
         var parser = new AutoDetectParser(TikaConfig.getDefaultConfig());
         var path = labelingToolConfig.getBasePath().resolve("extracted_text");
@@ -75,9 +78,7 @@ public class UserGroupAdminService {
                 metadata.add(Metadata.CONTENT_TYPE, file.getContentType());
                 parser.parse(new ByteArrayInputStream(file.getBytes()), bodyContentHandler, metadata);
                 var text = bodyContentHandler.toString();
-                //TODO add licence field in the frontend
-                var licence = "";
-                OriginalText originalText = new OriginalText(null, groupId, domainId, customUserDetailsService.getLoggedInUserId(), null, licence);
+                OriginalText originalText = new OriginalText(null, groupId, domainId, customUserDetailsService.getLoggedInUserId(), null, documentLicence);
                 OriginalTextRecord textRecord = dslContext.newRecord(ORIGINAL_TEXT, originalText);
                 textRecord.store();
                 Long id = textRecord.getId();
@@ -120,21 +121,21 @@ public class UserGroupAdminService {
 
     }
 
-    public List<OverviewOccurrence> getOverviewOccurrence(long groupId, OccurrenceMode mode) {
+    public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
-        if (mode == OccurrenceMode.TEXT_AUDIO) {
-            if (labelingToolConfig.getPublicGroupId().equals(groupId))
-                return dslContext.select(TEXT_AUDIO.ID, TEXT_AUDIO.CORRECT, TEXT_AUDIO.WRONG, TEXT_AUDIO.TEXT)
-                        .from(TEXT_AUDIO)
-                        .where(TEXT_AUDIO.CORRECT.plus(TEXT_AUDIO.WRONG).ge(0L))
-                        .fetchInto(OverviewOccurrence.class);
-            else return List.of();
-        } else {
-            return dslContext.select(RECORDING.ID, RECORDING.CORRECT, RECORDING.WRONG, EXCERPT.EXCERPT_)
-                    .from(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
-                    .where(RECORDING.LABEL.eq(RecordingLabel.RECORDED).and(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId).and(RECORDING.CORRECT.plus(RECORDING.WRONG).ge(0L))))
-                    .fetchInto(OverviewOccurrence.class);
+        //TODO implement pagination for increased performance
+        var step = dslContext.select(RECORDING.ID, RECORDING.CORRECT, RECORDING.WRONG, EXCERPT.EXCERPT_.as("text"), DSL.inline(OccurrenceMode.RECORDING.name()).as("mode"))
+                .from(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
+                .where(RECORDING.LABEL.eq(RecordingLabel.RECORDED).and(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId).and(RECORDING.CORRECT.plus(RECORDING.WRONG).ge(0L))));
+        if (labelingToolConfig.getPublicGroupId() == groupId) {
+            SelectOrderByStep<Record5<Long, Long, Long, String, String>> mode = dslContext.select(TEXT_AUDIO.ID, TEXT_AUDIO.CORRECT, TEXT_AUDIO.WRONG, TEXT_AUDIO.TEXT, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
+                    .from(TEXT_AUDIO)
+                    .where(TEXT_AUDIO.CORRECT.plus(TEXT_AUDIO.WRONG).ge(0L))
+                    .union(step);
+            System.out.println(mode.getSQL());
+            return mode.fetchInto(OverviewOccurrence.class);
         }
+        return step.fetchInto(OverviewOccurrence.class);
     }
 
     public List<UserGroupRoleDto> getUserGroupRole(UserGroupRoleRole mode, long groupId) {
@@ -181,5 +182,10 @@ public class UserGroupAdminService {
         isAllowed(groupId);
         var textAudio = dslContext.select(SOURCE.RAW_AUDIO_PATH).from(TEXT_AUDIO.join(SOURCE).onKey()).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOne(SOURCE.RAW_AUDIO_PATH);
         return Files.readAllBytes(labelingToolConfig.getBasePath().resolve(textAudio));
+    }
+
+    public void putDescription(long groupId, String description) {
+        isAllowed(groupId);
+        dslContext.update(USER_GROUP).set(USER_GROUP.DESCRIPTION, description).execute();
     }
 }

@@ -39,8 +39,8 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])],
       username: [this.user.username, [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]],
-      canton: [this.user.dialectId, []],
-      zipCode: [this.user.zipCode, [Validators.required]],
+      canton: [undefined, []],
+      zipCode: [undefined, [Validators.required]],
       password: undefined,
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
@@ -54,7 +54,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
       ])];
     }
     this.registerForm = this.formBuilder.group(cc);
-    this.userCopy = JSON.parse(JSON.stringify(this.user))
+    this.userCopy = JSON.parse(JSON.stringify(this.user));
     //TODO change zipcode/canton validators
     /*
     this.form.get('userCategory').valueChanges
@@ -118,9 +118,11 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     }
   }
 
+  isCanctonError(errorCode: string) {
+    return this.registerForm.controls.zipCode.hasError(errorCode) || this.registerForm.controls.canton.hasError(errorCode);
+  }
+
   cancel = () => this.output.emit('cancel');
-  isLNError = (errorCode: string) => this.registerForm.controls.lastName.hasError(errorCode);
-  isFNError = (errorCode: string) => this.registerForm.controls.firstName.hasError(errorCode);
   isEmailError = (errorCode: string) => this.registerForm.controls.email.hasError(errorCode);
   isUNError = (errorCode: string) => this.registerForm.controls.username.hasError(errorCode);
   isPwError = (errorCode: string) => this.registerForm.controls.password.hasError(errorCode);

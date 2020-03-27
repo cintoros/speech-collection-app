@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements Record6<Long, String, String, String, String, String> {
 
-    private static final long serialVersionUID = -377326621;
+    private static final long serialVersionUID = -2038396445;
 
     public void setId(Long value) {
         set(0, value);
@@ -34,7 +34,7 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @NotNull
-    @Size(max = 65535)
+    @Size(max = 16777215)
     public String getDescription() {
         return (String) get(1);
     }
@@ -73,7 +73,7 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         set(5, value);
     }
 
-    @Size(max = 65535)
+    @Size(max = 16777215)
     public String getLicence() {
         return (String) get(5);
     }

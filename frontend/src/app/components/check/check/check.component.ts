@@ -1,10 +1,9 @@
-import {Component, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../../services/auth.service';
 import {CheckMoreComponent} from '../check-more/check-more.component';
 import {ShortcutComponent} from '../shortcut/shortcut.component';
 import {HttpClient} from '@angular/common/http';
-import {TextAudioDto} from '../../../models/text-audio-dto';
 import {environment} from '../../../../environments/environment';
 import {CarouselComponent} from 'ngx-carousel-lib';
 import {CheckedOccurrence, CheckedOccurrenceLabel, Occurrence} from './checked-occurrence';
@@ -20,9 +19,7 @@ export enum OccurrenceMode {
   templateUrl: './check.component.html',
   styleUrls: ['./check.component.scss']
 })
-// TODO add message in case someone is labeling textaudio but has not selected the public group?
 export class CheckComponent implements OnInit {
-  @Input() checkMode: OccurrenceMode;
   isPlaying = false;
   occurrences: Array<Occurrence> = [];
   audioProgress = 0;
@@ -66,8 +63,8 @@ export class CheckComponent implements OnInit {
     if (this.isReady) {
       this.stop();
 
-      const textAudio = this.occurrences[this.carousel.carousel.activeIndex];
-      const cta = new CheckedOccurrence(textAudio.id, this.userId, checkType, this.checkMode);
+      const occurrence = this.occurrences[this.carousel.carousel.activeIndex];
+      const cta = new CheckedOccurrence(occurrence.id, this.userId, checkType, occurrence.mode);
       this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta).subscribe();
 
       // checkIfFinishedChunk
@@ -114,7 +111,7 @@ export class CheckComponent implements OnInit {
   }
 
   private getTenNonLabeledTextAudios() {
-    this.httpClient.get<Array<TextAudioDto>>(`${environment.url}user_group/${this.groupId}/occurrence/next?mode=${this.checkMode}`)
+    this.httpClient.get<Array<Occurrence>>(`${environment.url}user_group/${this.groupId}/occurrence/next`)
       .subscribe(textAudios => {
         this.occurrences = textAudios;
         if (textAudios.length > 0) {
@@ -123,8 +120,8 @@ export class CheckComponent implements OnInit {
       });
   }
 
-  private loadAudioBlob(dto: Occurrence): void {
-    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${dto.id}?mode=${this.checkMode}`, {responseType: 'blob'})
+  private loadAudioBlob(occurrence: Occurrence): void {
+    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${occurrence.id}?mode=${occurrence.mode}`, {responseType: 'blob'})
       .subscribe(resp => {
         this.audioPlayer = new Audio(URL.createObjectURL(resp));
         this.audioPlayer.onended = () => this.isPlaying = false;

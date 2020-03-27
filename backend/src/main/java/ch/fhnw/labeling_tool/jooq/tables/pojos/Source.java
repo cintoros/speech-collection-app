@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Source implements Serializable {
 
-    private static final long serialVersionUID = 777999557;
+    private static final long serialVersionUID = -2039825469;
 
     private Long   id;
     private String description;
@@ -58,7 +58,7 @@ public class Source implements Serializable {
     }
 
     @NotNull
-    @Size(max = 65535)
+    @Size(max = 16777215)
     public String getDescription() {
         return this.description;
     }
@@ -97,7 +97,7 @@ public class Source implements Serializable {
         this.rawFilePath = rawFilePath;
     }
 
-    @Size(max = 65535)
+    @Size(max = 16777215)
     public String getLicence() {
         return this.licence;
     }

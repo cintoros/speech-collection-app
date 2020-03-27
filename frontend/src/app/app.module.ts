@@ -47,13 +47,12 @@ import {MatSortModule} from '@angular/material/sort';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
 import {HomeComponent} from './components/home/home.component';
 import {UserGroupRoleComponent} from './components/multi-use/user-group-role/user-group-role.component';
-import {CheckRecordingComponent} from './components/check/check-recording.component';
-import {CheckTextAudioComponent} from './components/check/check-text-audio.component';
 import {EditTextAudioComponent} from './components/admin/overview/edit-text-audio/edit-text-audio.component';
 import {AdminGuardService} from './guards/admin-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {MarkdownModule, MarkdownService} from 'ngx-markdown';
-import { DocumentOverviewComponent } from './document-overview/document-overview.component';
+import {DocumentOverviewComponent} from './document-overview/document-overview.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -73,8 +72,6 @@ import { DocumentOverviewComponent } from './document-overview/document-overview
     GroupAdminComponent,
     HomeComponent,
     UserGroupRoleComponent,
-    CheckRecordingComponent,
-    CheckTextAudioComponent,
     EditTextAudioComponent,
     DocumentOverviewComponent
   ],
@@ -112,6 +109,7 @@ import { DocumentOverviewComponent } from './document-overview/document-overview
     MarkdownModule.forRoot({
       sanitize: SecurityContext.HTML
     }),
+    MatTabsModule,
   ],
   providers: [
     HttpClient,

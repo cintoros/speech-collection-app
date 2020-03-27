@@ -6,6 +6,22 @@
     <b>Excerpt: </b><span>{{excerpt?.excerpt}}</span>
   </mat-card>
   <div class="margin">
+    <mat-form-field class="max-width">
+      <mat-label>Noise level</mat-label>
+      <mat-select [(ngModel)]="selectedNoiseLevel">
+        <mat-option [value]="recordingNoiseLevel.NO_NOISE">No noise</mat-option>
+        <mat-option [value]="recordingNoiseLevel.MODERATE_NOISE">Moderate noise</mat-option>
+        <mat-option [value]="recordingNoiseLevel.VERY_NOISY">Very Noisy</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="max-width">
+      <mat-label>Mic quality</mat-label>
+      <mat-select [(ngModel)]="selectedQuality">
+        <mat-option [value]="recordingQuality.INTEGRATED">Integrated</mat-option>
+        <mat-option [value]="recordingQuality.DEDICATED">Dedicated</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
     <audio [src]="blobUrl" controls></audio>
     <br>
     <br>

@@ -4,9 +4,8 @@ import wave
 
 import mysql.connector
 from bs4 import BeautifulSoup
-from pydub import AudioSegment
-
 from config import *
+from pydub import AudioSegment
 
 connection = mysql.connector.connect(
     host=host,
@@ -16,6 +15,8 @@ connection = mysql.connector.connect(
 )
 connection.autocommit = False
 cursor = connection.cursor(dictionary=True)
+
+logging.basicConfig(level=logging.INFO)
 
 
 def get_last_insert_id(dict_cursor):
@@ -50,6 +51,7 @@ def search_directories():
 
 def extract_data_to_db(folderNumber: str):
     try:
+        logging.info('Loading ' + folderNumber)
         index = os.path.join(source_dir, folderNumber, 'indexes.xml')
         audio = os.path.join(source_dir, folderNumber, 'audio.wav')
         cursor.execute('insert into source(description,name,raw_audio_path,raw_file_path) VALUE(%s,%s,%s,%s)',

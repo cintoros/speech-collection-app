@@ -5,6 +5,8 @@ package ch.fhnw.labeling_tool.jooq.tables.daos;
 
 
 import ch.fhnw.labeling_tool.jooq.enums.RecordingLabel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingNoiseLevel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingQuality;
 import ch.fhnw.labeling_tool.jooq.tables.Recording;
 import ch.fhnw.labeling_tool.jooq.tables.records.RecordingRecord;
 
@@ -101,5 +103,21 @@ public class RecordingDao extends DAOImpl<RecordingRecord, ch.fhnw.labeling_tool
 
     public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Recording> fetchByDeleted(Timestamp... values) {
         return fetch(Recording.RECORDING.DELETED, values);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Recording> fetchRangeOfQuality(RecordingQuality lowerInclusive, RecordingQuality upperInclusive) {
+        return fetchRange(Recording.RECORDING.QUALITY, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Recording> fetchByQuality(RecordingQuality... values) {
+        return fetch(Recording.RECORDING.QUALITY, values);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Recording> fetchRangeOfNoiseLevel(RecordingNoiseLevel lowerInclusive, RecordingNoiseLevel upperInclusive) {
+        return fetchRange(Recording.RECORDING.NOISE_LEVEL, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Recording> fetchByNoiseLevel(RecordingNoiseLevel... values) {
+        return fetch(Recording.RECORDING.NOISE_LEVEL, values);
     }
 }

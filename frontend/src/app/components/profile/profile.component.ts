@@ -6,7 +6,6 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ChangePassword} from '../../models/change-password';
 import {SnackBarService} from '../../services/snack-bar.service';
-import {log} from 'util';
 import {Dialect} from '../../models/dialect';
 import {DialectService} from '../../services/dialect.service';
 

@@ -5,7 +5,7 @@
   </mat-form-field>
   <mat-form-field class="max-width">
     <input autocomplete="family-name" formControlName="lastName" matInput placeholder="Last Name" type="text">
-    <mat-error *ngIf="isLNError('required')">Please enter your last name</mat-error>
+    <mat-error *ngIf="isCanctonError('required')">Please enter your last name</mat-error>
   </mat-form-field>
   <mat-form-field class="max-width">
     <input autocomplete="username" formControlName="username" matInput placeholder="Username*" type="text">
@@ -55,11 +55,11 @@
   </mat-form-field>
   <span style="color: grey;font-size: 0.8em">* Indicates a required field</span>
   <!--TODO implement a selection that makes sense-->
+  <mat-error *ngIf="isCanctonError('required')">Please enter the zip code of your last school years or the canton which
+    had the most influence over your dialect.
+  </mat-error>
   <mat-form-field class="max-width">
-    <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="*Zip Code" type="text">
-    <mat-error *ngIf="isLNError('required')">Please enter the zip code of your last school years, in case you are not
-      sure you may also enter the canton.
-    </mat-error>
+    <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="Zip Code" type="text">
   </mat-form-field>
   <mat-form-field class="max-width">
     <mat-label>Canton</mat-label>

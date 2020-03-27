@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {Recording} from '../../models/recording';
+import {Recording, RecordingNoiseLevel, RecordingQuality} from '../../models/recording';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SnackBarService} from '../../services/snack-bar.service';
@@ -17,6 +17,10 @@ export class RecordComponent implements OnInit {
   excerpt: Excerpt = null;
   isRecording = false;
   blobUrl: SafeUrl;
+  recordingQuality = RecordingQuality;
+  recordingNoiseLevel = RecordingNoiseLevel;
+  selectedQuality = RecordingQuality.INTEGRATED;
+  selectedNoiseLevel = RecordingNoiseLevel.MODERATE_NOISE;
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
   private audioChunks = [];
@@ -62,10 +66,10 @@ export class RecordComponent implements OnInit {
   }
 
   submit(): void {
-    const recording = new Recording(undefined, this.excerpt.id, undefined, undefined, undefined);
+    const recording = new Recording(undefined, this.excerpt.id, undefined, undefined, undefined, this.selectedQuality, this.selectedNoiseLevel);
     const formData = new FormData();
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
-    formData.append('excerptId', recording.excerptId + '');
+    formData.append('recording', JSON.stringify(recording));
     this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
       this.audioChunks = [];
       this.blobUrl = undefined;

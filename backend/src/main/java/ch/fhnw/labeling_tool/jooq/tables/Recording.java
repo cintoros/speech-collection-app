@@ -8,6 +8,8 @@ import ch.fhnw.labeling_tool.jooq.Indexes;
 import ch.fhnw.labeling_tool.jooq.Keys;
 import ch.fhnw.labeling_tool.jooq.LabelingTool;
 import ch.fhnw.labeling_tool.jooq.enums.RecordingLabel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingNoiseLevel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingQuality;
 import ch.fhnw.labeling_tool.jooq.tables.records.RecordingRecord;
 
 import java.sql.Timestamp;
@@ -20,7 +22,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Recording extends TableImpl<RecordingRecord> {
 
-    private static final long serialVersionUID = -393432406;
+    private static final long serialVersionUID = -315290139;
 
     public static final Recording RECORDING = new Recording();
 
@@ -56,6 +58,10 @@ public class Recording extends TableImpl<RecordingRecord> {
     public final TableField<RecordingRecord, Long> CORRECT = createField(DSL.name("correct"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     public final TableField<RecordingRecord, Timestamp> DELETED = createField(DSL.name("deleted"), org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
+    public final TableField<RecordingRecord, RecordingQuality> QUALITY = createField(DSL.name("quality"), org.jooq.impl.SQLDataType.VARCHAR(10).defaultValue(org.jooq.impl.DSL.inline("'INTEGRATED'", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.labeling_tool.jooq.enums.RecordingQuality.class), this, "");
+
+    public final TableField<RecordingRecord, RecordingNoiseLevel> NOISE_LEVEL = createField(DSL.name("noise_level"), org.jooq.impl.SQLDataType.VARCHAR(14).defaultValue(org.jooq.impl.DSL.inline("'NO_NOISE'", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.labeling_tool.jooq.enums.RecordingNoiseLevel.class), this, "");
 
     public Recording() {
         this(DSL.name("recording"), null);
@@ -140,11 +146,11 @@ public class Recording extends TableImpl<RecordingRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp, RecordingQuality, RecordingNoiseLevel> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

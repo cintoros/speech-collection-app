@@ -5,6 +5,8 @@ package ch.fhnw.labeling_tool.jooq.tables.records;
 
 
 import ch.fhnw.labeling_tool.jooq.enums.RecordingLabel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingNoiseLevel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingQuality;
 import ch.fhnw.labeling_tool.jooq.tables.Recording;
 
 import java.sql.Timestamp;
@@ -13,15 +15,15 @@ import javax.validation.constraints.NotNull;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record8;
-import org.jooq.Row8;
+import org.jooq.Record10;
+import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implements Record8<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp> {
+public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implements Record10<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp, RecordingQuality, RecordingNoiseLevel> {
 
-    private static final long serialVersionUID = 1257347394;
+    private static final long serialVersionUID = 418877325;
 
     public void setId(Long value) {
         set(0, value);
@@ -89,6 +91,22 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
         return (Timestamp) get(7);
     }
 
+    public void setQuality(RecordingQuality value) {
+        set(8, value);
+    }
+
+    public RecordingQuality getQuality() {
+        return (RecordingQuality) get(8);
+    }
+
+    public void setNoiseLevel(RecordingNoiseLevel value) {
+        set(9, value);
+    }
+
+    public RecordingNoiseLevel getNoiseLevel() {
+        return (RecordingNoiseLevel) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -99,17 +117,17 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record8 type implementation
+    // Record10 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp, RecordingQuality, RecordingNoiseLevel> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row8<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp> valuesRow() {
-        return (Row8) super.valuesRow();
+    public Row10<Long, Long, Long, Timestamp, RecordingLabel, Long, Long, Timestamp, RecordingQuality, RecordingNoiseLevel> valuesRow() {
+        return (Row10) super.valuesRow();
     }
 
     @Override
@@ -153,6 +171,16 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
     }
 
     @Override
+    public Field<RecordingQuality> field9() {
+        return Recording.RECORDING.QUALITY;
+    }
+
+    @Override
+    public Field<RecordingNoiseLevel> field10() {
+        return Recording.RECORDING.NOISE_LEVEL;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -193,6 +221,16 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
     }
 
     @Override
+    public RecordingQuality component9() {
+        return getQuality();
+    }
+
+    @Override
+    public RecordingNoiseLevel component10() {
+        return getNoiseLevel();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -230,6 +268,16 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
     @Override
     public Timestamp value8() {
         return getDeleted();
+    }
+
+    @Override
+    public RecordingQuality value9() {
+        return getQuality();
+    }
+
+    @Override
+    public RecordingNoiseLevel value10() {
+        return getNoiseLevel();
     }
 
     @Override
@@ -281,7 +329,19 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
     }
 
     @Override
-    public RecordingRecord values(Long value1, Long value2, Long value3, Timestamp value4, RecordingLabel value5, Long value6, Long value7, Timestamp value8) {
+    public RecordingRecord value9(RecordingQuality value) {
+        setQuality(value);
+        return this;
+    }
+
+    @Override
+    public RecordingRecord value10(RecordingNoiseLevel value) {
+        setNoiseLevel(value);
+        return this;
+    }
+
+    @Override
+    public RecordingRecord values(Long value1, Long value2, Long value3, Timestamp value4, RecordingLabel value5, Long value6, Long value7, Timestamp value8, RecordingQuality value9, RecordingNoiseLevel value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -290,6 +350,8 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
         value6(value6);
         value7(value7);
         value8(value8);
+        value9(value9);
+        value10(value10);
         return this;
     }
 
@@ -301,7 +363,7 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
         super(Recording.RECORDING);
     }
 
-    public RecordingRecord(Long id, Long excerptId, Long userId, Timestamp time, RecordingLabel label, Long wrong, Long correct, Timestamp deleted) {
+    public RecordingRecord(Long id, Long excerptId, Long userId, Timestamp time, RecordingLabel label, Long wrong, Long correct, Timestamp deleted, RecordingQuality quality, RecordingNoiseLevel noiseLevel) {
         super(Recording.RECORDING);
 
         set(0, id);
@@ -312,5 +374,7 @@ public class RecordingRecord extends UpdatableRecordImpl<RecordingRecord> implem
         set(5, wrong);
         set(6, correct);
         set(7, deleted);
+        set(8, quality);
+        set(9, noiseLevel);
     }
 }
