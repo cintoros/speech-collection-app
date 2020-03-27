@@ -53,6 +53,7 @@ import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {MarkdownModule, MarkdownService} from 'ngx-markdown';
 import {DocumentOverviewComponent} from './document-overview/document-overview.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -110,6 +111,7 @@ import {MatTabsModule} from '@angular/material/tabs';
       sanitize: SecurityContext.HTML
     }),
     MatTabsModule,
+    MatCheckboxModule,
   ],
   providers: [
     HttpClient,

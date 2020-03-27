@@ -22,8 +22,10 @@ export class User {
   licence: Licence;
   age: UserAge;
   zipCode: string;
+  notCH: boolean;
 
-  constructor(id: number, firstName: string, lastName: string, email: string, username: string, password: string, dialectId: number, sex: Sex, licence: Licence, age: UserAge, zipCode: string) {
+
+  constructor(id: number, firstName: string, lastName: string, email: string, username: string, password: string, dialectId: number, sex: Sex, licence: Licence, age: UserAge, zipCode: string, notCH: boolean) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -35,7 +37,8 @@ export class User {
     this.licence = licence;
     this.age = age;
     this.zipCode = zipCode;
+    this.notCH = notCH;
   }
 
-  static default = () => new User(undefined, '', '', '', '', '', 1, Sex.NONE, Licence.PUBLIC, UserAge.NONE, undefined);
+  static default = () => new User(undefined, '', '', '', '', '', undefined, Sex.NONE, Licence.PUBLIC, UserAge.NONE, undefined, false);
 }

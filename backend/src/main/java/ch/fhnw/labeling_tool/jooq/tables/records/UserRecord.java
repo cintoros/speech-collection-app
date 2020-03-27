@@ -14,15 +14,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record12;
-import org.jooq.Row12;
+import org.jooq.Record13;
+import org.jooq.Row13;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record12<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, String> {
+public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> {
 
-    private static final long serialVersionUID = -2072332609;
+    private static final long serialVersionUID = 849509876;
 
     public void setId(Long value) {
         set(0, value);
@@ -121,14 +121,21 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         return (Long) get(10);
     }
 
-    public void setZipCode(String value) {
+    public void setNotCh(Boolean value) {
         set(11, value);
     }
 
-    @NotNull
+    public Boolean getNotCh() {
+        return (Boolean) get(11);
+    }
+
+    public void setZipCode(String value) {
+        set(12, value);
+    }
+
     @Size(max = 45)
     public String getZipCode() {
-        return (String) get(11);
+        return (String) get(12);
     }
 
     // -------------------------------------------------------------------------
@@ -141,17 +148,17 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     // -------------------------------------------------------------------------
-    // Record12 type implementation
+    // Record13 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     @Override
-    public Row12<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, String> valuesRow() {
-        return (Row12) super.valuesRow();
+    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> valuesRow() {
+        return (Row13) super.valuesRow();
     }
 
     @Override
@@ -210,7 +217,12 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public Field<String> field12() {
+    public Field<Boolean> field12() {
+        return User.USER.NOT_CH;
+    }
+
+    @Override
+    public Field<String> field13() {
         return User.USER.ZIP_CODE;
     }
 
@@ -270,7 +282,12 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public String component12() {
+    public Boolean component12() {
+        return getNotCh();
+    }
+
+    @Override
+    public String component13() {
         return getZipCode();
     }
 
@@ -330,7 +347,12 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public String value12() {
+    public Boolean value12() {
+        return getNotCh();
+    }
+
+    @Override
+    public String value13() {
         return getZipCode();
     }
 
@@ -401,13 +423,19 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public UserRecord value12(String value) {
+    public UserRecord value12(Boolean value) {
+        setNotCh(value);
+        return this;
+    }
+
+    @Override
+    public UserRecord value13(String value) {
         setZipCode(value);
         return this;
     }
 
     @Override
-    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, String value12) {
+    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, Boolean value12, String value13) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -420,6 +448,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         value10(value10);
         value11(value11);
         value12(value12);
+        value13(value13);
         return this;
     }
 
@@ -431,7 +460,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         super(User.USER);
     }
 
-    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, String zipCode) {
+    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, Boolean notCh, String zipCode) {
         super(User.USER);
 
         set(0, id);
@@ -445,6 +474,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         set(8, age);
         set(9, enabled);
         set(10, dialectId);
-        set(11, zipCode);
+        set(11, notCh);
+        set(12, zipCode);
     }
 }

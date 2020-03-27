@@ -21,7 +21,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -400023428;
+    private static final long serialVersionUID = 652342167;
 
     public static final User USER = new User();
 
@@ -64,7 +64,9 @@ public class User extends TableImpl<UserRecord> {
 
     public final TableField<UserRecord, Long> DIALECT_ID = createField(DSL.name("dialect_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
-    public final TableField<UserRecord, String> ZIP_CODE = createField(DSL.name("zip_code"), org.jooq.impl.SQLDataType.VARCHAR(45).nullable(false), this, "");
+    public final TableField<UserRecord, Boolean> NOT_CH = createField(DSL.name("not_CH"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    public final TableField<UserRecord, String> ZIP_CODE = createField(DSL.name("zip_code"), org.jooq.impl.SQLDataType.VARCHAR(45).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     public User() {
         this(DSL.name("user"), null);
@@ -145,11 +147,11 @@ public class User extends TableImpl<UserRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

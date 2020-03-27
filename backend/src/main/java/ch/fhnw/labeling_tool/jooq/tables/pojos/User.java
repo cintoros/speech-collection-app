@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -194681479;
+    private static final long serialVersionUID = 495679829;
 
     private Long        id;
     private String      firstName;
@@ -30,6 +30,7 @@ public class User implements Serializable {
     private UserAge     age;
     private Boolean     enabled;
     private Long        dialectId;
+    private Boolean     notCh;
     private String      zipCode;
 
     public User() {}
@@ -46,6 +47,7 @@ public class User implements Serializable {
         this.age = value.age;
         this.enabled = value.enabled;
         this.dialectId = value.dialectId;
+        this.notCh = value.notCh;
         this.zipCode = value.zipCode;
     }
 
@@ -61,6 +63,7 @@ public class User implements Serializable {
         UserAge     age,
         Boolean     enabled,
         Long        dialectId,
+        Boolean     notCh,
         String      zipCode
     ) {
         this.id = id;
@@ -74,6 +77,7 @@ public class User implements Serializable {
         this.age = age;
         this.enabled = enabled;
         this.dialectId = dialectId;
+        this.notCh = notCh;
         this.zipCode = zipCode;
     }
 
@@ -174,7 +178,14 @@ public class User implements Serializable {
         this.dialectId = dialectId;
     }
 
-    @NotNull
+    public Boolean getNotCh() {
+        return this.notCh;
+    }
+
+    public void setNotCh(Boolean notCh) {
+        this.notCh = notCh;
+    }
+
     @Size(max = 45)
     public String getZipCode() {
         return this.zipCode;
@@ -199,6 +210,7 @@ public class User implements Serializable {
         sb.append(", ").append(age);
         sb.append(", ").append(enabled);
         sb.append(", ").append(dialectId);
+        sb.append(", ").append(notCh);
         sb.append(", ").append(zipCode);
 
         sb.append(")");

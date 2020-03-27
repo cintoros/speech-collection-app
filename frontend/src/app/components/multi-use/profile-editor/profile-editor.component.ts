@@ -39,12 +39,13 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])],
       username: [this.user.username, [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]],
-      canton: [undefined, []],
-      zipCode: [undefined, [Validators.required]],
+      canton: [this.user.dialectId, []],
+      zipCode: [this.user.zipCode, [Validators.required]],
       password: undefined,
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
       licence: [this.user.licence, [Validators.required]],
+      notCH: [this.user.notCH, []]
     };
     if (this.isNewUser) {
       cc.password = ['', Validators.compose([
@@ -55,28 +56,24 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     }
     this.registerForm = this.formBuilder.group(cc);
     this.userCopy = JSON.parse(JSON.stringify(this.user));
-    //TODO change zipcode/canton validators
-    /*
-    this.form.get('userCategory').valueChanges
-      .subscribe(userCategory => {
 
-        if (userCategory === 'student') {
-          institutionControl.setValidators([Validators.required]);
-          companyControl.setValidators(null);
-          salaryControl.setValidators(null);
+
+    this.registerForm.controls.notCH.valueChanges
+      .subscribe(notCH => {
+        const zipCode = this.registerForm.controls.zipCode;
+        const canton = this.registerForm.controls.canton;
+        if (notCH) {
+          zipCode.setValidators([]);
+          canton.setValidators([Validators.required]);
+        } else {
+          zipCode.setValidators([Validators.required]);
+          canton.setValidators([]);
         }
 
-        if (userCategory === 'employee') {
-          institutionControl.setValidators(null);
-          companyControl.setValidators([Validators.required]);
-          salaryControl.setValidators([Validators.required]);
-        }
-
-        institutionControl.updateValueAndValidity();
-        companyControl.updateValueAndValidity();
-        salaryControl.updateValueAndValidity();
+        zipCode.updateValueAndValidity();
+        canton.updateValueAndValidity();
       });
-     */
+
     this.checkDisabled();
   }
 
@@ -94,8 +91,13 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     user.email = this.registerForm.controls.email.value;
     user.username = this.registerForm.controls.username.value;
     user.password = this.registerForm.controls.password.value;
-    user.canton = this.registerForm.controls.canton.value;
     user.zipCode = this.registerForm.controls.zipCode.value;
+    user.canton = this.registerForm.controls.canton.value;
+    // TODO update canton based on zipCode if nothing is selected -> todo needs to be changed depending on the backend
+    if (user.canton === undefined) {
+      user.canton = 1;
+    }
+    user.notCH = this.registerForm.controls.notCH.value;
     if (this.registerForm.valid) {
       if (this.isNewUser) {
         this.httpClient.post(environment.url + 'public/register', user).subscribe(() => {
