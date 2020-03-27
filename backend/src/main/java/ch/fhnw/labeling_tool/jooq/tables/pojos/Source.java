@@ -13,13 +13,14 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Source implements Serializable {
 
-    private static final long serialVersionUID = -478084651;
+    private static final long serialVersionUID = 777999557;
 
     private Long   id;
     private String description;
     private String name;
     private String rawAudioPath;
     private String rawFilePath;
+    private String licence;
 
     public Source() {}
 
@@ -29,6 +30,7 @@ public class Source implements Serializable {
         this.name = value.name;
         this.rawAudioPath = value.rawAudioPath;
         this.rawFilePath = value.rawFilePath;
+        this.licence = value.licence;
     }
 
     public Source(
@@ -36,13 +38,15 @@ public class Source implements Serializable {
         String description,
         String name,
         String rawAudioPath,
-        String rawFilePath
+        String rawFilePath,
+        String licence
     ) {
         this.id = id;
         this.description = description;
         this.name = name;
         this.rawAudioPath = rawAudioPath;
         this.rawFilePath = rawFilePath;
+        this.licence = licence;
     }
 
     public Long getId() {
@@ -93,6 +97,15 @@ public class Source implements Serializable {
         this.rawFilePath = rawFilePath;
     }
 
+    @Size(max = 65535)
+    public String getLicence() {
+        return this.licence;
+    }
+
+    public void setLicence(String licence) {
+        this.licence = licence;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Source (");
@@ -102,6 +115,7 @@ public class Source implements Serializable {
         sb.append(", ").append(name);
         sb.append(", ").append(rawAudioPath);
         sb.append(", ").append(rawFilePath);
+        sb.append(", ").append(licence);
 
         sb.append(")");
         return sb.toString();

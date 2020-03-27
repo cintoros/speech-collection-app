@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
     this.httpClient.put(environment.url + 'user/password',
       new ChangePassword(this.changePasswordForm.controls.password.value, this.changePasswordForm.controls.newPassword.value)
     ).subscribe(() => {
-      this.authService.logout(true);
+      this.authService.logout(false);
     }, err => {
       if (err === 'BAD REQUEST') {
         this.snackBarService.openError('Wrong password');

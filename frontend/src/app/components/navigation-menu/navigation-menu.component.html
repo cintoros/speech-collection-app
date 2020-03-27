@@ -14,7 +14,7 @@
     Login
   </span>
   <ng-container *ngIf="authService.checkAuthenticated()">
-    <app-avatar [hover]="'pointer'" [matMenuTriggerFor]="menu"  [username]="this.user.username"
+    <app-avatar *ngIf="user" [hover]="'pointer'" [matMenuTriggerFor]="menu"  [username]="this.user.username"
       style="float: right;"></app-avatar>
     <mat-menu #menu>
       <mat-list style="padding: 0;">

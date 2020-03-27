@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {User} from '../../../models/user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
@@ -14,12 +14,14 @@ import {DialectService} from '../../../services/dialect.service';
   templateUrl: './profile-editor.component.html',
   styleUrls: ['./profile-editor.component.scss']
 })
-export class ProfileEditorComponent implements OnInit {
+export class ProfileEditorComponent implements OnInit, OnChanges {
   @Input() isNewUser;
   @Input() user: User;
   @Output() output = new EventEmitter();
+  @Input() disabled: boolean;
   registerForm: FormGroup;
   dialects: Dialect[] = [];
+  private userCopy: User;
 
   constructor(
     private formBuilder: FormBuilder, private snackBarService: SnackBarService, private httpClient: HttpClient,
@@ -30,14 +32,15 @@ export class ProfileEditorComponent implements OnInit {
   ngOnInit() {
     this.dialectService.getDialects().subscribe(v => this.dialects = v);
     const cc = {
-      firstName: [this.user.firstName, [Validators.required]],
-      lastName: [this.user.lastName, [Validators.required]],
+      firstName: [this.user.firstName, []],
+      lastName: [this.user.lastName, []],
       email: [this.user.email, Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])],
       username: [this.user.username, [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]],
-      canton: [this.user.dialectId, [Validators.required]],
+      canton: [this.user.dialectId, []],
+      zipCode: [this.user.zipCode, [Validators.required]],
       password: undefined,
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
@@ -51,6 +54,36 @@ export class ProfileEditorComponent implements OnInit {
       ])];
     }
     this.registerForm = this.formBuilder.group(cc);
+    this.userCopy = JSON.parse(JSON.stringify(this.user))
+    //TODO change zipcode/canton validators
+    /*
+    this.form.get('userCategory').valueChanges
+      .subscribe(userCategory => {
+
+        if (userCategory === 'student') {
+          institutionControl.setValidators([Validators.required]);
+          companyControl.setValidators(null);
+          salaryControl.setValidators(null);
+        }
+
+        if (userCategory === 'employee') {
+          institutionControl.setValidators(null);
+          companyControl.setValidators([Validators.required]);
+          salaryControl.setValidators([Validators.required]);
+        }
+
+        institutionControl.updateValueAndValidity();
+        companyControl.updateValueAndValidity();
+        salaryControl.updateValueAndValidity();
+      });
+     */
+    this.checkDisabled();
+  }
+
+  ngOnChanges(): void {
+    if (this.registerForm) {
+      this.checkDisabled();
+    }
   }
 
   register(): void {
@@ -62,6 +95,7 @@ export class ProfileEditorComponent implements OnInit {
     user.username = this.registerForm.controls.username.value;
     user.password = this.registerForm.controls.password.value;
     user.canton = this.registerForm.controls.canton.value;
+    user.zipCode = this.registerForm.controls.zipCode.value;
     if (this.registerForm.valid) {
       if (this.isNewUser) {
         this.httpClient.post(environment.url + 'public/register', user).subscribe(() => {
@@ -71,8 +105,12 @@ export class ProfileEditorComponent implements OnInit {
         });
       } else {
         this.httpClient.put(environment.url + 'user', user).subscribe(() => {
-          // NOTE we need to re-login in case the email,username changed
-          this.authService.logout(true);
+          if (this.userCopy.username !== user.username) {
+            this.snackBarService.openMessage('logout caused by username change');
+            this.authService.logout(false);
+          } else {
+            this.snackBarService.openMessage('successfully updated user');
+          }
         }, error => {
           this.snackBarService.openError('failed to update user');
         });
@@ -86,4 +124,12 @@ export class ProfileEditorComponent implements OnInit {
   isEmailError = (errorCode: string) => this.registerForm.controls.email.hasError(errorCode);
   isUNError = (errorCode: string) => this.registerForm.controls.username.hasError(errorCode);
   isPwError = (errorCode: string) => this.registerForm.controls.password.hasError(errorCode);
+
+  private checkDisabled() {
+    if (this.disabled) {
+      this.registerForm.disable();
+    } else {
+      this.registerForm.enable();
+    }
+  }
 }

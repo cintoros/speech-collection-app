@@ -35,7 +35,11 @@
       </div>
     </mat-card-footer>
   </mat-card>
-  <app-profile-editor (output)="toggleIsLogin()" *ngIf="!isLogin" [isNewUser]="true"
-                      [user]="newUser()"></app-profile-editor>
+  <mat-card *ngIf="!isLogin" style="width: 500px;">
+    <mat-toolbar color="primary">Register</mat-toolbar>
+    <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true"
+                        [user]="newUser()"></app-profile-editor>
+  </mat-card>
+
 </div>
 

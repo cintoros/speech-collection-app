@@ -6,38 +6,12 @@
       <h1 style="margin: 0;">Account Settings</h1>
     </div>
     <mat-divider></mat-divider>
+    <br>
     <div style="width: 70%; float: left; height: 90%;">
+      <app-profile-editor (output)="toggleProfileEdit()" *ngIf="!isPasswordEdit" [disabled]="!isProfileEdit"
+                          [isNewUser]="false"
+                          [user]="copyUser()"></app-profile-editor>
       <ng-container *ngIf="!isProfileEdit&&!isPasswordEdit">
-        <mat-list>
-          <mat-list-item>
-            <span>First name:</span>&nbsp;
-            <span class="info-input">{{user.firstName}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Last name:</span>&nbsp;
-            <span class="info-input">{{user.lastName}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Email:</span>&nbsp;
-            <span class="info-input">{{user.email}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Canton:</span>&nbsp;
-            <span class="info-input">{{getCanton()}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Licence:</span>&nbsp;
-            <span class="info-input">{{user.licence}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Sex:</span>&nbsp;
-            <span class="info-input">{{user.sex}}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span>Age:</span>&nbsp;
-            <span class="info-input">{{user.age}}</span>
-          </mat-list-item>
-        </mat-list>
         <mat-button-toggle (click)="toggleProfileEdit()" class="edit-button">Edit Profile</mat-button-toggle>
         <mat-button-toggle (click)="togglePasswordEdit()" class="edit-button">Edit Password</mat-button-toggle>
       </ng-container>
@@ -74,8 +48,7 @@
           </div>
         </form>
       </ng-container>
-      <app-profile-editor (output)="toggleProfileEdit()" *ngIf="isProfileEdit" [isNewUser]="false"
-                          [user]="copyUser()"></app-profile-editor>
+
     </div>
   </mat-card>
 </div>

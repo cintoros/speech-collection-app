@@ -11,15 +11,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record5;
-import org.jooq.Row5;
+import org.jooq.Record6;
+import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements Record5<Long, String, String, String, String> {
+public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements Record6<Long, String, String, String, String, String> {
 
-    private static final long serialVersionUID = -1247968684;
+    private static final long serialVersionUID = -377326621;
 
     public void setId(Long value) {
         set(0, value);
@@ -69,6 +69,15 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         return (String) get(4);
     }
 
+    public void setLicence(String value) {
+        set(5, value);
+    }
+
+    @Size(max = 65535)
+    public String getLicence() {
+        return (String) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -79,17 +88,17 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     // -------------------------------------------------------------------------
-    // Record5 type implementation
+    // Record6 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, String, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Long, String, String, String, String, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 
     @Override
-    public Row5<Long, String, String, String, String> valuesRow() {
-        return (Row5) super.valuesRow();
+    public Row6<Long, String, String, String, String, String> valuesRow() {
+        return (Row6) super.valuesRow();
     }
 
     @Override
@@ -118,6 +127,11 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
+    public Field<String> field6() {
+        return Source.SOURCE.LICENCE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -143,6 +157,11 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
+    public String component6() {
+        return getLicence();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -165,6 +184,11 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     @Override
     public String value5() {
         return getRawFilePath();
+    }
+
+    @Override
+    public String value6() {
+        return getLicence();
     }
 
     @Override
@@ -198,12 +222,19 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
-    public SourceRecord values(Long value1, String value2, String value3, String value4, String value5) {
+    public SourceRecord value6(String value) {
+        setLicence(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord values(Long value1, String value2, String value3, String value4, String value5, String value6) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
+        value6(value6);
         return this;
     }
 
@@ -215,7 +246,7 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         super(Source.SOURCE);
     }
 
-    public SourceRecord(Long id, String description, String name, String rawAudioPath, String rawFilePath) {
+    public SourceRecord(Long id, String description, String name, String rawAudioPath, String rawFilePath, String licence) {
         super(Source.SOURCE);
 
         set(0, id);
@@ -223,5 +254,6 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         set(2, name);
         set(3, rawAudioPath);
         set(4, rawFilePath);
+        set(5, licence);
     }
 }

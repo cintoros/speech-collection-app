@@ -6,6 +6,7 @@ import {SnackBarService} from '../../services/snack-bar.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Excerpt} from '../../models/excerpt';
 import {UserGroupService} from '../../services/user-group.service';
+import {Observable, Subscription, timer} from 'rxjs';
 
 @Component({
   selector: 'app-record',
@@ -20,6 +21,9 @@ export class RecordComponent implements OnInit {
   private mediaRecorder: MediaRecorder;
   private audioChunks = [];
   private groupId = 1;
+  private elapsedTime = 0;
+  private numberObservable: Observable<number>;
+  private subscription: Subscription;
 
   constructor(
     private snackBarService: SnackBarService, private detector: ChangeDetectorRef, private httpClient: HttpClient,
@@ -40,15 +44,19 @@ export class RecordComponent implements OnInit {
           this.detector.detectChanges();
         };
       });
+    this.numberObservable = timer(0, 1000);
   }
 
   startRecord(): void {
     this.audioChunks = [];
     this.mediaRecorder.start();
+    this.elapsedTime = 0;
     this.isRecording = true;
+    this.subscription = this.numberObservable.subscribe(value => this.elapsedTime = value);
   }
 
   stopRecord(): void {
+    this.subscription.unsubscribe();
     this.mediaRecorder.stop();
     this.isRecording = false;
   }

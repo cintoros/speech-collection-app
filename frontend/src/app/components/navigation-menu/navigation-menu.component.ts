@@ -24,10 +24,10 @@ export class NavigationMenuComponent {
   }
 
   isGroupAdmin() {
-    return this.isAdmin() || this.user.userGroupRoles
-      .find(a => a.userGroupId === this.userGroupService.userGroupId && a.role === UserGroupRoleRole.GROUP_ADMIN);
+    return this.user && (this.isAdmin() || this.user.userGroupRoles
+      .find(a => a.userGroupId === this.userGroupService.userGroupId && a.role === UserGroupRoleRole.GROUP_ADMIN));
   }
 
   toggleSidenav = () => this.sidenav.toggle();
-  isAdmin = () => this.user.userGroupRoles.find(a => a.role === UserGroupRoleRole.ADMIN);
+  isAdmin = () => this.user && this.user.userGroupRoles.find(a => a.role === UserGroupRoleRole.ADMIN);
 }

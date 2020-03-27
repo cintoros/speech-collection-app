@@ -77,4 +77,12 @@ public class OriginalTextDao extends DAOImpl<OriginalTextRecord, ch.fhnw.labelin
     public List<ch.fhnw.labeling_tool.jooq.tables.pojos.OriginalText> fetchByTime(Timestamp... values) {
         return fetch(OriginalText.ORIGINAL_TEXT.TIME, values);
     }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.OriginalText> fetchRangeOfLicence(String lowerInclusive, String upperInclusive) {
+        return fetchRange(OriginalText.ORIGINAL_TEXT.LICENCE, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.OriginalText> fetchByLicence(String... values) {
+        return fetch(OriginalText.ORIGINAL_TEXT.LICENCE, values);
+    }
 }
