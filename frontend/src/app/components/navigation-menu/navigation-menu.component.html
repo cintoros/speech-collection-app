@@ -46,6 +46,10 @@
             <mat-icon>view_list</mat-icon>
             <span>Overview</span>
           </mat-list-item>
+          <mat-list-item (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">
+            <mat-icon>view_list</mat-icon>
+            <span>Document Overview</span>
+          </mat-list-item>
           <mat-list-item (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">
             <mat-icon>people</mat-icon>
             <span>User Group</span>

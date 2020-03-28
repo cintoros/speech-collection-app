@@ -12,6 +12,7 @@ import {HomeComponent} from './components/home/home.component';
 import {AdminGuardService} from './guards/admin-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {CheckComponent} from './components/check/check/check.component';
+import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,11 @@ const routes: Routes = [
         path: 'overview',
         canActivate: [GroupAdminGuardService],
         component: OverviewComponent,
+      },
+      {
+        path: 'document_overview',
+        canActivate: [GroupAdminGuardService],
+        component: DocumentOverviewComponent,
       },
     ]
   },

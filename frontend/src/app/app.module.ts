@@ -51,7 +51,7 @@ import {EditTextAudioComponent} from './components/admin/overview/edit-text-audi
 import {AdminGuardService} from './guards/admin-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {MarkdownModule, MarkdownService} from 'ngx-markdown';
-import {DocumentOverviewComponent} from './document-overview/document-overview.component';
+import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 

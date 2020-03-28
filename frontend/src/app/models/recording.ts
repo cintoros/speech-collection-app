@@ -1,16 +1,4 @@
 export class Recording {
-  /*
-      private Long                id;
-    private Long                excerptId;
-    private Long                userId;
-    private Timestamp           time;
-    private RecordingLabel      label;
-    private Long                wrong;
-    private Long                correct;
-    private Timestamp           deleted;
-    private RecordingQuality    quality;
-    private RecordingNoiseLevel noiseLevel;
-   */
   id: number;
   excerptId: number;
   userId: number;

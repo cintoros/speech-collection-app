@@ -8,7 +8,6 @@ import ch.fhnw.labeling_tool.user_group.OverviewOccurrence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,10 +40,6 @@ public class UserGroupAdminRestApiController {
         return userGroupAdminService.getTextAudioAudio(groupId, textAudioId);
     }
 
-    @PostMapping("original_text")
-    public void postOriginalText(@PathVariable long groupId, @RequestParam long domainId, @RequestParam MultipartFile[] files, @RequestParam String documentLicence) {
-        userGroupAdminService.postOriginalText(groupId, domainId, files, documentLicence);
-    }
 
     @GetMapping("overview_occurrence")
     public List<OverviewOccurrence> getOverviewOccurrence(@PathVariable long groupId) {

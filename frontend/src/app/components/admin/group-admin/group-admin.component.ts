@@ -22,18 +22,15 @@ export class GroupAdminComponent implements OnInit {
   ga = UserGroupRoleRole.GROUP_ADMIN;
   documentLicence: string;
   groupDescription = '';
-  private groupId = 1;
   private baseUrl: string;
-  private userGroups: UserGroup[] = [];
 
   constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
     this.userGroupService.getUserGroups()
       .subscribe(v => this.groupDescription = v.find(value => value.id === this.userGroupService.userGroupId).description);
-    this.groupId = this.userGroupService.userGroupId;
   }
 
   ngOnInit() {
-    this.baseUrl = `${environment.url}user_group/${this.groupId}/admin/`;
+    this.baseUrl = `${environment.url}user_group/${this.userGroupService.userGroupId}/admin/`;
     this.httpClient.get<Domain[]>(`${this.baseUrl}domain`).subscribe(domains => {
       this.domains = domains;
       this.selectedDomain = domains[0];
@@ -50,7 +47,7 @@ export class GroupAdminComponent implements OnInit {
     formData.append('domainId', this.selectedDomain.id.toFixed(0));
     formData.append('documentLicence', this.documentLicence);
     localStorage.setItem('documentLicence', this.documentLicence);
-    this.httpClient.post(`${this.baseUrl}original_text`, formData).subscribe(() => {
+    this.httpClient.post(`${this.baseUrl}original_text/`, formData).subscribe(() => {
     });
   }
 
