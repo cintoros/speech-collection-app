@@ -1,20 +1,15 @@
 spring:
-  datasource:
-    password: labeling-tool
-    username: labeling-tool
-    url: jdbc:mysql://localhost/labeling-tool
-    driver-class-name: org.mariadb.jdbc.Driver
   mail:
     host: "smtp.mailtrap.io"
     port: 2525
     test-connection: true
     username: ""
     password: ""
-server:
-  port: 8084
 labeling-tool:
   base-path: "./data"
   conda-exec: "/home/cintoros/miniconda3/condabin/conda run -n labeling_tool python /home/cintoros/Documents/git_repos/speech-collection-app/data_import/sentences.py"
   public-group-id: 1
   features:
     email-integration: false
+  from-email: "admin@admin.admin"
+  base-url: "http://localhost:4200/"

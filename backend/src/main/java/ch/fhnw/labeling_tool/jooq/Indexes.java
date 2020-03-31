@@ -19,6 +19,7 @@ import ch.fhnw.labeling_tool.jooq.tables.TextAudio;
 import ch.fhnw.labeling_tool.jooq.tables.User;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroup;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.VerificationToken;
 
 import org.jooq.Index;
 import org.jooq.OrderField;
@@ -66,6 +67,8 @@ public class Indexes {
     public static final Index USER_GROUP_ROLE_PRIMARY = Indexes0.USER_GROUP_ROLE_PRIMARY;
     public static final Index USER_GROUP_ROLE_USER_GROUP_ID = Indexes0.USER_GROUP_ROLE_USER_GROUP_ID;
     public static final Index USER_GROUP_ROLE_USER_ID = Indexes0.USER_GROUP_ROLE_USER_ID;
+    public static final Index VERIFICATION_TOKEN_PRIMARY = Indexes0.VERIFICATION_TOKEN_PRIMARY;
+    public static final Index VERIFICATION_TOKEN_USER_ID = Indexes0.VERIFICATION_TOKEN_USER_ID;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -106,5 +109,7 @@ public class Indexes {
         public static Index USER_GROUP_ROLE_PRIMARY = Internal.createIndex("PRIMARY", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.ID }, true);
         public static Index USER_GROUP_ROLE_USER_GROUP_ID = Internal.createIndex("user_group_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_GROUP_ID }, false);
         public static Index USER_GROUP_ROLE_USER_ID = Internal.createIndex("user_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_ID }, false);
+        public static Index VERIFICATION_TOKEN_PRIMARY = Internal.createIndex("PRIMARY", VerificationToken.VERIFICATION_TOKEN, new OrderField[] { VerificationToken.VERIFICATION_TOKEN.ID }, true);
+        public static Index VERIFICATION_TOKEN_USER_ID = Internal.createIndex("user_id", VerificationToken.VERIFICATION_TOKEN, new OrderField[] { VerificationToken.VERIFICATION_TOKEN.USER_ID }, false);
     }
 }

@@ -34,6 +34,7 @@ export class AuthService {
       this.router.navigate(['/home']);
       sessionStorage.setItem(AuthService.currentUserStore, this.buildAuthenticationHeader(emailPassword.email, emailPassword.password));
     }, () => {
+      // TODO get real reason e.g. maybe activate email etc.
       this.snackBarService.openError('Password or username incorrect.');
       sessionStorage.clear();
     });

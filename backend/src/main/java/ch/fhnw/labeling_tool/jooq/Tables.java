@@ -19,6 +19,7 @@ import ch.fhnw.labeling_tool.jooq.tables.TextAudio;
 import ch.fhnw.labeling_tool.jooq.tables.User;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroup;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.VerificationToken;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -53,4 +54,6 @@ public class Tables {
     public static final UserGroup USER_GROUP = UserGroup.USER_GROUP;
 
     public static final UserGroupRole USER_GROUP_ROLE = UserGroupRole.USER_GROUP_ROLE;
+
+    public static final VerificationToken VERIFICATION_TOKEN = VerificationToken.VERIFICATION_TOKEN;
 }

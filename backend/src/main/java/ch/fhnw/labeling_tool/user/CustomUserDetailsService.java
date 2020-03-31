@@ -1,5 +1,6 @@
 package ch.fhnw.labeling_tool.user;
 
+import ch.fhnw.labeling_tool.features.email.EmailSenderService;
 import ch.fhnw.labeling_tool.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.labeling_tool.jooq.tables.daos.DialectDao;
 import ch.fhnw.labeling_tool.jooq.tables.daos.UserDao;
@@ -7,7 +8,9 @@ import ch.fhnw.labeling_tool.jooq.tables.daos.UserGroupRoleDao;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.Dialect;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.User;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.records.UserRecord;
 import com.google.common.io.Resources;
+import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
@@ -27,20 +30,24 @@ import java.util.stream.Collectors;
 
 import static ch.fhnw.labeling_tool.jooq.Tables.USER;
 
-@Component
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserDao userDao;
     private final UserGroupRoleDao userGroupRoleDao;
     private final PasswordEncoder passwordEncoder;
     private final Map<String, String> zipCodes;
     private final DialectDao dialectDao;
+    private final EmailSenderService emailSenderService;
+    private final DSLContext dslContext;
 
     @Autowired
-    public CustomUserDetailsService(UserDao userDao, UserGroupRoleDao userGroupRoleDao, PasswordEncoder passwordEncoder, DialectDao dialectDao) throws IOException {
+    public CustomUserDetailsService(UserDao userDao, UserGroupRoleDao userGroupRoleDao, PasswordEncoder passwordEncoder, DialectDao dialectDao, EmailSenderService emailSenderService, DSLContext dslContext) throws IOException {
         this.userDao = userDao;
         this.userGroupRoleDao = userGroupRoleDao;
         this.passwordEncoder = passwordEncoder;
         this.dialectDao = dialectDao;
+        this.emailSenderService = emailSenderService;
+        this.dslContext = dslContext;
         //based on https://download.geonames.org/export/zip/
         this.zipCodes = Resources.readLines(Resources.getResource("ch_zip_distinct.csv"), StandardCharsets.UTF_8)
                 .stream()
@@ -52,6 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        /*TODO add custom error message if the user is not validated*/
         return userDao.fetchOptional(USER.USERNAME, username)
                 .map(user -> {
                     var userGroupRoles = userGroupRoleDao.fetchByUserId(user.getId());
@@ -106,15 +114,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public void register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        if (user.getDialectId() == null) {
-            user.setDialectId(dialectDao.fetchByCountyId(zipCodes.get(user.getZipCode())).stream().map(Dialect::getId).findFirst().orElse(1L));
+        UserRecord userRecord = dslContext.newRecord(USER, user);
+        userRecord.setPassword(passwordEncoder.encode(userRecord.getPassword()));
+        userRecord.setEnabled(false);
+        if (userRecord.getDialectId() == null) {
+            userRecord.setDialectId(dialectDao.fetchByCountyId(zipCodes.get(userRecord.getZipCode())).stream().map(Dialect::getId).findFirst().orElse(1L));
         }
-        userDao.insert(user);
-        Long id = userDao.fetchOneByUsername(user.getUsername()).getId();
+        userRecord.store();
         //add user to public group
-        userGroupRoleDao.insert(new UserGroupRole(null, UserGroupRoleRole.USER, id, 1L));
-
+        userGroupRoleDao.insert(new UserGroupRole(null, UserGroupRoleRole.USER, userRecord.getId(), 1L));
+        emailSenderService.sendEmailConfirmation(userRecord);
     }
 }

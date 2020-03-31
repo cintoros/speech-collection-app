@@ -44,16 +44,29 @@ public class UserRestApiController {
         customUserDetailsService.putUser(user);
     }
 
-    //TODO implement email reset functionality
     @PutMapping("user/password")
     public void putPassword(@RequestBody ChangePassword changePassword) {
         customUserDetailsService.putPassword(changePassword);
     }
 
-    //TODO implement email activation functionality
+
     @PostMapping("public/register")
     public void register(@RequestBody User user) {
         customUserDetailsService.register(user);
+    }
+
+    @PostMapping("public/user/email/confirm")
+    public void confirmEmail(@RequestParam String token) {
+        //TODO implement email activation functionality
+        //TODO maybe go over the ui? so we can show the success etc.?
+
+        //TODO also add ability to resend token after expiration
+    }
+
+    @PostMapping("public/user/password/confirm")
+    public void resetPassword(@RequestParam String token) {
+        //TODO implement email activation functionality
+        //TODO maybe go over the ui? so we can show the success etc.?
     }
 
     @GetMapping("public/dialect")

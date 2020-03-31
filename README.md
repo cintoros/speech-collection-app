@@ -80,3 +80,6 @@ In case the data_import has changed run:
     WantedBy=multi-user.target
     ```
 1. `systemctl enable labeling-tool.service`
+
+### Configuration
+for password etc. configuration you can add a `application.yml` in the same directory as the JAR see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files
