@@ -7,11 +7,11 @@ import java.nio.file.Path;
 
 @Component
 @ConfigurationProperties(prefix = "labeling-tool", ignoreUnknownFields = false)
-
 public class LabelingToolConfig {
     private Path basePath;
     private String condaExec;
     private Long publicGroupId;
+    private Features features;
 
     public Path getBasePath() {
         return basePath;
@@ -35,5 +35,25 @@ public class LabelingToolConfig {
 
     public void setPublicGroupId(Long publicGroupId) {
         this.publicGroupId = publicGroupId;
+    }
+
+    public Features getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Features features) {
+        this.features = features;
+    }
+
+    public static class Features {
+        private boolean emailIntegration;
+
+        public boolean isEmailIntegration() {
+            return emailIntegration;
+        }
+
+        public void setEmailIntegration(boolean emailIntegration) {
+            this.emailIntegration = emailIntegration;
+        }
     }
 }
