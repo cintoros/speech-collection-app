@@ -26,6 +26,8 @@ Note: Other versions might work, but have not been tested yet
    * `text_audio` used to save pre-cut audio
       * `<id>.flac`
 ## Development
+* copy the `application-dev-test.yml.example` to `application-dev-test.yml` and change it to match your local setup
+* copy the `config.py.example` to `config.py` and change it to match your local setup
 * to update the generated database classes run `gradle generateSampleJooqSchemaSource --rerun-tasks`   
 * to run the development version run `gradle devBootRun` && `npm start` 
 

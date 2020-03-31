@@ -16,9 +16,9 @@ import {OverviewOccurrence} from './overview-occurrence';
 export class OverviewComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  showTextAudio = true;
   dataSource = new MatTableDataSource<OverviewOccurrence | { id: number, text: string, username: string, time: string }>();
   columns = ['text', 'correct', 'wrong', 'options'];
+  occurrenceMode = OccurrenceMode;
   selectedOverviewOccurrence: OverviewOccurrence;
   private audioPlayer = new Audio();
   private baseUrl: string;
@@ -34,11 +34,6 @@ export class OverviewComponent implements OnInit {
     this.reload();
   }
 
-  toggleChangeView(): void {
-    this.showTextAudio = !this.showTextAudio;
-    this.reload();
-  }
-
   reload() {
     this.getTextAudios().subscribe(textAudio => {
       this.dataSource.data = textAudio;
@@ -46,12 +41,12 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  edit(element: OverviewOccurrence) {
-    this.selectedOverviewOccurrence = JSON.parse(JSON.stringify(element));
+  edit(occurrence: OverviewOccurrence) {
+    this.selectedOverviewOccurrence = JSON.parse(JSON.stringify(occurrence));
   }
 
-  play(element: any) {
-    this.httpClient.get(`${this.baseUrl}occurrence/audio/${element.id}?mode=${this.mode()}`, {responseType: 'blob'})
+  play(occurrence: OverviewOccurrence) {
+    this.httpClient.get(`${this.baseUrl}occurrence/audio/${occurrence.id}?mode=${occurrence.mode}`, {responseType: 'blob'})
       .subscribe(resp => {
         this.audioPlayer.pause();
         this.audioPlayer = new Audio(URL.createObjectURL(resp));
@@ -59,6 +54,5 @@ export class OverviewComponent implements OnInit {
       });
   }
 
-  private mode = () => this.showTextAudio ? OccurrenceMode.TEXT_AUDIO : OccurrenceMode.RECORDING;
-  private getTextAudios = () => this.httpClient.get<OverviewOccurrence[]>(`${this.baseUrl}admin/overview_occurrence?mode=${this.mode()}`);
+  private getTextAudios = () => this.httpClient.get<OverviewOccurrence[]>(`${this.baseUrl}admin/overview_occurrence`);
 }

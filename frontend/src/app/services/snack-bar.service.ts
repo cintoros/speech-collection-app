@@ -14,7 +14,7 @@ export class SnackBarService {
     this.ngZone.run(() => {
       setTimeout(() => {
         this.matSnackBar.open(error, 'close', {
-          duration: 3000, panelClass: 'snack-bar-error', verticalPosition: 'bottom', horizontalPosition: 'center'
+          duration: 5000, panelClass: 'snack-bar-error', verticalPosition: 'bottom', horizontalPosition: 'center'
         });
       }, 0);
     });
@@ -26,7 +26,7 @@ export class SnackBarService {
     this.ngZone.run(() => {
       setTimeout(() => {
         this.matSnackBar.open(message, 'close', {
-          duration: 3000, panelClass: 'snack-bar-message', verticalPosition: 'bottom', horizontalPosition: 'center'
+          duration: 5000, panelClass: 'snack-bar-message', verticalPosition: 'bottom', horizontalPosition: 'center'
         });
       }, 0);
     });

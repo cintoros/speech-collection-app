@@ -8,18 +8,20 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OriginalText implements Serializable {
 
-    private static final long serialVersionUID = -715219448;
+    private static final long serialVersionUID = -1860563638;
 
     private Long      id;
     private Long      userGroupId;
     private Long      domainId;
     private Long      userId;
     private Timestamp time;
+    private String    licence;
 
     public OriginalText() {}
 
@@ -29,6 +31,7 @@ public class OriginalText implements Serializable {
         this.domainId = value.domainId;
         this.userId = value.userId;
         this.time = value.time;
+        this.licence = value.licence;
     }
 
     public OriginalText(
@@ -36,13 +39,15 @@ public class OriginalText implements Serializable {
         Long      userGroupId,
         Long      domainId,
         Long      userId,
-        Timestamp time
+        Timestamp time,
+        String    licence
     ) {
         this.id = id;
         this.userGroupId = userGroupId;
         this.domainId = domainId;
         this.userId = userId;
         this.time = time;
+        this.licence = licence;
     }
 
     public Long getId() {
@@ -87,6 +92,15 @@ public class OriginalText implements Serializable {
         this.time = time;
     }
 
+    @Size(max = 65535)
+    public String getLicence() {
+        return this.licence;
+    }
+
+    public void setLicence(String licence) {
+        this.licence = licence;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OriginalText (");
@@ -96,6 +110,7 @@ public class OriginalText implements Serializable {
         sb.append(", ").append(domainId);
         sb.append(", ").append(userId);
         sb.append(", ").append(time);
+        sb.append(", ").append(licence);
 
         sb.append(")");
         return sb.toString();

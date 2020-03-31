@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, SecurityContext} from '@angular/core';
 import {AppComponent} from './app.component';
 import {NavigationMenuComponent} from './components/navigation-menu/navigation-menu.component';
 import {ShortcutComponent} from './components/check/shortcut/shortcut.component';
@@ -47,11 +47,14 @@ import {MatSortModule} from '@angular/material/sort';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
 import {HomeComponent} from './components/home/home.component';
 import {UserGroupRoleComponent} from './components/multi-use/user-group-role/user-group-role.component';
-import {CheckRecordingComponent} from './components/check/check-recording.component';
-import {CheckTextAudioComponent} from './components/check/check-text-audio.component';
 import {EditTextAudioComponent} from './components/admin/overview/edit-text-audio/edit-text-audio.component';
 import {AdminGuardService} from './guards/admin-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
+import {MarkdownModule, MarkdownService} from 'ngx-markdown';
+import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 @NgModule({
   declarations: [
@@ -70,9 +73,8 @@ import {GroupAdminGuardService} from './guards/group-admin-guard.service';
     GroupAdminComponent,
     HomeComponent,
     UserGroupRoleComponent,
-    CheckRecordingComponent,
-    CheckTextAudioComponent,
-    EditTextAudioComponent
+    EditTextAudioComponent,
+    DocumentOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -105,12 +107,18 @@ import {GroupAdminGuardService} from './guards/group-admin-guard.service';
     MatSnackBarModule,
     MatDialogModule,
     MatSortModule,
+    MarkdownModule.forRoot({
+      sanitize: SecurityContext.HTML
+    }),
+    MatTabsModule,
+    MatCheckboxModule,
   ],
   providers: [
     HttpClient,
     AuthGuardService,
     AdminGuardService,
     GroupAdminGuardService,
+    MarkdownService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptorService,

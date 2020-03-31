@@ -14,7 +14,7 @@
     Login
   </span>
   <ng-container *ngIf="authService.checkAuthenticated()">
-    <app-avatar [hover]="'pointer'" [matMenuTriggerFor]="menu"  [username]="this.user.username"
+    <app-avatar *ngIf="user" [hover]="'pointer'" [matMenuTriggerFor]="menu"  [username]="this.user.username"
       style="float: right;"></app-avatar>
     <mat-menu #menu>
       <mat-list style="padding: 0;">
@@ -34,13 +34,9 @@
             <mat-icon>home</mat-icon>
             <span>Home</span>
           </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/check/text_audio')">
+          <mat-list-item (click)="redirectToPage('/check')">
             <mat-icon>check</mat-icon>
-            <span>Check text audio</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/check/recording')">
-            <mat-icon>check</mat-icon>
-            <span>Check recording</span>
+            <span>Check</span>
           </mat-list-item>
           <mat-list-item (click)="redirectToPage('/record')">
             <mat-icon>record_voice_over</mat-icon>
@@ -49,6 +45,10 @@
           <mat-list-item (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">
             <mat-icon>view_list</mat-icon>
             <span>Overview</span>
+          </mat-list-item>
+          <mat-list-item (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">
+            <mat-icon>view_list</mat-icon>
+            <span>Document Overview</span>
           </mat-list-item>
           <mat-list-item (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">
             <mat-icon>people</mat-icon>

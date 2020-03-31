@@ -18,7 +18,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Source extends TableImpl<SourceRecord> {
 
-    private static final long serialVersionUID = -1268811210;
+    private static final long serialVersionUID = 1938474072;
 
     public static final Source SOURCE = new Source();
 
@@ -48,6 +48,8 @@ public class Source extends TableImpl<SourceRecord> {
     public final TableField<SourceRecord, String> RAW_AUDIO_PATH = createField(DSL.name("raw_audio_path"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     public final TableField<SourceRecord, String> RAW_FILE_PATH = createField(DSL.name("raw_file_path"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    public final TableField<SourceRecord, String> LICENCE = createField(DSL.name("licence"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("''", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public Source() {
         this(DSL.name("source"), null);
@@ -119,11 +121,11 @@ public class Source extends TableImpl<SourceRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, String, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Long, String, String, String, String, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

@@ -76,4 +76,12 @@ public class SourceDao extends DAOImpl<SourceRecord, ch.fhnw.labeling_tool.jooq.
     public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Source> fetchByRawFilePath(String... values) {
         return fetch(Source.SOURCE.RAW_FILE_PATH, values);
     }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Source> fetchRangeOfLicence(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Source.SOURCE.LICENCE, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Source> fetchByLicence(String... values) {
+        return fetch(Source.SOURCE.LICENCE, values);
+    }
 }

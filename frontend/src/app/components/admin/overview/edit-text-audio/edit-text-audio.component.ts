@@ -77,6 +77,12 @@ export class EditTextAudioComponent implements OnChanges {
   setVolume = (volume: any) => this.waveSurfer.setVolume(volume.value / 100);
   cancelEdit = () => this.cancelEmit.emit();
 
+  restore() {
+    this.textAudio = JSON.parse(JSON.stringify(this.textAudioCopy));
+    this.addRegion();
+    this.setViewToRegion();
+  }
+
   private addRegion(): void {
     this.waveSurfer.clearRegions();
     const region = this.waveSurfer.addRegion({
@@ -108,11 +114,5 @@ export class EditTextAudioComponent implements OnChanges {
         });
       });
     });
-  }
-
-  restore() {
-    this.textAudio = JSON.parse(JSON.stringify(this.textAudioCopy));
-    this.addRegion();
-    this.setViewToRegion();
   }
 }

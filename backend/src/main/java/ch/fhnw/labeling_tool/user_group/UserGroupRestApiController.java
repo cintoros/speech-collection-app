@@ -1,6 +1,8 @@
 package ch.fhnw.labeling_tool.user_group;
 
 import ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt;
+import ch.fhnw.labeling_tool.jooq.tables.pojos.Recording;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +15,17 @@ import java.util.List;
 @RequestMapping("/api/user_group/{groupId}/")
 public class UserGroupRestApiController {
     private final UserGroupService userGroupService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserGroupRestApiController(UserGroupService userGroupService) {
+    public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper) {
         this.userGroupService = userGroupService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("recording")
-    public void postRecording(@PathVariable long groupId, @RequestParam long excerptId, @RequestParam MultipartFile file) throws IOException {
-        userGroupService.postRecording(groupId, excerptId, file);
+    public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
+        userGroupService.postRecording(groupId, objectMapper.readValue(recording, Recording.class), file);
     }
 
     @PutMapping("excerpt/{excerptId}/private")
@@ -50,8 +54,8 @@ public class UserGroupRestApiController {
     }
 
     @GetMapping("occurrence/next")
-    public List<Occurrence> getNextOccurrences(@PathVariable long groupId, @RequestParam OccurrenceMode mode) {
-        return userGroupService.getNextOccurrences(groupId, mode);
+    public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
+        return userGroupService.getNextOccurrences(groupId);
     }
 
     @GetMapping(value = "occurrence/audio/{audioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

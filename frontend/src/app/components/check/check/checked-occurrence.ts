@@ -18,6 +18,7 @@ export class CheckedOccurrence {
 }
 
 export interface Occurrence {
+  mode: OccurrenceMode;
   id: number;
   text: string;
 }

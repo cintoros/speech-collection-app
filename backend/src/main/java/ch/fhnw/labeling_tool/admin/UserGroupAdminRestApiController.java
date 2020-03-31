@@ -4,12 +4,10 @@ import ch.fhnw.labeling_tool.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.labeling_tool.jooq.tables.daos.DomainDao;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.Domain;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio;
-import ch.fhnw.labeling_tool.user_group.OccurrenceMode;
 import ch.fhnw.labeling_tool.user_group.OverviewOccurrence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,14 +40,10 @@ public class UserGroupAdminRestApiController {
         return userGroupAdminService.getTextAudioAudio(groupId, textAudioId);
     }
 
-    @PostMapping("original_text")
-    public void postOriginalText(@PathVariable long groupId, @RequestParam long domainId, @RequestParam MultipartFile[] files) {
-        userGroupAdminService.postOriginalText(groupId, domainId, files);
-    }
 
     @GetMapping("overview_occurrence")
-    public List<OverviewOccurrence> getOverviewOccurrence(@PathVariable long groupId, @RequestParam OccurrenceMode mode) {
-        return userGroupAdminService.getOverviewOccurrence(groupId, mode);
+    public List<OverviewOccurrence> getOverviewOccurrence(@PathVariable long groupId) {
+        return userGroupAdminService.getOverviewOccurrence(groupId);
     }
 
     @DeleteMapping("user_group_role")
@@ -70,6 +64,11 @@ public class UserGroupAdminRestApiController {
     @GetMapping("domain")
     public List<Domain> getDomain() {
         return domainDao.findAll();
+    }
+
+    @PutMapping("description")
+    public void putDescription(@PathVariable long groupId, @RequestBody String description) {
+        userGroupAdminService.putDescription(groupId, description);
     }
 
 }

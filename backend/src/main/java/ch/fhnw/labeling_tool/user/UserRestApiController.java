@@ -44,11 +44,13 @@ public class UserRestApiController {
         customUserDetailsService.putUser(user);
     }
 
+    //TODO implement email reset functionality
     @PutMapping("user/password")
     public void putPassword(@RequestBody ChangePassword changePassword) {
         customUserDetailsService.putPassword(changePassword);
     }
 
+    //TODO implement email activation functionality
     @PostMapping("public/register")
     public void register(@RequestBody User user) {
         customUserDetailsService.register(user);

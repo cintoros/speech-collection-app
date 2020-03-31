@@ -17,4 +17,8 @@ export class HomeComponent implements OnInit {
     this.userGroupService.getUserGroups().subscribe(v => this.userGroups = v);
   }
 
+  getSelectedGroupDescription() {
+    const userGroup = this.userGroups.find(value => value.id === this.userGroupService.userGroupId);
+    return userGroup ? userGroup.description : undefined;
+  }
 }

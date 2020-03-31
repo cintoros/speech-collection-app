@@ -9,10 +9,10 @@ import {NavigationMenuComponent} from './components/navigation-menu/navigation-m
 import {GroupAdminComponent} from './components/admin/group-admin/group-admin.component';
 import {AdminComponent} from './components/admin/groups-admin/admin.component';
 import {HomeComponent} from './components/home/home.component';
-import {CheckTextAudioComponent} from './components/check/check-text-audio.component';
-import {CheckRecordingComponent} from './components/check/check-recording.component';
 import {AdminGuardService} from './guards/admin-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
+import {CheckComponent} from './components/check/check/check.component';
+import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 
 const routes: Routes = [
   {
@@ -35,6 +35,11 @@ const routes: Routes = [
         canActivate: [GroupAdminGuardService],
         component: OverviewComponent,
       },
+      {
+        path: 'document_overview',
+        canActivate: [GroupAdminGuardService],
+        component: DocumentOverviewComponent,
+      },
     ]
   },
   {
@@ -48,15 +53,7 @@ const routes: Routes = [
       },
       {
         path: 'check',
-        children: [
-          {
-            path: 'text_audio',
-            component: CheckTextAudioComponent,
-          }, {
-            path: 'recording',
-            component: CheckRecordingComponent,
-          }
-        ],
+        component: CheckComponent,
       },
       {
         path: 'record',

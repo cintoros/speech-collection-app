@@ -5,6 +5,8 @@ package ch.fhnw.labeling_tool.jooq.tables.pojos;
 
 
 import ch.fhnw.labeling_tool.jooq.enums.RecordingLabel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingNoiseLevel;
+import ch.fhnw.labeling_tool.jooq.enums.RecordingQuality;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,15 +17,18 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Recording implements Serializable {
 
-    private static final long serialVersionUID = -1423879176;
+    private static final long serialVersionUID = -647683933;
 
-    private Long           id;
-    private Long           excerptId;
-    private Long           userId;
-    private Timestamp      time;
-    private RecordingLabel label;
-    private Long           wrong;
-    private Long           correct;
+    private Long                id;
+    private Long                excerptId;
+    private Long                userId;
+    private Timestamp           time;
+    private RecordingLabel      label;
+    private Long                wrong;
+    private Long                correct;
+    private Timestamp           deleted;
+    private RecordingQuality    quality;
+    private RecordingNoiseLevel noiseLevel;
 
     public Recording() {}
 
@@ -35,16 +40,22 @@ public class Recording implements Serializable {
         this.label = value.label;
         this.wrong = value.wrong;
         this.correct = value.correct;
+        this.deleted = value.deleted;
+        this.quality = value.quality;
+        this.noiseLevel = value.noiseLevel;
     }
 
     public Recording(
-        Long           id,
-        Long           excerptId,
-        Long           userId,
-        Timestamp      time,
-        RecordingLabel label,
-        Long           wrong,
-        Long           correct
+        Long                id,
+        Long                excerptId,
+        Long                userId,
+        Timestamp           time,
+        RecordingLabel      label,
+        Long                wrong,
+        Long                correct,
+        Timestamp           deleted,
+        RecordingQuality    quality,
+        RecordingNoiseLevel noiseLevel
     ) {
         this.id = id;
         this.excerptId = excerptId;
@@ -53,6 +64,9 @@ public class Recording implements Serializable {
         this.label = label;
         this.wrong = wrong;
         this.correct = correct;
+        this.deleted = deleted;
+        this.quality = quality;
+        this.noiseLevel = noiseLevel;
     }
 
     public Long getId() {
@@ -113,6 +127,30 @@ public class Recording implements Serializable {
         this.correct = correct;
     }
 
+    public Timestamp getDeleted() {
+        return this.deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
+    }
+
+    public RecordingQuality getQuality() {
+        return this.quality;
+    }
+
+    public void setQuality(RecordingQuality quality) {
+        this.quality = quality;
+    }
+
+    public RecordingNoiseLevel getNoiseLevel() {
+        return this.noiseLevel;
+    }
+
+    public void setNoiseLevel(RecordingNoiseLevel noiseLevel) {
+        this.noiseLevel = noiseLevel;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Recording (");
@@ -124,6 +162,9 @@ public class Recording implements Serializable {
         sb.append(", ").append(label);
         sb.append(", ").append(wrong);
         sb.append(", ").append(correct);
+        sb.append(", ").append(deleted);
+        sb.append(", ").append(quality);
+        sb.append(", ").append(noiseLevel);
 
         sb.append(")");
         return sb.toString();
