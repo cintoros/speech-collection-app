@@ -31,7 +31,7 @@
       <tr *matRowDef="let row; columns: ['time','licence','domain','options'];" mat-row></tr>
     </table>
   </div>
-  <div [hidden]="!excerpts">
+  <div [hidden]="!excerpts" style=" height: 800px;width: 100%; overflow: auto;">
     <button (click)="back()" mat-icon-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
