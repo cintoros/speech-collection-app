@@ -13,13 +13,13 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Excerpt implements Serializable {
 
-    private static final long serialVersionUID = -1930845422;
+    private static final long serialVersionUID = 99563538;
 
     private Long    id;
     private Long    originalTextId;
     private String  excerpt;
-    private Integer isskipped;
-    private Boolean isprivate;
+    private Integer isSkipped;
+    private Boolean isPrivate;
     private Boolean isSentenceError;
 
     public Excerpt() {}
@@ -28,8 +28,8 @@ public class Excerpt implements Serializable {
         this.id = value.id;
         this.originalTextId = value.originalTextId;
         this.excerpt = value.excerpt;
-        this.isskipped = value.isskipped;
-        this.isprivate = value.isprivate;
+        this.isSkipped = value.isSkipped;
+        this.isPrivate = value.isPrivate;
         this.isSentenceError = value.isSentenceError;
     }
 
@@ -37,15 +37,15 @@ public class Excerpt implements Serializable {
         Long    id,
         Long    originalTextId,
         String  excerpt,
-        Integer isskipped,
-        Boolean isprivate,
+        Integer isSkipped,
+        Boolean isPrivate,
         Boolean isSentenceError
     ) {
         this.id = id;
         this.originalTextId = originalTextId;
         this.excerpt = excerpt;
-        this.isskipped = isskipped;
-        this.isprivate = isprivate;
+        this.isSkipped = isSkipped;
+        this.isPrivate = isPrivate;
         this.isSentenceError = isSentenceError;
     }
 
@@ -76,20 +76,20 @@ public class Excerpt implements Serializable {
         this.excerpt = excerpt;
     }
 
-    public Integer getIsskipped() {
-        return this.isskipped;
+    public Integer getIsSkipped() {
+        return this.isSkipped;
     }
 
-    public void setIsskipped(Integer isskipped) {
-        this.isskipped = isskipped;
+    public void setIsSkipped(Integer isSkipped) {
+        this.isSkipped = isSkipped;
     }
 
-    public Boolean getIsprivate() {
-        return this.isprivate;
+    public Boolean getIsPrivate() {
+        return this.isPrivate;
     }
 
-    public void setIsprivate(Boolean isprivate) {
-        this.isprivate = isprivate;
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
     }
 
     public Boolean getIsSentenceError() {
@@ -107,8 +107,8 @@ public class Excerpt implements Serializable {
         sb.append(id);
         sb.append(", ").append(originalTextId);
         sb.append(", ").append(excerpt);
-        sb.append(", ").append(isskipped);
-        sb.append(", ").append(isprivate);
+        sb.append(", ").append(isSkipped);
+        sb.append(", ").append(isPrivate);
         sb.append(", ").append(isSentenceError);
 
         sb.append(")");

@@ -37,6 +37,16 @@
       <mat-icon>skip_next</mat-icon>
       <span>&nbsp;Skip</span>
     </button>
+    <button (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)" [disabled]="!this.isReady"
+            class="check-navigation-button" mat-raised-button>
+      <mat-icon>delete</mat-icon>
+      <span>&nbsp;Not a sentence</span>
+    </button>
+    <button (click)="setCheckedType(checkedOccurrenceLabel.PRIVATE)" [disabled]="!this.isReady"
+            class="check-navigation-button" mat-raised-button>
+      <mat-icon>lock</mat-icon>
+      <span>&nbsp;sensitive data</span>
+    </button>
   </div>
   <div id="shortcut-button">
     <button (click)="openShortcutDialog()" mat-raised-button>

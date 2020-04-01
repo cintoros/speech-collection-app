@@ -53,7 +53,7 @@ public class UserGroupService {
         return dslContext.select(EXCERPT.fields())
                 .from(EXCERPT.join(ORIGINAL_TEXT).onKey())
                 .where(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId)
-                        .and(EXCERPT.ISSKIPPED.lessOrEqual(3))
+                        .and(EXCERPT.IS_SKIPPED.lessOrEqual(3))
                         .and(EXCERPT.IS_SENTENCE_ERROR.isFalse())
 
                         .and(EXCERPT.ID.notIn(dslContext.select(RECORDING.EXCERPT_ID)
@@ -116,13 +116,13 @@ public class UserGroupService {
 
     public void putExcerptSkipped(long groupId, long excerptId) {
         checkExcerpt(groupId, excerptId);
-        dslContext.update(EXCERPT).set(EXCERPT.ISSKIPPED, EXCERPT.ISSKIPPED.plus(1)).where(EXCERPT.ID.eq(excerptId)).execute();
+        dslContext.update(EXCERPT).set(EXCERPT.IS_SKIPPED, EXCERPT.IS_SKIPPED.plus(1)).where(EXCERPT.ID.eq(excerptId)).execute();
         storeRecord(RecordingLabel.SKIPPED, excerptId);
     }
 
     public void putExcerptPrivate(long groupId, long excerptId) {
         checkExcerpt(groupId, excerptId);
-        dslContext.update(EXCERPT).set(EXCERPT.ISPRIVATE, true).where(EXCERPT.ID.eq(excerptId)).execute();
+        dslContext.update(EXCERPT).set(EXCERPT.IS_PRIVATE, true).where(EXCERPT.ID.eq(excerptId)).execute();
         storeRecord(RecordingLabel.PRIVATE, excerptId);
     }
 

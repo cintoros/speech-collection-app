@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CheckedTextAudio extends TableImpl<CheckedTextAudioRecord> {
 
-    private static final long serialVersionUID = 930644910;
+    private static final long serialVersionUID = 285605226;
 
     public static final CheckedTextAudio CHECKED_TEXT_AUDIO = new CheckedTextAudio();
 
@@ -47,7 +47,7 @@ public class CheckedTextAudio extends TableImpl<CheckedTextAudioRecord> {
 
     public final TableField<CheckedTextAudioRecord, Long> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
-    public final TableField<CheckedTextAudioRecord, CheckedTextAudioLabel> LABEL = createField(DSL.name("label"), org.jooq.impl.SQLDataType.VARCHAR(7).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.labeling_tool.jooq.enums.CheckedTextAudioLabel.class), this, "");
+    public final TableField<CheckedTextAudioRecord, CheckedTextAudioLabel> LABEL = createField(DSL.name("label"), org.jooq.impl.SQLDataType.VARCHAR(14).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.labeling_tool.jooq.enums.CheckedTextAudioLabel.class), this, "");
 
     public final TableField<CheckedTextAudioRecord, Timestamp> TIME = createField(DSL.name("time"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("current_timestamp()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 

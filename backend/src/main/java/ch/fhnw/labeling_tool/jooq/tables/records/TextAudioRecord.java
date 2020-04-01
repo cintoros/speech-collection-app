@@ -13,15 +13,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record10;
-import org.jooq.Row10;
+import org.jooq.Record12;
+import org.jooq.Row12;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implements Record10<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp> {
+public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implements Record12<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp, Boolean, Boolean> {
 
-    private static final long serialVersionUID = -2070308744;
+    private static final long serialVersionUID = -915133375;
 
     public void setId(Long value) {
         set(0, value);
@@ -110,6 +110,22 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
         return (Timestamp) get(9);
     }
 
+    public void setIsSentenceError(Boolean value) {
+        set(10, value);
+    }
+
+    public Boolean getIsSentenceError() {
+        return (Boolean) get(10);
+    }
+
+    public void setIsPrivate(Boolean value) {
+        set(11, value);
+    }
+
+    public Boolean getIsPrivate() {
+        return (Boolean) get(11);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -120,17 +136,17 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Record12 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row12<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp, Boolean, Boolean> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 
     @Override
-    public Row10<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp> valuesRow() {
-        return (Row10) super.valuesRow();
+    public Row12<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp, Boolean, Boolean> valuesRow() {
+        return (Row12) super.valuesRow();
     }
 
     @Override
@@ -184,6 +200,16 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
     }
 
     @Override
+    public Field<Boolean> field11() {
+        return TextAudio.TEXT_AUDIO.IS_SENTENCE_ERROR;
+    }
+
+    @Override
+    public Field<Boolean> field12() {
+        return TextAudio.TEXT_AUDIO.IS_PRIVATE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -234,6 +260,16 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
     }
 
     @Override
+    public Boolean component11() {
+        return getIsSentenceError();
+    }
+
+    @Override
+    public Boolean component12() {
+        return getIsPrivate();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -281,6 +317,16 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
     @Override
     public Timestamp value10() {
         return getDeleted();
+    }
+
+    @Override
+    public Boolean value11() {
+        return getIsSentenceError();
+    }
+
+    @Override
+    public Boolean value12() {
+        return getIsPrivate();
     }
 
     @Override
@@ -344,7 +390,19 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
     }
 
     @Override
-    public TextAudioRecord values(Long value1, Double value2, Double value3, String value4, String value5, Long value6, Long value7, Long value8, Long value9, Timestamp value10) {
+    public TextAudioRecord value11(Boolean value) {
+        setIsSentenceError(value);
+        return this;
+    }
+
+    @Override
+    public TextAudioRecord value12(Boolean value) {
+        setIsPrivate(value);
+        return this;
+    }
+
+    @Override
+    public TextAudioRecord values(Long value1, Double value2, Double value3, String value4, String value5, Long value6, Long value7, Long value8, Long value9, Timestamp value10, Boolean value11, Boolean value12) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -355,6 +413,8 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
         value8(value8);
         value9(value9);
         value10(value10);
+        value11(value11);
+        value12(value12);
         return this;
     }
 
@@ -366,7 +426,7 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
         super(TextAudio.TEXT_AUDIO);
     }
 
-    public TextAudioRecord(Long id, Double audioStart, Double audioEnd, String text, String pathToFile, Long speakerId, Long sourceId, Long wrong, Long correct, Timestamp deleted) {
+    public TextAudioRecord(Long id, Double audioStart, Double audioEnd, String text, String pathToFile, Long speakerId, Long sourceId, Long wrong, Long correct, Timestamp deleted, Boolean isSentenceError, Boolean isPrivate) {
         super(TextAudio.TEXT_AUDIO);
 
         set(0, id);
@@ -379,5 +439,7 @@ public class TextAudioRecord extends UpdatableRecordImpl<TextAudioRecord> implem
         set(7, wrong);
         set(8, correct);
         set(9, deleted);
+        set(10, isSentenceError);
+        set(11, isPrivate);
     }
 }

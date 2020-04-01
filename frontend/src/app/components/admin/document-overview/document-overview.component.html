@@ -44,13 +44,13 @@
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Excerpt</th>
         <td *matCellDef="let element" mat-cell>{{element.excerpt}}</td>
       </ng-container>
-      <ng-container matColumnDef="isskipped">
+      <ng-container matColumnDef="isSkipped">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Skipped</th>
-        <td *matCellDef="let element" mat-cell>{{element.isskipped}}</td>
+        <td *matCellDef="let element" mat-cell>{{element.isSkipped}}</td>
       </ng-container>
-      <ng-container matColumnDef="isprivate">
+      <ng-container matColumnDef="isPrivate">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Private</th>
-        <td *matCellDef="let element" mat-cell>{{element.isprivate}}</td>
+        <td *matCellDef="let element" mat-cell>{{element.isPrivate}}</td>
       </ng-container>
       <ng-container matColumnDef="isSentenceError">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Sentence error</th>
@@ -64,9 +64,9 @@
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['excerpt','isskipped','isprivate','isSentenceError','options'];sticky: true"
+      <tr *matHeaderRowDef="['excerpt','isSkipped','isPrivate','isSentenceError','options'];sticky: true"
           mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['excerpt','isskipped','isprivate','isSentenceError','options'];" mat-row></tr>
+      <tr *matRowDef="let row; columns: ['excerpt','isSkipped','isPrivate','isSentenceError','options'];" mat-row></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

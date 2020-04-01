@@ -16,7 +16,11 @@ public enum CheckedTextAudioLabel implements EnumType {
 
     CORRECT("CORRECT"),
 
-    WRONG("WRONG");
+    WRONG("WRONG"),
+
+    PRIVATE("PRIVATE"),
+
+    SENTENCE_ERROR("SENTENCE_ERROR");
 
     private final String literal;
 

@@ -117,4 +117,20 @@ public class TextAudioDao extends DAOImpl<TextAudioRecord, ch.fhnw.labeling_tool
     public List<ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio> fetchByDeleted(Timestamp... values) {
         return fetch(TextAudio.TEXT_AUDIO.DELETED, values);
     }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio> fetchRangeOfIsSentenceError(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(TextAudio.TEXT_AUDIO.IS_SENTENCE_ERROR, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio> fetchByIsSentenceError(Boolean... values) {
+        return fetch(TextAudio.TEXT_AUDIO.IS_SENTENCE_ERROR, values);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio> fetchRangeOfIsPrivate(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(TextAudio.TEXT_AUDIO.IS_PRIVATE, lowerInclusive, upperInclusive);
+    }
+
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.TextAudio> fetchByIsPrivate(Boolean... values) {
+        return fetch(TextAudio.TEXT_AUDIO.IS_PRIVATE, values);
+    }
 }

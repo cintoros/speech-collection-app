@@ -42,8 +42,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .realmName("test")
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
+                //NOTE: on the server we need to correctly logout or else the session cookies are still valid
+                // for local development the cookies are not send over.
                 .logout()
-                //TODO needs to be tested on the server
                 .logoutUrl("/api/public/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
