@@ -52,4 +52,12 @@ export class LoginComponent implements OnInit {
 
   toggleIsLogin = () => this.isLogin = !this.isLogin;
   newUser = () => User.default();
+
+  clickPasswordReset() {
+
+  }
+
+  clickEmailToken() {
+
+  }
 }

@@ -73,7 +73,7 @@ public interface EmailSenderService {
                 email.setSubject((emailMode ? "Email Confirmation" : "Password Reset") + " Speech Collection App");
                 email.setFrom(labelingToolConfig.getFromEmail());
                 var template = freemarkerConfig.getTemplate(emailMode ? "email-confirmation.ftl" : "\"password-reset.ftl\"");
-                var url = labelingToolConfig.getBaseUrl() + "token?token=" + token;
+                var url = labelingToolConfig.getBaseUrl() + "mode=" + (emailMode ? "email" : "password") + "&token?token=" + token;
                 var text = FreeMarkerTemplateUtils.processTemplateIntoString(template, Map.of("link", url));
                 email.setText(text, true);
                 javaMailSender.send(email.getMimeMessage());

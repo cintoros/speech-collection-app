@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ch.fhnw.labeling_tool.jooq.Tables.USER;
+import static ch.fhnw.labeling_tool.jooq.Tables.VERIFICATION_TOKEN;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -124,5 +125,35 @@ public class CustomUserDetailsService implements UserDetailsService {
         //add user to public group
         userGroupRoleDao.insert(new UserGroupRole(null, UserGroupRoleRole.USER, userRecord.getId(), 1L));
         emailSenderService.sendEmailConfirmation(userRecord);
+    }
+
+    public boolean confirmEmail(String token) {
+        return dslContext.selectFrom(VERIFICATION_TOKEN)
+                .where(VERIFICATION_TOKEN.TOKEN.eq(token))
+                .fetchOptional()
+                .map(t -> dslContext.update(USER).set(USER.ENABLED, true).where(USER.ID.eq(t.getUserId())).execute() == 1)
+                .orElse(false);
+    }
+
+    public void resendEmail(String email) {
+        dslContext.selectFrom(USER)
+                .where(USER.EMAIL.eq(email))
+                .fetchOptional()
+                .ifPresent(emailSenderService::sendEmailConfirmation);
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        return dslContext.selectFrom(VERIFICATION_TOKEN)
+                .where(VERIFICATION_TOKEN.TOKEN.eq(token))
+                .fetchOptional()
+                .map(t -> dslContext.update(USER).set(USER.PASSWORD, passwordEncoder.encode(newPassword)).where(USER.ID.eq(t.getUserId())).execute() == 1)
+                .orElse(false);
+    }
+
+    public void resendPassword(String email) {
+        dslContext.selectFrom(USER)
+                .where(USER.EMAIL.eq(email))
+                .fetchOptional()
+                .ifPresent(emailSenderService::sendResetPassword);
     }
 }

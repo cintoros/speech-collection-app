@@ -1,1 +1,18 @@
-<p>verification-token works!</p>
+<!--TODO implement most of this logic-->
+<mat-card>
+  <div *ngIf="modus===verificationModus.EMAIL_VERIFIED">
+    <p>Your Email was successfully verified. you can now procceed to the login.</p>
+  </div>
+  <div *ngIf="modus===verificationModus.EMAIL_TOKEN_EXPIRED">
+    <p>Your token is expired</p>
+  </div>
+  <div *ngIf="modus===verificationModus.PASSWORD_FORM">
+    <p>EMAIL_VERIFIED</p>
+  </div>
+  <div *ngIf="modus===verificationModus.PASSWORD_CHANGED">
+    <p>Your password was successfully changed</p>
+  </div>
+  <div *ngIf="modus===verificationModus.PASSWORD_TOKEN_EXPIRED">
+    <p>Your token is expired</p>
+  </div>
+</mat-card>

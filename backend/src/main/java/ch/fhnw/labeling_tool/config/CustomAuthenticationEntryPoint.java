@@ -11,6 +11,8 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        //TODO change reason for email not validated etc.
+        authException.printStackTrace();
         response.sendError(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
     }
 }
