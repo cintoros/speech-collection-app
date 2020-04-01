@@ -6,6 +6,7 @@ import {Excerpt} from '../../../models/excerpt';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {Domain} from '../../../models/domain';
 
 interface OriginalText {
   id: number;
@@ -27,12 +28,15 @@ export class DocumentOverviewComponent implements OnInit {
   private baseUrl: string;
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
+  private domains: Domain[] = [];
 
   constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
   }
 
   ngOnInit(): void {
     this.baseUrl = `${environment.url}user_group/${this.userGroupService.userGroupId}/admin/original_text/`;
+    this.httpClient.get<Domain[]>(`${environment.url}user_group/${this.userGroupService.userGroupId}/admin/domain`)
+      .subscribe(d => this.domains = d);
     this.reload();
   }
 
@@ -58,6 +62,7 @@ export class DocumentOverviewComponent implements OnInit {
     }
   }
 
+  findDomain = (id: number) => this.domains.find(value => value.id === id);
   back = () => this.excerpts = undefined;
 
   private reload() {

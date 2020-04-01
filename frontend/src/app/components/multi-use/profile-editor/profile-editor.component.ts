@@ -15,13 +15,14 @@ import {DialectService} from '../../../services/dialect.service';
   styleUrls: ['./profile-editor.component.scss']
 })
 export class ProfileEditorComponent implements OnInit, OnChanges {
-  @Input() isNewUser;
+  @Input() isNewUser: boolean;
   @Input() user: User;
   @Output() output = new EventEmitter();
   @Input() disabled: boolean;
   registerForm: FormGroup;
   dialects: Dialect[] = [];
   private userCopy: User;
+  private zV = [Validators.required, Validators.pattern('[0-9]{4}'), Validators.minLength(4), Validators.maxLength(4)];
 
   constructor(
     private formBuilder: FormBuilder, private snackBarService: SnackBarService, private httpClient: HttpClient,
@@ -40,7 +41,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
       ])],
       username: [this.user.username, [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]],
       canton: [this.user.dialectId, []],
-      zipCode: [this.user.zipCode, [Validators.required]],
+      zipCode: [this.user.zipCode, this.zV],
       password: undefined,
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
@@ -66,7 +67,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
           zipCode.setValidators([]);
           canton.setValidators([Validators.required]);
         } else {
-          zipCode.setValidators([Validators.required]);
+          zipCode.setValidators(this.zV);
           canton.setValidators([]);
         }
 
@@ -116,14 +117,12 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     }
   }
 
-  isCanctonError(errorCode: string) {
-    return this.registerForm.controls.zipCode.hasError(errorCode) || this.registerForm.controls.canton.hasError(errorCode);
-  }
-
+  isCanctonError = (errorCode: string) => this.registerForm.controls.canton.hasError(errorCode);
   cancel = () => this.output.emit('cancel');
   isEmailError = (errorCode: string) => this.registerForm.controls.email.hasError(errorCode);
   isUNError = (errorCode: string) => this.registerForm.controls.username.hasError(errorCode);
   isPwError = (errorCode: string) => this.registerForm.controls.password.hasError(errorCode);
+  isZipError = (errorCode: string) => !this.registerForm.controls.zipCode.valid;
 
   private checkDisabled() {
     if (this.disabled) {
