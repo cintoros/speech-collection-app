@@ -49,12 +49,17 @@ export class AuthService {
 
   logout(b: boolean) {
     sessionStorage.clear();
-    this.router.navigate(['/login'])
-      .finally(() => {
-        if (b) {
-          location.reload();
-        }
-      });
+    this.httpClient.post(`${environment.url}public/logout`, {}).subscribe(() => {
+    }, () => {
+    }, () => {
+      this.router.navigate(['/login'])
+        .finally(() => {
+          if (b) {
+            location.reload();
+          }
+        });
+    });
+
   }
 
   private loginUser(user: EmailPassword): Observable<SpringPrincipal> {
