@@ -108,6 +108,8 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
             this.snackBarService.openMessage('logout caused by username change');
             this.authService.logout(false);
           } else {
+            this.authService.reloadUser();
+            this.cancel();
             this.snackBarService.openMessage('successfully updated user');
           }
         }, error => {

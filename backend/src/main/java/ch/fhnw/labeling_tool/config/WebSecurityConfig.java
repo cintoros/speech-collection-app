@@ -41,6 +41,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .logout()
+                //TODO needs to be tested on the server with the cookies an such see for example https://www.baeldung.com/spring-security-logout
                 .logoutUrl("/api/logout")
                 .and().csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
