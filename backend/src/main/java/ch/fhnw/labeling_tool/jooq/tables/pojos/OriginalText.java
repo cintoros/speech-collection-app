@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OriginalText implements Serializable {
 
-    private static final long serialVersionUID = -1860563638;
+    private static final long serialVersionUID = 1721250802;
 
     private Long      id;
     private Long      userGroupId;
@@ -22,6 +22,7 @@ public class OriginalText implements Serializable {
     private Long      userId;
     private Timestamp time;
     private String    licence;
+    private String    name;
 
     public OriginalText() {}
 
@@ -32,6 +33,7 @@ public class OriginalText implements Serializable {
         this.userId = value.userId;
         this.time = value.time;
         this.licence = value.licence;
+        this.name = value.name;
     }
 
     public OriginalText(
@@ -40,7 +42,8 @@ public class OriginalText implements Serializable {
         Long      domainId,
         Long      userId,
         Timestamp time,
-        String    licence
+        String    licence,
+        String    name
     ) {
         this.id = id;
         this.userGroupId = userGroupId;
@@ -48,6 +51,7 @@ public class OriginalText implements Serializable {
         this.userId = userId;
         this.time = time;
         this.licence = licence;
+        this.name = name;
     }
 
     public Long getId() {
@@ -101,6 +105,15 @@ public class OriginalText implements Serializable {
         this.licence = licence;
     }
 
+    @Size(max = 65535)
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OriginalText (");
@@ -111,6 +124,7 @@ public class OriginalText implements Serializable {
         sb.append(", ").append(userId);
         sb.append(", ").append(time);
         sb.append(", ").append(licence);
+        sb.append(", ").append(name);
 
         sb.append(")");
         return sb.toString();

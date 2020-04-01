@@ -15,6 +15,7 @@ interface OriginalText {
   userId: number;
   time: Date;
   licence: string;
+  name: string;
 }
 
 @Component({
