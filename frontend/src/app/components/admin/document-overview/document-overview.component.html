@@ -12,6 +12,10 @@
         <th *matHeaderCellDef mat-header-cell>Domain</th>
         <td *matCellDef="let element" mat-cell>{{findDomain(element.domainId)?.name}}</td>
       </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell>Name</th>
+        <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+      </ng-container>
       <ng-container matColumnDef="time">
         <th *matHeaderCellDef mat-header-cell>Time</th>
         <td *matCellDef="let element" mat-cell>{{element.time}}</td>
@@ -27,8 +31,8 @@
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['time','licence','domain','options'];sticky: true" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['time','licence','domain','options'];" mat-row></tr>
+      <tr *matHeaderRowDef="['time','licence','domain','name','options'];sticky: true" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: ['time','licence','domain','name','options'];" mat-row></tr>
     </table>
   </div>
   <div [hidden]="!excerpts" style=" height: 800px;width: 100%; overflow: auto;">
