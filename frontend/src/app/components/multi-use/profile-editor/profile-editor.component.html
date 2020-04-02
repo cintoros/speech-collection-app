@@ -5,7 +5,6 @@
   </mat-form-field>
   <mat-form-field class="max-width">
     <input autocomplete="family-name" formControlName="lastName" matInput placeholder="Last Name" type="text">
-    <mat-error *ngIf="isCanctonError('required')">Please enter your last name</mat-error>
   </mat-form-field>
   <mat-form-field class="max-width">
     <input autocomplete="username" formControlName="username" matInput placeholder="Username*" type="text">
@@ -54,25 +53,27 @@
     </mat-select>
   </mat-form-field>
   <p style="color: grey;font-size: 0.8em">* Indicates a required field</p>
-  <p style="color: grey;font-size: 0.8em">* Please enter the zip code of your last school years or the canton
-    which had the most influence over your dialect.</p>
-  <div class="max-width">
-    <mat-form-field>
+  <mat-card>
+    <h4 style="color: grey;font-size: 0.8em">Dialect</h4>
+    <p style="color: grey;font-size: 0.8em">Please enter the zip code of your last school years. If your dialect changed
+      a lot since then, please also select the canton which describes your current dialect best. If your last school
+      years were outside of Switzerland, tick the checkbox and select the canton describing your current dialect best
+      instead.</p>
+    <mat-form-field class="max-width">
       <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="Zip Code" type="text">
-      <!--      <mat-error *ngIf="isCanctonError('required')"></mat-error>-->
+      <mat-error *ngIf="isZipError('pattern')">Not a valid zip code</mat-error>
     </mat-form-field>
     <mat-checkbox formControlName="notCH">outside of Switzerland</mat-checkbox>
-  </div>
-  <mat-form-field class="max-width">
-    <mat-label>Canton</mat-label>
-    <mat-select formControlName="canton">
-      <mat-option *ngFor="let canton of dialects"
-                  [value]="canton.id">{{canton.countyName}}</mat-option>
-    </mat-select>
-    <!--    <mat-error *ngIf="isCanctonError('required')">Please enter the zip code of your last school years or the canton-->
-    <!--      which had the most influence over your dialect.-->
-    <!--    </mat-error>-->
-  </mat-form-field>
+    <mat-form-field class="max-width">
+      <mat-label>Canton</mat-label>
+      <mat-select formControlName="canton">
+        <mat-option *ngIf="isNewUser">None</mat-option>
+        <mat-option *ngFor="let canton of dialects"
+                    [value]="canton.id">{{canton.countyName}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="isCanctonError('required')">Canton is required</mat-error>
+    </mat-form-field>
+  </mat-card>
   <div *ngIf="!disabled">
     <button class="custom-button" mat-button type="submit">Save</button>
     <button (click)="cancel()" class="custom-button" mat-button type="button">Cancel</button>

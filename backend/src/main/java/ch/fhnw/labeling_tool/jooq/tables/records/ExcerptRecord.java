@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements Record6<Long, Long, String, Integer, Boolean, Boolean> {
 
-    private static final long serialVersionUID = 566034723;
+    private static final long serialVersionUID = 1109111911;
 
     public void setId(Long value) {
         set(0, value);
@@ -48,19 +48,19 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
         return (String) get(2);
     }
 
-    public void setIsskipped(Integer value) {
+    public void setIsSkipped(Integer value) {
         set(3, value);
     }
 
-    public Integer getIsskipped() {
+    public Integer getIsSkipped() {
         return (Integer) get(3);
     }
 
-    public void setIsprivate(Boolean value) {
+    public void setIsPrivate(Boolean value) {
         set(4, value);
     }
 
-    public Boolean getIsprivate() {
+    public Boolean getIsPrivate() {
         return (Boolean) get(4);
     }
 
@@ -112,12 +112,12 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
 
     @Override
     public Field<Integer> field4() {
-        return Excerpt.EXCERPT.ISSKIPPED;
+        return Excerpt.EXCERPT.IS_SKIPPED;
     }
 
     @Override
     public Field<Boolean> field5() {
-        return Excerpt.EXCERPT.ISPRIVATE;
+        return Excerpt.EXCERPT.IS_PRIVATE;
     }
 
     @Override
@@ -142,12 +142,12 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
 
     @Override
     public Integer component4() {
-        return getIsskipped();
+        return getIsSkipped();
     }
 
     @Override
     public Boolean component5() {
-        return getIsprivate();
+        return getIsPrivate();
     }
 
     @Override
@@ -172,12 +172,12 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
 
     @Override
     public Integer value4() {
-        return getIsskipped();
+        return getIsSkipped();
     }
 
     @Override
     public Boolean value5() {
-        return getIsprivate();
+        return getIsPrivate();
     }
 
     @Override
@@ -205,13 +205,13 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
 
     @Override
     public ExcerptRecord value4(Integer value) {
-        setIsskipped(value);
+        setIsSkipped(value);
         return this;
     }
 
     @Override
     public ExcerptRecord value5(Boolean value) {
-        setIsprivate(value);
+        setIsPrivate(value);
         return this;
     }
 
@@ -240,14 +240,14 @@ public class ExcerptRecord extends UpdatableRecordImpl<ExcerptRecord> implements
         super(Excerpt.EXCERPT);
     }
 
-    public ExcerptRecord(Long id, Long originalTextId, String excerpt, Integer isskipped, Boolean isprivate, Boolean isSentenceError) {
+    public ExcerptRecord(Long id, Long originalTextId, String excerpt, Integer isSkipped, Boolean isPrivate, Boolean isSentenceError) {
         super(Excerpt.EXCERPT);
 
         set(0, id);
         set(1, originalTextId);
         set(2, excerpt);
-        set(3, isskipped);
-        set(4, isprivate);
+        set(3, isSkipped);
+        set(4, isPrivate);
         set(5, isSentenceError);
     }
 }

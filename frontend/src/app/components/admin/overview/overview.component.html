@@ -6,7 +6,7 @@
                      [overviewOccurrence]="selectedOverviewOccurrence"></app-edit-text-audio>
 <div class="margin">
   <table [dataSource]="dataSource" mat-table matSort
-         style="width: 100%; ">
+         style="width: 100%; height: 800px;">
     <ng-container matColumnDef="text">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Text</th>
       <td *matCellDef="let element" [title]="element.text" mat-cell><span

@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Excerpt extends TableImpl<ExcerptRecord> {
 
-    private static final long serialVersionUID = 678737736;
+    private static final long serialVersionUID = -1103626046;
 
     public static final Excerpt EXCERPT = new Excerpt();
 
@@ -45,9 +45,9 @@ public class Excerpt extends TableImpl<ExcerptRecord> {
 
     public final TableField<ExcerptRecord, String> EXCERPT_ = createField(DSL.name("excerpt"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
-    public final TableField<ExcerptRecord, Integer> ISSKIPPED = createField(DSL.name("isSkipped"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<ExcerptRecord, Integer> IS_SKIPPED = createField(DSL.name("is_skipped"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
-    public final TableField<ExcerptRecord, Boolean> ISPRIVATE = createField(DSL.name("isPrivate"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ExcerptRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public final TableField<ExcerptRecord, Boolean> IS_SENTENCE_ERROR = createField(DSL.name("is_sentence_error"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 

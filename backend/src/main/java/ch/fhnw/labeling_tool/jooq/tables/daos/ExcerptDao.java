@@ -61,20 +61,20 @@ public class ExcerptDao extends DAOImpl<ExcerptRecord, ch.fhnw.labeling_tool.joo
         return fetch(Excerpt.EXCERPT.EXCERPT_, values);
     }
 
-    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchRangeOfIsskipped(Integer lowerInclusive, Integer upperInclusive) {
-        return fetchRange(Excerpt.EXCERPT.ISSKIPPED, lowerInclusive, upperInclusive);
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchRangeOfIsSkipped(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(Excerpt.EXCERPT.IS_SKIPPED, lowerInclusive, upperInclusive);
     }
 
-    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchByIsskipped(Integer... values) {
-        return fetch(Excerpt.EXCERPT.ISSKIPPED, values);
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchByIsSkipped(Integer... values) {
+        return fetch(Excerpt.EXCERPT.IS_SKIPPED, values);
     }
 
-    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchRangeOfIsprivate(Boolean lowerInclusive, Boolean upperInclusive) {
-        return fetchRange(Excerpt.EXCERPT.ISPRIVATE, lowerInclusive, upperInclusive);
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchRangeOfIsPrivate(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(Excerpt.EXCERPT.IS_PRIVATE, lowerInclusive, upperInclusive);
     }
 
-    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchByIsprivate(Boolean... values) {
-        return fetch(Excerpt.EXCERPT.ISPRIVATE, values);
+    public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchByIsPrivate(Boolean... values) {
+        return fetch(Excerpt.EXCERPT.IS_PRIVATE, values);
     }
 
     public List<ch.fhnw.labeling_tool.jooq.tables.pojos.Excerpt> fetchRangeOfIsSentenceError(Boolean lowerInclusive, Boolean upperInclusive) {

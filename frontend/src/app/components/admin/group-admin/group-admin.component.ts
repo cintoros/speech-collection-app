@@ -3,12 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {UserGroupService} from '../../../services/user-group.service';
 import {UserGroupRoleRole} from '../../../models/spring-principal';
-import {UserGroup} from '../../../models/user-group';
-
-interface Domain {
-  id: number;
-  name: string;
-}
+import {Domain} from '../../../models/domain';
 
 @Component({
   selector: 'app-group-admin',
