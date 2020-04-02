@@ -1,8 +1,8 @@
 export interface Excerpt {
   excerpt: string;
   id: number;
-  isskipped: number;
-  isprivate: boolean;
+  isSkipped: number;
+  isPrivate: boolean;
   isSentenceError: boolean;
   originalTextId: number;
 }

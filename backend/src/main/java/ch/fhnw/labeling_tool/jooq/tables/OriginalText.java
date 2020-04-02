@@ -19,7 +19,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OriginalText extends TableImpl<OriginalTextRecord> {
 
-    private static final long serialVersionUID = 205745596;
+    private static final long serialVersionUID = 216724877;
 
     public static final OriginalText ORIGINAL_TEXT = new OriginalText();
 
@@ -51,6 +51,8 @@ public class OriginalText extends TableImpl<OriginalTextRecord> {
     public final TableField<OriginalTextRecord, Timestamp> TIME = createField(DSL.name("time"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("current_timestamp()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     public final TableField<OriginalTextRecord, String> LICENCE = createField(DSL.name("licence"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("''", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<OriginalTextRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("''", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public OriginalText() {
         this(DSL.name("original_text"), null);
@@ -139,11 +141,11 @@ public class OriginalText extends TableImpl<OriginalTextRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, Long, Long, Long, Timestamp, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Long, Long, Long, Long, Timestamp, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

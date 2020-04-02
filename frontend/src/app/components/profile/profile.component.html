@@ -1,6 +1,6 @@
 <div *ngIf="user"
      style="height: 40%; margin-top: -12px; background-color: #303f9f; display: flex; justify-content: center;">
-  <mat-card *ngIf="user" [style.height]="'calc(100% - 130px)'" id="header-card"
+  <mat-card *ngIf="user" id="header-card"
             style="margin: 15px; width: 50%; position: absolute;">
     <div style="height: 10%; display: flex; align-items: center; margin-top: -15px;">
       <h1 style="margin: 0;">Account Settings</h1>
@@ -12,6 +12,7 @@
                           [isNewUser]="false"
                           [user]="copyUser()"></app-profile-editor>
       <ng-container *ngIf="!isProfileEdit&&!isPasswordEdit">
+        <br>
         <mat-button-toggle (click)="toggleProfileEdit()" class="edit-button">Edit Profile</mat-button-toggle>
         <mat-button-toggle (click)="togglePasswordEdit()" class="edit-button">Edit Password</mat-button-toggle>
       </ng-container>

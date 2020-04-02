@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TextAudio implements Serializable {
 
-    private static final long serialVersionUID = 865083015;
+    private static final long serialVersionUID = -1844839717;
 
     private Long      id;
     private Double    audioStart;
@@ -26,6 +26,8 @@ public class TextAudio implements Serializable {
     private Long      wrong;
     private Long      correct;
     private Timestamp deleted;
+    private Boolean   isSentenceError;
+    private Boolean   isPrivate;
 
     public TextAudio() {}
 
@@ -40,6 +42,8 @@ public class TextAudio implements Serializable {
         this.wrong = value.wrong;
         this.correct = value.correct;
         this.deleted = value.deleted;
+        this.isSentenceError = value.isSentenceError;
+        this.isPrivate = value.isPrivate;
     }
 
     public TextAudio(
@@ -52,7 +56,9 @@ public class TextAudio implements Serializable {
         Long      sourceId,
         Long      wrong,
         Long      correct,
-        Timestamp deleted
+        Timestamp deleted,
+        Boolean   isSentenceError,
+        Boolean   isPrivate
     ) {
         this.id = id;
         this.audioStart = audioStart;
@@ -64,6 +70,8 @@ public class TextAudio implements Serializable {
         this.wrong = wrong;
         this.correct = correct;
         this.deleted = deleted;
+        this.isSentenceError = isSentenceError;
+        this.isPrivate = isPrivate;
     }
 
     public Long getId() {
@@ -153,6 +161,22 @@ public class TextAudio implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean getIsSentenceError() {
+        return this.isSentenceError;
+    }
+
+    public void setIsSentenceError(Boolean isSentenceError) {
+        this.isSentenceError = isSentenceError;
+    }
+
+    public Boolean getIsPrivate() {
+        return this.isPrivate;
+    }
+
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("TextAudio (");
@@ -167,6 +191,8 @@ public class TextAudio implements Serializable {
         sb.append(", ").append(wrong);
         sb.append(", ").append(correct);
         sb.append(", ").append(deleted);
+        sb.append(", ").append(isSentenceError);
+        sb.append(", ").append(isPrivate);
 
         sb.append(")");
         return sb.toString();

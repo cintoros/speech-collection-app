@@ -13,15 +13,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record6;
-import org.jooq.Row6;
+import org.jooq.Record7;
+import org.jooq.Row7;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> implements Record6<Long, Long, Long, Long, Timestamp, String> {
+public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> implements Record7<Long, Long, Long, Long, Timestamp, String, String> {
 
-    private static final long serialVersionUID = 286628960;
+    private static final long serialVersionUID = 172884739;
 
     public void setId(Long value) {
         set(0, value);
@@ -74,6 +74,15 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
         return (String) get(5);
     }
 
+    public void setName(String value) {
+        set(6, value);
+    }
+
+    @Size(max = 65535)
+    public String getName() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -84,17 +93,17 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Record6 type implementation
+    // Record7 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, Long, Long, Long, Timestamp, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Long, Long, Long, Long, Timestamp, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     @Override
-    public Row6<Long, Long, Long, Long, Timestamp, String> valuesRow() {
-        return (Row6) super.valuesRow();
+    public Row7<Long, Long, Long, Long, Timestamp, String, String> valuesRow() {
+        return (Row7) super.valuesRow();
     }
 
     @Override
@@ -128,6 +137,11 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
     }
 
     @Override
+    public Field<String> field7() {
+        return OriginalText.ORIGINAL_TEXT.NAME;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -158,6 +172,11 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
     }
 
     @Override
+    public String component7() {
+        return getName();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -185,6 +204,11 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
     @Override
     public String value6() {
         return getLicence();
+    }
+
+    @Override
+    public String value7() {
+        return getName();
     }
 
     @Override
@@ -224,13 +248,20 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
     }
 
     @Override
-    public OriginalTextRecord values(Long value1, Long value2, Long value3, Long value4, Timestamp value5, String value6) {
+    public OriginalTextRecord value7(String value) {
+        setName(value);
+        return this;
+    }
+
+    @Override
+    public OriginalTextRecord values(Long value1, Long value2, Long value3, Long value4, Timestamp value5, String value6, String value7) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
         value6(value6);
+        value7(value7);
         return this;
     }
 
@@ -242,7 +273,7 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
         super(OriginalText.ORIGINAL_TEXT);
     }
 
-    public OriginalTextRecord(Long id, Long userGroupId, Long domainId, Long userId, Timestamp time, String licence) {
+    public OriginalTextRecord(Long id, Long userGroupId, Long domainId, Long userId, Timestamp time, String licence, String name) {
         super(OriginalText.ORIGINAL_TEXT);
 
         set(0, id);
@@ -251,5 +282,6 @@ public class OriginalTextRecord extends UpdatableRecordImpl<OriginalTextRecord> 
         set(3, userId);
         set(4, time);
         set(5, licence);
+        set(6, name);
     }
 }

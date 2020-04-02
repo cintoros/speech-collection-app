@@ -19,7 +19,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row10;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TextAudio extends TableImpl<TextAudioRecord> {
 
-    private static final long serialVersionUID = -7591636;
+    private static final long serialVersionUID = 2102265160;
 
     public static final TextAudio TEXT_AUDIO = new TextAudio();
 
@@ -59,6 +59,10 @@ public class TextAudio extends TableImpl<TextAudioRecord> {
     public final TableField<TextAudioRecord, Long> CORRECT = createField(DSL.name("correct"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     public final TableField<TextAudioRecord, Timestamp> DELETED = createField(DSL.name("deleted"), org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
+    public final TableField<TextAudioRecord, Boolean> IS_SENTENCE_ERROR = createField(DSL.name("is_sentence_error"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    public final TableField<TextAudioRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public TextAudio() {
         this(DSL.name("text_audio"), null);
@@ -143,11 +147,11 @@ public class TextAudio extends TableImpl<TextAudioRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row12<Long, Double, Double, String, String, Long, Long, Long, Long, Timestamp, Boolean, Boolean> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }

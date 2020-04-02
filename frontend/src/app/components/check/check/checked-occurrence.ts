@@ -1,6 +1,6 @@
 import {OccurrenceMode} from './check.component';
 
-export enum CheckedOccurrenceLabel {SKIPPED = 'SKIPPED', CORRECT = 'CORRECT', WRONG = 'WRONG'}
+export enum CheckedOccurrenceLabel {SKIPPED = 'SKIPPED', CORRECT = 'CORRECT', WRONG = 'WRONG', PRIVATE = 'PRIVATE', SENTENCE_ERROR = 'SENTENCE_ERROR'}
 
 export class CheckedOccurrence {
   id: number;
