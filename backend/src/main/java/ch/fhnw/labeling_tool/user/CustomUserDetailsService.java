@@ -8,6 +8,7 @@ import ch.fhnw.labeling_tool.jooq.tables.daos.UserGroupRoleDao;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.Dialect;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.User;
 import ch.fhnw.labeling_tool.jooq.tables.pojos.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.pojos.VerificationToken;
 import ch.fhnw.labeling_tool.jooq.tables.records.UserRecord;
 import com.google.common.io.Resources;
 import org.jooq.DSLContext;
@@ -25,7 +26,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static ch.fhnw.labeling_tool.jooq.Tables.USER;
@@ -128,11 +131,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public boolean confirmEmail(String token) {
-        return dslContext.selectFrom(VERIFICATION_TOKEN)
-                .where(VERIFICATION_TOKEN.TOKEN.eq(token))
-                .fetchOptional()
-                .map(t -> dslContext.update(USER).set(USER.ENABLED, true).where(USER.ID.eq(t.getUserId())).execute() == 1)
-                .orElse(false);
+        return validateToken(token, t -> dslContext.update(USER).set(USER.ENABLED, true).where(USER.ID.eq(t.getUserId())).execute() == 1);
     }
 
     public void resendEmail(String email) {
@@ -143,11 +142,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public boolean resetPassword(String token, String newPassword) {
-        return dslContext.selectFrom(VERIFICATION_TOKEN)
-                .where(VERIFICATION_TOKEN.TOKEN.eq(token))
-                .fetchOptional()
-                .map(t -> dslContext.update(USER).set(USER.PASSWORD, passwordEncoder.encode(newPassword)).where(USER.ID.eq(t.getUserId())).execute() == 1)
-                .orElse(false);
+        return validateToken(token, t -> dslContext.update(USER).set(USER.PASSWORD, passwordEncoder.encode(newPassword)).where(USER.ID.eq(t.getUserId())).execute() == 1);
     }
 
     public void resendPassword(String email) {
@@ -155,5 +150,21 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .where(USER.EMAIL.eq(email))
                 .fetchOptional()
                 .ifPresent(emailSenderService::sendResetPassword);
+    }
+
+    private boolean validateToken(String token, Function<VerificationToken, Boolean> onValid) {
+        return dslContext.selectFrom(VERIFICATION_TOKEN)
+                .where(VERIFICATION_TOKEN.TOKEN.eq(token))
+                .fetchOptionalInto(VerificationToken.class)
+                .map(t -> {
+                    //NOTE tokens are only valid for one day and only once.
+                    dslContext.delete(VERIFICATION_TOKEN).where(VERIFICATION_TOKEN.ID.eq(t.getId())).execute();
+                    if (t.getCreatedTime().toLocalDateTime().isBefore(LocalDateTime.now().minusDays(1))) {
+                        return false;
+                    } else {
+                        return onValid.apply(t);
+                    }
+                })
+                .orElse(false);
     }
 }

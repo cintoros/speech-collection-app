@@ -26,17 +26,18 @@
       <a (click)="toggleIsLogin()" href="#">here</a>
       <span>!</span>
     </p>
-    <p>
-      <span>Email Validation Token Expired? Click </span>
-      <a (click)="clickEmailToken()" href="#">here</a>
-      <span>!</span>
-    </p>
-    <p>
-      <span>Reset your password </span>
-      <a (click)="clickPasswordReset()" href="#">here</a>
-      <span>!</span>
-    </p>
-
+    <div *ngIf="emailIntegration">
+      <p>
+        <span>Email Validation Token Expired? Click </span>
+        <a [queryParams]="{ mode: 'email'}" [routerLink]="['/token']">here</a>
+        <span>!</span>
+      </p>
+      <p>
+        <span>Forgot your password? Reset your password </span>
+        <a [queryParams]="{ mode: 'password'}" [routerLink]="['/token']">here</a>
+        <span>!</span>
+      </p>
+    </div>
   </mat-card>
   <mat-card *ngIf="!isLogin" style="width: 500px;">
     <br>

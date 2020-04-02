@@ -98,8 +98,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     if (this.registerForm.valid) {
       if (this.isNewUser) {
         this.httpClient.post(environment.url + 'public/register', user).subscribe(() => {
-          // TODO maybe just show the email verification message normally ?
-          this.authService.login(new EmailPassword(user.username, user.password));
+          this.authService.login(new EmailPassword(user.username, user.password), () => this.cancel());
         }, () => {
           this.snackBarService.openError('failed to create user: username/email already taken');
         });

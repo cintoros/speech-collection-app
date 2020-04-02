@@ -1,18 +1,54 @@
 <!--TODO implement most of this logic-->
-<mat-card>
-  <div *ngIf="modus===verificationModus.EMAIL_VERIFIED">
-    <p>Your Email was successfully verified. you can now procceed to the login.</p>
-  </div>
-  <div *ngIf="modus===verificationModus.EMAIL_TOKEN_EXPIRED">
-    <p>Your token is expired</p>
+<mat-card class="centered">
+  <mat-toolbar color="primary">Token</mat-toolbar>
+  <div *ngIf="modus===verificationModus.EMAIL_FORM">
+    <p>Please enter your email so we can send you a new token.</p>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input [(ngModel)]="email" matInput required type="email">
+    </mat-form-field>
+    <button (click)="resendVerificationEmail()" mat-icon-button>
+      <mat-icon>send</mat-icon>
+    </button>
   </div>
   <div *ngIf="modus===verificationModus.PASSWORD_FORM">
-    <p>EMAIL_VERIFIED</p>
+    <p>Please enter your email so we can send you a new token.</p>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input [(ngModel)]="email" matInput required type="email">
+    </mat-form-field>
+    <button (click)="resetPasswordEmail()" mat-icon-button>
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="modus===verificationModus.EMAIL_VERIFIED">
+    <p>Your Email was successfully verified. You can now proceed to the login.</p>
   </div>
   <div *ngIf="modus===verificationModus.PASSWORD_CHANGED">
-    <p>Your password was successfully changed</p>
+    <p>Your password was successfully changed. You can now proceed to the login</p>
+  </div>
+  <div *ngIf="modus===verificationModus.EMAIL_TOKEN_EXPIRED">
+    <p>Your token is expired!</p>
+    <p>Click <a (click)="modus=verificationModus.EMAIL_FORM" href="#">here</a> to get a new one.</p>
   </div>
   <div *ngIf="modus===verificationModus.PASSWORD_TOKEN_EXPIRED">
-    <p>Your token is expired</p>
+    <p>Your token is expired!</p>
+    <p>Click <a (click)="modus=verificationModus.PASSWORD_FORM" href="#">here</a> to get a new one.</p>
   </div>
+  <div *ngIf="modus===verificationModus.EMAIL_SENDED">
+    <p>You will receive an email with your token shortly.</p>
+  </div>
+  <div *ngIf="modus===verificationModus.PASSWORD_CHANGING">
+    <p>Please enter your new password.</p>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input [(ngModel)]="password" matInput required type="password">
+    </mat-form-field>
+    <button (click)="resetPassword()" mat-icon-button>
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <p>Back to the <a routerLink="/login">Login</a></p>
 </mat-card>

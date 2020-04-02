@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+import {ChangePassword} from '../../models/change-password';
 
 enum VerificationModus {
-  EMAIL_VERIFIED, EMAIL_TOKEN_EXPIRED, PASSWORD_FORM, PASSWORD_CHANGED, PASSWORD_TOKEN_EXPIRED, EMAIL_SENDED
+  EMAIL_FORM, EMAIL_VERIFIED, EMAIL_TOKEN_EXPIRED, PASSWORD_FORM, PASSWORD_CHANGING, PASSWORD_CHANGED, PASSWORD_TOKEN_EXPIRED, EMAIL_SENDED
 }
 
 @Component({
@@ -14,7 +15,7 @@ enum VerificationModus {
 })
 export class VerificationTokenComponent implements OnInit {
   verificationModus = VerificationModus;
-  modus = VerificationModus.EMAIL_VERIFIED;
+  modus = VerificationModus.EMAIL_FORM;
   password: string;
   email: string;
   private token: string;
@@ -25,19 +26,22 @@ export class VerificationTokenComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
-    // TODO if token is not set this is from the login page => ask email
     const mode = this.route.snapshot.queryParamMap.get('mode');
-    if (mode === 'password') {
-      this.modus = VerificationModus.PASSWORD_FORM;
+    this.baseUrl = `${environment.url}public/user/`;
+    if (this.token) {
+      if (mode === 'password') {
+        this.modus = VerificationModus.PASSWORD_CHANGING;
+      } else {
+        this.httpClient.put(`${this.baseUrl}email/confirm?token=${this.token}`, {}).subscribe(value => {
+          if (value) {
+            this.modus = VerificationModus.EMAIL_VERIFIED;
+          } else {
+            this.modus = VerificationModus.EMAIL_TOKEN_EXPIRED;
+          }
+        });
+      }
     } else {
-      this.baseUrl = `${environment.url}public/user/`;
-      this.httpClient.put(`${this.baseUrl}email/confirm?token=${this.token}`, {}).subscribe(value => {
-        if (value) {
-          this.modus = VerificationModus.EMAIL_VERIFIED;
-        } else {
-          this.modus = VerificationModus.EMAIL_TOKEN_EXPIRED;
-        }
-      });
+      this.modus = mode === 'password' ? VerificationModus.PASSWORD_FORM : VerificationModus.EMAIL_FORM;
     }
   }
 
@@ -47,15 +51,16 @@ export class VerificationTokenComponent implements OnInit {
 
   resetPasswordEmail() {
     this.httpClient.get(`${this.baseUrl}password/resend?email=${this.email}`).subscribe(() => this.modus = VerificationModus.EMAIL_SENDED);
-
   }
 
   resetPassword() {
-    this.httpClient.put(`${this.baseUrl}password/reset?token=${this.token}`, {}).subscribe(value => {
+    //TODO why does this not work
+    this.httpClient.put(`${this.baseUrl}password/reset?token=${this.token}`, this.password).subscribe(value => {
       if (value) {
-        this.modus = VerificationModus.EMAIL_VERIFIED;
+        this.modus = VerificationModus.PASSWORD_CHANGED;
       } else {
-        this.modus = VerificationModus.EMAIL_TOKEN_EXPIRED;
+        this.modus = VerificationModus.PASSWORD_TOKEN_EXPIRED;
       }
-    }
+    });
   }
+}
