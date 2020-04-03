@@ -1,9 +1,9 @@
-package ch.fhnw.speech_collection_app.admin;
+package ch.fhnw.speech_collection_app.features.base.admin;
 
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
-import ch.fhnw.speech_collection_app.user_group.OverviewOccurrence;
+import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

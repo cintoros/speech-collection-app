@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.user;
+package ch.fhnw.speech_collection_app.features.base.user;
 
 public class ChangePassword {
     private String password;

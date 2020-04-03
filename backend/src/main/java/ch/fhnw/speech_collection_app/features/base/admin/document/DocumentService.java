@@ -1,10 +1,10 @@
-package ch.fhnw.speech_collection_app.admin.document;
+package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.OriginalText;
 import ch.fhnw.speech_collection_app.jooq.tables.records.OriginalTextRecord;
-import ch.fhnw.speech_collection_app.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.IOUtils;

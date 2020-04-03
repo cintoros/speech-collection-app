@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.user;
+package ch.fhnw.speech_collection_app.features.base.user;
 
 import ch.fhnw.speech_collection_app.features.email.EmailSenderService;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;

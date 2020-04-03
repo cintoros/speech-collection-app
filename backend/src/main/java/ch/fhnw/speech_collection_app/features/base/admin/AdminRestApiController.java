@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.admin;
+package ch.fhnw.speech_collection_app.features.base.admin;
 
 import ch.fhnw.speech_collection_app.jooq.Tables;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroup;

@@ -2,10 +2,10 @@
 **Required**
 * Java 11 
 * MariaDB 10.4
-* Node.js 12.10.0
+* Node.js 12.10.0 - 13.12.0
 * Miniconda/Anaconda
 
-Note: Other versions might work, but have not been tested yet
+**Note**: Other versions might work, but have not been tested.
 
 **Optional**
 * npm: @angular/cli
@@ -13,7 +13,8 @@ Note: Other versions might work, but have not been tested yet
 ## Data Structure
 * the data can be loaded using `data_import/data-import.py`
    * use `conda env create -f environment.yml` to install the environment.
-* the datastructure should look like this.
+    
+the data-structure looks like this:
 * `data` the base data directory (can be changed in the configuration)
    * `source` directory containing the raw data used by the import & edit
       * `<id>` id of the transcript
@@ -30,6 +31,9 @@ Note: Other versions might work, but have not been tested yet
 * copy the `config.py.example` to `config.py` and change it to match your local setup
 * to update the generated database classes run `gradle generateSampleJooqSchemaSource --rerun-tasks`   
 * to run the development version run `gradle devBootRun` && `npm start` 
+
+### Email
+for local testing of the email features https://mailtrap.io/ can be used.
 
 ## Deployment
 some additional packages may be needed (Ubuntu 18.04.3 ):

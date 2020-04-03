@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.user_group;
+package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Recording;

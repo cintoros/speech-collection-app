@@ -1,7 +1,6 @@
 package ch.fhnw.speech_collection_app.config;
 
-
-import ch.fhnw.speech_collection_app.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;

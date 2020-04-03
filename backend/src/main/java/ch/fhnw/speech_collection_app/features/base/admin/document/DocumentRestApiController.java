@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.admin.document;
+package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.OriginalText;

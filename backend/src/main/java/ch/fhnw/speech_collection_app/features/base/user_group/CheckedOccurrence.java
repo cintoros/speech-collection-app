@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.user_group;
+package ch.fhnw.speech_collection_app.features.base.user_group;
 
 public class CheckedOccurrence {
     public final Long id;

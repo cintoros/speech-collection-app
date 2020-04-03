@@ -18,7 +18,8 @@ public class BeanConfig {
 
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+        //NOTE: by default spring boot adds a ROLE_ prefix to the roles i.e. ROLE_ADMIN
+        return new GrantedAuthorityDefaults("");
     }
 
     @Profile("dev-test")

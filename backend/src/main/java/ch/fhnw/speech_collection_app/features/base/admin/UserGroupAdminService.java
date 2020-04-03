@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.admin;
+package ch.fhnw.speech_collection_app.features.base.admin;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.jooq.enums.RecordingLabel;
@@ -7,9 +7,9 @@ import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.records.TextAudioRecord;
-import ch.fhnw.speech_collection_app.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.user_group.OccurrenceMode;
-import ch.fhnw.speech_collection_app.user_group.OverviewOccurrence;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user_group.OccurrenceMode;
+import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import org.apache.tika.io.IOUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record5;

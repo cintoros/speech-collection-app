@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.admin;
+package ch.fhnw.speech_collection_app.features.base.admin;
 
 public class UserGroupRoleDto {
     public final Long id;

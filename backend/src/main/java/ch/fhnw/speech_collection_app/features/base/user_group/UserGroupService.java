@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.user_group;
+package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedRecordingLabel;
@@ -9,7 +9,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.pojos.Recording;
 import ch.fhnw.speech_collection_app.jooq.tables.records.CheckedRecordingRecord;
 import ch.fhnw.speech_collection_app.jooq.tables.records.CheckedTextAudioRecord;
 import ch.fhnw.speech_collection_app.jooq.tables.records.RecordingRecord;
-import ch.fhnw.speech_collection_app.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
