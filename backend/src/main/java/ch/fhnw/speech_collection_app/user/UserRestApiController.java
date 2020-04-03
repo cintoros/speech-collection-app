@@ -1,11 +1,8 @@
 package ch.fhnw.speech_collection_app.user;
 
-import ch.fhnw.speech_collection_app.jooq.tables.daos.DialectDao;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.UserGroupDao;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Dialect;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.User;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroup;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +13,10 @@ import java.util.List;
 @RequestMapping("/api/")
 public class UserRestApiController {
     private final CustomUserDetailsService customUserDetailsService;
-    private final DialectDao dialectDao;
-    private final UserGroupDao userGroupDao;
 
     @Autowired
-    public UserRestApiController(CustomUserDetailsService customUserDetailsService, DialectDao dialectDao, UserGroupDao userGroupDao) {
+    public UserRestApiController(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
-        this.dialectDao = dialectDao;
-        this.userGroupDao = userGroupDao;
     }
 
     /**
@@ -77,16 +70,11 @@ public class UserRestApiController {
 
     @GetMapping("public/dialect")
     public List<Dialect> getDialect() {
-        return dialectDao.findAll();
+        return customUserDetailsService.getDialect();
     }
 
     @GetMapping("user_group")
     public List<UserGroup> getUserGroup() {
-        if (customUserDetailsService.isAdmin()) {
-            return userGroupDao.findAll();
-        } else {
-            var ids = customUserDetailsService.getLoggedInUser().userGroupRoles.stream().map(UserGroupRole::getUserGroupId).distinct();
-            return userGroupDao.fetchById(ids.toArray(Long[]::new));
-        }
+        return customUserDetailsService.getUserGroup();
     }
 }

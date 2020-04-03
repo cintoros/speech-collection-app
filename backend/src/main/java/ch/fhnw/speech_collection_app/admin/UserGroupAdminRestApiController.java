@@ -1,7 +1,6 @@
 package ch.fhnw.speech_collection_app.admin;
 
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.DomainDao;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
 import ch.fhnw.speech_collection_app.user_group.OverviewOccurrence;
@@ -16,12 +15,10 @@ import java.util.List;
 @RequestMapping("/api/user_group/{groupId}/admin")
 public class UserGroupAdminRestApiController {
     private final UserGroupAdminService userGroupAdminService;
-    private final DomainDao domainDao;
 
     @Autowired
-    public UserGroupAdminRestApiController(UserGroupAdminService userGroupAdminService, DomainDao domainDao) {
+    public UserGroupAdminRestApiController(UserGroupAdminService userGroupAdminService) {
         this.userGroupAdminService = userGroupAdminService;
-        this.domainDao = domainDao;
     }
 
     @PutMapping("text_audio")
@@ -39,7 +36,6 @@ public class UserGroupAdminRestApiController {
     public byte[] getTextAudioAudio(@PathVariable long groupId, @PathVariable Long textAudioId) throws IOException {
         return userGroupAdminService.getTextAudioAudio(groupId, textAudioId);
     }
-
 
     @GetMapping("overview_occurrence")
     public List<OverviewOccurrence> getOverviewOccurrence(@PathVariable long groupId) {
@@ -63,7 +59,7 @@ public class UserGroupAdminRestApiController {
 
     @GetMapping("domain")
     public List<Domain> getDomain() {
-        return domainDao.findAll();
+        return userGroupAdminService.getDomain();
     }
 
     @PutMapping("description")

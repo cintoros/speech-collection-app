@@ -2,13 +2,8 @@ package ch.fhnw.speech_collection_app.user;
 
 import ch.fhnw.speech_collection_app.features.email.EmailSenderService;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.DialectDao;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.UserDao;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.UserGroupRoleDao;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Dialect;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.User;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.VerificationToken;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.*;
+import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRoleRecord;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserRecord;
 import com.google.common.io.Resources;
 import org.jooq.DSLContext;
@@ -27,29 +22,23 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ch.fhnw.speech_collection_app.jooq.Tables.USER;
-import static ch.fhnw.speech_collection_app.jooq.Tables.VERIFICATION_TOKEN;
+import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserDao userDao;
-    private final UserGroupRoleDao userGroupRoleDao;
     private final PasswordEncoder passwordEncoder;
     private final Map<String, String> zipCodes;
-    private final DialectDao dialectDao;
     private final EmailSenderService emailSenderService;
     private final DSLContext dslContext;
 
     @Autowired
-    public CustomUserDetailsService(UserDao userDao, UserGroupRoleDao userGroupRoleDao, PasswordEncoder passwordEncoder, DialectDao dialectDao, EmailSenderService emailSenderService, DSLContext dslContext) throws IOException {
-        this.userDao = userDao;
-        this.userGroupRoleDao = userGroupRoleDao;
+    public CustomUserDetailsService(PasswordEncoder passwordEncoder, EmailSenderService emailSenderService, DSLContext dslContext) throws IOException {
         this.passwordEncoder = passwordEncoder;
-        this.dialectDao = dialectDao;
         this.emailSenderService = emailSenderService;
         this.dslContext = dslContext;
         //based on https://download.geonames.org/export/zip/
@@ -63,10 +52,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        /*TODO add custom error message if the user is not validated*/
-        return userDao.fetchOptional(USER.USERNAME, username)
+        return dslContext.selectFrom(USER).where(USER.USERNAME.eq(username)).fetchOptionalInto(User.class)
                 .map(user -> {
-                    var userGroupRoles = userGroupRoleDao.fetchByUserId(user.getId());
+                    var userGroupRoles = dslContext.selectFrom(USER_GROUP_ROLE).where(USER_GROUP_ROLE.USER_ID.eq(user.getId())).fetchInto(UserGroupRole.class);
                     var authorities = userGroupRoles.stream().map(userGroupRole -> userGroupRole.getRole().toString()).distinct().toArray(String[]::new);
                     return new CustomUserDetails(user, AuthorityUtils.createAuthorityList(authorities), userGroupRoles);
                 })
@@ -98,20 +86,24 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public User getUser(long id) {
-        return userDao.findById(id);
+        return dslContext.selectFrom(USER).where(USER.ID.eq(id)).fetchOneInto(User.class);
+    }
+
+    private UserRecord getUserR(long id) {
+        return dslContext.selectFrom(USER).where(USER.ID.eq(id)).fetchOne();
     }
 
     public void putUser(User user) {
         if (!getLoggedInUserId().equals(user.getId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        userDao.update(user);
+        dslContext.newRecord(USER, user).update();
     }
 
     public void putPassword(ChangePassword changePassword) {
-        User user = userDao.fetchOneById(getLoggedInUserId());
+        UserRecord user = getUserR(getLoggedInUserId());
         if (passwordEncoder.matches(changePassword.getPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
-            userDao.update(user);
+            user.update();
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "BAD_REQUEST");
         }
@@ -122,11 +114,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRecord.setPassword(passwordEncoder.encode(userRecord.getPassword()));
         userRecord.setEnabled(false);
         if (userRecord.getDialectId() == null) {
-            userRecord.setDialectId(dialectDao.fetchByCountyId(zipCodes.get(userRecord.getZipCode())).stream().map(Dialect::getId).findFirst().orElse(1L));
+            var id = dslContext.selectFrom(DIALECT)
+                    .where(DIALECT.COUNTY_ID.eq(zipCodes.get(userRecord.getZipCode())))
+                    .fetchOptional(DIALECT.ID).orElse(1L);
+            userRecord.setDialectId(id);
         }
         userRecord.store();
         //add user to public group
-        userGroupRoleDao.insert(new UserGroupRole(null, UserGroupRoleRole.USER, userRecord.getId(), 1L));
+        dslContext.batchInsert(new UserGroupRoleRecord(null, UserGroupRoleRole.USER, userRecord.getId(), 1L)).execute();
         emailSenderService.sendEmailConfirmation(userRecord);
     }
 
@@ -166,5 +161,20 @@ public class CustomUserDetailsService implements UserDetailsService {
                     }
                 })
                 .orElse(false);
+    }
+
+    public List<Dialect> getDialect() {
+        return dslContext.selectFrom(DIALECT).fetchInto(Dialect.class);
+    }
+
+    public List<UserGroup> getUserGroup() {
+        if (isAdmin()) {
+            return dslContext.selectFrom(USER_GROUP).fetchInto(UserGroup.class);
+        } else {
+            var ids = getLoggedInUser().userGroupRoles.stream().map(UserGroupRole::getUserGroupId).distinct().toArray(Long[]::new);
+            return dslContext.selectFrom(USER_GROUP)
+                    .where(USER_GROUP.ID.in(ids))
+                    .fetchInto(UserGroup.class);
+        }
     }
 }

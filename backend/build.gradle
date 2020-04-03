@@ -47,7 +47,6 @@ jooq {
             }
             generate {
                 comments = false
-                daos = true
                 pojos = true
                 immutablePojos = false
                 javadoc = false

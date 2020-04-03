@@ -3,8 +3,7 @@ package ch.fhnw.speech_collection_app.admin;
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.jooq.enums.RecordingLabel;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.UserDao;
-import ch.fhnw.speech_collection_app.jooq.tables.daos.UserGroupRoleDao;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.records.TextAudioRecord;
@@ -26,7 +25,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
@@ -36,16 +34,12 @@ public class UserGroupAdminService {
     private final DSLContext dslContext;
     private final SpeechCollectionAppConfig speechCollectionAppConfig;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final UserGroupRoleDao userGroupRoleDao;
-    private final UserDao userDao;
 
     @Autowired
-    public UserGroupAdminService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext, SpeechCollectionAppConfig speechCollectionAppConfig, UserGroupRoleDao userGroupRoleDao, UserDao userDao) {
+    public UserGroupAdminService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext, SpeechCollectionAppConfig speechCollectionAppConfig) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
-        this.userGroupRoleDao = userGroupRoleDao;
-        this.userDao = userDao;
     }
 
     public void putTextAudio(long groupId, TextAudio textAudio) {
@@ -101,16 +95,17 @@ public class UserGroupAdminService {
         if (mode == UserGroupRoleRole.ADMIN) {
             if (!customUserDetailsService.isAdmin()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        var opt = Optional.ofNullable(userDao.fetchOneByEmail(email))
-                .or(() -> Optional.ofNullable(userDao.fetchOneByUsername(email)));
-        opt.ifPresent(user -> userGroupRoleDao.insert(new UserGroupRole(null, mode, user.getId(), groupId)));
+
+        var opt = dslContext.selectFrom(USER).where(USER.USERNAME.eq(email)).fetchOptional()
+                .or(() -> dslContext.selectFrom(USER).where(USER.EMAIL.eq(email)).fetchOptional());
+        opt.ifPresent(user -> dslContext.newRecord(USER_GROUP_ROLE, (new UserGroupRole(null, mode, user.getId(), groupId))).store());
         return opt.isPresent();
     }
 
     public void deleteUserGroupRole(long id) {
-        var userGroupRole = userGroupRoleDao.fetchOneById(id);
-        isAllowed(userGroupRole.getUserGroupId());
-        userGroupRoleDao.deleteById(id);
+        var groupId = dslContext.selectFrom(USER_GROUP_ROLE).where(USER_GROUP_ROLE.ID.eq(id)).fetchOne(USER_GROUP_ROLE.USER_GROUP_ID);
+        isAllowed(groupId);
+        dslContext.delete(USER_GROUP_ROLE).where(USER_GROUP_ROLE.ID.eq(id)).execute();
     }
 
     private void isAllowed(long groupId) {
@@ -120,17 +115,21 @@ public class UserGroupAdminService {
 
     public TextAudio getTextAudio(long groupId, Long textAudioId) {
         isAllowed(groupId);
-        return dslContext.select(TEXT_AUDIO.fields()).from(TEXT_AUDIO).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOneInto(TextAudio.class);
+        return dslContext.selectFrom(TEXT_AUDIO).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOneInto(TextAudio.class);
     }
 
     public byte[] getTextAudioAudio(long groupId, Long textAudioId) throws IOException {
         isAllowed(groupId);
-        var textAudio = dslContext.select(SOURCE.RAW_AUDIO_PATH).from(TEXT_AUDIO.join(SOURCE).onKey()).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOne(SOURCE.RAW_AUDIO_PATH);
+        var textAudio = dslContext.selectFrom(TEXT_AUDIO.join(SOURCE).onKey()).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOne(SOURCE.RAW_AUDIO_PATH);
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(textAudio));
     }
 
     public void putDescription(long groupId, String description) {
         isAllowed(groupId);
         dslContext.update(USER_GROUP).set(USER_GROUP.DESCRIPTION, description).execute();
+    }
+
+    public List<Domain> getDomain() {
+        return dslContext.selectFrom(DOMAIN).fetchInto(Domain.class);
     }
 }

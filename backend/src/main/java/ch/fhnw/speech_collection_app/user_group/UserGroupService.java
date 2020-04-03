@@ -172,18 +172,16 @@ public class UserGroupService {
 
     private void checkExcerpt(long groupId, long excerptId) {
         isAllowed(groupId);
-        boolean equals = dslContext.select(ORIGINAL_TEXT.USER_GROUP_ID)
-                .from(EXCERPT.join(ORIGINAL_TEXT).onKey())
+        boolean equals = dslContext.selectFrom(EXCERPT.join(ORIGINAL_TEXT).onKey())
                 .where(EXCERPT.ID.eq(excerptId))
-                .fetchOne().component1().equals(groupId);
+                .fetchOne(ORIGINAL_TEXT.USER_GROUP_ID).equals(groupId);
         if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
     private void checkAudio(long groupId, long audioId) {
-        boolean equals = dslContext.select(ORIGINAL_TEXT.USER_GROUP_ID)
-                .from(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
+        boolean equals = dslContext.selectFrom(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
                 .where(RECORDING.ID.eq(audioId))
-                .fetchOne().component1().equals(groupId);
+                .fetchOne(ORIGINAL_TEXT.USER_GROUP_ID).equals(groupId);
         if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
