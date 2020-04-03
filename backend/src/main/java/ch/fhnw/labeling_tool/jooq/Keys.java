@@ -19,6 +19,7 @@ import ch.fhnw.labeling_tool.jooq.tables.TextAudio;
 import ch.fhnw.labeling_tool.jooq.tables.User;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroup;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.VerificationToken;
 import ch.fhnw.labeling_tool.jooq.tables.records.CheckedRecordingRecord;
 import ch.fhnw.labeling_tool.jooq.tables.records.CheckedTextAudioRecord;
 import ch.fhnw.labeling_tool.jooq.tables.records.DialectRecord;
@@ -34,6 +35,7 @@ import ch.fhnw.labeling_tool.jooq.tables.records.TextAudioRecord;
 import ch.fhnw.labeling_tool.jooq.tables.records.UserGroupRecord;
 import ch.fhnw.labeling_tool.jooq.tables.records.UserGroupRoleRecord;
 import ch.fhnw.labeling_tool.jooq.tables.records.UserRecord;
+import ch.fhnw.labeling_tool.jooq.tables.records.VerificationTokenRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
@@ -62,6 +64,7 @@ public class Keys {
     public static final Identity<UserRecord, Long> IDENTITY_USER = Identities0.IDENTITY_USER;
     public static final Identity<UserGroupRecord, Long> IDENTITY_USER_GROUP = Identities0.IDENTITY_USER_GROUP;
     public static final Identity<UserGroupRoleRecord, Long> IDENTITY_USER_GROUP_ROLE = Identities0.IDENTITY_USER_GROUP_ROLE;
+    public static final Identity<VerificationTokenRecord, Long> IDENTITY_VERIFICATION_TOKEN = Identities0.IDENTITY_VERIFICATION_TOKEN;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -84,6 +87,7 @@ public class Keys {
     public static final UniqueKey<UserRecord> KEY_USER_USERNAME = UniqueKeys0.KEY_USER_USERNAME;
     public static final UniqueKey<UserGroupRecord> KEY_USER_GROUP_PRIMARY = UniqueKeys0.KEY_USER_GROUP_PRIMARY;
     public static final UniqueKey<UserGroupRoleRecord> KEY_USER_GROUP_ROLE_PRIMARY = UniqueKeys0.KEY_USER_GROUP_ROLE_PRIMARY;
+    public static final UniqueKey<VerificationTokenRecord> KEY_VERIFICATION_TOKEN_PRIMARY = UniqueKeys0.KEY_VERIFICATION_TOKEN_PRIMARY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -105,6 +109,7 @@ public class Keys {
     public static final ForeignKey<UserRecord, DialectRecord> USER_IBFK_1 = ForeignKeys0.USER_IBFK_1;
     public static final ForeignKey<UserGroupRoleRecord, UserRecord> USER_GROUP_ROLE_IBFK_2 = ForeignKeys0.USER_GROUP_ROLE_IBFK_2;
     public static final ForeignKey<UserGroupRoleRecord, UserGroupRecord> USER_GROUP_ROLE_IBFK_1 = ForeignKeys0.USER_GROUP_ROLE_IBFK_1;
+    public static final ForeignKey<VerificationTokenRecord, UserRecord> VERIFICATION_TOKEN_IBFK_1 = ForeignKeys0.VERIFICATION_TOKEN_IBFK_1;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -125,6 +130,7 @@ public class Keys {
         public static Identity<UserRecord, Long> IDENTITY_USER = Internal.createIdentity(User.USER, User.USER.ID);
         public static Identity<UserGroupRecord, Long> IDENTITY_USER_GROUP = Internal.createIdentity(UserGroup.USER_GROUP, UserGroup.USER_GROUP.ID);
         public static Identity<UserGroupRoleRecord, Long> IDENTITY_USER_GROUP_ROLE = Internal.createIdentity(UserGroupRole.USER_GROUP_ROLE, UserGroupRole.USER_GROUP_ROLE.ID);
+        public static Identity<VerificationTokenRecord, Long> IDENTITY_VERIFICATION_TOKEN = Internal.createIdentity(VerificationToken.VERIFICATION_TOKEN, VerificationToken.VERIFICATION_TOKEN.ID);
     }
 
     private static class UniqueKeys0 {
@@ -145,6 +151,7 @@ public class Keys {
         public static final UniqueKey<UserRecord> KEY_USER_USERNAME = Internal.createUniqueKey(User.USER, "KEY_user_username", User.USER.USERNAME);
         public static final UniqueKey<UserGroupRecord> KEY_USER_GROUP_PRIMARY = Internal.createUniqueKey(UserGroup.USER_GROUP, "KEY_user_group_PRIMARY", UserGroup.USER_GROUP.ID);
         public static final UniqueKey<UserGroupRoleRecord> KEY_USER_GROUP_ROLE_PRIMARY = Internal.createUniqueKey(UserGroupRole.USER_GROUP_ROLE, "KEY_user_group_role_PRIMARY", UserGroupRole.USER_GROUP_ROLE.ID);
+        public static final UniqueKey<VerificationTokenRecord> KEY_VERIFICATION_TOKEN_PRIMARY = Internal.createUniqueKey(VerificationToken.VERIFICATION_TOKEN, "KEY_verification_token_PRIMARY", VerificationToken.VERIFICATION_TOKEN.ID);
     }
 
     private static class ForeignKeys0 {
@@ -164,5 +171,6 @@ public class Keys {
         public static final ForeignKey<UserRecord, DialectRecord> USER_IBFK_1 = Internal.createForeignKey(ch.fhnw.labeling_tool.jooq.Keys.KEY_DIALECT_PRIMARY, User.USER, "user_ibfk_1", User.USER.DIALECT_ID);
         public static final ForeignKey<UserGroupRoleRecord, UserRecord> USER_GROUP_ROLE_IBFK_2 = Internal.createForeignKey(ch.fhnw.labeling_tool.jooq.Keys.KEY_USER_PRIMARY, UserGroupRole.USER_GROUP_ROLE, "user_group_role_ibfk_2", UserGroupRole.USER_GROUP_ROLE.USER_ID);
         public static final ForeignKey<UserGroupRoleRecord, UserGroupRecord> USER_GROUP_ROLE_IBFK_1 = Internal.createForeignKey(ch.fhnw.labeling_tool.jooq.Keys.KEY_USER_GROUP_PRIMARY, UserGroupRole.USER_GROUP_ROLE, "user_group_role_ibfk_1", UserGroupRole.USER_GROUP_ROLE.USER_GROUP_ID);
+        public static final ForeignKey<VerificationTokenRecord, UserRecord> VERIFICATION_TOKEN_IBFK_1 = Internal.createForeignKey(ch.fhnw.labeling_tool.jooq.Keys.KEY_USER_PRIMARY, VerificationToken.VERIFICATION_TOKEN, "verification_token_ibfk_1", VerificationToken.VERIFICATION_TOKEN.USER_ID);
     }
 }

@@ -32,14 +32,15 @@ export class AuthService {
     return item != null && item.trim().length > 0;
   }
 
-  login(emailPassword: EmailPassword) {
+  login(emailPassword: EmailPassword, p: () => void) {
     this.loginUser(emailPassword).subscribe(user => {
       this.user.next(user);
-      this.router.navigate(['/home']);
       sessionStorage.setItem(AuthService.currentUserStore, this.buildAuthenticationHeader(emailPassword.email, emailPassword.password));
-    }, () => {
-      this.snackBarService.openError('Password or username incorrect.');
+      this.router.navigate(['/home']);
+    }, error => {
+      this.snackBarService.openError(error);
       sessionStorage.clear();
+      p.apply(null);
     });
   }
 

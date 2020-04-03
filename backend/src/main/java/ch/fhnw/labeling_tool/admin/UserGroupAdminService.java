@@ -78,7 +78,6 @@ public class UserGroupAdminService {
                     .from(TEXT_AUDIO)
                     .where(TEXT_AUDIO.CORRECT.plus(TEXT_AUDIO.WRONG).ge(0L))
                     .union(step);
-            System.out.println(mode.getSQL());
             return mode.fetchInto(OverviewOccurrence.class);
         }
         return step.fetchInto(OverviewOccurrence.class);

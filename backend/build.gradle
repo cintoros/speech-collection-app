@@ -13,6 +13,9 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-jooq'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-mail'
+    compile 'org.springframework.boot:spring-boot-starter-freemarker'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     jooqRuntime 'org.mariadb.jdbc:mariadb-java-client'
 }
@@ -45,6 +48,7 @@ jooq {
             generate {
                 comments = false
                 daos = true
+                pojos = true
                 immutablePojos = false
                 javadoc = false
                 generatedAnnotation = false

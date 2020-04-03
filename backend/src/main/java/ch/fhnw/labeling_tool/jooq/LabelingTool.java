@@ -19,6 +19,7 @@ import ch.fhnw.labeling_tool.jooq.tables.TextAudio;
 import ch.fhnw.labeling_tool.jooq.tables.User;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroup;
 import ch.fhnw.labeling_tool.jooq.tables.UserGroupRole;
+import ch.fhnw.labeling_tool.jooq.tables.VerificationToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LabelingTool extends SchemaImpl {
 
-    private static final long serialVersionUID = -1920162028;
+    private static final long serialVersionUID = 973607186;
 
     public static final LabelingTool LABELING_TOOL = new LabelingTool();
 
@@ -65,6 +66,8 @@ public class LabelingTool extends SchemaImpl {
     public final UserGroup USER_GROUP = ch.fhnw.labeling_tool.jooq.tables.UserGroup.USER_GROUP;
 
     public final UserGroupRole USER_GROUP_ROLE = ch.fhnw.labeling_tool.jooq.tables.UserGroupRole.USER_GROUP_ROLE;
+
+    public final VerificationToken VERIFICATION_TOKEN = ch.fhnw.labeling_tool.jooq.tables.VerificationToken.VERIFICATION_TOKEN;
 
     private LabelingTool() {
         super("labeling-tool", null);
@@ -99,6 +102,7 @@ public class LabelingTool extends SchemaImpl {
             TextAudio.TEXT_AUDIO,
             User.USER,
             UserGroup.USER_GROUP,
-            UserGroupRole.USER_GROUP_ROLE);
+            UserGroupRole.USER_GROUP_ROLE,
+            VerificationToken.VERIFICATION_TOKEN);
     }
 }

@@ -54,6 +54,7 @@ import {MarkdownModule, MarkdownService} from 'ngx-markdown';
 import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     HomeComponent,
     UserGroupRoleComponent,
     EditTextAudioComponent,
-    DocumentOverviewComponent
+    DocumentOverviewComponent,
+    VerificationTokenComponent
   ],
   imports: [
     BrowserModule,

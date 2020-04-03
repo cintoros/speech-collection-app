@@ -44,16 +44,35 @@ public class UserRestApiController {
         customUserDetailsService.putUser(user);
     }
 
-    //TODO implement email reset functionality
     @PutMapping("user/password")
     public void putPassword(@RequestBody ChangePassword changePassword) {
         customUserDetailsService.putPassword(changePassword);
     }
 
-    //TODO implement email activation functionality
+
     @PostMapping("public/register")
     public void register(@RequestBody User user) {
         customUserDetailsService.register(user);
+    }
+
+    @PutMapping("public/user/email/confirm")
+    public boolean confirmEmail(@RequestParam String token) {
+        return customUserDetailsService.confirmEmail(token);
+    }
+
+    @GetMapping("public/user/email/resend")
+    public void resendEmail(@RequestParam String email) {
+        customUserDetailsService.resendEmail(email);
+    }
+
+    @PutMapping("public/user/password/reset")
+    public boolean resetPassword(@RequestParam String token, @RequestBody String newPassword) {
+        return customUserDetailsService.resetPassword(token, newPassword);
+    }
+
+    @GetMapping("public/user/password/resend")
+    public void resendPassword(@RequestParam String email) {
+        customUserDetailsService.resendPassword(email);
     }
 
     @GetMapping("public/dialect")
