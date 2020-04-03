@@ -39,13 +39,13 @@ some additional packages may be needed (Ubuntu 18.04.3 ):
 **NOTE:** for deployments the default admin password should be changed.
 
 1. run `gradle buildProd` to build the production jar
-1. `rsync backend/build/libs/backend-1.0.0-SNAPSHOT.jar s1042:~/labeling-tool/backend-1.0.0-SNAPSHOT.jar`
+1. `rsync backend/build/libs/backend-1.0.0-SNAPSHOT.jar s1042:~/speech-collection-app/backend-1.0.0-SNAPSHOT.jar`
 1. `ssh s1042`
-1. `systemctl restart labeling-tool`
+1. `systemctl restart speech-collection-app`
 
 In case the data_import has changed run:
-* `rsync data_import/data_import.py s1042:~/labeling-tool/data_import/data_import.py` 
-* `rsync data_import/sentences.py s1042:~/labeling-tool/data_import/sentences.py`
+* `rsync data_import/data_import.py s1042:~/speech-collection-app/data_import/data_import.py` 
+* `rsync data_import/sentences.py s1042:~/speech-collection-app/data_import/sentences.py`
 
 ### Automatic Deployment
 1. `nano /etc/nginx/nginx.conf` 
@@ -65,21 +65,21 @@ In case the data_import has changed run:
     }
     
     ```
-1. `nano /lib/systemd/system/labeling-tool.service`
+1. `nano /lib/systemd/system/speech-collection-app.service`
     ```
     [Unit]
-    Description=Labeling Tool
+    Description=Speech Collection App
     After=network.target
     [Service]
     Type=simple
     Restart=always
     RestartSec=1
     User=stt
-    ExecStart=/usr/bin/java -jar /home/stt/labeling-tool/backend-1.0.0-SNAPSHOT.jar
+    ExecStart=/usr/bin/java -jar /home/stt/speech-collection-app/backend-1.0.0-SNAPSHOT.jar
     [Install]
     WantedBy=multi-user.target
     ```
-1. `systemctl enable labeling-tool.service`
+1. `systemctl enable speech-collection-app.service`
 
 ### Configuration
 for password etc. configuration you can add a `application.yml` in the same directory as the JAR see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files

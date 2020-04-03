@@ -1,5 +1,5 @@
 {
-  "name": "labeling-tool",
+  "name": "speech_collection_app",
   "version": "1.0.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",

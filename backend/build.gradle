@@ -20,7 +20,7 @@ dependencies {
     jooqRuntime 'org.mariadb.jdbc:mariadb-java-client'
 }
 task devBootRun(type: BootRun) {
-    main = 'ch.fhnw.labeling_tool.DevTestApplication'
+    main = 'ch.fhnw.speech_collection_app.DevTestApplication'
     classpath += test.classpath
 }
 
@@ -29,14 +29,14 @@ jooq {
     sample(sourceSets.main) {
         jdbc {
             driver = 'org.mariadb.jdbc.Driver'
-            url = 'jdbc:mysql://localhost/labeling-tool'
-            user = 'labeling-tool'
-            password = 'labeling-tool'
+            url = 'jdbc:mysql://localhost/speech_collection_app'
+            user = 'speech_collection_app'
+            password = 'speech_collection_app'
         }
         generator {
             name = 'org.jooq.codegen.DefaultGenerator'
             database {
-                inputSchema = 'labeling-tool'
+                inputSchema = 'speech_collection_app'
                 forcedTypes {
                     forcedType {
                         name = 'BOOLEAN'
@@ -57,7 +57,7 @@ jooq {
                 records = true
             }
             target {
-                packageName = 'ch.fhnw.labeling_tool.jooq'
+                packageName = 'ch.fhnw.speech_collection_app.jooq'
                 directory = 'src/main/java'
             }
         }
@@ -70,5 +70,5 @@ task buildProd {
 
 //angular resources
 processResources {
-    from('../frontend/dist/labeling-tool') { into 'public' }
+    from('../frontend/dist/speech_collection_app') { into 'public' }
 }
