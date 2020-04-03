@@ -71,6 +71,7 @@ In case the data_import has changed run:
     Description=Speech Collection App
     After=network.target
     [Service]
+    Environment=SPRING_CONFIG_LOCATION=classpath:/,classpath:/config/,file:/home/stt/speech-collection-app/application.yml
     Type=simple
     Restart=always
     RestartSec=1
@@ -82,4 +83,4 @@ In case the data_import has changed run:
 1. `systemctl enable speech-collection-app.service`
 
 ### Configuration
-for password etc. configuration you can add a `application.yml` in the same directory as the JAR see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files
+for password etc. configuration you can add a `application.yml` see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files
