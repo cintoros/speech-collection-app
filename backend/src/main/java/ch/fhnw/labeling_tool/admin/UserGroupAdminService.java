@@ -81,7 +81,9 @@ public class UserGroupAdminService {
                 textRecord.store();
                 Long id = textRecord.getId();
                 Files.writeString(path.resolve(id + ".txt"), text, StandardCharsets.UTF_8);
-                //Files.write(labelingToolConfig.getBasePath().resolve("original_text/" + id + ".bin"), file.getBytes());
+                if(!Files.exists(labelingToolConfig.getBasePath().resolve("original_text/")))
+                    Files.createDirectories(labelingToolConfig.getBasePath().resolve("original_text/"));
+                Files.write(labelingToolConfig.getBasePath().resolve("original_text/" + id + ".bin"), file.getBytes());
                 return Optional.of(id);
             } catch (IOException | TikaException | SAXException ex) {
                 logger.error("failed to parse original text: ", ex);

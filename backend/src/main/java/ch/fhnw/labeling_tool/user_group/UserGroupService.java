@@ -41,6 +41,8 @@ public class UserGroupService {
     public void postRecording(long groupId, long excerptId, MultipartFile file) throws IOException {
         isAllowed(groupId);
         RecordingRecord recordingRecord = storeRecord(RecordingLabel.RECORDED, excerptId);
+        if(!Files.exists(labelingToolConfig.getBasePath().resolve("recording/")))
+            Files.createDirectories(labelingToolConfig.getBasePath().resolve("recording/"));
         Files.write(labelingToolConfig.getBasePath().resolve("recording/" + recordingRecord.getId() + ".webm"), file.getBytes());
     }
 

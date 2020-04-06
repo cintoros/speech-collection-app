@@ -3,4 +3,5 @@ build
 .idea
 *.iml
 data
+bin
 __pycache__
