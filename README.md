@@ -28,9 +28,15 @@ the data-structure looks like this:
       * `<id>.flac`
 ## Development
 * copy the `application-dev-test.yml.example` to `application-dev-test.yml` and change it to match your local setup
-* copy the `config.py.example` to `config.py` and change it to match your local setup
-* to update the generated database classes run `gradle generateSampleJooqSchemaSource --rerun-tasks`   
+* copy the `config.py.example` to `config.py` and change it to match your local setup   
 * to run the development version run `gradle devBootRun` && `npm start` 
+
+### Database Changes
+We use a database first approach based on  https://flywaydb.org/ and https://www.jooq.org/   
+In case the database needs to be changed:
+1. create a new migration in `backend/src/main/resources/db/migration`
+1. run the migration i.e `gradle devBootRun`
+1. update the generated database classes using `gradle generateSampleJooqSchemaSource --rerun-tasks`
 
 ### Email
 for local testing of the email features https://mailtrap.io/ can be used.
