@@ -3,7 +3,8 @@
     <title>Password Reset</title>
 </#macro>
 <#macro page_body>
-    <h1>Password Reset</h1>
+    <b>Password Reset</b>
+    <br>
     <p>To reset your password visit the flowing link:</p>
     <p><a href="${link}">${link}</a></p>
     <br>
