@@ -1,11 +1,7 @@
 -- refactor database for audio,image,text matching between each other.
--- TODO not sure if it makes sense to migrate or if we want to re-create the database?
--- TODO probably add a trigger to update occurrence counts on insert and delete (or join each time for overviews)
--- TODO not sure if we want to enable different occurrence mapping/checking globally and/or per user_group
 
--- TODO not sure about the source mappings as it can be uploaded by user and/or auto generated based on something uploaded by the user.
---  or it can be imported/upload by a script etc.
---  for now we only set the more advanced fields in case it was uploaded
+-- TODO not sure if it makes sense to migrate or if we want to re-create the database?
+-- TODO probably add triggers to update occurrence counts on insert and delete (or join each time for overviews) once the base data structure is clear.
 
 RENAME TABLE source TO transcript_source;
 
@@ -21,7 +17,7 @@ CREATE TABLE source
     licence          TEXT              DEFAULT NULL,
     dialect_id       BIGINT            DEFAULT NULL,
     domain_id        BIGINT            DEFAULT NULL,
-    meta_information JSON              DEFAULT NULL,
+    meta_information JSON              DEFAULT NULL COMMENT 'contains meta_information that are different depending on the source etc.',
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (user_group_id) REFERENCES user_group (id) ON DELETE CASCADE,
@@ -37,9 +33,11 @@ CREATE TABLE text
     id           BIGINT   NOT NULL AUTO_INCREMENT,
     text         TEXT     NOT NULL,
     source_id    BIGINT   NOT NULL,
+    language_id  BIGINT   NOT NULL,
     created_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE
+    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE CASCADE
 
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
@@ -49,12 +47,14 @@ CREATE TABLE audio
     id              BIGINT   NOT NULL AUTO_INCREMENT,
     path            TEXT     NOT NULL,
     source_id       BIGINT   NOT NULL,
+    language_id     BIGINT   NOT NULL,
     created_time    DATETIME NOT NULL                               DEFAULT CURRENT_TIMESTAMP,
     quality         ENUM ('INTEGRATED','DEDICATED')                 DEFAULT NULL,
     noise_level     ENUM ('NO_NOISE','MODERATE_NOISE','VERY_NOISY') DEFAULT NULL,
     browser_version TEXT                                            DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE
+    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE CASCADE
 
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
@@ -120,7 +120,11 @@ CREATE TABLE checked_occurrence
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'this table is used to save the label of a occurrence by a user so we can revert it in case a user produces nonsense';
 
-# TODO implement data migration here before dropping the old tables
+ALTER TABLE user_group
+    ADD COLUMN meta_information JSON DEFAULT NULL COMMENT 'contains meta_information. for example which features are activated per user_group';
+
+# TODO maybe implement data migration here before dropping the old tables
+
 DROP TABLE checked_recording,checked_text_audio;
 DROP TABLE text_audio,recording;
 DROP TABLE transcript_source,excerpt;
