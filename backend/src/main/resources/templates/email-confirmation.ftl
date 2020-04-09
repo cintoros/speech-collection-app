@@ -9,7 +9,6 @@
     <br>
     <p>To activate your account please visit the following link:</p>
     <p><a href="${link}">${link}</a></p>
-    <br>
     <p>Please note that this links is only valid for one day and can be used only once.</p>
 </#macro>
 <@display_page/>
