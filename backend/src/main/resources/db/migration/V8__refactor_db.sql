@@ -3,7 +3,7 @@
 -- TODO not sure if it makes sense to migrate or if we want to re-create the database?
 
 -- TODO probably add triggers to update occurrence counts on insert and delete (or join each time for overviews) once the base data structure is clear.
-create table labeled_data
+create table checked_data
 (
     id                BIGINT NOT NULL AUTO_INCREMENT,
     is_sentence_error BOOLEAN DEFAULT FALSE,
@@ -48,11 +48,11 @@ CREATE TABLE text
     source_id       BIGINT   NOT NULL,
     language_id     BIGINT   NOT NULL,
     created_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    labeled_data_id BIGINT   NOT NULL,
+    checked_data_id BIGINT   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
     FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE CASCADE,
-    FOREIGN KEY (labeled_data_id) REFERENCES labeled_data (id) ON DELETE CASCADE
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
@@ -67,11 +67,11 @@ CREATE TABLE audio
     quality         ENUM ('INTEGRATED','DEDICATED')                 DEFAULT NULL,
     noise_level     ENUM ('NO_NOISE','MODERATE_NOISE','VERY_NOISY') DEFAULT NULL,
     browser_version TEXT                                            DEFAULT NULL,
-    labeled_data_id BIGINT   NOT NULL,
+    checked_data_id BIGINT   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
     FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE CASCADE,
-    FOREIGN KEY (labeled_data_id) REFERENCES labeled_data (id) ON DELETE CASCADE
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
@@ -82,30 +82,12 @@ CREATE TABLE image
     path            TEXT     NOT NULL,
     created_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     source_id       BIGINT   NOT NULL,
-    labeled_data_id BIGINT   NOT NULL,
+    checked_data_id BIGINT   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
-    FOREIGN KEY (labeled_data_id) REFERENCES labeled_data (id) ON DELETE CASCADE
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
-
-CREATE TABLE checked_data
-(
-    id           BIGINT                                      NOT NULL AUTO_INCREMENT,
-    created_time DATETIME                                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    type         enum ('SKIPPED','PRIVATE','SENTENCE_ERROR') NOT NULL,
-    user_id      BIGINT                                      NOT NULL,
-    text_1       BIGINT                                               DEFAULT NULL,
-    image_1      BIGINT                                               DEFAULT NULL,
-    audio_1      BIGINT                                               DEFAULT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
-    FOREIGN KEY (text_1) REFERENCES text (id) ON DELETE CASCADE,
-    FOREIGN KEY (audio_1) REFERENCES audio (id) ON DELETE CASCADE,
-    FOREIGN KEY (image_1) REFERENCES image (id) ON DELETE CASCADE
-) ENGINE = INNODB
-  DEFAULT CHARSET = UTF8MB4
-    COMMENT ='this table is used to save the label of a text,audio,image by a user so we can revert it in case a user produces nonsense while recording/transcribing';
 
 CREATE TABLE occurrence
 (
@@ -116,29 +98,29 @@ CREATE TABLE occurrence
     audio_1         BIGINT DEFAULT NULL,
     audio_2         BIGINT DEFAULT NULL,
     image_1         BIGINT DEFAULT NULL,
-    labeled_data_id BIGINT                                                                   NOT NULL,
+    checked_data_id BIGINT                                                                   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (text_1) REFERENCES text (id) ON DELETE CASCADE,
     FOREIGN KEY (text_2) REFERENCES text (id) ON DELETE CASCADE,
     FOREIGN KEY (audio_1) REFERENCES audio (id) ON DELETE CASCADE,
     FOREIGN KEY (audio_2) REFERENCES audio (id) ON DELETE CASCADE,
     FOREIGN KEY (image_1) REFERENCES image (id) ON DELETE CASCADE,
-    FOREIGN KEY (labeled_data_id) REFERENCES labeled_data (id) ON DELETE CASCADE
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'this table is used to save the audio,text, images occurrences and the aggregated checked_states.
 the type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2)';
 
-CREATE TABLE checked_occurrence
+CREATE TABLE checked_data_user
 (
-    id            BIGINT                                                        NOT NULL AUTO_INCREMENT,
-    type          enum ('SKIPPED','CORRECT','WRONG','PRIVATE','SENTENCE_ERROR') NOT NULL,
-    created_time  DATETIME                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id       BIGINT                                                        NOT NULL,
-    occurrence_id BIGINT                                                        NOT NULL,
+    id              BIGINT                                                        NOT NULL AUTO_INCREMENT,
+    type            enum ('SKIPPED','CORRECT','WRONG','PRIVATE','SENTENCE_ERROR') NOT NULL,
+    created_time    DATETIME                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id         BIGINT                                                        NOT NULL,
+    checked_data_id BIGINT                                                        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
-    FOREIGN KEY (occurrence_id) REFERENCES occurrence (id) ON DELETE CASCADE
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'this table is used to save the label of a occurrence by a user so we can revert it in case a user produces nonsense';
