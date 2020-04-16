@@ -105,6 +105,7 @@ CREATE TABLE occurrence
     element_id_1    BIGINT                                                                   NOT NULL,
     element_id_2    BIGINT                                                                   NOT NULL,
     checked_data_id BIGINT                                                                   NOT NULL,
+    finished        BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (id),
     FOREIGN KEY (element_id_1) REFERENCES element (id) ON DELETE CASCADE,
     FOREIGN KEY (element_id_2) REFERENCES element (id) ON DELETE CASCADE,
@@ -112,7 +113,8 @@ CREATE TABLE occurrence
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'this table is used to save the audio,text, images occurrences.
-the type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2)';
+the type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2).
+The finished can be used to flag an element that already has enough checks or should not be checked at all.';
 
 CREATE TABLE checked_data_user
 (
