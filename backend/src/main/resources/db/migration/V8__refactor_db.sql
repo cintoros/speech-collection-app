@@ -6,7 +6,6 @@ DROP TABLE text_audio,recording;
 DROP TABLE source,excerpt;
 DROP TABLE speaker,original_text;
 
--- TODO probably add triggers to update occurrence counts on insert and delete (or join each time for overviews) once the base data structure is clear.
 create table checked_data
 (
     id                BIGINT NOT NULL AUTO_INCREMENT,
@@ -132,3 +131,65 @@ CREATE TABLE checked_data_user
 
 ALTER TABLE user_group
     ADD COLUMN meta_information JSON DEFAULT NULL COMMENT 'contains meta_information. for example which features are activated per user_group';
+
+DELIMITER //
+
+CREATE TRIGGER checked_data_user_insert_trigger
+    AFTER INSERT
+    ON checked_data_user
+    FOR EACH ROW
+BEGIN
+    IF NEW.type = 'CORRECT' THEN
+        UPDATE checked_data
+        SET checked_data.correct = checked_data.correct + 1
+        WHERE checked_data.id = NEW.checked_data_id;
+    elseif NEW.type = 'WRONG' THEN
+        UPDATE checked_data
+        SET checked_data.wrong = checked_data.wrong + 1
+        WHERE checked_data.id = NEW.checked_data_id;
+    elseif NEW.type = 'SKIPPED' THEN
+        UPDATE checked_data
+        SET checked_data.skipped = checked_data.skipped + 1
+        WHERE checked_data.id = NEW.checked_data_id;
+    elseif NEW.type = 'SENTENCE_ERROR' THEN
+        UPDATE checked_data
+        SET checked_data.is_sentence_error = true
+        WHERE checked_data.id = NEW.checked_data_id;
+    elseif NEW.type = 'PRIVATE' THEN
+        UPDATE checked_data
+        SET checked_data.is_private = true
+        WHERE checked_data.id = NEW.checked_data_id;
+    END IF;
+END;
+//
+
+CREATE TRIGGER checked_data_user_delete_trigger
+    AFTER DELETE
+    ON checked_data_user
+    FOR EACH ROW
+BEGIN
+    IF OLD.type = 'CORRECT' THEN
+        UPDATE checked_data
+        SET checked_data.correct = checked_data.correct - 1
+        WHERE checked_data.id = OLD.checked_data_id;
+    elseif OLD.type = 'WRONG' THEN
+        UPDATE checked_data
+        SET checked_data.wrong = checked_data.wrong - 1
+        WHERE checked_data.id = OLD.checked_data_id;
+    elseif OLD.type = 'SKIPPED' THEN
+        UPDATE checked_data
+        SET checked_data.skipped = checked_data.skipped - 1
+        WHERE checked_data.id = OLD.checked_data_id;
+    elseif OLD.type = 'SENTENCE_ERROR' THEN
+        UPDATE checked_data
+        SET checked_data.is_sentence_error = false
+        WHERE checked_data.id = OLD.checked_data_id;
+    elseif OLD.type = 'PRIVATE' THEN
+        UPDATE checked_data
+        SET checked_data.is_private = false
+        WHERE checked_data.id = OLD.checked_data_id;
+    END IF;
+END;
+//
+
+DELIMITER ;
