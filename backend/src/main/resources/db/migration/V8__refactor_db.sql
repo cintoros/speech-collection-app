@@ -17,7 +17,7 @@ create table checked_data
     PRIMARY KEY (id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
-    COMMENT 'this table is used to save aggregated checked_states of an element (audio,text,images) and occurrences.';
+    COMMENT 'this table is used to save aggregated checked_states of an data_element and data_tuples.';
 
 CREATE TABLE source
 (
@@ -41,7 +41,25 @@ CREATE TABLE source
     COMMENT 'the source mappings can be generated based on something uploaded by the user.
 Or it can be imported/upload by a script etc this is why the more "advanced" fields are only filled in case it was uploaded';
 
-CREATE TABLE excerpt
+CREATE TABLE data_element
+(
+    id              BIGINT   NOT NULL AUTO_INCREMENT,
+    created_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    source_id       BIGINT            DEFAULT NULL,
+    user_id         BIGINT            DEFAULT NULL,
+    checked_data_id BIGINT   NOT NULL,
+    finished        BOOLEAN           DEFAULT FALSE,
+    PRIMARY KEY (id),
+    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
+) ENGINE = INNODB
+  DEFAULT CHARSET = UTF8MB4 COMMENT 'the data_element can be an audio,text or image.
+In case of text & audio it can be uploaded normally or generated using a source i.e. transcript, text-document
+The finished flag is used to prevent cycles like text=>recording=>transcript=>recording=>transcript...
+It can also be used to flag an data_element that already has enough transcripts/recordings';
+
+CREATE TABLE text
 (
     id         BIGINT NOT NULL AUTO_INCREMENT,
     text       TEXT   NOT NULL,
@@ -66,54 +84,32 @@ CREATE TABLE audio
 
 CREATE TABLE image
 (
-    id      BIGINT NOT NULL AUTO_INCREMENT,
-    path    TEXT   NOT NULL,
-    licence TEXT DEFAULT NULL,
-    PRIMARY KEY (id)
+    id              BIGINT NOT NULL AUTO_INCREMENT,
+    data_element_id BIGINT NOT NULL,
+    path            TEXT   NOT NULL,
+    licence         TEXT DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (data_element_id) REFERENCES data_element (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4;
 
-CREATE TABLE element
+CREATE TABLE data_tuple
 (
-    id              BIGINT   NOT NULL AUTO_INCREMENT,
-    excerpt_id      BIGINT            DEFAULT NULL,
-    audio_id        BIGINT            DEFAULT NULL,
-    image_id        BIGINT            DEFAULT NULL,
-    created_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    source_id       BIGINT            DEFAULT NULL,
-    user_id         BIGINT            DEFAULT NULL,
-    checked_data_id BIGINT   NOT NULL,
-    finished        BOOLEAN           DEFAULT FALSE,
+    id                BIGINT                                                                   NOT NULL AUTO_INCREMENT,
+    type              ENUM ('TEXT_TEXT','AUDIO_AUDIO','TEXT_AUDIO','AUDIO_TEXT','IMAGE_AUDIO') NOT NULL,
+    data_element_id_1 BIGINT                                                                   NOT NULL,
+    data_element_id_2 BIGINT                                                                   NOT NULL,
+    checked_data_id   BIGINT                                                                   NOT NULL,
+    finished          BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (id),
-    FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
-    FOREIGN KEY (excerpt_id) REFERENCES excerpt (id) ON DELETE CASCADE,
-    FOREIGN KEY (audio_id) REFERENCES audio (id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES image (id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
-    FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
-) ENGINE = INNODB
-  DEFAULT CHARSET = UTF8MB4 COMMENT 'the element can be an audio,text or image.
-In case of text & audio it can be uploaded normally or generated using a source i.e. transcript, text-document
-The finished flag is used to prevent cycles like excerpt=>recording=>transcript=>recording=>transcript...
-It can also be used to flag an element that already has enough transcripts/recordings';
-
-CREATE TABLE occurrence
-(
-    id              BIGINT                                                                   NOT NULL AUTO_INCREMENT,
-    type            ENUM ('TEXT_TEXT','AUDIO_AUDIO','TEXT_AUDIO','AUDIO_TEXT','IMAGE_AUDIO') NOT NULL,
-    element_id_1    BIGINT                                                                   NOT NULL,
-    element_id_2    BIGINT                                                                   NOT NULL,
-    checked_data_id BIGINT                                                                   NOT NULL,
-    finished        BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (id),
-    FOREIGN KEY (element_id_1) REFERENCES element (id) ON DELETE CASCADE,
-    FOREIGN KEY (element_id_2) REFERENCES element (id) ON DELETE CASCADE,
+    FOREIGN KEY (data_element_id_1) REFERENCES data_element (id) ON DELETE CASCADE,
+    FOREIGN KEY (data_element_id_2) REFERENCES data_element (id) ON DELETE CASCADE,
     FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
-    COMMENT 'this table is used to save the audio,text, images occurrences.
+    COMMENT 'this table is used to save the audio,text, images data_tuples.
 the type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2).
-The finished can be used to flag an element that already has enough checks or should not be checked at all.';
+The finished can be used to flag an data_element that already has enough checks or should not be checked at all.';
 
 CREATE TABLE checked_data_user
 (
@@ -127,7 +123,7 @@ CREATE TABLE checked_data_user
     FOREIGN KEY (checked_data_id) REFERENCES checked_data (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
-    COMMENT 'this table is used to save the label of a occurrence by a user so we can revert it in case a user produces nonsense';
+    COMMENT 'this table is used to save the label of a data_tuple by a user so we can revert it in case a user produces nonsense';
 
 ALTER TABLE user_group
     ADD COLUMN meta_information JSON DEFAULT NULL COMMENT 'contains meta_information. for example which features are activated per user_group';
