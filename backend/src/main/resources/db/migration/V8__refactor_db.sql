@@ -1,6 +1,6 @@
 -- refactor database for audio,image,text matching between each other.
 
--- TODO not sure if it makes sense to migrate or if we want to re-create the database?
+-- old recordings etc. are not migrated as they only contain a small amount of test data - that can be re-imported/generated
 DROP TABLE checked_recording,checked_text_audio;
 DROP TABLE text_audio,recording;
 DROP TABLE source,excerpt;
@@ -193,3 +193,5 @@ END;
 //
 
 DELIMITER ;
+
+INSERT INTO dialect(county_id, county_name, language_id) VALUE ('DE-de', 'Standard German', 2)
