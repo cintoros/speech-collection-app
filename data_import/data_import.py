@@ -4,8 +4,9 @@ import wave
 
 import mysql.connector
 from bs4 import BeautifulSoup
-from config import *
 from pydub import AudioSegment
+
+from config import *
 
 connection = mysql.connector.connect(
     host=host,
@@ -19,6 +20,7 @@ cursor = connection.cursor(dictionary=True)
 logging.basicConfig(level=logging.INFO)
 
 
+# TODO refactor data base insert/updates etc.
 def get_last_insert_id(dict_cursor):
     dict_cursor.execute('select last_insert_id() as id')
     return dict_cursor.fetchone()['id']

@@ -10,15 +10,17 @@ import org.jooq.Schema;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public enum RecordingQuality implements EnumType {
+public enum AudioNoiseLevel implements EnumType {
 
-    INTEGRATED("INTEGRATED"),
+    NO_NOISE("NO_NOISE"),
 
-    DEDICATED("DEDICATED");
+    MODERATE_NOISE("MODERATE_NOISE"),
+
+    VERY_NOISY("VERY_NOISY");
 
     private final String literal;
 
-    private RecordingQuality(String literal) {
+    private AudioNoiseLevel(String literal) {
         this.literal = literal;
     }
 
@@ -34,7 +36,7 @@ public enum RecordingQuality implements EnumType {
 
     @Override
     public String getName() {
-        return "recording_quality";
+        return "audio_noise_level";
     }
 
     @Override

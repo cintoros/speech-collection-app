@@ -4,8 +4,9 @@
 package ch.fhnw.speech_collection_app.jooq.tables.records;
 
 
-import ch.fhnw.speech_collection_app.jooq.tables.UserGroup;
+import ch.fhnw.speech_collection_app.jooq.tables.Image;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jooq.Field;
@@ -16,9 +17,9 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implements Record4<Long, String, String, String> {
+public class ImageRecord extends UpdatableRecordImpl<ImageRecord> implements Record4<Long, Long, String, String> {
 
-    private static final long serialVersionUID = 643649220;
+    private static final long serialVersionUID = 1908873709;
 
     public void setId(Long value) {
         set(0, value);
@@ -28,29 +29,31 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
         return (Long) get(0);
     }
 
-    public void setName(String value) {
+    public void setDataElementId(Long value) {
         set(1, value);
     }
 
-    @Size(max = 100)
-    public String getName() {
-        return (String) get(1);
+    @NotNull
+    public Long getDataElementId() {
+        return (Long) get(1);
     }
 
-    public void setDescription(String value) {
+    public void setPath(String value) {
         set(2, value);
     }
 
-    @Size(max = 16777215)
-    public String getDescription() {
+    @NotNull
+    @Size(max = 65535)
+    public String getPath() {
         return (String) get(2);
     }
 
-    public void setMetaInformation(String value) {
+    public void setLicence(String value) {
         set(3, value);
     }
 
-    public String getMetaInformation() {
+    @Size(max = 65535)
+    public String getLicence() {
         return (String) get(3);
     }
 
@@ -68,33 +71,33 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, String, String, String> fieldsRow() {
+    public Row4<Long, Long, String, String> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 
     @Override
-    public Row4<Long, String, String, String> valuesRow() {
+    public Row4<Long, Long, String, String> valuesRow() {
         return (Row4) super.valuesRow();
     }
 
     @Override
     public Field<Long> field1() {
-        return UserGroup.USER_GROUP.ID;
+        return Image.IMAGE.ID;
     }
 
     @Override
-    public Field<String> field2() {
-        return UserGroup.USER_GROUP.NAME;
+    public Field<Long> field2() {
+        return Image.IMAGE.DATA_ELEMENT_ID;
     }
 
     @Override
     public Field<String> field3() {
-        return UserGroup.USER_GROUP.DESCRIPTION;
+        return Image.IMAGE.PATH;
     }
 
     @Override
     public Field<String> field4() {
-        return UserGroup.USER_GROUP.META_INFORMATION;
+        return Image.IMAGE.LICENCE;
     }
 
     @Override
@@ -103,18 +106,18 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     @Override
-    public String component2() {
-        return getName();
+    public Long component2() {
+        return getDataElementId();
     }
 
     @Override
     public String component3() {
-        return getDescription();
+        return getPath();
     }
 
     @Override
     public String component4() {
-        return getMetaInformation();
+        return getLicence();
     }
 
     @Override
@@ -123,46 +126,46 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     @Override
-    public String value2() {
-        return getName();
+    public Long value2() {
+        return getDataElementId();
     }
 
     @Override
     public String value3() {
-        return getDescription();
+        return getPath();
     }
 
     @Override
     public String value4() {
-        return getMetaInformation();
+        return getLicence();
     }
 
     @Override
-    public UserGroupRecord value1(Long value) {
+    public ImageRecord value1(Long value) {
         setId(value);
         return this;
     }
 
     @Override
-    public UserGroupRecord value2(String value) {
-        setName(value);
+    public ImageRecord value2(Long value) {
+        setDataElementId(value);
         return this;
     }
 
     @Override
-    public UserGroupRecord value3(String value) {
-        setDescription(value);
+    public ImageRecord value3(String value) {
+        setPath(value);
         return this;
     }
 
     @Override
-    public UserGroupRecord value4(String value) {
-        setMetaInformation(value);
+    public ImageRecord value4(String value) {
+        setLicence(value);
         return this;
     }
 
     @Override
-    public UserGroupRecord values(Long value1, String value2, String value3, String value4) {
+    public ImageRecord values(Long value1, Long value2, String value3, String value4) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -174,16 +177,16 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     // Constructors
     // -------------------------------------------------------------------------
 
-    public UserGroupRecord() {
-        super(UserGroup.USER_GROUP);
+    public ImageRecord() {
+        super(Image.IMAGE);
     }
 
-    public UserGroupRecord(Long id, String name, String description, String metaInformation) {
-        super(UserGroup.USER_GROUP);
+    public ImageRecord(Long id, Long dataElementId, String path, String licence) {
+        super(Image.IMAGE);
 
         set(0, id);
-        set(1, name);
-        set(2, description);
-        set(3, metaInformation);
+        set(1, dataElementId);
+        set(2, path);
+        set(3, licence);
     }
 }

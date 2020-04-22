@@ -4,8 +4,8 @@
 package ch.fhnw.speech_collection_app.jooq.tables.records;
 
 
-import ch.fhnw.speech_collection_app.jooq.enums.CheckedTextAudioLabel;
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedTextAudio;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
 
 import java.sql.Timestamp;
 
@@ -19,9 +19,9 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudioRecord> implements Record5<Long, Long, Long, CheckedTextAudioLabel, Timestamp> {
+public class CheckedDataTupleRecord extends UpdatableRecordImpl<CheckedDataTupleRecord> implements Record5<Long, Long, Long, CheckedDataTupleType, Timestamp> {
 
-    private static final long serialVersionUID = -1803607455;
+    private static final long serialVersionUID = -467944828;
 
     public void setId(Long value) {
         set(0, value);
@@ -31,37 +31,38 @@ public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudio
         return (Long) get(0);
     }
 
-    public void setTextAudioId(Long value) {
+    public void setUserId(Long value) {
         set(1, value);
     }
 
     @NotNull
-    public Long getTextAudioId() {
+    public Long getUserId() {
         return (Long) get(1);
     }
 
-    public void setUserId(Long value) {
+    public void setDataTupleId(Long value) {
         set(2, value);
     }
 
     @NotNull
-    public Long getUserId() {
+    public Long getDataTupleId() {
         return (Long) get(2);
     }
 
-    public void setLabel(CheckedTextAudioLabel value) {
+    public void setType(CheckedDataTupleType value) {
         set(3, value);
     }
 
-    public CheckedTextAudioLabel getLabel() {
-        return (CheckedTextAudioLabel) get(3);
+    @NotNull
+    public CheckedDataTupleType getType() {
+        return (CheckedDataTupleType) get(3);
     }
 
-    public void setTime(Timestamp value) {
+    public void setCreatedTime(Timestamp value) {
         set(4, value);
     }
 
-    public Timestamp getTime() {
+    public Timestamp getCreatedTime() {
         return (Timestamp) get(4);
     }
 
@@ -79,38 +80,38 @@ public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudio
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, Long, CheckedTextAudioLabel, Timestamp> fieldsRow() {
+    public Row5<Long, Long, Long, CheckedDataTupleType, Timestamp> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 
     @Override
-    public Row5<Long, Long, Long, CheckedTextAudioLabel, Timestamp> valuesRow() {
+    public Row5<Long, Long, Long, CheckedDataTupleType, Timestamp> valuesRow() {
         return (Row5) super.valuesRow();
     }
 
     @Override
     public Field<Long> field1() {
-        return CheckedTextAudio.CHECKED_TEXT_AUDIO.ID;
+        return CheckedDataTuple.CHECKED_DATA_TUPLE.ID;
     }
 
     @Override
     public Field<Long> field2() {
-        return CheckedTextAudio.CHECKED_TEXT_AUDIO.TEXT_AUDIO_ID;
+        return CheckedDataTuple.CHECKED_DATA_TUPLE.USER_ID;
     }
 
     @Override
     public Field<Long> field3() {
-        return CheckedTextAudio.CHECKED_TEXT_AUDIO.USER_ID;
+        return CheckedDataTuple.CHECKED_DATA_TUPLE.DATA_TUPLE_ID;
     }
 
     @Override
-    public Field<CheckedTextAudioLabel> field4() {
-        return CheckedTextAudio.CHECKED_TEXT_AUDIO.LABEL;
+    public Field<CheckedDataTupleType> field4() {
+        return CheckedDataTuple.CHECKED_DATA_TUPLE.TYPE;
     }
 
     @Override
     public Field<Timestamp> field5() {
-        return CheckedTextAudio.CHECKED_TEXT_AUDIO.TIME;
+        return CheckedDataTuple.CHECKED_DATA_TUPLE.CREATED_TIME;
     }
 
     @Override
@@ -120,22 +121,22 @@ public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudio
 
     @Override
     public Long component2() {
-        return getTextAudioId();
-    }
-
-    @Override
-    public Long component3() {
         return getUserId();
     }
 
     @Override
-    public CheckedTextAudioLabel component4() {
-        return getLabel();
+    public Long component3() {
+        return getDataTupleId();
+    }
+
+    @Override
+    public CheckedDataTupleType component4() {
+        return getType();
     }
 
     @Override
     public Timestamp component5() {
-        return getTime();
+        return getCreatedTime();
     }
 
     @Override
@@ -145,56 +146,56 @@ public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudio
 
     @Override
     public Long value2() {
-        return getTextAudioId();
-    }
-
-    @Override
-    public Long value3() {
         return getUserId();
     }
 
     @Override
-    public CheckedTextAudioLabel value4() {
-        return getLabel();
+    public Long value3() {
+        return getDataTupleId();
+    }
+
+    @Override
+    public CheckedDataTupleType value4() {
+        return getType();
     }
 
     @Override
     public Timestamp value5() {
-        return getTime();
+        return getCreatedTime();
     }
 
     @Override
-    public CheckedTextAudioRecord value1(Long value) {
+    public CheckedDataTupleRecord value1(Long value) {
         setId(value);
         return this;
     }
 
     @Override
-    public CheckedTextAudioRecord value2(Long value) {
-        setTextAudioId(value);
-        return this;
-    }
-
-    @Override
-    public CheckedTextAudioRecord value3(Long value) {
+    public CheckedDataTupleRecord value2(Long value) {
         setUserId(value);
         return this;
     }
 
     @Override
-    public CheckedTextAudioRecord value4(CheckedTextAudioLabel value) {
-        setLabel(value);
+    public CheckedDataTupleRecord value3(Long value) {
+        setDataTupleId(value);
         return this;
     }
 
     @Override
-    public CheckedTextAudioRecord value5(Timestamp value) {
-        setTime(value);
+    public CheckedDataTupleRecord value4(CheckedDataTupleType value) {
+        setType(value);
         return this;
     }
 
     @Override
-    public CheckedTextAudioRecord values(Long value1, Long value2, Long value3, CheckedTextAudioLabel value4, Timestamp value5) {
+    public CheckedDataTupleRecord value5(Timestamp value) {
+        setCreatedTime(value);
+        return this;
+    }
+
+    @Override
+    public CheckedDataTupleRecord values(Long value1, Long value2, Long value3, CheckedDataTupleType value4, Timestamp value5) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -207,17 +208,17 @@ public class CheckedTextAudioRecord extends UpdatableRecordImpl<CheckedTextAudio
     // Constructors
     // -------------------------------------------------------------------------
 
-    public CheckedTextAudioRecord() {
-        super(CheckedTextAudio.CHECKED_TEXT_AUDIO);
+    public CheckedDataTupleRecord() {
+        super(CheckedDataTuple.CHECKED_DATA_TUPLE);
     }
 
-    public CheckedTextAudioRecord(Long id, Long textAudioId, Long userId, CheckedTextAudioLabel label, Timestamp time) {
-        super(CheckedTextAudio.CHECKED_TEXT_AUDIO);
+    public CheckedDataTupleRecord(Long id, Long userId, Long dataTupleId, CheckedDataTupleType type, Timestamp createdTime) {
+        super(CheckedDataTuple.CHECKED_DATA_TUPLE);
 
         set(0, id);
-        set(1, textAudioId);
-        set(2, userId);
-        set(3, label);
-        set(4, time);
+        set(1, userId);
+        set(2, dataTupleId);
+        set(3, type);
+        set(4, createdTime);
     }
 }

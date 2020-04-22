@@ -26,6 +26,11 @@ def split_to_sentences(transcript):
     return [sent.text for sent in doc.sents]
 
 
+def get_last_insert_id(cursor):
+    cursor.execute('select last_insert_id() as id')
+    return cursor.fetchone()['id']
+
+
 if __name__ == '__main__':
     command = sys.argv[1]
     connection = mysql.connector.connect(
@@ -36,17 +41,25 @@ if __name__ == '__main__':
     )
     connection.autocommit = False
     cursor = connection.cursor(dictionary=True)
+    # TODO refactor data base insert/updates etc.
     try:
+        # extract sentences from a text file.
         if command == "1":
             fileIds = sys.argv[2].split(',')
             for fileId in fileIds:
                 fp = os.path.join(base_dir, 'extracted_text', fileId + ".txt")
                 sentences = split_to_sentences(open(fp, encoding="utf-8").read())
                 for excerpt in sentences:
-                    cursor.execute("insert into excerpt(original_text_id,excerpt) values(%s,%s)", [fileId, excerpt])
+                    cursor.execute(
+                        "insert into data_element(source_id, user_group_id) value(%s, (select (user_group_id) from source where id=%s))",
+                        [fileId, fileId])
+                    data_element_id = get_last_insert_id(cursor)
+                    cursor.execute("insert into text(dialect_id,data_element_id,text) values(%s,%s,%s)",
+                                   [27, data_element_id, excerpt])
                 print(fileId + " done.")
                 os.remove(fp)
                 connection.commit()
+        # re generate text-audio audio segment
         elif (command == "2"):
             text_audio_id = sys.argv[2]
             cursor.execute(

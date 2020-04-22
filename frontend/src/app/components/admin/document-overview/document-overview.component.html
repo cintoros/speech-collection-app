@@ -16,9 +16,9 @@
         <th *matHeaderCellDef mat-header-cell>Name</th>
         <td *matCellDef="let element" mat-cell>{{element.name}}</td>
       </ng-container>
-      <ng-container matColumnDef="time">
+      <ng-container matColumnDef="createdTime">
         <th *matHeaderCellDef mat-header-cell>Time</th>
-        <td *matCellDef="let element" mat-cell>{{element.time}}</td>
+        <td *matCellDef="let element" mat-cell>{{element.createdTime | date:'short'}}</td>
       </ng-container>
       <ng-container matColumnDef="options">
         <th *matHeaderCellDef mat-header-cell></th>
@@ -31,8 +31,8 @@
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['time','licence','domain','name','options'];sticky: true" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['time','licence','domain','name','options'];" mat-row></tr>
+      <tr *matHeaderRowDef="['createdTime','licence','domain','name','options'];sticky: true" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: ['createdTime','licence','domain','name','options'];" mat-row></tr>
     </table>
   </div>
   <div [hidden]="!excerpts" style=" height: 800px;width: 100%; overflow: auto;">
@@ -40,9 +40,9 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <table [dataSource]="excerpts" mat-table matSort style="width: 100%; ">
-      <ng-container matColumnDef="excerpt">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Excerpt</th>
-        <td *matCellDef="let element" mat-cell>{{element.excerpt}}</td>
+      <ng-container matColumnDef="text">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Text</th>
+        <td *matCellDef="let element" mat-cell>{{element.text}}</td>
       </ng-container>
       <ng-container matColumnDef="isSkipped">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Skipped</th>
@@ -64,9 +64,9 @@
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['excerpt','isSkipped','isPrivate','isSentenceError','options'];sticky: true"
+      <tr *matHeaderRowDef="['text','isSkipped','isPrivate','isSentenceError','options'];sticky: true"
           mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['excerpt','isSkipped','isPrivate','isSentenceError','options'];" mat-row></tr>
+      <tr *matRowDef="let row; columns: ['text','isSkipped','isPrivate','isSentenceError','options'];" mat-row></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

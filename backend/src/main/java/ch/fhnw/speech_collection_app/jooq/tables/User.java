@@ -12,6 +12,7 @@ import ch.fhnw.speech_collection_app.jooq.enums.UserLicence;
 import ch.fhnw.speech_collection_app.jooq.enums.UserSex;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserRecord;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row13;
+import org.jooq.Row14;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -1176563901;
+    private static final long serialVersionUID = 1038244234;
 
     public static final User USER = new User();
 
@@ -67,6 +68,8 @@ public class User extends TableImpl<UserRecord> {
     public final TableField<UserRecord, Boolean> NOT_CH = createField(DSL.name("not_CH"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public final TableField<UserRecord, String> ZIP_CODE = createField(DSL.name("zip_code"), org.jooq.impl.SQLDataType.VARCHAR(45).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
+    public final TableField<UserRecord, Timestamp> LAST_ONLINE = createField(DSL.name("last_online"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("current_timestamp()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     public User() {
         this(DSL.name("user"), null);
@@ -147,11 +150,11 @@ public class User extends TableImpl<UserRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row14 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 }

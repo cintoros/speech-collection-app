@@ -10,13 +10,9 @@ import org.jooq.Schema;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public enum CheckedRecordingLabel implements EnumType {
+public enum CheckedDataElementType implements EnumType {
 
     SKIPPED("SKIPPED"),
-
-    CORRECT("CORRECT"),
-
-    WRONG("WRONG"),
 
     PRIVATE("PRIVATE"),
 
@@ -24,7 +20,7 @@ public enum CheckedRecordingLabel implements EnumType {
 
     private final String literal;
 
-    private CheckedRecordingLabel(String literal) {
+    private CheckedDataElementType(String literal) {
         this.literal = literal;
     }
 
@@ -40,7 +36,7 @@ public enum CheckedRecordingLabel implements EnumType {
 
     @Override
     public String getName() {
-        return "checked_recording_label";
+        return "checked_data_element_type";
     }
 
     @Override

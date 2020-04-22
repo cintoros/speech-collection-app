@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SnackBarService} from '../../services/snack-bar.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {Excerpt} from '../../models/excerpt';
+import {Text} from '../../models/text';
 import {UserGroupService} from '../../services/user-group.service';
 import {Observable, Subscription, timer} from 'rxjs';
 
@@ -14,7 +14,7 @@ import {Observable, Subscription, timer} from 'rxjs';
   styleUrls: ['./record.component.scss']
 })
 export class RecordComponent implements OnInit {
-  excerpt: Excerpt = null;
+  excerpt: Text = null;
   isRecording = false;
   blobUrl: SafeUrl;
   recordingQuality = RecordingQuality;
@@ -79,7 +79,7 @@ export class RecordComponent implements OnInit {
   }
 
   private() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/private`, {})
+    this.httpClient.put<Text>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/private`, {})
       .subscribe(() => {
         this.snackBarService.openMessage('marked as private');
         this.excerpt.isPrivate = true;
@@ -87,7 +87,7 @@ export class RecordComponent implements OnInit {
   }
 
   skip() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/skipped`, {})
+    this.httpClient.put<Text>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/skipped`, {})
       .subscribe(() => {
         this.snackBarService.openMessage('marked as skipped');
         this.getNext();
@@ -97,7 +97,7 @@ export class RecordComponent implements OnInit {
   isReady = () => this.audioChunks.length > 0;
 
   sentenceError() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/sentence_error`, {})
+    this.httpClient.put<Text>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/sentence_error`, {})
       .subscribe(() => {
         this.snackBarService.openMessage('marked as "Not a sentence"');
         this.getNext();
@@ -105,6 +105,6 @@ export class RecordComponent implements OnInit {
   }
 
   private getNext() {
-    this.httpClient.get<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.excerpt = value);
+    this.httpClient.get<Text>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.excerpt = value);
   }
 }

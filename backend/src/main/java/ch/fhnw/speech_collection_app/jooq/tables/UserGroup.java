@@ -18,7 +18,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroup extends TableImpl<UserGroupRecord> {
 
-    private static final long serialVersionUID = -1763818116;
+    private static final long serialVersionUID = -1457515415;
 
     public static final UserGroup USER_GROUP = new UserGroup();
 
@@ -44,6 +44,8 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     public final TableField<UserGroupRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(100).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     public final TableField<UserGroupRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<UserGroupRecord, String> META_INFORMATION = createField(DSL.name("meta_information"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "contains meta_information. for example which features are activated per user_group");
 
     public UserGroup() {
         this(DSL.name("user_group"), null);
@@ -115,11 +117,11 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, String, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, String, String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

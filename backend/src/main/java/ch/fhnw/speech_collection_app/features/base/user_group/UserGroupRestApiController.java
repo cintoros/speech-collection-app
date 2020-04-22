@@ -1,7 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Recording;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Audio;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,7 +25,8 @@ public class UserGroupRestApiController {
 
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, Recording.class), file);
+        //TODO add dto
+        userGroupService.postRecording(groupId, objectMapper.readValue(recording, Audio.class), file);
     }
 
     @PutMapping("excerpt/{excerptId}/private")
@@ -44,7 +45,7 @@ public class UserGroupRestApiController {
     }
 
     @GetMapping("excerpt")
-    public Excerpt getExcerpt(@PathVariable long groupId) {
+    public Text getExcerpt(@PathVariable long groupId) {
         return userGroupService.getExcerpt(groupId);
     }
 

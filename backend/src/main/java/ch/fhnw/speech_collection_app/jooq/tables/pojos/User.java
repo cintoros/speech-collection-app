@@ -9,6 +9,7 @@ import ch.fhnw.speech_collection_app.jooq.enums.UserLicence;
 import ch.fhnw.speech_collection_app.jooq.enums.UserSex;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 459759421;
+    private static final long serialVersionUID = -1856201516;
 
     private Long        id;
     private String      firstName;
@@ -32,6 +33,7 @@ public class User implements Serializable {
     private Long        dialectId;
     private Boolean     notCh;
     private String      zipCode;
+    private Timestamp   lastOnline;
 
     public User() {}
 
@@ -49,6 +51,7 @@ public class User implements Serializable {
         this.dialectId = value.dialectId;
         this.notCh = value.notCh;
         this.zipCode = value.zipCode;
+        this.lastOnline = value.lastOnline;
     }
 
     public User(
@@ -64,7 +67,8 @@ public class User implements Serializable {
         Boolean     enabled,
         Long        dialectId,
         Boolean     notCh,
-        String      zipCode
+        String      zipCode,
+        Timestamp   lastOnline
     ) {
         this.id = id;
         this.firstName = firstName;
@@ -79,6 +83,7 @@ public class User implements Serializable {
         this.dialectId = dialectId;
         this.notCh = notCh;
         this.zipCode = zipCode;
+        this.lastOnline = lastOnline;
     }
 
     public Long getId() {
@@ -195,6 +200,14 @@ public class User implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public Timestamp getLastOnline() {
+        return this.lastOnline;
+    }
+
+    public void setLastOnline(Timestamp lastOnline) {
+        this.lastOnline = lastOnline;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("User (");
@@ -212,6 +225,7 @@ public class User implements Serializable {
         sb.append(", ").append(dialectId);
         sb.append(", ").append(notCh);
         sb.append(", ").append(zipCode);
+        sb.append(", ").append(lastOnline);
 
         sb.append(")");
         return sb.toString();

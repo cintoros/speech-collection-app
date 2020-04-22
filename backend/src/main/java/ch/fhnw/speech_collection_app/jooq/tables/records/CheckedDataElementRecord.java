@@ -4,8 +4,8 @@
 package ch.fhnw.speech_collection_app.jooq.tables.records;
 
 
-import ch.fhnw.speech_collection_app.jooq.enums.CheckedRecordingLabel;
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedRecording;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
 
 import java.sql.Timestamp;
 
@@ -19,9 +19,9 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecordingRecord> implements Record5<Long, Long, Long, CheckedRecordingLabel, Timestamp> {
+public class CheckedDataElementRecord extends UpdatableRecordImpl<CheckedDataElementRecord> implements Record5<Long, Long, Long, CheckedDataElementType, Timestamp> {
 
-    private static final long serialVersionUID = -437195075;
+    private static final long serialVersionUID = 1309953868;
 
     public void setId(Long value) {
         set(0, value);
@@ -31,37 +31,38 @@ public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecording
         return (Long) get(0);
     }
 
-    public void setRecordingId(Long value) {
+    public void setUserId(Long value) {
         set(1, value);
     }
 
     @NotNull
-    public Long getRecordingId() {
+    public Long getUserId() {
         return (Long) get(1);
     }
 
-    public void setUserId(Long value) {
+    public void setDataElementId(Long value) {
         set(2, value);
     }
 
     @NotNull
-    public Long getUserId() {
+    public Long getDataElementId() {
         return (Long) get(2);
     }
 
-    public void setLabel(CheckedRecordingLabel value) {
+    public void setType(CheckedDataElementType value) {
         set(3, value);
     }
 
-    public CheckedRecordingLabel getLabel() {
-        return (CheckedRecordingLabel) get(3);
+    @NotNull
+    public CheckedDataElementType getType() {
+        return (CheckedDataElementType) get(3);
     }
 
-    public void setTime(Timestamp value) {
+    public void setCreatedTime(Timestamp value) {
         set(4, value);
     }
 
-    public Timestamp getTime() {
+    public Timestamp getCreatedTime() {
         return (Timestamp) get(4);
     }
 
@@ -79,38 +80,38 @@ public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecording
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, Long, CheckedRecordingLabel, Timestamp> fieldsRow() {
+    public Row5<Long, Long, Long, CheckedDataElementType, Timestamp> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 
     @Override
-    public Row5<Long, Long, Long, CheckedRecordingLabel, Timestamp> valuesRow() {
+    public Row5<Long, Long, Long, CheckedDataElementType, Timestamp> valuesRow() {
         return (Row5) super.valuesRow();
     }
 
     @Override
     public Field<Long> field1() {
-        return CheckedRecording.CHECKED_RECORDING.ID;
+        return CheckedDataElement.CHECKED_DATA_ELEMENT.ID;
     }
 
     @Override
     public Field<Long> field2() {
-        return CheckedRecording.CHECKED_RECORDING.RECORDING_ID;
+        return CheckedDataElement.CHECKED_DATA_ELEMENT.USER_ID;
     }
 
     @Override
     public Field<Long> field3() {
-        return CheckedRecording.CHECKED_RECORDING.USER_ID;
+        return CheckedDataElement.CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID;
     }
 
     @Override
-    public Field<CheckedRecordingLabel> field4() {
-        return CheckedRecording.CHECKED_RECORDING.LABEL;
+    public Field<CheckedDataElementType> field4() {
+        return CheckedDataElement.CHECKED_DATA_ELEMENT.TYPE;
     }
 
     @Override
     public Field<Timestamp> field5() {
-        return CheckedRecording.CHECKED_RECORDING.TIME;
+        return CheckedDataElement.CHECKED_DATA_ELEMENT.CREATED_TIME;
     }
 
     @Override
@@ -120,22 +121,22 @@ public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecording
 
     @Override
     public Long component2() {
-        return getRecordingId();
-    }
-
-    @Override
-    public Long component3() {
         return getUserId();
     }
 
     @Override
-    public CheckedRecordingLabel component4() {
-        return getLabel();
+    public Long component3() {
+        return getDataElementId();
+    }
+
+    @Override
+    public CheckedDataElementType component4() {
+        return getType();
     }
 
     @Override
     public Timestamp component5() {
-        return getTime();
+        return getCreatedTime();
     }
 
     @Override
@@ -145,56 +146,56 @@ public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecording
 
     @Override
     public Long value2() {
-        return getRecordingId();
-    }
-
-    @Override
-    public Long value3() {
         return getUserId();
     }
 
     @Override
-    public CheckedRecordingLabel value4() {
-        return getLabel();
+    public Long value3() {
+        return getDataElementId();
+    }
+
+    @Override
+    public CheckedDataElementType value4() {
+        return getType();
     }
 
     @Override
     public Timestamp value5() {
-        return getTime();
+        return getCreatedTime();
     }
 
     @Override
-    public CheckedRecordingRecord value1(Long value) {
+    public CheckedDataElementRecord value1(Long value) {
         setId(value);
         return this;
     }
 
     @Override
-    public CheckedRecordingRecord value2(Long value) {
-        setRecordingId(value);
-        return this;
-    }
-
-    @Override
-    public CheckedRecordingRecord value3(Long value) {
+    public CheckedDataElementRecord value2(Long value) {
         setUserId(value);
         return this;
     }
 
     @Override
-    public CheckedRecordingRecord value4(CheckedRecordingLabel value) {
-        setLabel(value);
+    public CheckedDataElementRecord value3(Long value) {
+        setDataElementId(value);
         return this;
     }
 
     @Override
-    public CheckedRecordingRecord value5(Timestamp value) {
-        setTime(value);
+    public CheckedDataElementRecord value4(CheckedDataElementType value) {
+        setType(value);
         return this;
     }
 
     @Override
-    public CheckedRecordingRecord values(Long value1, Long value2, Long value3, CheckedRecordingLabel value4, Timestamp value5) {
+    public CheckedDataElementRecord value5(Timestamp value) {
+        setCreatedTime(value);
+        return this;
+    }
+
+    @Override
+    public CheckedDataElementRecord values(Long value1, Long value2, Long value3, CheckedDataElementType value4, Timestamp value5) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -207,17 +208,17 @@ public class CheckedRecordingRecord extends UpdatableRecordImpl<CheckedRecording
     // Constructors
     // -------------------------------------------------------------------------
 
-    public CheckedRecordingRecord() {
-        super(CheckedRecording.CHECKED_RECORDING);
+    public CheckedDataElementRecord() {
+        super(CheckedDataElement.CHECKED_DATA_ELEMENT);
     }
 
-    public CheckedRecordingRecord(Long id, Long recordingId, Long userId, CheckedRecordingLabel label, Timestamp time) {
-        super(CheckedRecording.CHECKED_RECORDING);
+    public CheckedDataElementRecord(Long id, Long userId, Long dataElementId, CheckedDataElementType type, Timestamp createdTime) {
+        super(CheckedDataElement.CHECKED_DATA_ELEMENT);
 
         set(0, id);
-        set(1, recordingId);
-        set(2, userId);
-        set(3, label);
-        set(4, time);
+        set(1, userId);
+        set(2, dataElementId);
+        set(3, type);
+        set(4, createdTime);
     }
 }

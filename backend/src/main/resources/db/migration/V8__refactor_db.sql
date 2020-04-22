@@ -19,6 +19,7 @@ CREATE TABLE source
     user_id          BIGINT   NOT NULL,
     dialect_id       BIGINT            DEFAULT NULL,
     domain_id        BIGINT            DEFAULT NULL,
+    user_group_id    BIGINT   NOT NULL,
     created_time     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     path_to_raw_file TEXT              DEFAULT NULL,
     name             TEXT              DEFAULT NULL,
@@ -27,7 +28,8 @@ CREATE TABLE source
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (dialect_id) REFERENCES dialect (id) ON DELETE CASCADE,
-    FOREIGN KEY (domain_id) REFERENCES domain (id) ON DELETE CASCADE
+    FOREIGN KEY (domain_id) REFERENCES domain (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_group_id) REFERENCES user_group (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'a source can be generated based on something uploaded by the user i.e a text document.
@@ -74,11 +76,14 @@ CREATE TABLE audio
     quality         ENUM ('INTEGRATED','DEDICATED')                 DEFAULT NULL,
     noise_level     ENUM ('NO_NOISE','MODERATE_NOISE','VERY_NOISY') DEFAULT NULL,
     browser_version TEXT                                            DEFAULT NULL,
+    audio_start     TEXT                                            DEFAULT NULL,
+    audio_end       TEXT                                            DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (dialect_id) REFERENCES dialect (id) ON DELETE CASCADE,
     FOREIGN KEY (data_element_id) REFERENCES data_element (id) ON DELETE CASCADE
 ) ENGINE = INNODB
-  DEFAULT CHARSET = UTF8MB4;
+  DEFAULT CHARSET = UTF8MB4 COMMENT 'the audio can be an recording or a extract from a transcipt/audiofile .
+depending on this we have different meta data';
 
 CREATE TABLE image
 (
@@ -93,10 +98,10 @@ CREATE TABLE image
 
 CREATE TABLE data_tuple
 (
-    id                BIGINT                                                                   NOT NULL AUTO_INCREMENT,
-    data_element_id_1 BIGINT                                                                   NOT NULL,
-    data_element_id_2 BIGINT                                                                   NOT NULL,
-    type              ENUM ('TEXT_TEXT','AUDIO_AUDIO','TEXT_AUDIO','AUDIO_TEXT','IMAGE_AUDIO') NOT NULL,
+    id                BIGINT                                                                               NOT NULL AUTO_INCREMENT,
+    data_element_id_1 BIGINT                                                                               NOT NULL,
+    data_element_id_2 BIGINT                                                                               NOT NULL,
+    type              ENUM ('TEXT_TEXT','AUDIO_AUDIO','TEXT_AUDIO','AUDIO_TEXT','IMAGE_AUDIO','RECORDING') NOT NULL,
     finished          BOOLEAN DEFAULT FALSE,
     correct           BIGINT  DEFAULT 0,
     wrong             BIGINT  DEFAULT 0,

@@ -12,11 +12,12 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroup implements Serializable {
 
-    private static final long serialVersionUID = 1306561194;
+    private static final long serialVersionUID = -1013519199;
 
     private Long   id;
     private String name;
     private String description;
+    private String metaInformation;
 
     public UserGroup() {}
 
@@ -24,16 +25,19 @@ public class UserGroup implements Serializable {
         this.id = value.id;
         this.name = value.name;
         this.description = value.description;
+        this.metaInformation = value.metaInformation;
     }
 
     public UserGroup(
         Long   id,
         String name,
-        String description
+        String description,
+        String metaInformation
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.metaInformation = metaInformation;
     }
 
     public Long getId() {
@@ -62,6 +66,14 @@ public class UserGroup implements Serializable {
         this.description = description;
     }
 
+    public String getMetaInformation() {
+        return this.metaInformation;
+    }
+
+    public void setMetaInformation(String metaInformation) {
+        this.metaInformation = metaInformation;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserGroup (");
@@ -69,6 +81,7 @@ public class UserGroup implements Serializable {
         sb.append(id);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(metaInformation);
 
         sb.append(")");
         return sb.toString();

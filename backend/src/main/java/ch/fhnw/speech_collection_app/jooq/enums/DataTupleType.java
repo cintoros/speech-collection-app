@@ -10,19 +10,23 @@ import org.jooq.Schema;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public enum RecordingLabel implements EnumType {
+public enum DataTupleType implements EnumType {
 
-    SKIPPED("SKIPPED"),
+    TEXT_TEXT("TEXT_TEXT"),
 
-    RECORDED("RECORDED"),
+    AUDIO_AUDIO("AUDIO_AUDIO"),
 
-    PRIVATE("PRIVATE"),
+    TEXT_AUDIO("TEXT_AUDIO"),
 
-    SENTENCE_ERROR("SENTENCE_ERROR");
+    AUDIO_TEXT("AUDIO_TEXT"),
+
+    IMAGE_AUDIO("IMAGE_AUDIO"),
+
+    RECORDING("RECORDING");
 
     private final String literal;
 
-    private RecordingLabel(String literal) {
+    private DataTupleType(String literal) {
         this.literal = literal;
     }
 
@@ -38,7 +42,7 @@ public enum RecordingLabel implements EnumType {
 
     @Override
     public String getName() {
-        return "recording_label";
+        return "data_tuple_type";
     }
 
     @Override

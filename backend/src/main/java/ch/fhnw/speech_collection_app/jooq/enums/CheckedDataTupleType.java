@@ -10,21 +10,17 @@ import org.jooq.Schema;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public enum CheckedTextAudioLabel implements EnumType {
+public enum CheckedDataTupleType implements EnumType {
 
     SKIPPED("SKIPPED"),
 
     CORRECT("CORRECT"),
 
-    WRONG("WRONG"),
-
-    PRIVATE("PRIVATE"),
-
-    SENTENCE_ERROR("SENTENCE_ERROR");
+    WRONG("WRONG");
 
     private final String literal;
 
-    private CheckedTextAudioLabel(String literal) {
+    private CheckedDataTupleType(String literal) {
         this.literal = literal;
     }
 
@@ -40,7 +36,7 @@ public enum CheckedTextAudioLabel implements EnumType {
 
     @Override
     public String getName() {
-        return "checked_text_audio_label";
+        return "checked_data_tuple_type";
     }
 
     @Override

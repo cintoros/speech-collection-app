@@ -1,12 +1,13 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.OriginalText;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+//TODO rename all endpoints/methods once everything is ready
 @RestController
 @RequestMapping("/api/user_group/{groupId}/admin/original_text/")
 public class DocumentRestApiController {
@@ -22,7 +23,7 @@ public class DocumentRestApiController {
     }
 
     @GetMapping
-    public List<OriginalText> getOriginalText(@PathVariable long groupId) {
+    public List<Source> getOriginalText(@PathVariable long groupId) {
         return documentService.getOriginalText(groupId);
     }
 
@@ -32,7 +33,7 @@ public class DocumentRestApiController {
     }
 
     @GetMapping("{originalTextId}/excerpt")
-    public List<Excerpt> getExcerpt(@PathVariable long groupId, @PathVariable long originalTextId) {
+    public List<Text> getExcerpt(@PathVariable long groupId, @PathVariable long originalTextId) {
         return documentService.getExcerpt(groupId, originalTextId);
     }
 
