@@ -8,11 +8,17 @@ from config import *
 
 
 def ttsGTTS(text: str):
+    """
+     current limit can be seen here https://cloud.google.com/text-to-speech/quotas
+     see also https://github.com/pndurette/gTTS/issues/117#issuecomment-458634045
+    :param text:
+    """
     tts = gTTS(text, lang='de')
     tts.save(os.path.join(base_dir, 'data_generation', "gTTS.mp3"))
 
+
 # TODO not sure about the quality of espeak/espeak-ng
-#  could be usefully to generate data with differnt pitch,speed volume etc.
+#  could be usefully to generate data with different pitch,speed volume etc.
 
 # requires espeak(all) , nsss(mac) or sapi5(windows) to be installed locally
 def ttsPyttsx3(text: str):
@@ -52,15 +58,19 @@ def ttsEsng(text: str):
     # print(wav.getnchannels(), wav.getframerate(), wav.getnframes())
 
 
-# https://acapela-box.com/AcaBox/index.php does not serve an api for a cloud base api see https://www.acapela-group.com/solutions/acapela-vaas/
+# TODO https://acapela-box.com/AcaBox/index.php does not serve an api.
+#  For a cloud base api see https://www.acapela-group.com/solutions/acapela-vaas/
 def acapela(text: str):
     print("not implemented")
+
 
 def mozillaTss():
     # see https://github.com/mozilla/TTS
     # TODO maybe some of the data of the open source datasets might be useful instead?
     #  https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/
     print("not implemented")
+
+
 def run(text: str):
     # ttsGTTS(text)
     # ttsPyttsx3(text)
