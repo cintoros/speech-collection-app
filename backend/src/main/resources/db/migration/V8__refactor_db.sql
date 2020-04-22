@@ -8,6 +8,8 @@ DROP TABLE speaker,original_text;
 
 ALTER TABLE user_group
     ADD COLUMN meta_information JSON DEFAULT NULL COMMENT 'contains meta_information. for example which features are activated per user_group';
+ALTER TABLE user
+    ADD COLUMN last_online DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 INSERT INTO dialect(county_id, county_name, language_id) VALUE ('DE-de', 'Standard German', 2);
 
@@ -33,15 +35,14 @@ Or it can be imported by a script this is why most fields are optional.';
 
 CREATE TABLE data_element
 (
-    id                BIGINT   NOT NULL AUTO_INCREMENT,
-    source_id         BIGINT            DEFAULT NULL,
-    user_id           BIGINT            DEFAULT NULL,
-    user_group_id     BIGINT   NOT NULL,
-    created_time      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    finished          BOOLEAN           DEFAULT FALSE,
-    is_sentence_error BOOLEAN           DEFAULT FALSE,
-    is_private        BOOLEAN           DEFAULT FALSE,
-    skipped           BIGINT            DEFAULT 0,
+    id            BIGINT   NOT NULL AUTO_INCREMENT,
+    source_id     BIGINT            DEFAULT NULL,
+    user_id       BIGINT            DEFAULT NULL,
+    user_group_id BIGINT   NOT NULL,
+    created_time  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    finished      BOOLEAN           DEFAULT FALSE,
+    is_private    BOOLEAN           DEFAULT FALSE,
+    skipped       BIGINT            DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (source_id) REFERENCES source (id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
@@ -49,15 +50,15 @@ CREATE TABLE data_element
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4 COMMENT 'the data_element can be an audio,text or image.
 In case of text & audio it can be uploaded normally or generated using a source i.e. transcript, text-document
-The finished flag is used to prevent cycles like text=>recording=>text=>recording=>...
-It can also be used to flag an data_element that already has enough recordings etc.';
+The finished flag is used to prevent cycles like text=>recording=>text=>recording=>...';
 
 CREATE TABLE text
 (
-    id              BIGINT NOT NULL AUTO_INCREMENT,
-    dialect_id      BIGINT NOT NULL,
-    data_element_id BIGINT NOT NULL,
-    text            TEXT   NOT NULL,
+    id                BIGINT NOT NULL AUTO_INCREMENT,
+    dialect_id        BIGINT NOT NULL,
+    data_element_id   BIGINT NOT NULL,
+    is_sentence_error BOOLEAN DEFAULT FALSE,
+    text              TEXT   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (dialect_id) REFERENCES dialect (id) ON DELETE CASCADE,
     FOREIGN KEY (data_element_id) REFERENCES data_element (id) ON DELETE CASCADE
@@ -107,7 +108,7 @@ CREATE TABLE data_tuple
   DEFAULT CHARSET = UTF8MB4
     COMMENT 'this table is used to save the audio,text, images data_tuples.
 the type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2).
-the finished can be used to flag an data_element that already has enough checks or should not be checked at all.';
+the finished can be used to flag an data_element should not be checked at all.';
 
 CREATE TABLE checked_data_element
 (
@@ -125,11 +126,11 @@ CREATE TABLE checked_data_element
 
 CREATE TABLE checked_data_tuple
 (
-    id            BIGINT                                                        NOT NULL AUTO_INCREMENT,
-    user_id       BIGINT                                                        NOT NULL,
-    data_tuple_id BIGINT                                                        NOT NULL,
-    type          ENUM ('SKIPPED','CORRECT','WRONG','PRIVATE','SENTENCE_ERROR') NOT NULL,
-    created_time  DATETIME                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id            BIGINT                             NOT NULL AUTO_INCREMENT,
+    user_id       BIGINT                             NOT NULL,
+    data_tuple_id BIGINT                             NOT NULL,
+    type          ENUM ('SKIPPED','CORRECT','WRONG') NOT NULL,
+    created_time  DATETIME                           NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (data_tuple_id) REFERENCES data_tuple (id) ON DELETE CASCADE
@@ -149,9 +150,9 @@ BEGIN
         SET data_element.skipped = data_element.skipped + 1
         WHERE data_element.id = NEW.data_element_id;
     elseif NEW.type = 'SENTENCE_ERROR' THEN
-        UPDATE data_element
-        SET data_element.is_sentence_error = true
-        WHERE data_element.id = NEW.data_element_id;
+        UPDATE text
+        SET text.is_sentence_error = true
+        WHERE text.data_element_id = NEW.data_element_id;
     elseif NEW.type = 'PRIVATE' THEN
         UPDATE data_element
         SET data_element.is_private = true
@@ -170,9 +171,9 @@ BEGIN
         SET data_element.skipped = data_element.skipped - 1
         WHERE data_element.id = OLD.data_element_id;
     elseif OLD.type = 'SENTENCE_ERROR' THEN
-        UPDATE data_element
-        SET data_element.is_sentence_error = false
-        WHERE data_element.id = OLD.data_element_id;
+        UPDATE text
+        SET text.is_sentence_error = false
+        WHERE text.data_element_id = OLD.data_element_id;
     elseif OLD.type = 'PRIVATE' THEN
         UPDATE data_element
         SET data_element.is_private = false
