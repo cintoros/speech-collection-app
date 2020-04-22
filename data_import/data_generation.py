@@ -8,6 +8,9 @@ import abox
 from config import *
 
 
+# first make google and bing official api as they seem to be better supported than acapella -> and have no rate limit etc.
+
+
 def ttsGTTS(text: str):
     """
      current limit can be seen here https://cloud.google.com/text-to-speech/quotas
@@ -61,10 +64,6 @@ def ttsEsng(text: str):
 
 # TODO https://acapela-box.com/AcaBox/index.php does not serve an api.
 #  For a cloud base api see https://www.acapela-group.com/solutions/acapela-vaas/
-def acapela(text: str):
-    print("not implemented")
-
-
 # TODO not sure about this implementation -> needs python-pympv or other library that provides codecs
 def ttsAbox(text: str):
     box = abox.Abox(output=os.path.join(base_dir, 'data_generation', "abox.ogg"), voice="willbadguy22k")
@@ -72,6 +71,16 @@ def ttsAbox(text: str):
     ret = abox.ab_download(url, box.option_l)
     if not ret:
         print("Aborting")
+
+
+def googleApi():
+    # TODO implement
+    print("not implemented")
+
+
+def bingApi():
+    # TODO implement
+    print("not implemented")
 
 
 def mozillaTss():
