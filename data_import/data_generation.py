@@ -4,6 +4,7 @@ import pyttsx3
 from espeakng import ESpeakNG
 from gtts import gTTS
 
+import abox
 from config import *
 
 
@@ -40,9 +41,9 @@ def ttsEsng(text: str):
     esng = ESpeakNG()
     esng.voice = 'german'
     esng.voice = 'German'
-    esng.pitch = 80
-    esng.speed = 120
-    esng.volume = 200
+    # esng.pitch = 80
+    # esng.speed = 120
+    # esng.volume = 200
     esng.say(text)
     # esng.runAndWait()
     for v in esng.voices:
@@ -64,6 +65,15 @@ def acapela(text: str):
     print("not implemented")
 
 
+# TODO not sure about this implementation -> needs python-pympv or other library that provides codecs
+def ttsAbox(text: str):
+    box = abox.Abox(output=os.path.join(base_dir, 'data_generation', "abox.ogg"), voice="willbadguy22k")
+    url = box.query(text)
+    ret = abox.ab_download(url, box.option_l)
+    if not ret:
+        print("Aborting")
+
+
 def mozillaTss():
     # see https://github.com/mozilla/TTS
     # TODO maybe some of the data of the open source datasets might be useful instead?
@@ -74,8 +84,9 @@ def mozillaTss():
 def run(text: str):
     # ttsGTTS(text)
     # ttsPyttsx3(text)
-    ttsEsng(text)
+    # ttsEsng(text)
     # acapela(text)
+    ttsAbox(text)
 
 
 if __name__ == '__main__':
