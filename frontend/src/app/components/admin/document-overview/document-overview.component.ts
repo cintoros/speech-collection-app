@@ -2,7 +2,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {UserGroupService} from '../../../services/user-group.service';
-import {Text} from '../../../models/text';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -19,6 +18,15 @@ interface Source {
   name: string;
 }
 
+interface TextElementDto {
+  id: number;
+  sourceId: number;
+  skipped: number;
+  isPrivate: boolean;
+  isSentenceError: boolean;
+  text: string;
+}
+
 @Component({
   selector: 'app-document-overview',
   templateUrl: './document-overview.component.html',
@@ -26,8 +34,7 @@ interface Source {
 })
 export class DocumentOverviewComponent implements OnInit {
   documents: Source[] = [];
-  //TODO add/refactor dto
-  excerpts: MatTableDataSource<Text>;
+  textElements: MatTableDataSource<TextElementDto>;
   private baseUrl: string;
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
@@ -37,36 +44,36 @@ export class DocumentOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.baseUrl = `${environment.url}user_group/${this.userGroupService.userGroupId}/admin/original_text/`;
+    this.baseUrl = `${environment.url}user_group/${this.userGroupService.userGroupId}/admin/source/`;
     this.httpClient.get<Domain[]>(`${environment.url}user_group/${this.userGroupService.userGroupId}/admin/domain`)
       .subscribe(d => this.domains = d);
     this.reload();
   }
 
   edit(text: Source) {
-    this.httpClient.get<Text[]>(`${this.baseUrl + text.id}/excerpt`).subscribe(v => {
-      this.excerpts = new MatTableDataSource(v);
-      this.excerpts.paginator = this.paginator;
-      this.excerpts.sort = this.sort;
+    this.httpClient.get<TextElementDto[]>(`${this.baseUrl + text.id}/element`).subscribe(v => {
+      this.textElements = new MatTableDataSource(v);
+      this.textElements.paginator = this.paginator;
+      this.textElements.sort = this.sort;
     });
   }
 
-  deleteE(text: Text) {
+  deleteTextElement(text: TextElementDto) {
     if (confirm('are you sure you want to delete this element?')) {
-      this.httpClient.delete<Text[]>(`${this.baseUrl + text.originalTextId}/excerpt/${text.id}`)
-        .subscribe(() => this.excerpts.data = this.excerpts.data.filter(v => v.id !== text.id));
+      this.httpClient.delete<TextElementDto[]>(`${this.baseUrl + text.sourceId}/element/${text.id}`)
+        .subscribe(() => this.textElements.data = this.textElements.data.filter(v => v.id !== text.id));
     }
   }
 
-  delete(text: Source) {
+  deleteDocument(source: Source) {
     if (confirm('are you sure you want to delete this element?')) {
-      this.httpClient.delete<Source[]>(this.baseUrl + text.id)
-        .subscribe(() => this.documents = this.documents.filter(v => v.id !== text.id));
+      this.httpClient.delete<Source[]>(this.baseUrl + source.id)
+        .subscribe(() => this.documents = this.documents.filter(v => v.id !== source.id));
     }
   }
 
   findDomain = (id: number) => this.domains.find(value => value.id === id);
-  back = () => this.excerpts = undefined;
+  back = () => this.textElements = undefined;
 
   private reload() {
     this.httpClient.get<Source[]>(this.baseUrl).subscribe(v => this.documents = v);

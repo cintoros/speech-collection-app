@@ -27,6 +27,10 @@ def split_to_sentences(transcript):
 
 
 def get_last_insert_id(cursor):
+    """
+    return the last inserted id by this client/connection.
+    see also https://dev.mysql.com/doc/refman/5.7/en/mysql-insert-id.html
+    """
     cursor.execute('select last_insert_id() as id')
     return cursor.fetchone()['id']
 

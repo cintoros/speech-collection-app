@@ -3,7 +3,6 @@ package ch.fhnw.speech_collection_app.features.base.admin.document;
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.IOUtils;
@@ -45,7 +44,7 @@ public class DocumentService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    public void postOriginalText(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
+    public void postDocumentSource(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
         isAllowed(groupId);
         var parser = new AutoDetectParser(TikaConfig.getDefaultConfig());
         var path = speechCollectionAppConfig.getBasePath().resolve("extracted_text");
@@ -86,7 +85,7 @@ public class DocumentService {
             }
         }).flatMap(Optional::stream).map(Object::toString).collect(Collectors.joining(","));
         try {
-            Process process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 1 " + collect);
+            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 1 " + collect);
             List<String> list = IOUtils.readLines(process.getErrorStream());
             if (!list.isEmpty()) {
                 logger.error(String.join("\n", list));
@@ -96,30 +95,30 @@ public class DocumentService {
         }
     }
 
-    public void deleteExcerpt(long groupId, long originalTextId, long excerptId) {
+    public void deleteElement(long groupId, long sourceId, long elementId) {
         isAllowed(groupId);
-        //TODO check if excerpt is in the right group -> see https://github.com/jOOQ/jOOQ/issues/3266
-        dslContext.delete(TEXT)
-                .where(TEXT.ID.eq(excerptId))
+        dslContext.delete(DATA_ELEMENT)
+                .where(DATA_ELEMENT.ID.eq(elementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
                 .execute();
     }
 
-    public List<Text> getExcerpt(long groupId, long originalTextId) {
+    public List<TextElementDto> getTextElement(long groupId, long originalTextId) {
         isAllowed(groupId);
-        return dslContext.select(TEXT.fields())
+        return dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
+                TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.SOURCE_ID.eq(originalTextId))
-                .fetchInto(Text.class);
+                .fetchInto(TextElementDto.class);
     }
 
-    public void deleteOriginalText(long groupId, long originalTextId) {
+    public void deleteSource(long groupId, long sourceId) {
         isAllowed(groupId);
         dslContext.delete(SOURCE)
-                .where(SOURCE.ID.eq(originalTextId))
+                .where(SOURCE.ID.eq(sourceId))
                 .execute();
     }
 
-    public List<Source> getOriginalText(long groupId) {
+    public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
         return dslContext.selectFrom(SOURCE)
                 //TODO not sure if it makes sense to also show the transcript imports? -> probably yes
