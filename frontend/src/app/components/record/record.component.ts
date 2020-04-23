@@ -101,7 +101,7 @@ export class RecordComponent implements OnInit {
   }
 
   isReady = () => this.audioChunks.length > 0;
-  private check = (type: CheckedDataElementType) => this.httpClient.put<void>(`${environment.url}user_group/${this.groupId}/element/${this.textDto.id}/checked?type=${type}`, {});
+  private check = (type: CheckedDataElementType) => this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.textDto.id}/checked?type=${type}`, {});
 
   private getNext() {
     this.httpClient.get<TextDto>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.textDto = value);

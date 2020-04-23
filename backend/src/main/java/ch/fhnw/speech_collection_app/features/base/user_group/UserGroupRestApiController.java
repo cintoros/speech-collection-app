@@ -28,7 +28,7 @@ public class UserGroupRestApiController {
         userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
     }
 
-    @PutMapping("element/{elementId}/checked")
+    @PostMapping("element/{elementId}/checked")
     public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long elementId, @RequestParam CheckedDataElementType type) {
         userGroupService.postCheckedDataElement(groupId, elementId, type);
     }
