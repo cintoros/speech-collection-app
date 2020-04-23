@@ -2,8 +2,9 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Audio;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
+import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,16 @@ public class UserGroupService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    //TODO probably use a dto
-    public void postRecording(long groupId, Audio recording, MultipartFile file) throws IOException {
+    public void postRecording(long groupId, RecordingDto recording, MultipartFile file) throws IOException {
         isAllowed(groupId);
         var element = dslContext.newRecord(DATA_ELEMENT);
         element.setFinished(true);
         element.setUserGroupId(groupId);
         element.setUserId(customUserDetailsService.getLoggedInUserId());
         element.store();
-        var audio = dslContext.newRecord(AUDIO, recording);
+        var audio = dslContext.newRecord(AUDIO);
+        audio.setNoiseLevel(recording.getAudioNoiseLevel());
+        audio.setQuality(recording.getAudioQuality());
         audio.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
         audio.setPath("default");
         audio.setDataElementId(element.getId());
@@ -50,33 +52,56 @@ public class UserGroupService {
         audio.setPath(path.toString());
         audio.store();
         var tuple = dslContext.newRecord(DATA_TUPLE);
-        tuple.setDataElementId_1(1L);//TODO set real text id from dto
+        tuple.setDataElementId_1(recording.getExcerptId());
         tuple.setDataElementId_2(element.getId());
+        tuple.setType(DataTupleType.RECORDING);
         tuple.store();
     }
 
     //TODO change logic so it is also possible to return an image
-    public Text getExcerpt(Long groupId) {
+    //TODO maybe over a feature flag and then a dropdown?
+    // maybe an additional method?
+
+
+    /**
+     * return a text to be recorded based on:
+     * 1. if the text is not easy to understand (no more than 3 skips)
+     * 2. the text does not contain an error
+     * 3. the text was not already recorded with the same dialect
+     * 4. the text was not already skipped by the user.
+     */
+    public TextDto getExcerpt(Long groupId) {
         isAllowed(groupId);
-        return dslContext.select(TEXT.fields())
-                //TODO not sure which join -> test it.
-                .from(DATA_ELEMENT.innerJoin(TEXT).onKey())
+        return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
+                .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
+                        //only show the ones that are good.
                         .and(DATA_ELEMENT.SKIPPED.lessOrEqual(3L))
                         .and(TEXT.IS_SENTENCE_ERROR.isFalse())
-                        .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_2)
-                                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2))
-                                //TODO not sure how we want to do the mapping in case of zip_codes?
-                                .where(USER.DIALECT_ID.eq(customUserDetailsService.getLoggedInUserDialectId())))))
+                        .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
+                                .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2).innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
+                                //only show the ones that need an additional dialect
+                                .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)
+                                        .and(AUDIO.DIALECT_ID.eq(customUserDetailsService.getLoggedInUserDialectId()))))
+                                //only show the ones that are not already skipped.
+                                .and(DATA_ELEMENT.ID.notIn(dslContext.select(CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID)
+                                        .from(CHECKED_DATA_ELEMENT)
+                                        .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
+                                                .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
                 .orderBy(DSL.rand())
-                .limit(1).fetchOneInto(Text.class);
+                .limit(1).fetchOneInto(TextDto.class);
     }
 
+    //TODO rename dto/method
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {
         isAllowed(groupId);
-        if (checkedOccurrence.mode == OccurrenceMode.TEXT_AUDIO)
-            postCheckedOccurrenceTextAudio(checkedOccurrence);
-        else postCheckedOccurrenceRecording(checkedOccurrence);
+        //TODO check user_group tuple mapping
+        var type = CheckedDataTupleType.valueOf(checkedOccurrence.label.toString());
+        var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
+        checked.setDataTupleId(checkedOccurrence.id);
+        checked.setUserId(customUserDetailsService.getLoggedInUserId());
+        checked.setType(type);
+        checked.store();
     }
 
     /**
@@ -94,6 +119,7 @@ public class UserGroupService {
         return getNextOccurrencesRecoding(groupId);
     }
 
+    //TODO refactor endpoints/logic so it can be expanded with images etc.
     private List<Occurrence> getNextOccurrencesTextAudio() {
 //        return dslContext.select(TEXT_AUDIO.ID, TEXT_AUDIO.TEXT, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
 //                .from(TEXT_AUDIO)
@@ -118,74 +144,30 @@ public class UserGroupService {
 
     public byte[] getAudio(long groupId, long audioId, OccurrenceMode mode) throws IOException {
         isAllowed(groupId);
+        //TODO instead of the audioId use the elementId
         if (mode == OccurrenceMode.RECORDING) checkAudio(groupId, audioId);
+        //TODO instead get the actual path from the database
         var s = (mode == OccurrenceMode.TEXT_AUDIO) ? "text_audio/" + audioId + ".flac" : "recording/" + audioId + ".webm";
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(s));
 
     }
 
-    public void putExcerptSkipped(long groupId, long excerptId) {
-        checkExcerpt(groupId, excerptId);
-//        dslContext.update(EXCERPT).set(EXCERPT.IS_SKIPPED, EXCERPT.IS_SKIPPED.plus(1)).where(EXCERPT.ID.eq(excerptId)).execute();
-//        storeRecord(RecordingLabel.SKIPPED, excerptId);
+    public void postCheckedDataElement(long groupId, long dataElementId, CheckedDataElementType type) {
+        checkElement(groupId, dataElementId);
+        var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
+        checked.setType(type);
+        checked.setUserId(customUserDetailsService.getLoggedInUserId());
+        checked.setDataElementId(dataElementId);
+        checked.store();
     }
 
-    public void putExcerptPrivate(long groupId, long excerptId) {
-        checkExcerpt(groupId, excerptId);
-//        dslContext.update(EXCERPT).set(EXCERPT.IS_PRIVATE, true).where(EXCERPT.ID.eq(excerptId)).execute();
-//        storeRecord(RecordingLabel.PRIVATE, excerptId);
-    }
 
-    public void putExcerptSentenceError(long groupId, long excerptId) {
-        checkExcerpt(groupId, excerptId);
-//        dslContext.update(EXCERPT).set(EXCERPT.IS_SENTENCE_ERROR, true).where(EXCERPT.ID.eq(excerptId)).execute();
-//        storeRecord(RecordingLabel.SENTENCE_ERROR, excerptId);
-
-    }
-
-    private void postCheckedOccurrenceRecording(CheckedOccurrence checkedOccurrence) {
-//        var label = CheckedRecordingLabel.valueOf(checkedOccurrence.label.toString());
-//        var record = new CheckedRecordingRecord();
-//        record.setRecordingId(checkedOccurrence.id);
-//        record.setUserId(customUserDetailsService.getLoggedInUserId());
-//        record.setLabel(label);
-//        dslContext.executeInsert(record);
-//        if (checkedOccurrence.label == CheckedOccurrenceLabel.WRONG) {
-//            dslContext.update(RECORDING).set(RECORDING.WRONG, RECORDING.WRONG.plus(1)).where(RECORDING.ID.eq(checkedOccurrence.id)).execute();
-//        } else if (checkedOccurrence.label == CheckedOccurrenceLabel.CORRECT) {
-//            dslContext.update(RECORDING).set(RECORDING.CORRECT, RECORDING.CORRECT.plus(1)).where(RECORDING.ID.eq(checkedOccurrence.id)).execute();
-//        }
-    }
-
-    private void postCheckedOccurrenceTextAudio(CheckedOccurrence checkedOccurrence) {
-//        var label = CheckedTextAudioLabel.valueOf(checkedOccurrence.label.toString());
-//        var record = new CheckedTextAudioRecord();
-//        record.setTextAudioId(checkedOccurrence.id);
-//        record.setUserId(customUserDetailsService.getLoggedInUserId());
-//        record.setLabel(label);
-//        dslContext.executeInsert(record);
-//        if (checkedOccurrence.label == CheckedOccurrenceLabel.WRONG) {
-//            dslContext.update(TEXT_AUDIO).set(TEXT_AUDIO.WRONG, TEXT_AUDIO.WRONG.plus(1)).where(TEXT_AUDIO.ID.eq(checkedOccurrence.id)).execute();
-//        } else if (checkedOccurrence.label == CheckedOccurrenceLabel.CORRECT) {
-//            dslContext.update(TEXT_AUDIO).set(TEXT_AUDIO.CORRECT, TEXT_AUDIO.CORRECT.plus(1)).where(TEXT_AUDIO.ID.eq(checkedOccurrence.id)).execute();
-//        }
-    }
-
-//    private RecordingRecord storeRecord(RecordingLabel recordingLabel, long excerptId) {
-//        RecordingRecord recordingRecord = dslContext.newRecord(RECORDING);
-//        recordingRecord.setUserId(customUserDetailsService.getLoggedInUserId());
-//        recordingRecord.setExcerptId(excerptId);
-//        recordingRecord.setLabel(recordingLabel);
-//        recordingRecord.store();
-//        return recordingRecord;
-//    }
-
-    private void checkExcerpt(long groupId, long excerptId) {
+    private void checkElement(long groupId, long elementId) {
         isAllowed(groupId);
-//        boolean equals = dslContext.selectFrom(EXCERPT.join(ORIGINAL_TEXT).onKey())
-//                .where(EXCERPT.ID.eq(excerptId))
-//                .fetchOne(ORIGINAL_TEXT.USER_GROUP_ID).equals(groupId);
-//        if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        boolean equals = dslContext.selectFrom(DATA_ELEMENT)
+                .where(DATA_ELEMENT.ID.eq(elementId))
+                .fetchOne(DATA_ELEMENT.USER_GROUP_ID).equals(groupId);
+        if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
     private void checkAudio(long groupId, long audioId) {

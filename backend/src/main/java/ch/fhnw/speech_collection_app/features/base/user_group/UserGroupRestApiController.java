@@ -1,7 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Audio;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,29 +22,19 @@ public class UserGroupRestApiController {
         this.objectMapper = objectMapper;
     }
 
+    //TODO not sure how we want to upload design the one where we also translate the text -> one endpoint/requests or two
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
-        //TODO add dto
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, Audio.class), file);
+        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
     }
 
-    @PutMapping("excerpt/{excerptId}/private")
-    public void putExcerptPrivate(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptPrivate(groupId, excerptId);
-    }
-
-    @PutMapping("excerpt/{excerptId}/skipped")
-    public void putExcerptSkipped(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptSkipped(groupId, excerptId);
-    }
-
-    @PutMapping("excerpt/{excerptId}/sentence_error")
-    public void putExcerptSentenceError(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptSentenceError(groupId, excerptId);
+    @PutMapping("element/{elementId}/checked")
+    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long elementId, @RequestParam CheckedDataElementType type) {
+        userGroupService.postCheckedDataElement(groupId, elementId, type);
     }
 
     @GetMapping("excerpt")
-    public Text getExcerpt(@PathVariable long groupId) {
+    public TextDto getExcerpt(@PathVariable long groupId) {
         return userGroupService.getExcerpt(groupId);
     }
 

@@ -1,9 +1,9 @@
-<div *ngIf="excerpt">
+<div *ngIf="textDto">
   <mat-card class="margin">
     <h1>Record</h1>
-    <mat-icon *ngIf="excerpt.isPrivate">lock</mat-icon>
-    <mat-icon *ngIf="!excerpt.isPrivate">lock_open</mat-icon>
-    <b>Excerpt: </b><span>{{excerpt?.excerpt}}</span>
+    <mat-icon *ngIf="textDto.isPrivate">lock</mat-icon>
+    <mat-icon *ngIf="!textDto.isPrivate">lock_open</mat-icon>
+    <b>Excerpt: </b><span>{{textDto?.text}}</span>
   </mat-card>
   <div class="margin">
     <mat-form-field class="max-width">
@@ -41,7 +41,7 @@
       <mat-icon>delete</mat-icon>
       <span>&nbsp;Not a sentence</span>
     </button>
-    <button (click)="private()" [disabled]="excerpt.isPrivate" mat-raised-button title="Mark as private">
+    <button (click)="private()" [disabled]="textDto.isPrivate" mat-raised-button title="Mark as private">
       <mat-icon>lock</mat-icon>
       <span>&nbsp;Sensitive data</span>
     </button>
@@ -51,7 +51,7 @@
     <span *ngIf="isRecording"> &ensp; Recorded {{elapsedTime}} Seconds</span>
   </div>
 </div>
-<div *ngIf="!excerpt" style="height: calc(100% - 100px);">
+<div *ngIf="!textDto" style="height: calc(100% - 100px);">
   <div style="height: calc(100% - 90px);">
     <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
       <div style="font-weight: bold; font-size: 36px;">No more Data available</div>

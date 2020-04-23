@@ -27,7 +27,7 @@ subprojects {
     }
     sourceCompatibility = 11
     targetCompatibility = 11
-    group = 'ch.i4ds.new_project'
+    group = 'ch.fhnw.speech_collection_app'
     version = "1.0.0-SNAPSHOT"
 
     //managed dependency versions

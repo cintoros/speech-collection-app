@@ -118,10 +118,10 @@ public class DocumentService {
                 .execute();
     }
 
+    //TODO maybe add an endpoint for imported transcripts, or just add a general endpoint to view all elements/tuples.
     public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
         return dslContext.selectFrom(SOURCE)
-                //TODO not sure if it makes sense to also show the transcript imports? -> probably yes
                 .where(SOURCE.USER_GROUP_ID.eq(groupId).and(SOURCE.DOMAIN_ID.isNotNull()))
                 .fetchInto(Source.class);
     }

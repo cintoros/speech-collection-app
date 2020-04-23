@@ -1,18 +1,10 @@
-export class Recording {
-  id: number;
+export class RecordingDto {
   excerptId: number;
-  userId: number;
-  audio: Blob;
-  time: Date;
   quality: RecordingQuality;
   noiseLevel: RecordingNoiseLevel;
 
-  constructor(id: number, excerptId: number, userId: number, audio: Blob, time: Date, quality: RecordingQuality, noiseLevel: RecordingNoiseLevel) {
-    this.id = id;
+  constructor(excerptId: number, quality: RecordingQuality, noiseLevel: RecordingNoiseLevel) {
     this.excerptId = excerptId;
-    this.userId = userId;
-    this.audio = audio;
-    this.time = time;
     this.quality = quality;
     this.noiseLevel = noiseLevel;
   }
