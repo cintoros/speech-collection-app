@@ -48,9 +48,9 @@ public class UserGroupRestApiController {
         return userGroupService.getNextOccurrences(groupId);
     }
 
-    @GetMapping(value = "occurrence/audio/{audioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "occurrence/audio/{elementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public byte[] getAudio(@PathVariable long groupId, @PathVariable long audioId, @RequestParam OccurrenceMode mode) throws IOException {
-        return userGroupService.getAudio(groupId, audioId, mode);
+    public byte[] getAudio(@PathVariable long groupId, @PathVariable long elementId) throws IOException {
+        return userGroupService.getAudio(groupId, elementId);
     }
 }

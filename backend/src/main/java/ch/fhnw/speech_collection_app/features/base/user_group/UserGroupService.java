@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
@@ -34,7 +35,7 @@ public class UserGroupService {
     }
 
     public void postRecording(long groupId, RecordingDto recording, MultipartFile file) throws IOException {
-        isAllowed(groupId);
+        checkAllowed(groupId);
         var element = dslContext.newRecord(DATA_ELEMENT);
         element.setFinished(true);
         element.setUserGroupId(groupId);
@@ -58,20 +59,16 @@ public class UserGroupService {
         tuple.store();
     }
 
-    //TODO change logic so it is also possible to return an image
-    //TODO maybe over a feature flag and then a dropdown?
-    // maybe an additional method?
-
-
     /**
-     * return a text to be recorded based on:
-     * 1. if the text is not easy to understand (no more than 3 skips)
-     * 2. the text does not contain an error
-     * 3. the text was not already recorded with the same dialect
-     * 4. the text was not already skipped by the user.
+     * return a text to be recorded based on:<br>
+     * 1. if the text is not easy to understand (no more than 3 skips)<br>
+     * 2. the text does not contain an error<br>
+     * 3. the text was not already recorded with the same dialect<br>
+     * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
-        isAllowed(groupId);
+        //TODO change logic so it is also possible to return an image or use a different endpoint?
+        checkAllowed(groupId);
         return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
@@ -94,7 +91,7 @@ public class UserGroupService {
 
     //TODO rename dto/method
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {
-        isAllowed(groupId);
+        checkAllowed(groupId);
         //TODO check user_group tuple mapping
         var type = CheckedDataTupleType.valueOf(checkedOccurrence.label.toString());
         var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
@@ -105,50 +102,27 @@ public class UserGroupService {
     }
 
     /**
-     * returns the next occurrences to check based on the groupId and available data.
-     * occurrences are labeled until it is clear that they clearly wrong|correct
+     * returns the next occurrences to check based on the groupId and available data.<br>
+     * occurrences are labeled until it is clear that they clearly wrong|correct.<br>
      */
     public List<Occurrence> getNextOccurrences(long groupId) {
-        isAllowed(groupId);
-        if (speechCollectionAppConfig.getPublicGroupId() == groupId) {
-            var nextOccurrencesTextAudio = getNextOccurrencesTextAudio();
-            if (!nextOccurrencesTextAudio.isEmpty()) {
-                return nextOccurrencesTextAudio;
-            }
-        }
-        return getNextOccurrencesRecoding(groupId);
+        checkAllowed(groupId);
+        //TODO implement image checking -> refactor endpoint/dto
+        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
+                .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
+                        .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
+                        .and(DATA_TUPLE.FINISHED.isFalse())
+                        .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
+                                .from(CHECKED_DATA_TUPLE)
+                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(customUserDetailsService.getLoggedInUserId()))))
+                ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
     }
 
-    //TODO refactor endpoints/logic so it can be expanded with images etc.
-    private List<Occurrence> getNextOccurrencesTextAudio() {
-//        return dslContext.select(TEXT_AUDIO.ID, TEXT_AUDIO.TEXT, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
-//                .from(TEXT_AUDIO)
-//                .where(DSL.abs(TEXT_AUDIO.WRONG.minus(TEXT_AUDIO.CORRECT)).le(3L)
-//                        .and(TEXT_AUDIO.ID.notIn(dslContext.select(CHECKED_TEXT_AUDIO.TEXT_AUDIO_ID).from(CHECKED_TEXT_AUDIO)
-//                                .where(CHECKED_TEXT_AUDIO.USER_ID.eq(customUserDetailsService.getLoggedInUserId()))))
-//                ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
-        return List.of();
-    }
-
-    private List<Occurrence> getNextOccurrencesRecoding(long groupId) {
-//        return dslContext.select(RECORDING.ID, EXCERPT.EXCERPT_, DSL.inline(OccurrenceMode.RECORDING.name()).as("mode"))
-//                .from(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
-//                .where(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId)
-//                        .and(DSL.abs(RECORDING.WRONG.minus(RECORDING.CORRECT)).le(3L))
-//                        .and(RECORDING.LABEL.eq(RecordingLabel.RECORDED))
-//                        .and(RECORDING.ID.notIn(dslContext.select(CHECKED_RECORDING.RECORDING_ID).from(CHECKED_RECORDING)
-//                                .where(CHECKED_RECORDING.USER_ID.eq(customUserDetailsService.getLoggedInUserId()))))
-//                ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
-        return List.of();
-    }
-
-    public byte[] getAudio(long groupId, long audioId, OccurrenceMode mode) throws IOException {
-        isAllowed(groupId);
-        //TODO instead of the audioId use the elementId
-        if (mode == OccurrenceMode.RECORDING) checkAudio(groupId, audioId);
-        //TODO instead get the actual path from the database
-        var s = (mode == OccurrenceMode.TEXT_AUDIO) ? "text_audio/" + audioId + ".flac" : "recording/" + audioId + ".webm";
-        return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(s));
+    public byte[] getAudio(long groupId, long elementId) throws IOException {
+        checkElement(groupId, elementId);
+        var path = dslContext.selectFrom(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(elementId)).fetchOne(AUDIO.PATH);
+        return Files.readAllBytes(Paths.get(path));
 
     }
 
@@ -161,23 +135,15 @@ public class UserGroupService {
         checked.store();
     }
 
-
     private void checkElement(long groupId, long elementId) {
-        isAllowed(groupId);
+        checkAllowed(groupId);
         boolean equals = dslContext.selectFrom(DATA_ELEMENT)
                 .where(DATA_ELEMENT.ID.eq(elementId))
                 .fetchOne(DATA_ELEMENT.USER_GROUP_ID).equals(groupId);
         if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    private void checkAudio(long groupId, long audioId) {
-//        boolean equals = dslContext.selectFrom(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
-//                .where(RECORDING.ID.eq(audioId))
-//                .fetchOne(ORIGINAL_TEXT.USER_GROUP_ID).equals(groupId);
-//        if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-
-    private void isAllowed(long userGroupId) {
+    private void checkAllowed(long userGroupId) {
         if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }

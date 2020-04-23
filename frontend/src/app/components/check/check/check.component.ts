@@ -121,7 +121,7 @@ export class CheckComponent implements OnInit {
   }
 
   private loadAudioBlob(occurrence: Occurrence): void {
-    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${occurrence.id}?mode=${occurrence.mode}`, {responseType: 'blob'})
+    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${occurrence.dataElementId2}`, {responseType: 'blob'})
       .subscribe(resp => {
         this.audioPlayer = new Audio(URL.createObjectURL(resp));
         this.audioPlayer.onended = () => this.isPlaying = false;
