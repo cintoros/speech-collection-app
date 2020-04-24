@@ -6,3 +6,4 @@ data
 __pycache__
 backend/src/test/resources/application-dev-test.yml
 data_import/config.py
+.ipynb_checkpoints
