@@ -1,10 +1,10 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.OriginalText;
 import ch.fhnw.speech_collection_app.jooq.tables.records.OriginalTextRecord;
-import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.IOUtils;
@@ -58,13 +58,14 @@ public class DocumentService {
         }
         String collect = Arrays.stream(files).map(file -> {
             try {
-                var bodyContentHandler = new BodyContentHandler();
+                //NOTE: -1 disables the write limit -> as spring already limit the upload to 1MB -> note ngingx etc. may also have a file limit
+                var bodyContentHandler = new BodyContentHandler(-1);
                 var metadata = new Metadata();
                 metadata.add(Metadata.RESOURCE_NAME_KEY, file.getOriginalFilename());
                 metadata.add(Metadata.CONTENT_TYPE, file.getContentType());
                 parser.parse(new ByteArrayInputStream(file.getBytes()), bodyContentHandler, metadata);
                 var text = bodyContentHandler.toString();
-                OriginalText originalText = new OriginalText(null, groupId, domainId, customUserDetailsService.getLoggedInUserId(), null, documentLicence,file.getOriginalFilename());
+                OriginalText originalText = new OriginalText(null, groupId, domainId, customUserDetailsService.getLoggedInUserId(), null, documentLicence, file.getOriginalFilename());
                 OriginalTextRecord textRecord = dslContext.newRecord(ORIGINAL_TEXT, originalText);
                 textRecord.store();
                 Long id = textRecord.getId();
