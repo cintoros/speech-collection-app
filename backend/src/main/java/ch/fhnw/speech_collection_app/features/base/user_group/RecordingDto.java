@@ -3,7 +3,6 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.jooq.enums.AudioNoiseLevel;
 import ch.fhnw.speech_collection_app.jooq.enums.AudioQuality;
 
-//TODO maybe add a separate endpoint class etc.
 public class RecordingDto {
     private Long excerptId;
     private AudioQuality audioQuality;
