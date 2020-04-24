@@ -55,7 +55,8 @@ public class DocumentService {
         }
         String collect = Arrays.stream(files).map(file -> {
             try {
-                var bodyContentHandler = new BodyContentHandler();
+                //NOTE: -1 disables the write limit -> as spring already limit the upload to 1MB -> note ngingx etc. may also have a file limit
+                var bodyContentHandler = new BodyContentHandler(-1);
                 var metadata = new Metadata();
                 metadata.add(Metadata.RESOURCE_NAME_KEY, file.getOriginalFilename());
                 metadata.add(Metadata.CONTENT_TYPE, file.getContentType());
