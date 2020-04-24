@@ -75,6 +75,7 @@ public class UserGroupService {
                         //only show the ones that are good.
                         .and(DATA_ELEMENT.SKIPPED.lessOrEqual(3L))
                         .and(TEXT.IS_SENTENCE_ERROR.isFalse())
+                        .and(DATA_ELEMENT.FINISHED.isFalse())
                         .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
                                 .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2).innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
                                 //only show the ones that need an additional dialect

@@ -2,15 +2,14 @@ package ch.fhnw.speech_collection_app.features.base.admin;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.features.base.user_group.OccurrenceMode;
 import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
+import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.DataTuple;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
 import org.apache.tika.io.IOUtils;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +52,15 @@ public class UserGroupAdminService {
 
     }
 
-    //TODO maybe also add a overview for the elements
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
         //TODO implement pagination for increased performance
-        //TODO not sure how we want to handle the text as some are image -> text etc.
-        //TODO maybe add a drop down to filter per type
-        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, DSL.inline("TODO add text"),
-                DSL.inline(OccurrenceMode.RECORDING.name()).as("mode"))
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1))
-                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)))
+        //TODO not sure how we want to handle the images for now we just filter based on the type.
+        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE, DATA_TUPLE.DATA_ELEMENT_ID_2)
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
+                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)
+                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO))))
+                )
                 .fetchInto(OverviewOccurrence.class);
     }
 
@@ -102,6 +100,7 @@ public class UserGroupAdminService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
+    //TODO test whol text audio logic
     public TextAudioDto getTextAudio(long groupId, Long textAudioId) {
         isAllowed(groupId);
         //TODO implement dto that contains both the text and audio information

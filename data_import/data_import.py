@@ -20,8 +20,11 @@ cursor = connection.cursor(dictionary=True)
 logging.basicConfig(level=logging.INFO)
 
 
-# TODO refactor data base insert/updates etc.
 def get_last_insert_id(dict_cursor):
+    """
+    return the last inserted id by this client/connection.
+    see also https://dev.mysql.com/doc/refman/5.7/en/mysql-insert-id.html
+    """
     dict_cursor.execute('select last_insert_id() as id')
     return dict_cursor.fetchone()['id']
 
@@ -56,6 +59,7 @@ def extract_data_to_db(folderNumber: str):
         logging.info('Loading ' + folderNumber)
         index = os.path.join(source_dir, folderNumber, 'indexes.xml')
         audio = os.path.join(source_dir, folderNumber, 'audio.wav')
+        # TODO change so it matches -> needs two sources one for audio and one for text
         cursor.execute('insert into source(description,name,raw_audio_path,raw_file_path) VALUE(%s,%s,%s,%s)',
                        [source_desc, source_name, audio, index])
         source_id = get_last_insert_id(cursor)
@@ -68,12 +72,6 @@ def extract_data_to_db(folderNumber: str):
             speakers = dict()
             for speaker in soup.find_all('speaker'):
                 speaker_id = speaker['id']
-
-                gender = speaker.find('sex')['value']
-                if gender == 'f' or gender == 'm':
-                    gender = gender.upper()
-                else:
-                    gender = 'none'
 
                 language = speaker.find('languages-used').find('language')
                 if language is not None:
@@ -90,6 +88,7 @@ def extract_data_to_db(folderNumber: str):
                     if info['attribute-name'] == 'dialect':
                         dialect = info.get_text()
                         break
+                # TODO maybe filter dialect based on database dialect
                 if dialect is not None:
                     dialect = dialect.upper().strip()
                     if dialect in {'BS', 'BE', 'GR', 'LU', 'OST', 'VS', 'ZH'}:
@@ -106,6 +105,8 @@ def extract_data_to_db(folderNumber: str):
                 if language is None or language == 'Standard German':
                     dialect = None
                 if language is not None:
+                    # TODO most of this information is no longer needed
+
                     cursor.execute('insert into speaker (name, language,dialect,sex) values (%s, %s,%s,%s)',
                                    [speaker_id, language, dialect, gender])
                     speaker_id_db = get_last_insert_id(cursor)
@@ -127,13 +128,14 @@ def extract_data_to_db(folderNumber: str):
                             duration_seconds = end_time - start_time
                             if duration_seconds > 0.0:
                                 transcript_text = event.get_text()
-
+                                # TODO insert two elements audio/text and then a text_audio tuple
                                 cursor.execute(
                                     "insert into text_audio ( audio_start,  audio_end, text, path_to_file, speaker_id,source_id)values (%s, %s, %s, %s, %s, %s)",
                                     [start_time, end_time, transcript_text, 'PLACEHOLDER', speaker_id_db, source_id]
                                 )
                                 text_audio_id = get_last_insert_id(cursor)
                                 audio_path_to_file = f'{text_audio_id}.flac'
+                                # TODO see above
                                 cursor.execute('update text_audio set path_to_file = %s where id = %s',
                                                [audio_path_to_file, text_audio_id])
 

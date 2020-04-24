@@ -45,7 +45,6 @@ if __name__ == '__main__':
     )
     connection.autocommit = False
     cursor = connection.cursor(dictionary=True)
-    # TODO refactor data base insert/updates etc.
     try:
         # extract sentences from a text file.
         if command == "1":
@@ -66,8 +65,10 @@ if __name__ == '__main__':
         # re generate text-audio audio segment
         elif (command == "2"):
             text_audio_id = sys.argv[2]
+            # TODO test this logic once backend/frontend is refactored.
             cursor.execute(
-                'select raw_audio_path,audio_start,  audio_end  from text_audio join source on source.id=text_audio.source_id where text_audio.id = %s',
+                'select path_to_raw_file,audio_start,audio_end from audio join data_element on '
+                'audio.data_element_id=data_element.id join source on source.id=data_element.source_id where audio.id = %s',
                 [text_audio_id])
             text_audio = cursor.fetchone()
             audio = text_audio['raw_audio_path']
