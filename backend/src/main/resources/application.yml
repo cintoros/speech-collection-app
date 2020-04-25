@@ -1,12 +1,17 @@
 spring:
   datasource:
-    password: labeling-tool
-    username: labeling-tool
-    url: jdbc:mysql://localhost/labeling-tool
+    password: speech_collection_app
+    username: speech_collection_app
+    url: jdbc:mysql://localhost/speech_collection_app
     driver-class-name: org.mariadb.jdbc.Driver
+  main:
+    banner-mode: off
 server:
   port: 8084
-labeling-tool:
-  base-path: /home/stt/labeling-tool/data
-  conda-exec: "/home/stt/miniconda3/condabin/conda run -n labeling_tool python /home/stt/labeling-tool/data_import/sentences.py"
+speech-collection-app:
+  base-path: /home/stt/speech-collection-app/data
+  conda-exec: "/home/stt/miniconda3/condabin/conda run -n speech_collection_app python /home/stt/speech-collection-app/data_import/sentences.py"
   public-group-id: 1
+  features:
+    email-integration: false
+  min-num-checks: 3

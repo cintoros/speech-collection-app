@@ -1,15 +1,15 @@
-import {Component, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../../services/auth.service';
 import {CheckMoreComponent} from '../check-more/check-more.component';
 import {ShortcutComponent} from '../shortcut/shortcut.component';
 import {HttpClient} from '@angular/common/http';
-import {TextAudioDto} from '../../../models/text-audio-dto';
 import {environment} from '../../../../environments/environment';
 import {CarouselComponent} from 'ngx-carousel-lib';
 import {CheckedOccurrence, CheckedOccurrenceLabel, Occurrence} from './checked-occurrence';
 import {Router} from '@angular/router';
 import {UserGroupService} from '../../../services/user-group.service';
+import {SnackBarService} from '../../../services/snack-bar.service';
 
 export enum OccurrenceMode {
   RECORDING = 'RECORDING', TEXT_AUDIO = 'TEXT_AUDIO'
@@ -20,9 +20,7 @@ export enum OccurrenceMode {
   templateUrl: './check.component.html',
   styleUrls: ['./check.component.scss']
 })
-// TODO add message in case someone is labeling textaudio but has not selected the public group?
 export class CheckComponent implements OnInit {
-  @Input() checkMode: OccurrenceMode;
   isPlaying = false;
   occurrences: Array<Occurrence> = [];
   audioProgress = 0;
@@ -35,7 +33,7 @@ export class CheckComponent implements OnInit {
 
   constructor(
     private httpClient: HttpClient, private dialog: MatDialog, private authService: AuthService, private router: Router,
-    private userGroupService: UserGroupService
+    private userGroupService: UserGroupService, private snackBarService: SnackBarService
   ) {
     this.groupId = this.userGroupService.userGroupId;
   }
@@ -66,26 +64,31 @@ export class CheckComponent implements OnInit {
     if (this.isReady) {
       this.stop();
 
-      const textAudio = this.occurrences[this.carousel.carousel.activeIndex];
-      const cta = new CheckedOccurrence(textAudio.id, this.userId, checkType, this.checkMode);
-      this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta).subscribe();
-
-      // checkIfFinishedChunk
-      if (this.carousel.carousel.activeIndex === this.occurrences.length - 1) {
-        this.dialog.open(CheckMoreComponent, {width: '500px', disableClose: true}).afterClosed().subscribe(result => {
-          if (result) {
-            // reset carousel and load new data
-            this.carousel.carousel.activeIndex = 0;
-            this.occurrences = [];
-            this.getTenNonLabeledTextAudios();
-          } else {
-            this.router.navigate(['/home']);
-          }
-        });
+      const occurrence = this.occurrences[this.carousel.carousel.activeIndex];
+      if ((checkType === CheckedOccurrenceLabel.SENTENCE_ERROR || checkType === CheckedOccurrenceLabel.PRIVATE)) {
+        this.httpClient.post(`${environment.url}user_group/${this.groupId}/element/${occurrence.dataElementId_1}/checked?type=${checkType}`, {})
+          .subscribe(value => this.snackBarService.openMessage('successfully updated element.'));
       } else {
-        this.isReady = false;
-        this.loadAudioBlob(this.occurrences[this.carousel.carousel.activeIndex + 1]);
-        this.carousel.slideNext();
+        const cta = new CheckedOccurrence(occurrence.id, checkType);
+        this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta).subscribe();
+
+        // checkIfFinishedChunk
+        if (this.carousel.carousel.activeIndex === this.occurrences.length - 1) {
+          this.dialog.open(CheckMoreComponent, {width: '500px', disableClose: true}).afterClosed().subscribe(result => {
+            if (result) {
+              // reset carousel and load new data
+              this.carousel.carousel.activeIndex = 0;
+              this.occurrences = [];
+              this.getTenNonLabeledTextAudios();
+            } else {
+              this.router.navigate(['/home']);
+            }
+          });
+        } else {
+          this.isReady = false;
+          this.loadAudioBlob(this.occurrences[this.carousel.carousel.activeIndex + 1]);
+          this.carousel.slideNext();
+        }
       }
     }
   }
@@ -114,7 +117,7 @@ export class CheckComponent implements OnInit {
   }
 
   private getTenNonLabeledTextAudios() {
-    this.httpClient.get<Array<TextAudioDto>>(`${environment.url}user_group/${this.groupId}/occurrence/next?mode=${this.checkMode}`)
+    this.httpClient.get<Array<Occurrence>>(`${environment.url}user_group/${this.groupId}/occurrence/next`)
       .subscribe(textAudios => {
         this.occurrences = textAudios;
         if (textAudios.length > 0) {
@@ -123,8 +126,8 @@ export class CheckComponent implements OnInit {
       });
   }
 
-  private loadAudioBlob(dto: Occurrence): void {
-    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${dto.id}?mode=${this.checkMode}`, {responseType: 'blob'})
+  private loadAudioBlob(occurrence: Occurrence): void {
+    this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${occurrence.dataElementId_2}`, {responseType: 'blob'})
       .subscribe(resp => {
         this.audioPlayer = new Audio(URL.createObjectURL(resp));
         this.audioPlayer.onended = () => this.isPlaying = false;

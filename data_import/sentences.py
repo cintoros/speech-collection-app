@@ -26,6 +26,15 @@ def split_to_sentences(transcript):
     return [sent.text for sent in doc.sents]
 
 
+def get_last_insert_id(cursor):
+    """
+    return the last inserted id by this client/connection.
+    see also https://dev.mysql.com/doc/refman/5.7/en/mysql-insert-id.html
+    """
+    cursor.execute('select last_insert_id() as id')
+    return cursor.fetchone()['id']
+
+
 if __name__ == '__main__':
     command = sys.argv[1]
     connection = mysql.connector.connect(
@@ -37,20 +46,29 @@ if __name__ == '__main__':
     connection.autocommit = False
     cursor = connection.cursor(dictionary=True)
     try:
+        # extract sentences from a text file.
         if command == "1":
             fileIds = sys.argv[2].split(',')
             for fileId in fileIds:
                 fp = os.path.join(base_dir, 'extracted_text', fileId + ".txt")
                 sentences = split_to_sentences(open(fp, encoding="utf-8").read())
                 for excerpt in sentences:
-                    cursor.execute("insert into excerpt(original_text_id,excerpt) values(%s,%s)", [fileId, excerpt])
+                    cursor.execute(
+                        "insert into data_element(source_id, user_group_id) value(%s, (select (user_group_id) from source where id=%s))",
+                        [fileId, fileId])
+                    data_element_id = get_last_insert_id(cursor)
+                    cursor.execute("insert into text(dialect_id,data_element_id,text) values(%s,%s,%s)",
+                                   [27, data_element_id, excerpt])
                 print(fileId + " done.")
                 os.remove(fp)
                 connection.commit()
+        # re generate text-audio audio segment
         elif (command == "2"):
             text_audio_id = sys.argv[2]
+            # TODO test this logic once backend/frontend is refactored.
             cursor.execute(
-                'select raw_audio_path,audio_start,  audio_end  from text_audio join source on source.id=text_audio.source_id where text_audio.id = %s',
+                'select path_to_raw_file,audio_start,audio_end from audio join data_element on '
+                'audio.data_element_id=data_element.id join source on source.id=data_element.source_id where audio.id = %s',
                 [text_audio_id])
             text_audio = cursor.fetchone()
             audio = text_audio['raw_audio_path']

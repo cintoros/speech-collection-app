@@ -1,56 +1,47 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {EmailPassword} from '../models/email-password';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {SpringPrincipal} from '../models/spring-principal';
 import {SnackBarService} from './snack-bar.service';
+import {filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   static currentUserStore = 'currentUser';
-  private user: Observable<SpringPrincipal>;
+  private user: BehaviorSubject<SpringPrincipal> = new BehaviorSubject<SpringPrincipal>(null);
 
   constructor(private router: Router, private httpClient: HttpClient, private snackBarService: SnackBarService) {
   }
 
   getUser() {
-    if (this.user === undefined) {
-      this.user = this.httpClient.get<SpringPrincipal>(environment.url + 'user');
+    if (this.user.value === null) {
+      this.reloadUser();
     }
-    return this.user;
+    return this.user.pipe(filter(value => value !== null));
   }
+
+  reloadUser = () => this.httpClient.get<SpringPrincipal>(environment.url + 'user').subscribe(value => this.user.next(value));
 
   checkAuthenticated(): boolean {
     const item = sessionStorage.getItem(AuthService.currentUserStore);
     return item != null && item.trim().length > 0;
   }
 
-  login(emailPassword: EmailPassword) {
+  login(emailPassword: EmailPassword, p: () => void) {
     this.loginUser(emailPassword).subscribe(user => {
-      this.router.navigate(['/home']);
+      this.user.next(user);
       sessionStorage.setItem(AuthService.currentUserStore, this.buildAuthenticationHeader(emailPassword.email, emailPassword.password));
-    }, () => {
-      this.snackBarService.openError('Unauthorized');
+      this.router.navigate(['/home']);
+    }, error => {
+      this.snackBarService.openError(error);
       sessionStorage.clear();
+      p.apply(null);
     });
-  }
-
-  loginUser(user: EmailPassword): Observable<SpringPrincipal> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        // needed to prevent browser popup - only happens once angular is served from docker,spring
-        'X-Requested-With': 'XMLHttpRequest',
-        Authorization: this.buildAuthenticationHeader(user.email, user.password)
-      })
-    };
-    const userO = this.httpClient.get<SpringPrincipal>(environment.url + 'user', httpOptions);
-    this.user = userO;
-    return userO;
   }
 
   buildAuthenticationHeader(username: string, password: string): string {
@@ -59,11 +50,28 @@ export class AuthService {
 
   logout(b: boolean) {
     sessionStorage.clear();
-    this.router.navigate(['/login'])
-      .finally(() => {
-        if (b) {
-          location.reload();
-        }
-      });
+    this.httpClient.post(`${environment.url}public/logout`, {}).subscribe(() => {
+    }, () => {
+    }, () => {
+      this.router.navigate(['/login'])
+        .finally(() => {
+          if (b) {
+            location.reload();
+          }
+        });
+    });
+
+  }
+
+  private loginUser(user: EmailPassword): Observable<SpringPrincipal> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        // needed to prevent browser popup - only happens once angular is served from docker,spring
+        'X-Requested-With': 'XMLHttpRequest',
+        Authorization: this.buildAuthenticationHeader(user.email, user.password)
+      })
+    };
+    return this.httpClient.get<SpringPrincipal>(environment.url + 'user', httpOptions);
   }
 }

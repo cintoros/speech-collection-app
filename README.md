@@ -2,10 +2,10 @@
 **Required**
 * Java 11 
 * MariaDB 10.4
-* Node.js 12.10.0
+* Node.js 12.10.0 - 13.12.0
 * Miniconda/Anaconda
 
-Note: Other versions might work, but have not been tested yet
+**Note**: Other versions might work, but have not been tested.
 
 **Optional**
 * npm: @angular/cli
@@ -13,7 +13,8 @@ Note: Other versions might work, but have not been tested yet
 ## Data Structure
 * the data can be loaded using `data_import/data-import.py`
    * use `conda env create -f environment.yml` to install the environment.
-* the datastructure should look like this.
+    
+the data-structure looks like this:
 * `data` the base data directory (can be changed in the configuration)
    * `source` directory containing the raw data used by the import & edit
       * `<id>` id of the transcript
@@ -26,8 +27,19 @@ Note: Other versions might work, but have not been tested yet
    * `text_audio` used to save pre-cut audio
       * `<id>.flac`
 ## Development
-* to update the generated database classes run `gradle generateSampleJooqSchemaSource --rerun-tasks`   
+* copy the `application-dev-test.yml.example` to `application-dev-test.yml` and change it to match your local setup
+* copy the `config.py.example` to `config.py` and change it to match your local setup   
 * to run the development version run `gradle devBootRun` && `npm start` 
+
+### Database Changes
+We use a database first approach based on  https://flywaydb.org/ and https://www.jooq.org/   
+In case the database needs to be changed:
+1. create a new migration in `backend/src/main/resources/db/migration`
+1. run the migration i.e `gradle devBootRun`
+1. update the generated database classes using `gradle generateSampleJooqSchemaSource --rerun-tasks`
+
+### Email
+for local testing of the email features https://mailtrap.io/ can be used.
 
 ## Deployment
 some additional packages may be needed (Ubuntu 18.04.3 ):
@@ -37,13 +49,13 @@ some additional packages may be needed (Ubuntu 18.04.3 ):
 **NOTE:** for deployments the default admin password should be changed.
 
 1. run `gradle buildProd` to build the production jar
-1. `rsync backend/build/libs/backend-1.0.0-SNAPSHOT.jar s1042:~/labeling-tool/backend-1.0.0-SNAPSHOT.jar`
+1. `rsync backend/build/libs/backend-1.0.0-SNAPSHOT.jar s1042:~/speech-collection-app/backend-1.0.0-SNAPSHOT.jar`
 1. `ssh s1042`
-1. `systemctl restart labeling-tool`
+1. `systemctl restart speech-collection-app`
 
 In case the data_import has changed run:
-* `rsync data_import/data_import.py s1042:~/labeling-tool/data_import/data_import.py` 
-* `rsync data_import/sentences.py s1042:~/labeling-tool/data_import/sentences.py`
+* `rsync data_import/data_import.py s1042:~/speech-collection-app/data_import/data_import.py` 
+* `rsync data_import/sentences.py s1042:~/speech-collection-app/data_import/sentences.py`
 
 ### Automatic Deployment
 1. `nano /etc/nginx/nginx.conf` 
@@ -63,18 +75,22 @@ In case the data_import has changed run:
     }
     
     ```
-1. `nano /lib/systemd/system/labeling-tool.service`
+1. `nano /lib/systemd/system/speech-collection-app.service`
     ```
     [Unit]
-    Description=Labeling Tool
+    Description=Speech Collection App
     After=network.target
     [Service]
+    Environment=SPRING_CONFIG_LOCATION=classpath:/,classpath:/config/,file:/home/stt/speech-collection-app/application.yml
     Type=simple
     Restart=always
     RestartSec=1
     User=stt
-    ExecStart=/usr/bin/java -jar /home/stt/labeling-tool/backend-1.0.0-SNAPSHOT.jar
+    ExecStart=/usr/bin/java -jar /home/stt/speech-collection-app/backend-1.0.0-SNAPSHOT.jar
     [Install]
     WantedBy=multi-user.target
     ```
-1. `systemctl enable labeling-tool.service`
+1. `systemctl enable speech-collection-app.service`
+
+### Configuration
+for password etc. configuration you can add a `application.yml` see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files

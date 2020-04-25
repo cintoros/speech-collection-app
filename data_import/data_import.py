@@ -17,8 +17,14 @@ connection = mysql.connector.connect(
 connection.autocommit = False
 cursor = connection.cursor(dictionary=True)
 
+logging.basicConfig(level=logging.INFO)
+
 
 def get_last_insert_id(dict_cursor):
+    """
+    return the last inserted id by this client/connection.
+    see also https://dev.mysql.com/doc/refman/5.7/en/mysql-insert-id.html
+    """
     dict_cursor.execute('select last_insert_id() as id')
     return dict_cursor.fetchone()['id']
 
@@ -50,26 +56,24 @@ def search_directories():
 
 def extract_data_to_db(folderNumber: str):
     try:
-        index = os.path.join(source_dir, folderNumber, 'indexes.xml')
-        audio = os.path.join(source_dir, folderNumber, 'audio.wav')
-        cursor.execute('insert into source(description,name,raw_audio_path,raw_file_path) VALUE(%s,%s,%s,%s)',
-                       [source_desc, source_name, audio, index])
-        source_id = get_last_insert_id(cursor)
-        index = os.path.join(base_dir, index)
-        audio = os.path.join(base_dir, audio)
+        logging.info('Loading ' + folderNumber)
+        text_path = os.path.join(source_dir, folderNumber, 'indexes.xml')
+        audio_path = os.path.join(source_dir, folderNumber, 'audio.wav')
+        cursor.execute('insert into source(user_id,user_group_id,path_to_raw_file,name,licence) VALUE(%s,%s,%s,%s,%s)',
+                       [1, 1, audio_path, source_name, source_licence])
+        audio_source_id = get_last_insert_id(cursor)
+        cursor.execute('insert into source(user_id,user_group_id,path_to_raw_file,name,licence) VALUE(%s,%s,%s,%s,%s)',
+                       [1, 1, text_path, source_name, source_licence])
+        text_source_id = get_last_insert_id(cursor)
+        text_path = os.path.join(base_dir, text_path)
+        audio_path = os.path.join(base_dir, audio_path)
 
-        with open(index, encoding='utf-8') as file:
+        with open(text_path, encoding='utf-8') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
-        with wave.open(audio, 'rb') as f_wave:
+        with wave.open(audio_path, 'rb') as f_wave:
             speakers = dict()
             for speaker in soup.find_all('speaker'):
                 speaker_id = speaker['id']
-
-                gender = speaker.find('sex')['value']
-                if gender == 'f' or gender == 'm':
-                    gender = gender.upper()
-                else:
-                    gender = 'none'
 
                 language = speaker.find('languages-used').find('language')
                 if language is not None:
@@ -86,6 +90,7 @@ def extract_data_to_db(folderNumber: str):
                     if info['attribute-name'] == 'dialect':
                         dialect = info.get_text()
                         break
+                # TODO maybe filter dialect based on database dialect
                 if dialect is not None:
                     dialect = dialect.upper().strip()
                     if dialect in {'BS', 'BE', 'GR', 'LU', 'OST', 'VS', 'ZH'}:
@@ -102,10 +107,8 @@ def extract_data_to_db(folderNumber: str):
                 if language is None or language == 'Standard German':
                     dialect = None
                 if language is not None:
-                    cursor.execute('insert into speaker (name, language,dialect,sex) values (%s, %s,%s,%s)',
-                                   [speaker_id, language, dialect, gender])
-                    speaker_id_db = get_last_insert_id(cursor)
-                    speakers[speaker_id] = {'speaker_id_db': speaker_id_db, }
+                    # TODO refactor once it is clear which one are needed
+                    speakers[speaker_id] = {'dialect': dialect, }
                 else:
                     logging.warning(f'skipping speaker {speaker_id} because no language is set.')
 
@@ -116,23 +119,43 @@ def extract_data_to_db(folderNumber: str):
                     speaker_id_xml = tier['speaker']
                     speaker = speakers.get(speaker_id_xml)
                     if speaker is not None:
-                        speaker_id_db = speaker['speaker_id_db']
+                        # TODO get dialect of speaker
+                        # speaker_id_db = speaker['speaker_id_db']
                         for event in tier.find_all('event'):
                             start_time = times[event['start']]
                             end_time = times[event['end']]
                             duration_seconds = end_time - start_time
                             if duration_seconds > 0.0:
                                 transcript_text = event.get_text()
-
                                 cursor.execute(
-                                    "insert into text_audio ( audio_start,  audio_end, text, path_to_file, speaker_id,source_id)values (%s, %s, %s, %s, %s, %s)",
-                                    [start_time, end_time, transcript_text, 'PLACEHOLDER', speaker_id_db, source_id]
+                                    "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
+                                    [text_source_id, 1, True]
                                 )
-                                text_audio_id = get_last_insert_id(cursor)
-                                audio_path_to_file = f'{text_audio_id}.flac'
-                                cursor.execute('update text_audio set path_to_file = %s where id = %s',
-                                               [audio_path_to_file, text_audio_id])
+                                element_id_1 = get_last_insert_id(cursor)
+                                cursor.execute(
+                                    "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
+                                    [audio_source_id, 1, True]
+                                )
+                                element_id_2 = get_last_insert_id(cursor)
+                                cursor.execute(
+                                    "insert into data_tuple (data_element_id_1,data_element_id_2,type)values (%s,%s,%s)",
+                                    [element_id_1, element_id_2, "TEXT_AUDIO"]
+                                )
+                                # TODO maybe insert actual dialect instead of 27
+                                cursor.execute(
+                                    "insert into text ( dialect_id,  data_element_id, text)values (%s, %s, %s)",
+                                    [27, element_id_1, transcript_text]
+                                )
+                                cursor.execute(
+                                    "insert into audio (dialect_id,data_element_id,audio_start,audio_end,path)values (%s,%s,%s,%s,%s)",
+                                    [27, element_id_2, start_time, end_time, 'PLACEHOLDER']
+                                )
 
+                                text_audio_id = get_last_insert_id(cursor)
+                                # TODO test if audio path is correct etc.
+                                audio_path_to_file = os.path.join("text_audio", f'{text_audio_id}.flac')
+                                cursor.execute('update audio set path = %s where id = %s',
+                                               [audio_path_to_file, text_audio_id])
                                 f_wave.setpos(int(start_time * f_wave.getframerate()))
                                 audio_bytes = f_wave.readframes(int(duration_seconds * f_wave.getframerate()))
                                 audio_segment = AudioSegment(
@@ -142,7 +165,7 @@ def extract_data_to_db(folderNumber: str):
                                     channels=f_wave.getnchannels(),
                                 )
                                 audio_segment = audio_segment.set_channels(1)
-                                audio_segment.export(os.path.join(base_dir, "text_audio", audio_path_to_file),
+                                audio_segment.export(os.path.join(base_dir, audio_path_to_file),
                                                      format='flac')
                             else:
                                 logging.warning(
@@ -162,5 +185,6 @@ def extract_data_to_db(folderNumber: str):
         connection.close()
 
 
+# TODO test once everything is ready
 if __name__ == '__main__':
     search_directories()

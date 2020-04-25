@@ -1,10 +1,26 @@
 <div class="margin">
+  <h3>Group description</h3>
+  <mat-tab-group>
+    <mat-tab label="Editor">
+      <textarea [(ngModel)]="groupDescription" style="min-width: 50em;min-height: 20em"></textarea>
+    </mat-tab>
+    <mat-tab label="Preview">
+      <markdown [data]="groupDescription"></markdown>
+    </mat-tab>
+  </mat-tab-group>
+  <button (click)="saveGroupDescription()" mat-icon-button title="Save group description">
+    <mat-icon>save</mat-icon>
+  </button>
   <h3>Document Upload</h3>
   <mat-form-field>
     <mat-label>Domain</mat-label>
     <mat-select [(ngModel)]="selectedDomain">
       <mat-option *ngFor="let domain of domains" [value]="domain">{{domain.name}}</mat-option>
     </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Document Licence</mat-label>
+    <input [(ngModel)]="documentLicence" matInput>
   </mat-form-field>
   <mat-label (click)="projectSetupFile.click()" class="click-me">select files for uploading</mat-label>
   <input #projectSetupFile (change)="handleFileInput($event.target.files)" hidden id="projectSetupFile" multiple

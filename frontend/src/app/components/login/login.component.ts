@@ -3,7 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmailPassword} from '../../models/email-password';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {Licence, Sex, User, UserAge} from '../../models/user';
+import {User} from '../../models/user';
+import {FeaturesService} from '../../services/features.service';
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,13 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   isLogin = true;
+  emailIntegration: boolean;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private featuresService: FeaturesService) {
   }
 
   ngOnInit() {
+    this.featuresService.getFeatureFlags().subscribe(v => this.emailIntegration = v.emailIntegration);
     this.initForm();
     if (this.authService.checkAuthenticated()) {
       this.router.navigate(['/home']);
@@ -34,7 +37,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.loginForm.valid) {
-      this.authService.login(new EmailPassword(this.loginForm.controls.email.value, this.loginForm.controls.password.value));
+      this.authService.login(new EmailPassword(this.loginForm.controls.email.value, this.loginForm.controls.password.value), () => null);
     }
   }
 
@@ -51,5 +54,5 @@ export class LoginComponent implements OnInit {
   }
 
   toggleIsLogin = () => this.isLogin = !this.isLogin;
-  newUser = () => new User(undefined, '', '', '', '', '', 1, Sex.NONE, Licence.ACADEMIC, UserAge.NONE);
+  newUser = () => User.default();
 }

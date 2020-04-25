@@ -6,7 +6,6 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ChangePassword} from '../../models/change-password';
 import {SnackBarService} from '../../services/snack-bar.service';
-import {log} from 'util';
 import {Dialect} from '../../models/dialect';
 import {DialectService} from '../../services/dialect.service';
 
@@ -53,7 +52,7 @@ export class ProfileComponent implements OnInit {
     this.httpClient.put(environment.url + 'user/password',
       new ChangePassword(this.changePasswordForm.controls.password.value, this.changePasswordForm.controls.newPassword.value)
     ).subscribe(() => {
-      this.authService.logout(true);
+      this.authService.logout(false);
     }, err => {
       if (err === 'BAD REQUEST') {
         this.snackBarService.openError('Wrong password');

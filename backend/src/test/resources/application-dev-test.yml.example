@@ -1,0 +1,15 @@
+spring:
+  mail:
+    host: "smtp.mailtrap.io"
+    port: 2525
+    test-connection: true
+    username: ""
+    password: ""
+speech-collection-app:
+  base-path: "./data"
+  conda-exec: "/home/cintoros/miniconda3/condabin/conda run -n speech_collection_app python /home/cintoros/Documents/git_repos/speech-collection-app/data_import/sentences.py"
+  public-group-id: 1
+  features:
+    email-integration: false
+  from-email: "admin@admin.admin"
+  base-url: "http://localhost:4200/"

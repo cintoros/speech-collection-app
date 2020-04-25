@@ -77,6 +77,12 @@ export class EditTextAudioComponent implements OnChanges {
   setVolume = (volume: any) => this.waveSurfer.setVolume(volume.value / 100);
   cancelEdit = () => this.cancelEmit.emit();
 
+  restore() {
+    this.textAudio = JSON.parse(JSON.stringify(this.textAudioCopy));
+    this.addRegion();
+    this.setViewToRegion();
+  }
+
   private addRegion(): void {
     this.waveSurfer.clearRegions();
     const region = this.waveSurfer.addRegion({
@@ -94,7 +100,8 @@ export class EditTextAudioComponent implements OnChanges {
   }
 
   private load(overviewOccurrence: OverviewOccurrence) {
-    this.httpClient.get<TextAudioDto>(`${this.baseUrl}admin/text_audio/${overviewOccurrence.id}`).subscribe(ta => {
+    //TODO fix
+    this.httpClient.get<TextAudioDto>(`${this.baseUrl}admin/text_audio/${overviewOccurrence.dataElementId_2}`).subscribe(ta => {
       this.httpClient.get(`${this.baseUrl}admin/text_audio/audio/${ta.id}`, {responseType: 'blob'}).subscribe(resp => {
         this.waveSurfer.load(URL.createObjectURL(resp));
         this.textAudio = ta;
@@ -108,11 +115,5 @@ export class EditTextAudioComponent implements OnChanges {
         });
       });
     });
-  }
-
-  restore() {
-    this.textAudio = JSON.parse(JSON.stringify(this.textAudioCopy));
-    this.addRegion();
-    this.setViewToRegion();
   }
 }
