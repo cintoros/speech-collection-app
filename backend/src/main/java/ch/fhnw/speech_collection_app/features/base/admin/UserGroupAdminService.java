@@ -5,7 +5,6 @@ import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService
 import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.DataTuple;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
 import org.apache.tika.io.IOUtils;
@@ -37,11 +36,15 @@ public class UserGroupAdminService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    public void putTextAudio(long groupId, DataTuple textAudio) {
+    public void putTextAudio(long groupId, TextAudioDto textAudio) {
         isAllowed(groupId);
-        dslContext.delete(CHECKED_DATA_TUPLE).where(CHECKED_DATA_TUPLE.DATA_TUPLE_ID.eq(textAudio.getId())).execute();
+        var audio = dslContext.selectFrom(AUDIO).where(AUDIO.ID.eq(textAudio.id)).fetchOne();
+        audio.setAudioEnd(textAudio.audioEnd);
+        audio.setAudioStart(textAudio.audioStart);
+        audio.store();
+        dslContext.delete(CHECKED_DATA_TUPLE).where(CHECKED_DATA_TUPLE.DATA_TUPLE_ID.eq(textAudio.id)).execute();
         try {
-            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 2 " + textAudio.getId());
+            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 2 " + textAudio.id);
             List<String> list = IOUtils.readLines(process.getErrorStream());
             if (!list.isEmpty()) {
                 logger.error(String.join("\n", list));
@@ -49,7 +52,6 @@ public class UserGroupAdminService {
         } catch (IOException e) {
             logger.error("Exception Raised", e);
         }
-
     }
 
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
@@ -100,11 +102,9 @@ public class UserGroupAdminService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    //TODO test whol text audio logic
-    public TextAudioDto getTextAudio(long groupId, Long textAudioId) {
+    public TextAudioDto getTextAudio(long groupId, long dataElementId) {
         isAllowed(groupId);
-        //TODO implement dto that contains both the text and audio information
-        return dslContext.selectFrom(AUDIO).where(AUDIO.ID.eq(textAudioId)).fetchOneInto(TextAudioDto.class);
+        return dslContext.select(AUDIO.ID, AUDIO.AUDIO_START, AUDIO.AUDIO_END).from(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOneInto(TextAudioDto.class);
     }
 
     public byte[] getTextAudioAudio(long groupId, Long textAudioId) throws IOException {

@@ -22,7 +22,6 @@ public class UserGroupRestApiController {
         this.objectMapper = objectMapper;
     }
 
-    //TODO not sure how we want to upload the one where we also translate the text -> one endpoint/requests or two
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
         userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);

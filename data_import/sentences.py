@@ -65,13 +65,12 @@ if __name__ == '__main__':
         # re generate text-audio audio segment
         elif (command == "2"):
             text_audio_id = sys.argv[2]
-            # TODO test this logic once backend/frontend is refactored.
             cursor.execute(
                 'select path_to_raw_file,audio_start,audio_end from audio join data_element on '
                 'audio.data_element_id=data_element.id join source on source.id=data_element.source_id where audio.id = %s',
                 [text_audio_id])
             text_audio = cursor.fetchone()
-            audio = text_audio['raw_audio_path']
+            audio = text_audio['path_to_raw_file']
             audio = os.path.join(base_dir, audio)
             audio_start = text_audio['audio_start']
             audio_end = text_audio['audio_end']

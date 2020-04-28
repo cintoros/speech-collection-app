@@ -19,9 +19,9 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Record9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, String, String> {
+public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Record9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double> {
 
-    private static final long serialVersionUID = -1503281650;
+    private static final long serialVersionUID = -1066446388;
 
     public void setId(Long value) {
         set(0, value);
@@ -84,22 +84,20 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
         return (String) get(6);
     }
 
-    public void setAudioStart(String value) {
+    public void setAudioStart(Double value) {
         set(7, value);
     }
 
-    @Size(max = 65535)
-    public String getAudioStart() {
-        return (String) get(7);
+    public Double getAudioStart() {
+        return (Double) get(7);
     }
 
-    public void setAudioEnd(String value) {
+    public void setAudioEnd(Double value) {
         set(8, value);
     }
 
-    @Size(max = 65535)
-    public String getAudioEnd() {
-        return (String) get(8);
+    public Double getAudioEnd() {
+        return (Double) get(8);
     }
 
     // -------------------------------------------------------------------------
@@ -116,12 +114,12 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, String, String> fieldsRow() {
+    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, String, String> valuesRow() {
+    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double> valuesRow() {
         return (Row9) super.valuesRow();
     }
 
@@ -161,12 +159,12 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
     }
 
     @Override
-    public Field<String> field8() {
+    public Field<Double> field8() {
         return Audio.AUDIO.AUDIO_START;
     }
 
     @Override
-    public Field<String> field9() {
+    public Field<Double> field9() {
         return Audio.AUDIO.AUDIO_END;
     }
 
@@ -206,12 +204,12 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
     }
 
     @Override
-    public String component8() {
+    public Double component8() {
         return getAudioStart();
     }
 
     @Override
-    public String component9() {
+    public Double component9() {
         return getAudioEnd();
     }
 
@@ -251,12 +249,12 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
     }
 
     @Override
-    public String value8() {
+    public Double value8() {
         return getAudioStart();
     }
 
     @Override
-    public String value9() {
+    public Double value9() {
         return getAudioEnd();
     }
 
@@ -303,19 +301,19 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
     }
 
     @Override
-    public AudioRecord value8(String value) {
+    public AudioRecord value8(Double value) {
         setAudioStart(value);
         return this;
     }
 
     @Override
-    public AudioRecord value9(String value) {
+    public AudioRecord value9(Double value) {
         setAudioEnd(value);
         return this;
     }
 
     @Override
-    public AudioRecord values(Long value1, Long value2, Long value3, String value4, AudioQuality value5, AudioNoiseLevel value6, String value7, String value8, String value9) {
+    public AudioRecord values(Long value1, Long value2, Long value3, String value4, AudioQuality value5, AudioNoiseLevel value6, String value7, Double value8, Double value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -336,7 +334,7 @@ public class AudioRecord extends UpdatableRecordImpl<AudioRecord> implements Rec
         super(Audio.AUDIO);
     }
 
-    public AudioRecord(Long id, Long dialectId, Long dataElementId, String path, AudioQuality quality, AudioNoiseLevel noiseLevel, String browserVersion, String audioStart, String audioEnd) {
+    public AudioRecord(Long id, Long dialectId, Long dataElementId, String path, AudioQuality quality, AudioNoiseLevel noiseLevel, String browserVersion, Double audioStart, Double audioEnd) {
         super(Audio.AUDIO);
 
         set(0, id);

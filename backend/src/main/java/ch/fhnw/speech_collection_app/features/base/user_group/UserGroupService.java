@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -48,9 +47,10 @@ public class UserGroupService {
         audio.setPath("default");
         audio.setDataElementId(element.getId());
         audio.store();
-        Path path = speechCollectionAppConfig.getBasePath().resolve("recording/" + audio.getId() + ".webm");
-        Files.write(path, file.getBytes());
-        audio.setPath(path.toString());
+        var rawPath = Paths.get("recording", audio.getId() + ".webm");
+        audio.setPath(rawPath.toString());
+        rawPath = speechCollectionAppConfig.getBasePath().resolve(rawPath);
+        Files.write(rawPath, file.getBytes());
         audio.store();
         var tuple = dslContext.newRecord(DATA_TUPLE);
         tuple.setDataElementId_1(recording.getExcerptId());
@@ -90,10 +90,8 @@ public class UserGroupService {
                 .limit(1).fetchOneInto(TextDto.class);
     }
 
-    //TODO rename dto/method
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {
         checkAllowed(groupId);
-        //TODO check user_group tuple mapping
         var type = CheckedDataTupleType.valueOf(checkedOccurrence.label.toString());
         var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
         checked.setDataTupleId(checkedOccurrence.id);
@@ -108,7 +106,7 @@ public class UserGroupService {
      */
     public List<Occurrence> getNextOccurrences(long groupId) {
         checkAllowed(groupId);
-        //TODO implement image checking -> refactor endpoint/dto
+        //TODO change logic so it is also possible to return an image or use a different endpoint?
         return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
                 .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
                 .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
@@ -123,7 +121,7 @@ public class UserGroupService {
     public byte[] getAudio(long groupId, long elementId) throws IOException {
         checkElement(groupId, elementId);
         var path = dslContext.selectFrom(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(elementId)).fetchOne(AUDIO.PATH);
-        return Files.readAllBytes(Paths.get(path));
+        return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(path));
 
     }
 

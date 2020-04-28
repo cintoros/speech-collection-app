@@ -100,7 +100,6 @@ export class EditTextAudioComponent implements OnChanges {
   }
 
   private load(overviewOccurrence: OverviewOccurrence) {
-    //TODO fix
     this.httpClient.get<TextAudioDto>(`${this.baseUrl}admin/text_audio/${overviewOccurrence.dataElementId_2}`).subscribe(ta => {
       this.httpClient.get(`${this.baseUrl}admin/text_audio/audio/${ta.id}`, {responseType: 'blob'}).subscribe(resp => {
         this.waveSurfer.load(URL.createObjectURL(resp));

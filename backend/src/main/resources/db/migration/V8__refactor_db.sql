@@ -76,8 +76,8 @@ CREATE TABLE audio
     quality         ENUM ('INTEGRATED','DEDICATED')                 DEFAULT NULL,
     noise_level     ENUM ('NO_NOISE','MODERATE_NOISE','VERY_NOISY') DEFAULT NULL,
     browser_version TEXT                                            DEFAULT NULL,
-    audio_start     TEXT                                            DEFAULT NULL,
-    audio_end       TEXT                                            DEFAULT NULL,
+    audio_start     FLOAT                                           DEFAULT NULL,
+    audio_end       FLOAT                                           DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (dialect_id) REFERENCES dialect (id) ON DELETE CASCADE,
     FOREIGN KEY (data_element_id) REFERENCES data_element (id) ON DELETE CASCADE
