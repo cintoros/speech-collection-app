@@ -30,10 +30,10 @@ public class UserGroupAdminRestApiController {
         return userGroupAdminService.getTextAudio(groupId, dataElementId);
     }
 
-    @GetMapping(value = "text_audio/audio/{textAudioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "text_audio/audio/{audioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public byte[] getTextAudioAudio(@PathVariable long groupId, @PathVariable long textAudioId) throws IOException {
-        return userGroupAdminService.getTextAudioAudio(groupId, textAudioId);
+    public byte[] getTextAudioAudio(@PathVariable long groupId, @PathVariable long audioId) throws IOException {
+        return userGroupAdminService.getTextAudioAudio(groupId, audioId);
     }
 
     @GetMapping("overview_occurrence")

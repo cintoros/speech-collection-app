@@ -118,15 +118,15 @@ public class UserGroupService {
                 ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
     }
 
-    public byte[] getAudio(long groupId, long elementId) throws IOException {
-        checkElement(groupId, elementId);
-        var path = dslContext.selectFrom(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(elementId)).fetchOne(AUDIO.PATH);
+    public byte[] getAudio(long groupId, long dataElementId) throws IOException {
+        checkDataElement(groupId, dataElementId);
+        var path = dslContext.selectFrom(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOne(AUDIO.PATH);
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(path));
 
     }
 
     public void postCheckedDataElement(long groupId, long dataElementId, CheckedDataElementType type) {
-        checkElement(groupId, dataElementId);
+        checkDataElement(groupId, dataElementId);
         var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
         checked.setType(type);
         checked.setUserId(customUserDetailsService.getLoggedInUserId());
@@ -134,10 +134,10 @@ public class UserGroupService {
         checked.store();
     }
 
-    private void checkElement(long groupId, long elementId) {
+    private void checkDataElement(long groupId, long dataElementId) {
         checkAllowed(groupId);
         boolean equals = dslContext.selectFrom(DATA_ELEMENT)
-                .where(DATA_ELEMENT.ID.eq(elementId))
+                .where(DATA_ELEMENT.ID.eq(dataElementId))
                 .fetchOne(DATA_ELEMENT.USER_GROUP_ID).equals(groupId);
         if (!equals) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }

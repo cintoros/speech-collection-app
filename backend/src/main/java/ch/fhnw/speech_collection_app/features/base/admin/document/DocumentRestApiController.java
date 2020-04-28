@@ -25,18 +25,18 @@ public class DocumentRestApiController {
         return documentService.getDocumentSource(groupId);
     }
 
-    @DeleteMapping("{originalTextId}")
-    public void deleteSource(@PathVariable long groupId, @PathVariable long originalTextId) {
-        documentService.deleteSource(groupId, originalTextId);
+    @DeleteMapping("{sourceId}")
+    public void deleteSource(@PathVariable long groupId, @PathVariable long sourceId) {
+        documentService.deleteSource(groupId, sourceId);
     }
 
-    @GetMapping("{originalTextId}/element")
-    public List<TextElementDto> getTextElement(@PathVariable long groupId, @PathVariable long originalTextId) {
-        return documentService.getTextElement(groupId, originalTextId);
+    @GetMapping("{dataElementId}/element")
+    public List<TextElementDto> getTextElement(@PathVariable long groupId, @PathVariable long dataElementId) {
+        return documentService.getTextElement(groupId, dataElementId);
     }
 
-    @DeleteMapping("{originalTextId}/element/{excerptId}")
-    public void deleteElement(@PathVariable long groupId, @PathVariable long originalTextId, @PathVariable long excerptId) {
-        documentService.deleteElement(groupId, originalTextId, excerptId);
+    @DeleteMapping("{sourceId}/element/{dataElementId}")
+    public void deleteDataElement(@PathVariable long groupId, @PathVariable long sourceId, @PathVariable long dataElementId) {
+        documentService.deleteDataElement(groupId, sourceId, dataElementId);
     }
 }

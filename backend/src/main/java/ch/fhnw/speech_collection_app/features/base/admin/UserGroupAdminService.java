@@ -107,10 +107,10 @@ public class UserGroupAdminService {
         return dslContext.select(AUDIO.ID, AUDIO.AUDIO_START, AUDIO.AUDIO_END).from(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOneInto(TextAudioDto.class);
     }
 
-    public byte[] getTextAudioAudio(long groupId, Long textAudioId) throws IOException {
+    public byte[] getTextAudioAudio(long groupId, Long audioId) throws IOException {
         isAllowed(groupId);
         var textAudio = dslContext.selectFrom(AUDIO.join(DATA_ELEMENT).onKey().join(SOURCE).onKey())
-                .where(AUDIO.ID.eq(textAudioId))
+                .where(AUDIO.ID.eq(audioId))
                 .fetchOne(SOURCE.PATH_TO_RAW_FILE);
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(textAudio));
     }

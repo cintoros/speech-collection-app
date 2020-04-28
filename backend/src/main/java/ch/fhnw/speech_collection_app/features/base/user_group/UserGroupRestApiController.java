@@ -27,9 +27,9 @@ public class UserGroupRestApiController {
         userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
     }
 
-    @PostMapping("element/{elementId}/checked")
-    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long elementId, @RequestParam CheckedDataElementType type) {
-        userGroupService.postCheckedDataElement(groupId, elementId, type);
+    @PostMapping("element/{dataElementId}/checked")
+    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId, @RequestParam CheckedDataElementType type) {
+        userGroupService.postCheckedDataElement(groupId, dataElementId, type);
     }
 
     @GetMapping("excerpt")
@@ -47,9 +47,9 @@ public class UserGroupRestApiController {
         return userGroupService.getNextOccurrences(groupId);
     }
 
-    @GetMapping(value = "occurrence/audio/{elementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public byte[] getAudio(@PathVariable long groupId, @PathVariable long elementId) throws IOException {
-        return userGroupService.getAudio(groupId, elementId);
+    public byte[] getAudio(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
+        return userGroupService.getAudio(groupId, dataElementId);
     }
 }

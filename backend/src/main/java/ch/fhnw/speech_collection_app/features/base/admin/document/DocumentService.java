@@ -98,19 +98,19 @@ public class DocumentService {
         }
     }
 
-    public void deleteElement(long groupId, long sourceId, long elementId) {
+    public void deleteDataElement(long groupId, long sourceId, long dataElementId) {
         isAllowed(groupId);
         dslContext.delete(DATA_ELEMENT)
-                .where(DATA_ELEMENT.ID.eq(elementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
+                .where(DATA_ELEMENT.ID.eq(dataElementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
                 .execute();
     }
 
-    public List<TextElementDto> getTextElement(long groupId, long originalTextId) {
+    public List<TextElementDto> getTextElement(long groupId, long dataElementId) {
         isAllowed(groupId);
         return dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
                 TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
-                .where(DATA_ELEMENT.SOURCE_ID.eq(originalTextId))
+                .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
                 .fetchInto(TextElementDto.class);
     }
 
