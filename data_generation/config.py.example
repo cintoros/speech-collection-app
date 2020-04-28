@@ -1,9 +1,4 @@
-host = "localhost"
-database = "speech_collection_app"
-password = "speech_collection_app"
-user = "speech_collection_app"
-
-base_dir = "/home/cintoros/Documents/git_repos/speech-collection-app/data/"
-source_dir = "source"
-source_name = 'Digitaltag'
-source_desc = 'Digitaltag 2019'
+BASE_DIR = "/home/cintoros/Documents/git_repos/speech-collection-app/data/"
+GOOGLE_APPLICATION_CREDENTIALS = "/home/cintoros/Documents/GOOGLE_APPLICATION_CREDENTIALS/file.json"
+AZURE_APPLICATION_KEY = "key"
+AZURE_APPLICATION_REGION = "westeurope"
