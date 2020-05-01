@@ -1,4 +1,4 @@
 BASE_DIR = "/home/cintoros/Documents/git_repos/speech-collection-app/data/"
 GOOGLE_APPLICATION_CREDENTIALS = "/home/cintoros/Documents/GOOGLE_APPLICATION_CREDENTIALS/file.json"
-AZURE_APPLICATION_KEY = "key"
+AZURE_APPLICATION_KEY = "KEY-1"
 AZURE_APPLICATION_REGION = "westeurope"
