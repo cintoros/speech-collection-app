@@ -69,11 +69,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Long getLoggedInUserId() {
-        return getLoggedInUser().user.getId();
+        return getLoggedInUser().getUser().getId();
     }
 
     public Long getLoggedInUserDialectId() {
-        return getLoggedInUser().user.getDialectId();
+        return getLoggedInUser().getUser().getDialectId();
     }
 
     public boolean isAllowedOnProject(long userGroupId, boolean checkAdminPermission) {
@@ -96,9 +96,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void putUser(User user) {
         if (!getLoggedInUserId().equals(user.getId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        var userRecord = dslContext.newRecord(USER, user);
-        userRecord.setEnabled(true);
-        userRecord.update();
+        user.setEnabled(true);
+        dslContext.newRecord(USER, user).update();
+        //on a production server we need to update the cached spring principal
+        getLoggedInUser().setUser(user);
     }
 
     public void putPassword(ChangePassword changePassword) {
