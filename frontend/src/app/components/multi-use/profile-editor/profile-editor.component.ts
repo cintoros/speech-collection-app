@@ -23,6 +23,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   dialects: Dialect[] = [];
   private userCopy: User;
   private zV = [Validators.required, Validators.pattern('[0-9]{4}'), Validators.minLength(4), Validators.maxLength(4)];
+  private oldDialectId: number;
 
   constructor(
     private formBuilder: FormBuilder, private snackBarService: SnackBarService, private httpClient: HttpClient,
@@ -57,7 +58,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     }
     this.registerForm = this.formBuilder.group(cc);
     this.userCopy = JSON.parse(JSON.stringify(this.user));
-
+    this.oldDialectId = this.userCopy.dialectId;
 
     this.registerForm.controls.notCH.valueChanges
       .subscribe(notCH => {
@@ -81,6 +82,11 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.registerForm) {
       this.checkDisabled();
+      // update dialect id in case it has been changed by the backend
+      if (this.user.dialectId !== this.oldDialectId) {
+        this.oldDialectId = this.user.dialectId;
+        this.registerForm.controls.canton.setValue(this.user.dialectId);
+      }
     }
   }
 

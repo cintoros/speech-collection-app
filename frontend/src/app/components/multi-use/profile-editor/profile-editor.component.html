@@ -67,7 +67,7 @@
     <mat-form-field class="max-width">
       <mat-label>Canton</mat-label>
       <mat-select formControlName="canton">
-        <mat-option *ngIf="isNewUser">None</mat-option>
+        <mat-option>None</mat-option>
         <mat-option *ngFor="let canton of dialects"
                     [value]="canton.id">{{canton.countyName}}</mat-option>
       </mat-select>
