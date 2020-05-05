@@ -46,7 +46,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
       licence: [this.user.licence, [Validators.required]],
-      notCH: [this.user.notCH, []]
+      notCH: [this.user.notCh, []]
     };
     if (this.isNewUser) {
       cc.password = ['', Validators.compose([
@@ -86,15 +86,19 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
 
   register(): void {
     // we need to deep copy the object to prevent updating the object inside the observables
-    const user = JSON.parse(JSON.stringify(this.user));
-    user.firstName = this.registerForm.controls.firstName.value;
-    user.lastName = this.registerForm.controls.lastName.value;
-    user.email = this.registerForm.controls.email.value;
-    user.username = this.registerForm.controls.username.value;
-    user.password = this.registerForm.controls.password.value;
-    user.zipCode = this.registerForm.controls.zipCode.value;
-    user.canton = this.registerForm.controls.canton.value;
-    user.notCH = this.registerForm.controls.notCH.value;
+    const firstName = this.registerForm.controls.firstName.value;
+    const lastName = this.registerForm.controls.lastName.value;
+    const email = this.registerForm.controls.email.value;
+    const username = this.registerForm.controls.username.value;
+    const password = this.registerForm.controls.password.value;
+    const zipCode = this.registerForm.controls.zipCode.value;
+    const dialectId = this.registerForm.controls.canton.value;
+    const sex = this.registerForm.controls.sex.value;
+    const licence = this.registerForm.controls.licence.value;
+    const age = this.registerForm.controls.age.value;
+    const notCh = this.registerForm.controls.notCH.value;
+    const user: User = new User(this.user.id, firstName, lastName, email, username, password, dialectId, sex, licence, age, zipCode, notCh);
+
     if (this.registerForm.valid) {
       if (this.isNewUser) {
         this.httpClient.post(environment.url + 'public/register', user).subscribe(() => {

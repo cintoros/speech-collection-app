@@ -96,7 +96,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void putUser(User user) {
         if (!getLoggedInUserId().equals(user.getId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        dslContext.newRecord(USER, user).update();
+        var userRecord = dslContext.newRecord(USER, user);
+        userRecord.setEnabled(true);
+        userRecord.update();
     }
 
     public void putPassword(ChangePassword changePassword) {
