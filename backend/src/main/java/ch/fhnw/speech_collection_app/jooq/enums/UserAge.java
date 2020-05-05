@@ -22,7 +22,11 @@ public enum UserAge implements EnumType {
 
     U50("U50"),
 
-    U60_27U70_27U70("U60'U70'U70"),
+    U60("U60"),
+
+    U70("U70"),
+
+    U80("U80"),
 
     O80("O80");
 
