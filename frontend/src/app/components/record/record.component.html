@@ -1,6 +1,20 @@
 <div *ngIf="textDto">
   <mat-card class="margin">
     <h1>Record</h1>
+    <div style="color: grey;font-size: 0.8em">
+      Record Swiss German speech for a Standard German sentence. Please think about the Swiss German translation of the
+      sentence first before starting to record.
+      <ul>
+        <li>Start: Start recording speech</li>
+        <li>Skip: I don't want to read this sentence aloud, give me another one.</li>
+        <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
+          step, longer texts are automatically split to sentences, so use this button also if you suspect that the
+          sentence
+          splitting went wrong.
+        </li>
+        <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
+      </ul>
+    </div>
     <mat-icon *ngIf="textDto.isPrivate">lock</mat-icon>
     <mat-icon *ngIf="!textDto.isPrivate">lock_open</mat-icon>
     <b>Excerpt: </b><span>{{textDto?.text}}</span>

@@ -1,4 +1,20 @@
-<mat-card id="header-card"><h1>Check</h1></mat-card>
+<mat-card id="header-card"><h1>Check</h1>
+  <div style="color: grey;font-size: 0.8em">
+    Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct Swiss
+    German translation.
+    <ul>
+      <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
+      <li>Wrong: Recording is not a correct Swiss German translation</li>
+      <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
+      <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
+        step, longer texts are automatically split to sentences, so use this button also if you suspect that the
+        sentence
+        splitting went wrong.
+      </li>
+      <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
+    </ul>
+  </div>
+</mat-card>
 <div *ngIf="occurrences.length===0" style="height: calc(100% - 100px);">
   <div style="height: calc(100% - 90px);">
     <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
