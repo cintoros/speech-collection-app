@@ -1,9 +1,8 @@
 package ch.fhnw.speech_collection_app.features.base.admin;
 
+import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
-import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +21,19 @@ public class UserGroupAdminRestApiController {
     }
 
     @PutMapping("text_audio")
-    public void putTextAudio(@PathVariable long groupId, @RequestBody TextAudio textAudio) {
+    public void putTextAudio(@PathVariable long groupId, @RequestBody TextAudioDto textAudio) {
         userGroupAdminService.putTextAudio(groupId, textAudio);
     }
 
-    @GetMapping("text_audio/{textAudioId}")
-    public TextAudio getTextAudio(@PathVariable long groupId, @PathVariable Long textAudioId) {
-        return userGroupAdminService.getTextAudio(groupId, textAudioId);
+    @GetMapping("text_audio/{dataElementId}")
+    public TextAudioDto getTextAudio(@PathVariable long groupId, @PathVariable Long dataElementId) {
+        return userGroupAdminService.getTextAudio(groupId, dataElementId);
     }
 
-    @GetMapping(value = "text_audio/audio/{textAudioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "text_audio/audio/{audioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public byte[] getTextAudioAudio(@PathVariable long groupId, @PathVariable Long textAudioId) throws IOException {
-        return userGroupAdminService.getTextAudioAudio(groupId, textAudioId);
+    public byte[] getTextAudioAudio(@PathVariable long groupId, @PathVariable long audioId) throws IOException {
+        return userGroupAdminService.getTextAudioAudio(groupId, audioId);
     }
 
     @GetMapping("overview_occurrence")

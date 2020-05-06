@@ -9,20 +9,22 @@ import ch.fhnw.speech_collection_app.jooq.enums.UserLicence;
 import ch.fhnw.speech_collection_app.jooq.enums.UserSex;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record13;
-import org.jooq.Row13;
+import org.jooq.Record14;
+import org.jooq.Row14;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> {
+public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> {
 
-    private static final long serialVersionUID = -1129005248;
+    private static final long serialVersionUID = 1510011383;
 
     public void setId(Long value) {
         set(0, value);
@@ -138,6 +140,14 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         return (String) get(12);
     }
 
+    public void setLastOnline(Timestamp value) {
+        set(13, value);
+    }
+
+    public Timestamp getLastOnline() {
+        return (Timestamp) get(13);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -148,17 +158,17 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     // -------------------------------------------------------------------------
-    // Record13 type implementation
+    // Record14 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 
     @Override
-    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> valuesRow() {
-        return (Row13) super.valuesRow();
+    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> valuesRow() {
+        return (Row14) super.valuesRow();
     }
 
     @Override
@@ -227,6 +237,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
+    public Field<Timestamp> field14() {
+        return User.USER.LAST_ONLINE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -292,6 +307,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
+    public Timestamp component14() {
+        return getLastOnline();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -354,6 +374,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     @Override
     public String value13() {
         return getZipCode();
+    }
+
+    @Override
+    public Timestamp value14() {
+        return getLastOnline();
     }
 
     @Override
@@ -435,7 +460,13 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, Boolean value12, String value13) {
+    public UserRecord value14(Timestamp value) {
+        setLastOnline(value);
+        return this;
+    }
+
+    @Override
+    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, Boolean value12, String value13, Timestamp value14) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -449,6 +480,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         value11(value11);
         value12(value12);
         value13(value13);
+        value14(value14);
         return this;
     }
 
@@ -460,7 +492,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         super(User.USER);
     }
 
-    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, Boolean notCh, String zipCode) {
+    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, Boolean notCh, String zipCode, Timestamp lastOnline) {
         super(User.USER);
 
         set(0, id);
@@ -476,5 +508,6 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         set(10, dialectId);
         set(11, notCh);
         set(12, zipCode);
+        set(13, lastOnline);
     }
 }

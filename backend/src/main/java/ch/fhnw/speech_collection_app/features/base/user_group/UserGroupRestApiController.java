@@ -1,7 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Recording;
+import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,26 +24,16 @@ public class UserGroupRestApiController {
 
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, Recording.class), file);
+        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
     }
 
-    @PutMapping("excerpt/{excerptId}/private")
-    public void putExcerptPrivate(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptPrivate(groupId, excerptId);
-    }
-
-    @PutMapping("excerpt/{excerptId}/skipped")
-    public void putExcerptSkipped(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptSkipped(groupId, excerptId);
-    }
-
-    @PutMapping("excerpt/{excerptId}/sentence_error")
-    public void putExcerptSentenceError(@PathVariable long groupId, @PathVariable long excerptId) {
-        userGroupService.putExcerptSentenceError(groupId, excerptId);
+    @PostMapping("element/{dataElementId}/checked")
+    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId, @RequestParam CheckedDataElementType type) {
+        userGroupService.postCheckedDataElement(groupId, dataElementId, type);
     }
 
     @GetMapping("excerpt")
-    public Excerpt getExcerpt(@PathVariable long groupId) {
+    public TextDto getExcerpt(@PathVariable long groupId) {
         return userGroupService.getExcerpt(groupId);
     }
 
@@ -58,9 +47,9 @@ public class UserGroupRestApiController {
         return userGroupService.getNextOccurrences(groupId);
     }
 
-    @GetMapping(value = "occurrence/audio/{audioId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public byte[] getAudio(@PathVariable long groupId, @PathVariable long audioId, @RequestParam OccurrenceMode mode) throws IOException {
-        return userGroupService.getAudio(groupId, audioId, mode);
+    public byte[] getAudio(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
+        return userGroupService.getAudio(groupId, dataElementId);
     }
 }

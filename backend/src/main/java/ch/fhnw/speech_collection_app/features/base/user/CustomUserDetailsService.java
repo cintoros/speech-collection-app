@@ -7,6 +7,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRoleRecord;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserRecord;
 import com.google.common.io.Resources;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -187,5 +188,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .where(USER_GROUP.ID.in(ids))
                     .fetchInto(UserGroup.class);
         }
+    }
+
+    public void updateLastLogin(Long id) {
+        dslContext.update(USER).set(USER.LAST_ONLINE, DSL.currentTimestamp()).where(USER.ID.eq(id)).execute();
     }
 }

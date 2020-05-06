@@ -1,20 +1,14 @@
 package ch.fhnw.speech_collection_app.features.base.admin;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
-import ch.fhnw.speech_collection_app.jooq.enums.RecordingLabel;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
+import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Domain;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.TextAudio;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserGroupRole;
-import ch.fhnw.speech_collection_app.jooq.tables.records.TextAudioRecord;
-import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.features.base.user_group.OccurrenceMode;
-import ch.fhnw.speech_collection_app.features.base.user_group.OverviewOccurrence;
 import org.apache.tika.io.IOUtils;
 import org.jooq.DSLContext;
-import org.jooq.Record5;
-import org.jooq.SelectOrderByStep;
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +36,15 @@ public class UserGroupAdminService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    public void putTextAudio(long groupId, TextAudio textAudio) {
+    public void putTextAudio(long groupId, TextAudioDto textAudio) {
         isAllowed(groupId);
-        TextAudioRecord textAudioRecord = dslContext.newRecord(TEXT_AUDIO, textAudio);
-        textAudioRecord.setCorrect(0L);
-        textAudioRecord.setWrong(0L);
-        textAudioRecord.update();
-        dslContext.delete(CHECKED_TEXT_AUDIO).where(CHECKED_TEXT_AUDIO.TEXT_AUDIO_ID.eq(textAudio.getId())).execute();
+        var audio = dslContext.selectFrom(AUDIO).where(AUDIO.ID.eq(textAudio.id)).fetchOne();
+        audio.setAudioEnd(textAudio.audioEnd);
+        audio.setAudioStart(textAudio.audioStart);
+        audio.store();
+        dslContext.delete(CHECKED_DATA_TUPLE).where(CHECKED_DATA_TUPLE.DATA_TUPLE_ID.eq(textAudio.id)).execute();
         try {
-            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 2 " + textAudio.getId());
+            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 2 " + textAudio.id);
             List<String> list = IOUtils.readLines(process.getErrorStream());
             if (!list.isEmpty()) {
                 logger.error(String.join("\n", list));
@@ -58,23 +52,18 @@ public class UserGroupAdminService {
         } catch (IOException e) {
             logger.error("Exception Raised", e);
         }
-
     }
 
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
         //TODO implement pagination for increased performance
-        var step = dslContext.select(RECORDING.ID, RECORDING.CORRECT, RECORDING.WRONG, EXCERPT.EXCERPT_.as("text"), DSL.inline(OccurrenceMode.RECORDING.name()).as("mode"))
-                .from(RECORDING.join(EXCERPT).onKey().join(ORIGINAL_TEXT).onKey())
-                .where(RECORDING.LABEL.eq(RecordingLabel.RECORDED).and(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId).and(RECORDING.CORRECT.plus(RECORDING.WRONG).ge(0L))));
-        if (speechCollectionAppConfig.getPublicGroupId() == groupId) {
-            SelectOrderByStep<Record5<Long, Long, Long, String, String>> mode = dslContext.select(TEXT_AUDIO.ID, TEXT_AUDIO.CORRECT, TEXT_AUDIO.WRONG, TEXT_AUDIO.TEXT, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
-                    .from(TEXT_AUDIO)
-                    .where(TEXT_AUDIO.CORRECT.plus(TEXT_AUDIO.WRONG).ge(0L))
-                    .union(step);
-            return mode.fetchInto(OverviewOccurrence.class);
-        }
-        return step.fetchInto(OverviewOccurrence.class);
+        //TODO not sure how we want to handle the images for now we just filter based on the type.
+        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE, DATA_TUPLE.DATA_ELEMENT_ID_2)
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
+                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)
+                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO))))
+                )
+                .fetchInto(OverviewOccurrence.class);
     }
 
     public List<UserGroupRoleDto> getUserGroupRole(UserGroupRoleRole mode, long groupId) {
@@ -113,14 +102,16 @@ public class UserGroupAdminService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    public TextAudio getTextAudio(long groupId, Long textAudioId) {
+    public TextAudioDto getTextAudio(long groupId, long dataElementId) {
         isAllowed(groupId);
-        return dslContext.selectFrom(TEXT_AUDIO).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOneInto(TextAudio.class);
+        return dslContext.select(AUDIO.ID, AUDIO.AUDIO_START, AUDIO.AUDIO_END).from(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOneInto(TextAudioDto.class);
     }
 
-    public byte[] getTextAudioAudio(long groupId, Long textAudioId) throws IOException {
+    public byte[] getTextAudioAudio(long groupId, Long audioId) throws IOException {
         isAllowed(groupId);
-        var textAudio = dslContext.selectFrom(TEXT_AUDIO.join(SOURCE).onKey()).where(TEXT_AUDIO.ID.eq(textAudioId)).fetchOne(SOURCE.RAW_AUDIO_PATH);
+        var textAudio = dslContext.selectFrom(AUDIO.join(DATA_ELEMENT).onKey().join(SOURCE).onKey())
+                .where(AUDIO.ID.eq(audioId))
+                .fetchOne(SOURCE.PATH_TO_RAW_FILE);
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(textAudio));
     }
 
