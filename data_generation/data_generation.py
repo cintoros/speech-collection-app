@@ -146,6 +146,8 @@ class SequentualApiFetcher:
             try:
                 self.request_next(self.dataset.sentence[i], i + 1)
                 # NOTE: the azure api seems has a relative low request limit per time(1min,10min) that is not documented...
+                # NOTE: after about 1 hour googe/azure run into timeouts etc.
+                # NOTE google does not seem to like too long requests "_InactiveRpcError"
                 time.sleep(0.7)
             finally:
                 logger.info("finished with lastId(+1): " + str(i))
