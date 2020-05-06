@@ -54,7 +54,6 @@ export class VerificationTokenComponent implements OnInit {
   }
 
   resetPassword() {
-    //TODO why does this not work
     this.httpClient.put(`${this.baseUrl}password/reset?token=${this.token}`, this.password).subscribe(value => {
       if (value) {
         this.modus = VerificationModus.PASSWORD_CHANGED;

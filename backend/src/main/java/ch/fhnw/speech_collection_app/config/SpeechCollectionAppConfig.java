@@ -18,6 +18,8 @@ public class SpeechCollectionAppConfig {
     @NotNull
     private Long publicGroupId;
     @NotNull
+    private Long minNumChecks;
+    @NotNull
     private Features features;
     @NotNull
     private String baseUrl;
@@ -69,6 +71,14 @@ public class SpeechCollectionAppConfig {
 
     public void setFromEmail(String fromEmail) {
         this.fromEmail = fromEmail;
+    }
+
+    public Long getMinNumChecks() {
+        return minNumChecks;
+    }
+
+    public void setMinNumChecks(Long minNumChecks) {
+        this.minNumChecks = minNumChecks;
     }
 
     public static class Features {

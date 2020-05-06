@@ -4,21 +4,18 @@ export enum CheckedOccurrenceLabel {SKIPPED = 'SKIPPED', CORRECT = 'CORRECT', WR
 
 export class CheckedOccurrence {
   id: number;
-  userId: number;
   label: CheckedOccurrenceLabel;
-  mode: OccurrenceMode;
 
-
-  constructor(id: number, userId: number, label: CheckedOccurrenceLabel, mode: OccurrenceMode) {
+  constructor(id: number, label: CheckedOccurrenceLabel) {
     this.id = id;
-    this.userId = userId;
     this.label = label;
-    this.mode = mode;
   }
 }
 
 export interface Occurrence {
   mode: OccurrenceMode;
   id: number;
+  dataElementId_2: number;
+  dataElementId_1: number;
   text: string;
 }

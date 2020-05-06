@@ -32,7 +32,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        var conf = http.authorizeRequests()
+        var conf = http.addFilter(new CustomAuthenticationSuccessHandler(authenticationManager(), userDetailsService))
+                .authorizeRequests()
                 .antMatchers("/api/public/**").permitAll()
                 .antMatchers("/api/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/api/**").fullyAuthenticated()
