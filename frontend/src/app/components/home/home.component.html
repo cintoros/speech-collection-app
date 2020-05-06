@@ -1,46 +1,16 @@
-<div class="margin">
-  Welcome to the Speech Collection App.<br/>
-  This web application was built for the purpose of collecting Swiss German speech with the corresponding Standard
-  German transcript to train Swiss German speech-to-text models.<br/>
-  You can help us build a freely available Swiss German speech-to-text model by providing speech (Record function) or by
-  doublechecking the recordings of other users (Check function).<br/>
-  Any contribution is much appreciated!<br/>
-  <h3>Check</h3>
-  Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct Swiss
-  German translation.
-  <ul>
-    <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
-    <li>Wrong: Recording is not a correct Swiss German translation</li>
-    <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
-    <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
-      step, longer texts are automatically split to sentences, so use this button also if you suspect that the sentence
-      splitting went wrong.
-    </li>
-    <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
-  </ul>
-  <h3>Record</h3>
-  Record Swiss German speech for a Standard German sentence. Please think about the Swiss German translation of the
-  sentence first before starting to record.
-  <ul>
-    <li>Start: Start recording speech</li>
-    <li>Skip: I don't want to read this sentence aloud, give me another one.</li>
-    <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
-      step, longer texts are automatically split to sentences, so use this button also if you suspect that the sentence
-      splitting went wrong.
-    </li>
-    <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
-  </ul>
-  <div *ngIf="userGroups.length>1">
-    <h3>Multiple user groups available:</h3>
-    <mat-form-field>
-      <mat-label>User group:</mat-label>
-      <mat-select [(value)]="userGroupService.userGroupId">
-        <mat-option *ngFor="let group of userGroups" [value]="group.id">{{group.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6">
+      <a href="/record">
+        <button type="button" class="btn btn-primary btn-lg btn-block">
+          Aufnehmen
+        </button>
+      </a>
+    </div>
+    <div class="col-sm-6"><a href="/check">
+        <button type="button" class="btn btn-primary btn-lg btn-block">
+          Prüfen
+        </button>
+      </a></div>
   </div>
-  <br>
-  <mat-divider></mat-divider>
-  <br>
-  <markdown [data]="getSelectedGroupDescription()"></markdown>
 </div>

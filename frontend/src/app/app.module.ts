@@ -55,6 +55,7 @@ import {DocumentOverviewComponent} from './components/admin/document-overview/do
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
+import { ExcerptComponent } from './components/record/excerpt/excerpt.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import { VerificationTokenComponent } from './components/verification-token/veri
     UserGroupRoleComponent,
     EditTextAudioComponent,
     DocumentOverviewComponent,
-    VerificationTokenComponent
+    VerificationTokenComponent,
+    ExcerptComponent
   ],
   imports: [
     BrowserModule,

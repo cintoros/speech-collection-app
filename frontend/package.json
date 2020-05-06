@@ -22,7 +22,7 @@
     "@angular/router": "^9.1.0",
     "bootstrap": "^3.4.1",
     "export-to-csv": "^0.2.1",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "ngx-carousel-lib": "^0.1.2",
     "ngx-markdown": "^9.0.0",
     "rxjs": "^6.5.5",
