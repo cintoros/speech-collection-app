@@ -1,7 +1,16 @@
-<mat-card class="margin">
-
-    <p class="excerpt_text">{{excerpt_text}}</p>
-
-
-
-</mat-card>
+<span class="margin">
+  <br />
+  <textarea
+    *ngIf="can_Edit"
+    [readonly]="!can_Edit"
+    placeholder="{{ excerpt_text }}"
+    class="excerpt_text"
+  ></textarea>
+  <p
+    *ngIf="!can_Edit"
+    [class]="is_Deactivated ? 'excerpt_tiny' : 'excerpt_text'"
+  >
+    {{ excerpt_text }}
+  </p>
+  <br />
+</span>

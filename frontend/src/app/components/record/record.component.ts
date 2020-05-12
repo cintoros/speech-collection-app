@@ -17,6 +17,9 @@ export class RecordComponent implements OnInit {
   recordingNoiseLevel = RecordingNoiseLevel;
   selectedQuality = RecordingQuality.INTEGRATED;
   selectedNoiseLevel = RecordingNoiseLevel.MODERATE_NOISE;
+  recording_sentence = "Satz auf Schweizerdeutsch";
+  isTranslated = false;
+  translatedText = "";
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
   private audioChunks = [];
@@ -70,7 +73,7 @@ export class RecordComponent implements OnInit {
     this.isRecording = false;
   }
 
-  submit(): void {
+  submit_text_recording(): void {
     const recording = new RecordingDto(
       this.textDto.id,
       this.selectedQuality,
@@ -87,6 +90,12 @@ export class RecordComponent implements OnInit {
         this.snackBarService.openMessage("Successfully uploaded recording");
         this.getNext();
       });
+  }
+
+  submit_text_text(): void {
+    const text = new TextDto(-1, false, this.translatedText);
+    this.isTranslated = true;
+    this.recording_sentence = this.translatedText;
   }
 
   private() {

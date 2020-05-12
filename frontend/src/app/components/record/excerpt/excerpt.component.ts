@@ -9,6 +9,8 @@ export class ExcerptComponent implements OnInit {
   constructor() {}
 
   @Input() excerpt_text: string;
+  @Input() can_Edit: boolean;
+  @Input() is_Deactivated: boolean;
 
   ngOnInit(): void {}
 }
