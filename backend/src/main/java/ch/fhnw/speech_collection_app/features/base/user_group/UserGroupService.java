@@ -162,39 +162,30 @@ public class UserGroupService {
                    .fetchOne(AUDIO.PATH);
     return Files.readAllBytes(
         speechCollectionAppConfig.getBasePath().resolve(path));
-
-    public void postCheckedDataElement(long groupId, long dataElementId,
-                                       CheckedDataElementType type) {
-      checkElement(groupId, dataElementId);
-      var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
-      checked.setType(type);
-      checked.setUserId(customUserDetailsService.getLoggedInUserId());
-      checked.setDataElementId(dataElementId);
-      checked.store();
-    }
-
-    public void postCheckedDataElement(long groupId, long dataElementId,
-                                       CheckedDataElementType type) {
-      checkDataElement(groupId, dataElementId);
-      var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
-      checked.setType(type);
-      checked.setUserId(customUserDetailsService.getLoggedInUserId());
-      checked.setDataElementId(dataElementId);
-      checked.store();
-    }
-
-    private void checkDataElement(long groupId, long dataElementId) {
-      checkAllowed(groupId);
-      boolean equals = dslContext.selectFrom(DATA_ELEMENT)
-                           .where(DATA_ELEMENT.ID.eq(dataElementId))
-                           .fetchOne(DATA_ELEMENT.USER_GROUP_ID)
-                           .equals(groupId);
-      if (!equals)
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-
-    private void checkAllowed(long userGroupId) {
-      if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
   }
+
+  public void postCheckedDataElement(long groupId, long dataElementId,
+                                     CheckedDataElementType type) {
+    checkDataElement(groupId, dataElementId);
+    var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
+    checked.setType(type);
+    checked.setUserId(customUserDetailsService.getLoggedInUserId());
+    checked.setDataElementId(dataElementId);
+    checked.store();
+  }
+
+  private void checkDataElement(long groupId, long dataElementId) {
+    checkAllowed(groupId);
+    boolean equals = dslContext.selectFrom(DATA_ELEMENT)
+                         .where(DATA_ELEMENT.ID.eq(dataElementId))
+                         .fetchOne(DATA_ELEMENT.USER_GROUP_ID)
+                         .equals(groupId);
+    if (!equals)
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+  }
+
+  private void checkAllowed(long userGroupId) {
+    if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+  }
+}
