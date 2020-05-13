@@ -27,14 +27,14 @@ subprojects {
     }
     sourceCompatibility = 11
     targetCompatibility = 11
-    group = 'ch.i4ds.new_project'
+    group = 'ch.fhnw.speech_collection_app'
     version = "1.0.0-SNAPSHOT"
 
     //managed dependency versions
     dependencyManagement {
         dependencies {
             dependency 'org.apache.tika:tika-parsers:1.24'
-            dependency 'org.flywaydb:flyway-core:6.3.2'
+            dependency 'org.flywaydb:flyway-core:6.3.3'
             dependencySet(group: 'org.jooq', version: '3.13.1') {
                 entry 'jooq'
                 entry 'jooq-codegen'

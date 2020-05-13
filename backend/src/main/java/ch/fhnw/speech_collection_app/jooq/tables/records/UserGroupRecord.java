@@ -10,15 +10,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record3;
-import org.jooq.Row3;
+import org.jooq.Record4;
+import org.jooq.Row4;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implements Record3<Long, String, String> {
+public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implements Record4<Long, String, String, String> {
 
-    private static final long serialVersionUID = 448297633;
+    private static final long serialVersionUID = 643649220;
 
     public void setId(Long value) {
         set(0, value);
@@ -46,6 +46,14 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
         return (String) get(2);
     }
 
+    public void setMetaInformation(String value) {
+        set(3, value);
+    }
+
+    public String getMetaInformation() {
+        return (String) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -56,17 +64,17 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record3 type implementation
+    // Record4 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, String, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, String, String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 
     @Override
-    public Row3<Long, String, String> valuesRow() {
-        return (Row3) super.valuesRow();
+    public Row4<Long, String, String, String> valuesRow() {
+        return (Row4) super.valuesRow();
     }
 
     @Override
@@ -85,6 +93,11 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     @Override
+    public Field<String> field4() {
+        return UserGroup.USER_GROUP.META_INFORMATION;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -100,6 +113,11 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     @Override
+    public String component4() {
+        return getMetaInformation();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -112,6 +130,11 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     @Override
     public String value3() {
         return getDescription();
+    }
+
+    @Override
+    public String value4() {
+        return getMetaInformation();
     }
 
     @Override
@@ -133,10 +156,17 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
     }
 
     @Override
-    public UserGroupRecord values(Long value1, String value2, String value3) {
+    public UserGroupRecord value4(String value) {
+        setMetaInformation(value);
+        return this;
+    }
+
+    @Override
+    public UserGroupRecord values(Long value1, String value2, String value3, String value4) {
         value1(value1);
         value2(value2);
         value3(value3);
+        value4(value4);
         return this;
     }
 
@@ -148,11 +178,12 @@ public class UserGroupRecord extends UpdatableRecordImpl<UserGroupRecord> implem
         super(UserGroup.USER_GROUP);
     }
 
-    public UserGroupRecord(Long id, String name, String description) {
+    public UserGroupRecord(Long id, String name, String description, String metaInformation) {
         super(UserGroup.USER_GROUP);
 
         set(0, id);
         set(1, name);
         set(2, description);
+        set(3, metaInformation);
     }
 }

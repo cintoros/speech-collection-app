@@ -5,5 +5,6 @@ export interface OverviewOccurrence {
   correct: number;
   wrong: number;
   id: number;
-  mode: OccurrenceMode
+  mode: OccurrenceMode;
+  dataElementId_2: number;
 }

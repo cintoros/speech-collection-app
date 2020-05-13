@@ -14,3 +14,4 @@ speech-collection-app:
   public-group-id: 1
   features:
     email-integration: false
+  min-num-checks: 3

@@ -6,20 +6,22 @@ package ch.fhnw.speech_collection_app.jooq.tables.records;
 
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record6;
-import org.jooq.Row6;
+import org.jooq.Record10;
+import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements Record6<Long, String, String, String, String, String> {
+public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements Record10<Long, Long, Long, Long, Long, Timestamp, String, String, String, String> {
 
-    private static final long serialVersionUID = 1392616315;
+    private static final long serialVersionUID = -333926711;
 
     public void setId(Long value) {
         set(0, value);
@@ -29,53 +31,81 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         return (Long) get(0);
     }
 
-    public void setDescription(String value) {
+    public void setUserId(Long value) {
         set(1, value);
     }
 
     @NotNull
-    @Size(max = 16777215)
-    public String getDescription() {
-        return (String) get(1);
+    public Long getUserId() {
+        return (Long) get(1);
     }
 
-    public void setName(String value) {
+    public void setDialectId(Long value) {
         set(2, value);
     }
 
-    @NotNull
-    @Size(max = 45)
-    public String getName() {
-        return (String) get(2);
+    public Long getDialectId() {
+        return (Long) get(2);
     }
 
-    public void setRawAudioPath(String value) {
+    public void setDomainId(Long value) {
         set(3, value);
     }
 
-    @NotNull
-    @Size(max = 255)
-    public String getRawAudioPath() {
-        return (String) get(3);
+    public Long getDomainId() {
+        return (Long) get(3);
     }
 
-    public void setRawFilePath(String value) {
+    public void setUserGroupId(Long value) {
         set(4, value);
     }
 
     @NotNull
-    @Size(max = 255)
-    public String getRawFilePath() {
-        return (String) get(4);
+    public Long getUserGroupId() {
+        return (Long) get(4);
     }
 
-    public void setLicence(String value) {
+    public void setCreatedTime(Timestamp value) {
         set(5, value);
     }
 
-    @Size(max = 16777215)
+    public Timestamp getCreatedTime() {
+        return (Timestamp) get(5);
+    }
+
+    public void setPathToRawFile(String value) {
+        set(6, value);
+    }
+
+    @Size(max = 65535)
+    public String getPathToRawFile() {
+        return (String) get(6);
+    }
+
+    public void setName(String value) {
+        set(7, value);
+    }
+
+    @Size(max = 65535)
+    public String getName() {
+        return (String) get(7);
+    }
+
+    public void setLicence(String value) {
+        set(8, value);
+    }
+
+    @Size(max = 65535)
     public String getLicence() {
-        return (String) get(5);
+        return (String) get(8);
+    }
+
+    public void setMetaInformation(String value) {
+        set(9, value);
+    }
+
+    public String getMetaInformation() {
+        return (String) get(9);
     }
 
     // -------------------------------------------------------------------------
@@ -88,17 +118,17 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     // -------------------------------------------------------------------------
-    // Record6 type implementation
+    // Record10 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, String, String, String, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row10<Long, Long, Long, Long, Long, Timestamp, String, String, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row6<Long, String, String, String, String, String> valuesRow() {
-        return (Row6) super.valuesRow();
+    public Row10<Long, Long, Long, Long, Long, Timestamp, String, String, String, String> valuesRow() {
+        return (Row10) super.valuesRow();
     }
 
     @Override
@@ -107,28 +137,48 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
-    public Field<String> field2() {
-        return Source.SOURCE.DESCRIPTION;
+    public Field<Long> field2() {
+        return Source.SOURCE.USER_ID;
     }
 
     @Override
-    public Field<String> field3() {
+    public Field<Long> field3() {
+        return Source.SOURCE.DIALECT_ID;
+    }
+
+    @Override
+    public Field<Long> field4() {
+        return Source.SOURCE.DOMAIN_ID;
+    }
+
+    @Override
+    public Field<Long> field5() {
+        return Source.SOURCE.USER_GROUP_ID;
+    }
+
+    @Override
+    public Field<Timestamp> field6() {
+        return Source.SOURCE.CREATED_TIME;
+    }
+
+    @Override
+    public Field<String> field7() {
+        return Source.SOURCE.PATH_TO_RAW_FILE;
+    }
+
+    @Override
+    public Field<String> field8() {
         return Source.SOURCE.NAME;
     }
 
     @Override
-    public Field<String> field4() {
-        return Source.SOURCE.RAW_AUDIO_PATH;
-    }
-
-    @Override
-    public Field<String> field5() {
-        return Source.SOURCE.RAW_FILE_PATH;
-    }
-
-    @Override
-    public Field<String> field6() {
+    public Field<String> field9() {
         return Source.SOURCE.LICENCE;
+    }
+
+    @Override
+    public Field<String> field10() {
+        return Source.SOURCE.META_INFORMATION;
     }
 
     @Override
@@ -137,28 +187,48 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
-    public String component2() {
-        return getDescription();
+    public Long component2() {
+        return getUserId();
     }
 
     @Override
-    public String component3() {
+    public Long component3() {
+        return getDialectId();
+    }
+
+    @Override
+    public Long component4() {
+        return getDomainId();
+    }
+
+    @Override
+    public Long component5() {
+        return getUserGroupId();
+    }
+
+    @Override
+    public Timestamp component6() {
+        return getCreatedTime();
+    }
+
+    @Override
+    public String component7() {
+        return getPathToRawFile();
+    }
+
+    @Override
+    public String component8() {
         return getName();
     }
 
     @Override
-    public String component4() {
-        return getRawAudioPath();
-    }
-
-    @Override
-    public String component5() {
-        return getRawFilePath();
-    }
-
-    @Override
-    public String component6() {
+    public String component9() {
         return getLicence();
+    }
+
+    @Override
+    public String component10() {
+        return getMetaInformation();
     }
 
     @Override
@@ -167,28 +237,48 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
-    public String value2() {
-        return getDescription();
+    public Long value2() {
+        return getUserId();
     }
 
     @Override
-    public String value3() {
+    public Long value3() {
+        return getDialectId();
+    }
+
+    @Override
+    public Long value4() {
+        return getDomainId();
+    }
+
+    @Override
+    public Long value5() {
+        return getUserGroupId();
+    }
+
+    @Override
+    public Timestamp value6() {
+        return getCreatedTime();
+    }
+
+    @Override
+    public String value7() {
+        return getPathToRawFile();
+    }
+
+    @Override
+    public String value8() {
         return getName();
     }
 
     @Override
-    public String value4() {
-        return getRawAudioPath();
-    }
-
-    @Override
-    public String value5() {
-        return getRawFilePath();
-    }
-
-    @Override
-    public String value6() {
+    public String value9() {
         return getLicence();
+    }
+
+    @Override
+    public String value10() {
+        return getMetaInformation();
     }
 
     @Override
@@ -198,43 +288,71 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
     }
 
     @Override
-    public SourceRecord value2(String value) {
-        setDescription(value);
+    public SourceRecord value2(Long value) {
+        setUserId(value);
         return this;
     }
 
     @Override
-    public SourceRecord value3(String value) {
+    public SourceRecord value3(Long value) {
+        setDialectId(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord value4(Long value) {
+        setDomainId(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord value5(Long value) {
+        setUserGroupId(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord value6(Timestamp value) {
+        setCreatedTime(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord value7(String value) {
+        setPathToRawFile(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord value8(String value) {
         setName(value);
         return this;
     }
 
     @Override
-    public SourceRecord value4(String value) {
-        setRawAudioPath(value);
-        return this;
-    }
-
-    @Override
-    public SourceRecord value5(String value) {
-        setRawFilePath(value);
-        return this;
-    }
-
-    @Override
-    public SourceRecord value6(String value) {
+    public SourceRecord value9(String value) {
         setLicence(value);
         return this;
     }
 
     @Override
-    public SourceRecord values(Long value1, String value2, String value3, String value4, String value5, String value6) {
+    public SourceRecord value10(String value) {
+        setMetaInformation(value);
+        return this;
+    }
+
+    @Override
+    public SourceRecord values(Long value1, Long value2, Long value3, Long value4, Long value5, Timestamp value6, String value7, String value8, String value9, String value10) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
         value6(value6);
+        value7(value7);
+        value8(value8);
+        value9(value9);
+        value10(value10);
         return this;
     }
 
@@ -246,14 +364,18 @@ public class SourceRecord extends UpdatableRecordImpl<SourceRecord> implements R
         super(Source.SOURCE);
     }
 
-    public SourceRecord(Long id, String description, String name, String rawAudioPath, String rawFilePath, String licence) {
+    public SourceRecord(Long id, Long userId, Long dialectId, Long domainId, Long userGroupId, Timestamp createdTime, String pathToRawFile, String name, String licence, String metaInformation) {
         super(Source.SOURCE);
 
         set(0, id);
-        set(1, description);
-        set(2, name);
-        set(3, rawAudioPath);
-        set(4, rawFilePath);
-        set(5, licence);
+        set(1, userId);
+        set(2, dialectId);
+        set(3, domainId);
+        set(4, userGroupId);
+        set(5, createdTime);
+        set(6, pathToRawFile);
+        set(7, name);
+        set(8, licence);
+        set(9, metaInformation);
     }
 }
