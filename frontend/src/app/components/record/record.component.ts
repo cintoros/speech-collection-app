@@ -90,6 +90,7 @@ export class RecordComponent implements OnInit {
   }
 
   submit_text_text(): void {
+    if (this.translatedText.length < 3) return;
     const text = new TextDto(this.textDto.id, false, this.translatedText);
     const formData = new FormData();
     formData.append(`text`, JSON.stringify(text));
