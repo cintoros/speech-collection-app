@@ -62,6 +62,29 @@ public class UserGroupService {
     tuple.store();
   }
 
+  public void postExcerpt(long groupId, TextDto received_text)
+      throws IOException {
+    checkAllowed(groupId);
+    var element = dslContext.newRecord(DATA_ELEMENT);
+    element.setFinished(true);
+    element.setUserGroupId(groupId);
+    element.setUserId(customUserDetailsService.getLoggedInUserId());
+    element.store();
+
+    var text = dslContext.newRecord(TEXT);
+    text.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
+    text.setDataElementId(element.getId());
+    text.setIsSentenceError(false);
+    text.setText(received_text.getText());
+    text.store();
+
+    var tuple = dslContext.newRecord(DATA_TUPLE);
+    tuple.setDataElementId_1(received_text.getId());
+    tuple.setDataElementId_2(text.getId());
+    tuple.setType(DataTupleType.TEXT_TEXT);
+    tuple.store();
+  }
+
   /**
    * return a text to be recorded based on:<br>
    * 1. if the text is not easy to understand (no more than 3 skips)<br>

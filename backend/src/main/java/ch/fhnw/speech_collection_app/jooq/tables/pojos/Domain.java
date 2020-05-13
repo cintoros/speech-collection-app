@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Domain implements Serializable {
 
-    private static final long serialVersionUID = 1921672235;
+    private static final long serialVersionUID = 1560454481;
 
     private Long   id;
     private String name;
@@ -42,7 +42,7 @@ public class Domain implements Serializable {
     }
 
     @NotNull
-    @Size(max = 65535)
+    @Size(max = 16777215)
     public String getName() {
         return this.name;
     }

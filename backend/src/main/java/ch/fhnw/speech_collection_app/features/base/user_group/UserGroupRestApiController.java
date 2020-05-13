@@ -13,43 +13,63 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user_group/{groupId}/")
 public class UserGroupRestApiController {
-    private final UserGroupService userGroupService;
-    private final ObjectMapper objectMapper;
+  private final UserGroupService userGroupService;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper) {
-        this.userGroupService = userGroupService;
-        this.objectMapper = objectMapper;
-    }
+  @Autowired
+  public UserGroupRestApiController(UserGroupService userGroupService,
+                                    ObjectMapper objectMapper) {
+    this.userGroupService = userGroupService;
+    this.objectMapper = objectMapper;
+  }
 
-    @PostMapping("recording")
-    public void postRecording(@PathVariable long groupId, @RequestParam String recording, @RequestParam MultipartFile file) throws IOException {
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
-    }
+  @PostMapping("recording")
+  public void postRecording(@PathVariable long groupId,
+                            @RequestParam String recording,
+                            @RequestParam MultipartFile file)
+      throws IOException {
+    userGroupService.postRecording(
+        groupId, objectMapper.readValue(recording, RecordingDto.class), file);
+  }
 
-    @PostMapping("element/{dataElementId}/checked")
-    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId, @RequestParam CheckedDataElementType type) {
-        userGroupService.postCheckedDataElement(groupId, dataElementId, type);
-    }
+  @PostMapping("element/{dataElementId}/checked")
+  public void
+  postCheckedDataElement(@PathVariable long groupId,
+                         @PathVariable long dataElementId,
+                         @RequestParam CheckedDataElementType type) {
+    userGroupService.postCheckedDataElement(groupId, dataElementId, type);
+  }
 
-    @GetMapping("excerpt")
-    public TextDto getExcerpt(@PathVariable long groupId) {
-        return userGroupService.getExcerpt(groupId);
-    }
+  @PostMapping("excerpt")
+  public void postExcerpt(@PathVariable long groupId, @RequestParam String text)
+      throws IOException {
+    System.out.print(text);
+    userGroupService.postExcerpt(groupId,
+                                 objectMapper.readValue(text, TextDto.class));
+  }
 
-    @PostMapping("occurrence/check")
-    public void postCheckedOccurrence(@PathVariable long groupId, @RequestBody CheckedOccurrence checkedOccurrence) {
-        userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
-    }
+  @GetMapping("excerpt")
+  public TextDto getExcerpt(@PathVariable long groupId) {
+    return userGroupService.getExcerpt(groupId);
+  }
 
-    @GetMapping("occurrence/next")
-    public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
-        return userGroupService.getNextOccurrences(groupId);
-    }
+  @PostMapping("occurrence/check")
+  public void
+  postCheckedOccurrence(@PathVariable long groupId,
+                        @RequestBody CheckedOccurrence checkedOccurrence) {
+    userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
+  }
 
-    @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseBody
-    public byte[] getAudio(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
-        return userGroupService.getAudio(groupId, dataElementId);
-    }
+  @GetMapping("occurrence/next")
+  public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
+    return userGroupService.getNextOccurrences(groupId);
+  }
+
+  @GetMapping(value = "occurrence/audio/{dataElementId}",
+              produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  @ResponseBody
+  public byte[] getAudio(@PathVariable long groupId,
+                         @PathVariable long dataElementId) throws IOException {
+    return userGroupService.getAudio(groupId, dataElementId);
+  }
 }
