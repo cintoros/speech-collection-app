@@ -23,11 +23,28 @@
     <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
   </p>
 
-  <div *ngFor="let textAudio of occurrences; let i = index">
-    <mat-card class="center">
-      <div class="excerpt_text">{{ textAudio.text }}</div>
-    </mat-card>
-  </div>
+  <mat-card class="center">
+    <div class="excerpt_text">{{ occurrences[occurrences_idx].text }}</div>
+
+    <br />
+    <br />
+    <button
+      (click)="togglePlay()"
+      *ngIf="!isPlaying"
+      class="check-navigation-button btn btn-primary"
+      mat-raised-button
+    >
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button
+      (click)="togglePlay()"
+      *ngIf="isPlaying"
+      class="check-navigation-button btn btn-secondary"
+      mat-raised-button
+    >
+      <mat-icon>pause</mat-icon>
+    </button>
+  </mat-card>
 
   <br />
 
@@ -39,23 +56,6 @@
       mat-raised-button
     >
       <span class="glyphicon glyphicon-remove-sign"></span>
-    </button>
-    <button
-      (click)="togglePlay()"
-      *ngIf="!isPlaying"
-      class="check-navigation-button btn btn-primary"
-      mat-raised-button
-    >
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-
-    <button
-      (click)="togglePlay()"
-      *ngIf="isPlaying"
-      class="check-navigation-button btn btn-secondary"
-      mat-raised-button
-    >
-      <mat-icon>pause</mat-icon>
     </button>
 
     <button
