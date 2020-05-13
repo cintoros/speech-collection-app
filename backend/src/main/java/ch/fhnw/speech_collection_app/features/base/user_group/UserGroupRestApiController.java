@@ -43,7 +43,6 @@ public class UserGroupRestApiController {
   @PostMapping("excerpt")
   public void postExcerpt(@PathVariable long groupId, @RequestParam String text)
       throws IOException {
-    System.out.print(text);
     userGroupService.postExcerpt(groupId,
                                  objectMapper.readValue(text, TextDto.class));
   }
