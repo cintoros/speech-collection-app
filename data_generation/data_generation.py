@@ -5,20 +5,20 @@ import mysql.connector
 import os
 import pandas
 import requests
-import sys
 import time
 from google.cloud import texttospeech
 from google.oauth2 import service_account
+from typing import Union
 
 from config import *
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('data_generations')
 logger.setLevel(logging.INFO)
-output_file_handler = logging.FileHandler("output.log")
-stdout_handler = logging.StreamHandler(sys.stdout)
-logger.addHandler(output_file_handler)
-logger.addHandler(stdout_handler)
+
+
+# stdout_handler = logging.StreamHandler(sys.stdout)
+# logger.addHandler(stdout_handler)
 
 
 # based on https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/
@@ -54,14 +54,25 @@ class MicrosoftApi:
         response = requests.post(fetch_token_url, headers=headers)
         return str(response.text)
 
-    def request_next(self, text: str, id: int) -> str:
+    def get_next_voice(self, id: int) -> Union[None, str]:
+        l = len(self.voices)
+        for i in range(0, l):
+            self.voice_index = (self.voice_index + i) % l
+            voice_name = self.voices[self.voice_index]
+            file_name = str(id) + "_" + voice_name + ".mp3"
+            if not os.path.exists(os.path.join(self.base_path, file_name)):
+                return voice_name
+        return None
+
+    def request_next(self, text: str, id: int) -> Union[None, str]:
         # refresh token every 9 minutes (token is valid for 10 minutes)
         if ((time.time() - self.last_token_time) > (60 * 9)):
-            logger.info("updated old token: %s", self.headers['Authorization'])
+            logger.info("updated old token")
             self.headers['Authorization'] = 'Bearer ' + self.get_token()
-            logger.info("updated new token: %s", self.headers['Authorization'])
 
-        voice_name = self.voices[self.voice_index]
+        voice_name = self.get_next_voice(id)
+        if voice_name is None:
+            return None
         self.voice.set('name', voice_name)
         self.voice.text = text
         response = requests.post(self.constructed_url, headers=self.headers, data=ElementTree.tostring(self.xml_body))
@@ -73,7 +84,7 @@ class MicrosoftApi:
             logger.warning(
                 f"\nStatus code: {str(response.status_code)}\nSomething went wrong. Check your subscription key and headers.\n")
             logger.warning(response)
-            raise response
+            raise Exception('status code ', str(response.status_code))
         self.voice_index += 1
         if self.voice_index >= len(self.voices):
             self.voice_index = 0
@@ -85,18 +96,30 @@ class MicrosoftApi:
 # for languages/voices see https://cloud.google.com/text-to-speech/docs/voices
 class GoogleApi:
     def __init__(self):
-        self.basePath = os.path.join(BASE_DIR, "data_generation", "sequentual")
-        os.makedirs(name=self.basePath, exist_ok=True)
+        self.base_path = os.path.join(BASE_DIR, "data_generation", "sequentual")
+        os.makedirs(name=self.base_path, exist_ok=True)
         self.voices = ["de-DE-Standard-A", "de-DE-Standard-B", "de-DE-Standard-E", "de-DE-Standard-F"]
         self.voice_index = 0
         # Instantiates a client
         self.credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
         self.client = texttospeech.TextToSpeechClient(credentials=self.credentials)
 
-    def request_next(self, text: str, id: int) -> str:
+    def get_next_voice(self, id: int) -> Union[None, str]:
+        l = len(self.voices)
+        for i in range(0, l):
+            self.voice_index = (self.voice_index + i) % l
+            voice_name = self.voices[self.voice_index]
+            file_name = str(id) + "_" + voice_name + ".mp3"
+            if not os.path.exists(os.path.join(self.base_path, file_name)):
+                return voice_name
+        return None
+
+    def request_next(self, text: str, id: int) -> Union[None, str]:
         # Set the text input to be synthesized
         synthesis_input = texttospeech.types.SynthesisInput(text=text)
-        voice_name = self.voices[self.voice_index]
+        voice_name = self.get_next_voice(id)
+        if voice_name is None:
+            return None
         # Build the voice request, select the language and voice
         voice = texttospeech.types.VoiceSelectionParams(language_code="de-DE", name=voice_name)
         # Select the type of audio file you want returned
@@ -105,7 +128,7 @@ class GoogleApi:
         response = self.client.synthesize_speech(synthesis_input, voice, audio_config)
         file_name = str(id) + "_" + voice_name + ".mp3"
         # The response's audio_content is binary.
-        with open(os.path.join(self.basePath, file_name), 'wb') as out:
+        with open(os.path.join(self.base_path, file_name), 'wb') as out:
             # Write the response to the output file.
             out.write(response.audio_content)
         self.voice_index += 1
@@ -125,32 +148,33 @@ class SequentualApiFetcher:
         self.apis = [GoogleApi(), MicrosoftApi()]
         self.connection.autocommit = True
         self.api_index = 0
-        self.cursor.execute("SELECT IFNULL(MAX(text_id), 0) as last_id from generated_audio;")
-        # TODO it would probably be better to save the last_id escpecially in case of multiple "second" runs
+        self.cursor.execute("select IFNULL(text_id, 0) as last_id from generated_audio order by id DESC LIMIT 1;")
         result = self.cursor.fetchone()
         self.last_id = result['last_id']
-        self.first_run = True
 
     def request_next(self, text: str, id: int):
-        if self.first_run:
-            voice = self.apis[self.api_index].request_next(text, id)
-            self.api_index += 1
-            if self.api_index >= len(self.apis):
-                self.api_index = 0
+        voice = self.apis[self.api_index].request_next(text, id)
+        self.api_index += 1
+        if self.api_index >= len(self.apis):
+            self.api_index = 0
+        if voice is not None:
             self.cursor.execute("INSERT INTO generated_audio(text_id,voice) VALUE (%s,%s)", [id, voice])
-        else:
-            raise NotImplementedError
 
     def request_all(self, ):
-        for i in range(self.last_id, len(self.dataset)):
-            try:
+        try:
+            for i in range(self.last_id, len(self.dataset)):
                 self.request_next(self.dataset.sentence[i], i + 1)
-                # NOTE: the azure api seems has a relative low request limit per time(1min,10min) that is not documented... 0.7 seems to be save... maybe 0.6/0.5
-                # NOTE: after about 1 hour googe/azure run into timeouts etc.
-                # NOTE google does not seem to like too long requests "_InactiveRpcError"
-                time.sleep(0.5)
-            finally:
-                logger.info("finished with lastId(+1): " + str(i))
+                # NOTE: the azure api seems has a relative low request limit per time(1m,10m,1h) that is not documented...
+                #  0.6-0.7 seems to be mostly good
+                # NOTE: after about 1 hour googe/azure may run into timeouts etc.
+                # NOTE google does not like special charachters like " in the sentence. "_InactiveRpcError"
+                self.last_id = i
+                time.sleep(0.6)
+                if (i % 100 == 0):
+                    logger.info("fetched with lastId(+1): " + str(i))
+        finally:
+            logger.info("finished with lastId(+1): " + str(self.last_id))
+                
 
 
 if __name__ == '__main__':
