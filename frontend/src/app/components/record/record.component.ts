@@ -20,6 +20,7 @@ export class RecordComponent implements OnInit {
   recording_sentence = 'Satz auf Schweizerdeutsch';
   isTranslated = false;
   translatedText = '';
+  translatedText_id = -1;
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
   private audioChunks = [];
@@ -71,7 +72,7 @@ export class RecordComponent implements OnInit {
 
   submit_text_recording(): void {
     const recording = new RecordingDto(
-        this.textDto.id, this.selectedQuality, this.selectedNoiseLevel);
+        this.translatedText_id, this.selectedQuality, this.selectedNoiseLevel);
     const formData = new FormData();
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
     formData.append('recording', JSON.stringify(recording));
@@ -94,8 +95,10 @@ export class RecordComponent implements OnInit {
     formData.append(`text`, JSON.stringify(text));
 
     this.httpClient
-        .post(`${environment.url}user_group/${this.groupId}/excerpt`, formData)
-        .subscribe(() => {
+        .post<number>(
+            `${environment.url}user_group/${this.groupId}/excerpt`, formData)
+        .subscribe((translatedText_id) => {
+          this.translatedText_id = translatedText_id;
           this.isTranslated = true;
           this.recording_sentence = this.translatedText;
         })
@@ -139,5 +142,7 @@ import {environment} from '../../../environments/environment';
 import {CheckedDataElementType} from '../../models/checked-data-element-type';
 import {RecordingDto, RecordingNoiseLevel, RecordingQuality,} from '../../models/recording-dto';
 import {TextDto} from '../../models/text-dto';
+import {LoginComponent} from '../login/login.component';
+
 import {SnackBarService} from '../../services/snack-bar.service';
 import {UserGroupService} from '../../services/user-group.service';

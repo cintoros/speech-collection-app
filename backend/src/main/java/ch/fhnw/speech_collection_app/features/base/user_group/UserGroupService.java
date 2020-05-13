@@ -62,7 +62,7 @@ public class UserGroupService {
     tuple.store();
   }
 
-  public void postExcerpt(long groupId, TextDto received_text)
+  public long postExcerpt(long groupId, TextDto received_text)
       throws IOException {
     checkAllowed(groupId);
     var element = dslContext.newRecord(DATA_ELEMENT);
@@ -83,6 +83,8 @@ public class UserGroupService {
     tuple.setDataElementId_2(text.getId());
     tuple.setType(DataTupleType.TEXT_TEXT);
     tuple.store();
+
+    return element.getId();
   }
 
   /**
