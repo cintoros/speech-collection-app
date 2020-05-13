@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -51,10 +50,10 @@ public class UserGroupService {
     audio.setPath("default");
     audio.setDataElementId(element.getId());
     audio.store();
-    Path path = speechCollectionAppConfig.getBasePath().resolve(
-        "recording/" + audio.getId() + ".webm");
-    Files.write(path, file.getBytes());
-    audio.setPath(path.toString());
+    var rawPath = Paths.get("recording", audio.getId() + ".webm");
+    audio.setPath(rawPath.toString());
+    rawPath = speechCollectionAppConfig.getBasePath().resolve(rawPath);
+    Files.write(rawPath, file.getBytes());
     audio.store();
     var tuple = dslContext.newRecord(DATA_TUPLE);
     tuple.setDataElementId_1(recording.getExcerptId());
@@ -114,11 +113,9 @@ public class UserGroupService {
         .fetchOneInto(TextDto.class);
   }
 
-  // TODO rename dto/method
   public void postCheckedOccurrence(long groupId,
                                     CheckedOccurrence checkedOccurrence) {
     checkAllowed(groupId);
-    // TODO check user_group tuple mapping
     var type = CheckedDataTupleType.valueOf(checkedOccurrence.label.toString());
     var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
     checked.setDataTupleId(checkedOccurrence.id);
@@ -134,7 +131,8 @@ public class UserGroupService {
    */
   public List<Occurrence> getNextOccurrences(long groupId) {
     checkAllowed(groupId);
-    // TODO implement image checking -> refactor endpoint/dto
+    // TODO change logic so it is also possible to return an image or use a
+    // different endpoint?
     return dslContext
         .select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1,
                 DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_,
@@ -157,36 +155,46 @@ public class UserGroupService {
         .fetchInto(Occurrence.class);
   }
 
-  public byte[] getAudio(long groupId, long elementId) throws IOException {
-    checkElement(groupId, elementId);
+  public byte[] getAudio(long groupId, long dataElementId) throws IOException {
+    checkDataElement(groupId, dataElementId);
     var path = dslContext.selectFrom(AUDIO)
-                   .where(AUDIO.DATA_ELEMENT_ID.eq(elementId))
+                   .where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId))
                    .fetchOne(AUDIO.PATH);
-    return Files.readAllBytes(Paths.get(path));
-  }
+    return Files.readAllBytes(
+        speechCollectionAppConfig.getBasePath().resolve(path));
 
-  public void postCheckedDataElement(long groupId, long dataElementId,
-                                     CheckedDataElementType type) {
-    checkElement(groupId, dataElementId);
-    var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
-    checked.setType(type);
-    checked.setUserId(customUserDetailsService.getLoggedInUserId());
-    checked.setDataElementId(dataElementId);
-    checked.store();
-  }
+    public void postCheckedDataElement(long groupId, long dataElementId,
+                                       CheckedDataElementType type) {
+      checkElement(groupId, dataElementId);
+      var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
+      checked.setType(type);
+      checked.setUserId(customUserDetailsService.getLoggedInUserId());
+      checked.setDataElementId(dataElementId);
+      checked.store();
+    }
 
-  private void checkElement(long groupId, long elementId) {
-    checkAllowed(groupId);
-    boolean equals = dslContext.selectFrom(DATA_ELEMENT)
-                         .where(DATA_ELEMENT.ID.eq(elementId))
-                         .fetchOne(DATA_ELEMENT.USER_GROUP_ID)
-                         .equals(groupId);
-    if (!equals)
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-  }
+    public void postCheckedDataElement(long groupId, long dataElementId,
+                                       CheckedDataElementType type) {
+      checkDataElement(groupId, dataElementId);
+      var checked = dslContext.newRecord(CHECKED_DATA_ELEMENT);
+      checked.setType(type);
+      checked.setUserId(customUserDetailsService.getLoggedInUserId());
+      checked.setDataElementId(dataElementId);
+      checked.store();
+    }
 
-  private void checkAllowed(long userGroupId) {
-    if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    private void checkDataElement(long groupId, long dataElementId) {
+      checkAllowed(groupId);
+      boolean equals = dslContext.selectFrom(DATA_ELEMENT)
+                           .where(DATA_ELEMENT.ID.eq(dataElementId))
+                           .fetchOne(DATA_ELEMENT.USER_GROUP_ID)
+                           .equals(groupId);
+      if (!equals)
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+
+    private void checkAllowed(long userGroupId) {
+      if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
   }
-}

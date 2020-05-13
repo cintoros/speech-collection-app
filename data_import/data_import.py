@@ -71,111 +71,56 @@ def extract_data_to_db(folderNumber: str):
         with open(text_path, encoding='utf-8') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
         with wave.open(audio_path, 'rb') as f_wave:
-            speakers = dict()
-            for speaker in soup.find_all('speaker'):
-                speaker_id = speaker['id']
-
-                language = speaker.find('languages-used').find('language')
-                if language is not None:
-                    language = language['lang']
-                    if language == 'gsw':
-                        language = 'Swiss German'
-                    elif language == 'deu':
-                        language = 'Standard German'
-                    else:
-                        language = None
-
-                dialect = None
-                for info in speaker.find('ud-speaker-information').find_all('ud-information'):
-                    if info['attribute-name'] == 'dialect':
-                        dialect = info.get_text()
-                        break
-                # TODO maybe filter dialect based on database dialect
-                if dialect is not None:
-                    dialect = dialect.upper().strip()
-                    if dialect in {'BS', 'BE', 'GR', 'LU', 'OST', 'VS', 'ZH'}:
-                        pass
-                    elif dialect == 'BERN':
-                        dialect = 'BE'
-                    elif dialect == 'SG':
-                        dialect = 'OST'
-                    elif dialect in {'DE', 'HOCHDEUTSCH', 'BAYERN'}:
-                        language = 'Standard German'
-                        dialect = None
-                    else:
-                        dialect = None
-                if language is None or language == 'Standard German':
-                    dialect = None
-                if language is not None:
-                    # TODO refactor once it is clear which one are needed
-                    speakers[speaker_id] = {'dialect': dialect, }
-                else:
-                    logging.warning(f'skipping speaker {speaker_id} because no language is set.')
-
             times = {tli['id']: float(tli['time']) for tli in soup.find_all('tli')}
-
             for tier in soup.find_all('tier'):
-                if tier.has_attr('speaker'):
-                    speaker_id_xml = tier['speaker']
-                    speaker = speakers.get(speaker_id_xml)
-                    if speaker is not None:
-                        # TODO get dialect of speaker
-                        # speaker_id_db = speaker['speaker_id_db']
-                        for event in tier.find_all('event'):
-                            start_time = times[event['start']]
-                            end_time = times[event['end']]
-                            duration_seconds = end_time - start_time
-                            if duration_seconds > 0.0:
-                                transcript_text = event.get_text()
-                                cursor.execute(
-                                    "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
-                                    [text_source_id, 1, True]
-                                )
-                                element_id_1 = get_last_insert_id(cursor)
-                                cursor.execute(
-                                    "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
-                                    [audio_source_id, 1, True]
-                                )
-                                element_id_2 = get_last_insert_id(cursor)
-                                cursor.execute(
-                                    "insert into data_tuple (data_element_id_1,data_element_id_2,type)values (%s,%s,%s)",
-                                    [element_id_1, element_id_2, "TEXT_AUDIO"]
-                                )
-                                # TODO maybe insert actual dialect instead of 27
-                                cursor.execute(
-                                    "insert into text ( dialect_id,  data_element_id, text)values (%s, %s, %s)",
-                                    [27, element_id_1, transcript_text]
-                                )
-                                cursor.execute(
-                                    "insert into audio (dialect_id,data_element_id,audio_start,audio_end,path)values (%s,%s,%s,%s,%s)",
-                                    [27, element_id_2, start_time, end_time, 'PLACEHOLDER']
-                                )
+                for event in tier.find_all('event'):
+                    start_time = times[event['start']]
+                    end_time = times[event['end']]
+                    duration_seconds = end_time - start_time
+                    if duration_seconds > 0.0:
+                        transcript_text = event.get_text()
+                        cursor.execute(
+                            "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
+                            [text_source_id, 1, True]
+                        )
+                        element_id_1 = get_last_insert_id(cursor)
+                        cursor.execute(
+                            "insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
+                            [audio_source_id, 1, True]
+                        )
+                        element_id_2 = get_last_insert_id(cursor)
+                        cursor.execute(
+                            "insert into data_tuple (data_element_id_1,data_element_id_2,type)values (%s,%s,%s)",
+                            [element_id_1, element_id_2, "TEXT_AUDIO"]
+                        )
+                        # TODO for now we just insert everything as standard german
+                        cursor.execute(
+                            "insert into text ( dialect_id,  data_element_id, text)values (%s, %s, %s)",
+                            [27, element_id_1, transcript_text]
+                        )
+                        cursor.execute(
+                            "insert into audio (dialect_id,data_element_id,audio_start,audio_end,path)values (%s,%s,%s,%s,%s)",
+                            [27, element_id_2, start_time, end_time, 'PLACEHOLDER']
+                        )
 
-                                text_audio_id = get_last_insert_id(cursor)
-                                # TODO test if audio path is correct etc.
-                                audio_path_to_file = os.path.join("text_audio", f'{text_audio_id}.flac')
-                                cursor.execute('update audio set path = %s where id = %s',
-                                               [audio_path_to_file, text_audio_id])
-                                f_wave.setpos(int(start_time * f_wave.getframerate()))
-                                audio_bytes = f_wave.readframes(int(duration_seconds * f_wave.getframerate()))
-                                audio_segment = AudioSegment(
-                                    data=audio_bytes,
-                                    sample_width=f_wave.getsampwidth(),
-                                    frame_rate=f_wave.getframerate(),
-                                    channels=f_wave.getnchannels(),
-                                )
-                                audio_segment = audio_segment.set_channels(1)
-                                audio_segment.export(os.path.join(base_dir, audio_path_to_file),
-                                                     format='flac')
-                            else:
-                                logging.warning(
-                                    f"skipping event with start={event['start']} because its duration of {duration_seconds} is <= 0.0.")
+                        text_audio_id = get_last_insert_id(cursor)
+                        audio_path_to_file = os.path.join("text_audio", f'{text_audio_id}.flac')
+                        cursor.execute('update audio set path = %s where id = %s',
+                                       [audio_path_to_file, text_audio_id])
+                        f_wave.setpos(int(start_time * f_wave.getframerate()))
+                        audio_bytes = f_wave.readframes(int(duration_seconds * f_wave.getframerate()))
+                        audio_segment = AudioSegment(
+                            data=audio_bytes,
+                            sample_width=f_wave.getsampwidth(),
+                            frame_rate=f_wave.getframerate(),
+                            channels=f_wave.getnchannels(),
+                        )
+                        audio_segment = audio_segment.set_channels(1)
+                        audio_segment.export(os.path.join(base_dir, audio_path_to_file),
+                                             format='flac')
                     else:
-                        logging.warning(f'skipping utterances of speaker {id} because no language is set.')
-
-                else:
-                    logging.warning(f"skipping tier {tier['id']} because no speaker is set.")
-
+                        logging.warning(
+                            f"skipping event with start={event['start']} because its duration of {duration_seconds} is <= 0.0.")
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -185,6 +130,5 @@ def extract_data_to_db(folderNumber: str):
         connection.close()
 
 
-# TODO test once everything is ready
 if __name__ == '__main__':
     search_directories()

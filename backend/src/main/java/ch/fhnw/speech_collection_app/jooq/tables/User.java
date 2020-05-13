@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = 1038244234;
+    private static final long serialVersionUID = 266751886;
 
     public static final User USER = new User();
 
@@ -59,13 +59,13 @@ public class User extends TableImpl<UserRecord> {
 
     public final TableField<UserRecord, UserLicence> LICENCE = createField(DSL.name("licence"), org.jooq.impl.SQLDataType.VARCHAR(8).defaultValue(org.jooq.impl.DSL.inline("'PUBLIC'", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.UserLicence.class), this, "");
 
-    public final TableField<UserRecord, UserAge> AGE = createField(DSL.name("age"), org.jooq.impl.SQLDataType.VARCHAR(11).defaultValue(org.jooq.impl.DSL.inline("'NONE'", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.UserAge.class), this, "");
+    public final TableField<UserRecord, UserAge> AGE = createField(DSL.name("age"), org.jooq.impl.SQLDataType.VARCHAR(4).defaultValue(org.jooq.impl.DSL.inline("'NONE'", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.UserAge.class), this, "");
 
-    public final TableField<UserRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<UserRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public final TableField<UserRecord, Long> DIALECT_ID = createField(DSL.name("dialect_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
-    public final TableField<UserRecord, Boolean> NOT_CH = createField(DSL.name("not_CH"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<UserRecord, Boolean> NOT_CH = createField(DSL.name("not_CH"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public final TableField<UserRecord, String> ZIP_CODE = createField(DSL.name("zip_code"), org.jooq.impl.SQLDataType.VARCHAR(45).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 

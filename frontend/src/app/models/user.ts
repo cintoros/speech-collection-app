@@ -22,12 +22,12 @@ export class User {
   licence: Licence;
   age: UserAge;
   zipCode: string;
-  notCH: boolean;
+  notCh: boolean;
   lastOnline: Date;
 
 
   constructor(id: number, firstName: string, lastName: string, email: string, username: string, password: string, dialectId: number,
-              sex: Sex, licence: Licence, age: UserAge, zipCode: string, notCH: boolean, lastOnline: Date) {
+              sex: Sex, licence: Licence, age: UserAge, zipCode: string, notCh: boolean, lastOnline: Date) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -39,7 +39,7 @@ export class User {
     this.licence = licence;
     this.age = age;
     this.zipCode = zipCode;
-    this.notCH = notCH;
+    this.notCh = notCh;
     this.lastOnline = lastOnline;
   }
 

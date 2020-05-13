@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Audio implements Serializable {
 
-    private static final long serialVersionUID = 1610439639;
+    private static final long serialVersionUID = 363241167;
 
     private Long            id;
     private Long            dialectId;
@@ -25,8 +25,8 @@ public class Audio implements Serializable {
     private AudioQuality    quality;
     private AudioNoiseLevel noiseLevel;
     private String          browserVersion;
-    private String          audioStart;
-    private String          audioEnd;
+    private Double          audioStart;
+    private Double          audioEnd;
 
     public Audio() {}
 
@@ -50,8 +50,8 @@ public class Audio implements Serializable {
         AudioQuality    quality,
         AudioNoiseLevel noiseLevel,
         String          browserVersion,
-        String          audioStart,
-        String          audioEnd
+        Double          audioStart,
+        Double          audioEnd
     ) {
         this.id = id;
         this.dialectId = dialectId;
@@ -125,21 +125,19 @@ public class Audio implements Serializable {
         this.browserVersion = browserVersion;
     }
 
-    @Size(max = 65535)
-    public String getAudioStart() {
+    public Double getAudioStart() {
         return this.audioStart;
     }
 
-    public void setAudioStart(String audioStart) {
+    public void setAudioStart(Double audioStart) {
         this.audioStart = audioStart;
     }
 
-    @Size(max = 65535)
-    public String getAudioEnd() {
+    public Double getAudioEnd() {
         return this.audioEnd;
     }
 
-    public void setAudioEnd(String audioEnd) {
+    public void setAudioEnd(Double audioEnd) {
         this.audioEnd = audioEnd;
     }
 

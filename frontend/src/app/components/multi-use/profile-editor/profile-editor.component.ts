@@ -23,6 +23,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   dialects: Dialect[] = [];
   private userCopy: User;
   private zV = [Validators.required, Validators.pattern('[0-9]{4}'), Validators.minLength(4), Validators.maxLength(4)];
+  private oldDialectId: number;
 
   constructor(
     private formBuilder: FormBuilder, private snackBarService: SnackBarService, private httpClient: HttpClient,
@@ -46,7 +47,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
       sex: [this.user.sex, [Validators.required]],
       age: [this.user.age, [Validators.required]],
       licence: [this.user.licence, [Validators.required]],
-      notCH: [this.user.notCH, []]
+      notCH: [this.user.notCh, []]
     };
     if (this.isNewUser) {
       cc.password = ['', Validators.compose([
@@ -57,7 +58,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     }
     this.registerForm = this.formBuilder.group(cc);
     this.userCopy = JSON.parse(JSON.stringify(this.user));
-
+    this.oldDialectId = this.userCopy.dialectId;
 
     this.registerForm.controls.notCH.valueChanges
       .subscribe(notCH => {
@@ -81,20 +82,30 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.registerForm) {
       this.checkDisabled();
+      // update dialect id in case it has been changed by the backend
+      if (this.user.dialectId !== this.oldDialectId) {
+        this.oldDialectId = this.user.dialectId;
+        this.registerForm.controls.canton.setValue(this.user.dialectId);
+      }
     }
   }
 
   register(): void {
     // we need to deep copy the object to prevent updating the object inside the observables
-    const user = JSON.parse(JSON.stringify(this.user));
-    user.firstName = this.registerForm.controls.firstName.value;
-    user.lastName = this.registerForm.controls.lastName.value;
-    user.email = this.registerForm.controls.email.value;
-    user.username = this.registerForm.controls.username.value;
-    user.password = this.registerForm.controls.password.value;
-    user.zipCode = this.registerForm.controls.zipCode.value;
-    user.canton = this.registerForm.controls.canton.value;
-    user.notCH = this.registerForm.controls.notCH.value;
+    const firstName = this.registerForm.controls.firstName.value;
+    const lastName = this.registerForm.controls.lastName.value;
+    const email = this.registerForm.controls.email.value;
+    const username = this.registerForm.controls.username.value;
+    const password = this.registerForm.controls.password.value;
+    const zipCode = this.registerForm.controls.zipCode.value;
+    const dialectId = this.registerForm.controls.canton.value;
+    const sex = this.registerForm.controls.sex.value;
+    const licence = this.registerForm.controls.licence.value;
+    const age = this.registerForm.controls.age.value;
+    const notCh = this.registerForm.controls.notCH.value;
+    const user: User = new User(this.user.id, firstName, lastName, email, username, password, dialectId, sex, licence, age, zipCode, notCh,
+      undefined);
+
     if (this.registerForm.valid) {
       if (this.isNewUser) {
         this.httpClient.post(environment.url + 'public/register', user).subscribe(() => {

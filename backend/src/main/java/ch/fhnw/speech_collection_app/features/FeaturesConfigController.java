@@ -14,7 +14,6 @@ public class FeaturesConfigController {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    //TODO add features per user_group for example optional swiss german text translation to recording & image recording
     @GetMapping("/api/public/features")
     public SpeechCollectionAppConfig.Features getProperties() {
         return speechCollectionAppConfig.getFeatures();

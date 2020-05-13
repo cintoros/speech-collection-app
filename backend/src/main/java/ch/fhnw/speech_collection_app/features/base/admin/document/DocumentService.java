@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -73,9 +74,10 @@ public class DocumentService {
                 source.setUserGroupId(groupId);
                 source.store();
                 var id = source.getId();
-                var path1 = speechCollectionAppConfig.getBasePath().resolve("original_text/" + id + ".bin");
-                Files.write(path1, file.getBytes());
-                source.setPathToRawFile(path1.toString());
+                var rawFilePath = Paths.get("original_text", id + ".bin");
+                source.setPathToRawFile(rawFilePath.toString());
+                rawFilePath = speechCollectionAppConfig.getBasePath().resolve(rawFilePath);
+                Files.write(rawFilePath, file.getBytes());
                 source.store();
 
                 Files.writeString(path.resolve(id + ".txt"), text, StandardCharsets.UTF_8);
@@ -96,19 +98,19 @@ public class DocumentService {
         }
     }
 
-    public void deleteElement(long groupId, long sourceId, long elementId) {
+    public void deleteDataElement(long groupId, long sourceId, long dataElementId) {
         isAllowed(groupId);
         dslContext.delete(DATA_ELEMENT)
-                .where(DATA_ELEMENT.ID.eq(elementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
+                .where(DATA_ELEMENT.ID.eq(dataElementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
                 .execute();
     }
 
-    public List<TextElementDto> getTextElement(long groupId, long originalTextId) {
+    public List<TextElementDto> getTextElement(long groupId, long dataElementId) {
         isAllowed(groupId);
         return dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
                 TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
-                .where(DATA_ELEMENT.SOURCE_ID.eq(originalTextId))
+                .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
                 .fetchInto(TextElementDto.class);
     }
 
@@ -119,7 +121,6 @@ public class DocumentService {
                 .execute();
     }
 
-    //TODO maybe add an endpoint for imported transcripts, or just add a general endpoint to view all elements/tuples.
     public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
         return dslContext.selectFrom(SOURCE)

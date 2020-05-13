@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Audio extends TableImpl<AudioRecord> {
 
-    private static final long serialVersionUID = -1786008932;
+    private static final long serialVersionUID = 967711132;
 
     public static final Audio AUDIO = new Audio();
 
@@ -55,9 +55,9 @@ public class Audio extends TableImpl<AudioRecord> {
 
     public final TableField<AudioRecord, String> BROWSER_VERSION = createField(DSL.name("browser_version"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
-    public final TableField<AudioRecord, String> AUDIO_START = createField(DSL.name("audio_start"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+    public final TableField<AudioRecord, Double> AUDIO_START = createField(DSL.name("audio_start"), org.jooq.impl.SQLDataType.FLOAT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.FLOAT)), this, "");
 
-    public final TableField<AudioRecord, String> AUDIO_END = createField(DSL.name("audio_end"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+    public final TableField<AudioRecord, Double> AUDIO_END = createField(DSL.name("audio_end"), org.jooq.impl.SQLDataType.FLOAT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.FLOAT)), this, "");
 
     public Audio() {
         this(DSL.name("audio"), null);
@@ -146,7 +146,7 @@ public class Audio extends TableImpl<AudioRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, String, String> fieldsRow() {
+    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 }

@@ -70,11 +70,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Long getLoggedInUserId() {
-        return getLoggedInUser().user.getId();
+        return getLoggedInUser().getUser().getId();
     }
 
     public Long getLoggedInUserDialectId() {
-        return getLoggedInUser().user.getDialectId();
+        return getLoggedInUser().getUser().getDialectId();
     }
 
     public boolean isAllowedOnProject(long userGroupId, boolean checkAdminPermission) {
@@ -97,7 +97,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void putUser(User user) {
         if (!getLoggedInUserId().equals(user.getId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        user.setEnabled(true);
+        checkDialect(user);
         dslContext.newRecord(USER, user).update();
+        //on a production server we need to update the cached spring principal
+        getLoggedInUser().setUser(user);
     }
 
     public void putPassword(ChangePassword changePassword) {
@@ -110,16 +114,23 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
+    /**
+     * check if the dialect is set if not it is selected using the zip code
+     */
+    private void checkDialect(User user) {
+        if (user.getDialectId() == null) {
+            var id = dslContext.selectFrom(DIALECT)
+                    .where(DIALECT.COUNTY_ID.eq(zipCodes.get(user.getZipCode())))
+                    .fetchOptional(DIALECT.ID).orElse(1L);
+            user.setDialectId(id);
+        }
+    }
+
     public void register(User user) {
+        checkDialect(user);
         UserRecord userRecord = dslContext.newRecord(USER, user);
         userRecord.setPassword(passwordEncoder.encode(userRecord.getPassword()));
         userRecord.setEnabled(false);
-        if (userRecord.getDialectId() == null) {
-            var id = dslContext.selectFrom(DIALECT)
-                    .where(DIALECT.COUNTY_ID.eq(zipCodes.get(userRecord.getZipCode())))
-                    .fetchOptional(DIALECT.ID).orElse(1L);
-            userRecord.setDialectId(id);
-        }
         userRecord.store();
         //add user to public group
         dslContext.batchInsert(new UserGroupRoleRecord(null, UserGroupRoleRole.USER, userRecord.getId(), 1L)).execute();
