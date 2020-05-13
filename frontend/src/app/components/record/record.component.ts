@@ -88,6 +88,8 @@ export class RecordComponent implements OnInit {
         this.audioChunks = [];
         this.blobUrl = undefined;
         this.snackBarService.openMessage("Successfully uploaded recording");
+        this.isTranslated = false;
+        this.translatedText = "";
         this.getNext();
       });
   }
@@ -96,6 +98,8 @@ export class RecordComponent implements OnInit {
     const text = new TextDto(-1, false, this.translatedText);
     this.isTranslated = true;
     this.recording_sentence = this.translatedText;
+
+    //TODO implement
   }
 
   private() {
