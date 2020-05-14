@@ -20,6 +20,11 @@ public class DocumentRestApiController {
         documentService.postDocumentSource(groupId, domainId, files, documentLicence);
     }
 
+    @PostMapping("image")
+    public void postImageSource(@PathVariable long groupId, @RequestParam long domainId, @RequestParam MultipartFile[] files, @RequestParam String documentLicence) {
+        documentService.postImageSource(groupId, domainId, files, documentLicence);
+    }
+
     @GetMapping
     public List<Source> getDocumentSource(@PathVariable long groupId) {
         return documentService.getDocumentSource(groupId);

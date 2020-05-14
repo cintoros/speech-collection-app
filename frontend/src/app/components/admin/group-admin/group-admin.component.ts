@@ -33,7 +33,7 @@ export class GroupAdminComponent implements OnInit {
     this.documentLicence = localStorage.getItem('documentLicence');
   }
 
-  handleFileInput(fileList: FileList): void {
+  handleDocumentUpload(fileList: FileList): void {
     const formData = new FormData();
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < fileList.length; i++) {
@@ -45,6 +45,22 @@ export class GroupAdminComponent implements OnInit {
     // do not upload anything in case the input was canceled after a previous upload.
     if (fileList.length > 0) {
       this.httpClient.post(`${this.baseUrl}source/`, formData).subscribe(() => {
+      });
+    }
+  }
+
+  handleImageUpload(fileList: FileList) {
+    const formData = new FormData();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < fileList.length; i++) {
+      formData.append('files', fileList[i], fileList[i].name);
+    }
+    formData.append('domainId', this.selectedDomain.id.toFixed(0));
+    formData.append('documentLicence', this.documentLicence);
+    localStorage.setItem('documentLicence', this.documentLicence);
+    // do not upload anything in case the input was canceled after a previous upload.
+    if (fileList.length > 0) {
+      this.httpClient.post(`${this.baseUrl}source/image`, formData).subscribe(() => {
       });
     }
   }

@@ -189,6 +189,15 @@ public class UserGroupService {
         speechCollectionAppConfig.getBasePath().resolve(path));
   }
 
+    public byte[] getImage(long groupId, long dataElementId) throws IOException {
+        checkDataElement(groupId, dataElementId);
+        var path = dslContext.selectFrom(IMAGE)
+                .where(IMAGE.DATA_ELEMENT_ID.eq(dataElementId))
+                .fetchOne(IMAGE.PATH);
+        return Files.readAllBytes(
+                speechCollectionAppConfig.getBasePath().resolve(path));
+    }
+
   public void postCheckedDataElement(long groupId, long dataElementId,
                                      CheckedDataElementType type) {
     checkDataElement(groupId, dataElementId);
