@@ -62,8 +62,7 @@ public class UserGroupService {
     tuple.store();
   }
 
-  public long postExcerpt(long groupId, TextDto received_text)
-      throws IOException {
+  public long postExcerpt(long groupId, TextDto received_text) {
     checkAllowed(groupId);
     var element = dslContext.newRecord(DATA_ELEMENT);
     element.setFinished(true);
@@ -79,9 +78,9 @@ public class UserGroupService {
     text.store();
 
     var tuple = dslContext.newRecord(DATA_TUPLE);
-    //FIXME this is the false id
     tuple.setDataElementId_1(received_text.getId());
-    tuple.setDataElementId_2(text.getId());
+    tuple.setDataElementId_2(element.getId());
+    tuple.setFinished(true);
     tuple.setType(DataTupleType.TEXT_TEXT);
     tuple.store();
 
