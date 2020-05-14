@@ -52,6 +52,11 @@ public class UserGroupRestApiController {
     return userGroupService.getExcerpt(groupId);
   }
 
+    @GetMapping("image_dto")
+    public ImageDto getImageDto(@PathVariable long groupId) {
+        return userGroupService.getImageDto(groupId);
+    }
+
   @PostMapping("occurrence/check")
   public void
   postCheckedOccurrence(@PathVariable long groupId,
