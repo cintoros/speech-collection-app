@@ -197,6 +197,7 @@ public class UserGroupService {
                 .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT))
                         .le(speechCollectionAppConfig.getMinNumChecks())
                         .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
+                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO)))
                         .and(DATA_TUPLE.FINISHED.isFalse())
                         .and(DATA_TUPLE.ID.notIn(
                                 dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
