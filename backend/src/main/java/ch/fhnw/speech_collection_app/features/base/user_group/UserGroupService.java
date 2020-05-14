@@ -79,6 +79,7 @@ public class UserGroupService {
     text.store();
 
     var tuple = dslContext.newRecord(DATA_TUPLE);
+    //FIXME this is the false id
     tuple.setDataElementId_1(received_text.getId());
     tuple.setDataElementId_2(text.getId());
     tuple.setType(DataTupleType.TEXT_TEXT);
@@ -144,8 +145,8 @@ public class UserGroupService {
      */
     public ImageDto getImageDto(Long groupId) {
         checkAllowed(groupId);
-        return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE)
-                .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
+        return dslContext.select(IMAGE.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE)
+                .from(IMAGE.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
                         //only show the ones that are good.
                         .and(DATA_ELEMENT.SKIPPED.lessOrEqual(3L))
