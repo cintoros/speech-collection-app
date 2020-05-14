@@ -52,6 +52,11 @@ public class UserGroupRestApiController {
     return userGroupService.getExcerpt(groupId);
   }
 
+    @GetMapping("image_dto")
+    public ImageDto getImageDto(@PathVariable long groupId) {
+        return userGroupService.getImageDto(groupId);
+    }
+
   @PostMapping("occurrence/check")
   public void
   postCheckedOccurrence(@PathVariable long groupId,
@@ -71,4 +76,10 @@ public class UserGroupRestApiController {
                          @PathVariable long dataElementId) throws IOException {
     return userGroupService.getAudio(groupId, dataElementId);
   }
+
+    @GetMapping(value = "image/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseBody
+    public byte[] getImage(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
+        return userGroupService.getImage(groupId, dataElementId);
+    }
 }

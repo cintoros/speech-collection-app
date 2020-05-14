@@ -98,6 +98,48 @@ public class DocumentService {
         }
     }
 
+    public void postImageSource(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
+        isAllowed(groupId);
+        try {
+            Files.createDirectories(speechCollectionAppConfig.getBasePath().resolve("images"));
+        } catch (IOException e) {
+            logger.error("unexpected Exception: ", e);
+        }
+        var source = dslContext.newRecord(SOURCE);
+        source.setUserGroupId(groupId);
+        source.setDomainId(domainId);
+        source.setUserId(customUserDetailsService.getLoggedInUserId());
+        source.setLicence(documentLicence);
+        source.setName(documentLicence + " Images");
+        source.setUserGroupId(groupId);
+        source.store();
+        Arrays.stream(files).forEach(file -> {
+            try {
+                var element = dslContext.newRecord(DATA_ELEMENT);
+                element.setUserId(customUserDetailsService.getLoggedInUserId());
+                element.setUserGroupId(groupId);
+                element.setSourceId(source.getId());
+                element.store();
+
+                var image = dslContext.newRecord(IMAGE);
+                image.setPath("default");
+                image.setLicence(documentLicence);
+                image.setDataElementId(element.getId());
+                image.store();
+
+                var id = image.getId();
+                var rawFilePath = Paths.get("images", id + ".bin");
+                image.setPath(rawFilePath.toString());
+                image.store();
+
+                rawFilePath = speechCollectionAppConfig.getBasePath().resolve(rawFilePath);
+                Files.write(rawFilePath, file.getBytes());
+            } catch (IOException ex) {
+                logger.error("unexpected Exception: ", ex);
+            }
+        });
+    }
+
     public void deleteDataElement(long groupId, long sourceId, long dataElementId) {
         isAllowed(groupId);
         dslContext.delete(DATA_ELEMENT)

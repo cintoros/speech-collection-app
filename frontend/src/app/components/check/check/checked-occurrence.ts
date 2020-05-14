@@ -18,4 +18,5 @@ export interface Occurrence {
   dataElementId_2: number;
   dataElementId_1: number;
   text: string;
+  imageDataElementId?: number;
 }
