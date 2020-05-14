@@ -30,7 +30,7 @@ class MicrosoftApi:
     def __init__(self):
         self.base_path = os.path.join(BASE_DIR, "data_generation", "sequentual")
         os.makedirs(name=self.base_path, exist_ok=True)
-        self.voices = ["de-CH-Karsten", "de-DE-Hedda", "de-DE-Stefan-Apollo", "de-DE-HeddaRUS"]
+        self.voices = ["de-CH-Karsten", "de-DE-Hedda", "de-DE-Stefan-Apollo", "de-AT-Michael"]
         self.voice_index = 0
         self.constructed_url = 'https://' + AZURE_APPLICATION_REGION + '.tts.speech.microsoft.com/' + 'cognitiveservices/v1'
         self.headers = {
