@@ -79,8 +79,6 @@ public class UserGroupService {
         text.setText(received_text.getText());
         text.store();
 
-        System.out.println("blub");
-
         var tuple = dslContext.newRecord(DATA_TUPLE);
         tuple.setDataElementId_1(idOfOtherDataElement);
         tuple.setDataElementId_2(element.getId());
@@ -109,14 +107,7 @@ public class UserGroupService {
 
         DataElementDto data = getDataElementDto(dataElementID);
 
-        System.out.println(dataElementID);
-        System.out.println(data);
-
-        ReturnWrapper result = new ReturnWrapper(data, text, recording, image, eType);
-
-        System.out.println(result);
-
-        return result;
+        return new ReturnWrapper(data, text, recording, image, eType);
 
     }
 

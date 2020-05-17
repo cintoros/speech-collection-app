@@ -60,6 +60,7 @@ import { CheckTextComponent } from './components/check/check/check-text/check-te
 import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol.component';
 import { MicSymbolComponent } from './components/record/mic-symbol/mic-symbol.component';
 import { AudioComponent } from './components/record/audio/audio.component';
+import { ImageComponent } from './components/record/image/image.component';
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import { AudioComponent } from './components/record/audio/audio.component';
     CheckTextComponent,
     SaveSymbolComponent,
     MicSymbolComponent,
-    AudioComponent
+    AudioComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,

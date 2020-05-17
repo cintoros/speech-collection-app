@@ -14,8 +14,6 @@ export class RecordComponent implements OnInit {
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
 
-  temp: SafeUrl;
-
   // Depending on the current mode only two
   // of the fields below will be != null
   textDto1: TextDto = null;
@@ -65,7 +63,6 @@ export class RecordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getImage();
     this.getNext();
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       // @ts-ignore
@@ -149,13 +146,6 @@ export class RecordComponent implements OnInit {
   isReady = () => this.audioChunks.length > 0;
   private check = (type: CheckedDataElementType) =>
     this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${type}`, {});
-
-  private getImage() {
-    console.log("hallo");
-    this.httpClient.get(`${environment.url}user_group/${this.groupId}/image/26`, { responseType: "blob" }).subscribe((resp) => {
-      this.temp = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(resp));
-    });
-  }
 
   private getNext() {
     const formData = new FormData();
