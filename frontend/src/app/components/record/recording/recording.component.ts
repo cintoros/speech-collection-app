@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, Input, Output, EventEmitter } from "@angular/core";
 import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { Subscription, Observable, timer } from "rxjs";
 import { CheckedDataElementType } from "src/app/models/checked-data-element-type";
@@ -17,6 +17,7 @@ export class RecordingComponent implements OnInit {
   isRecording = false; //is true when there is an active recording
 
   @Input() otherDataElement: number;
+  @Output() uploaded = new EventEmitter<string>();
 
   private audioChunks = [];
   // @ts-ignore
@@ -75,7 +76,7 @@ export class RecordingComponent implements OnInit {
     this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
       this.audioChunks = [];
       this.blobUrl = undefined;
-      // TODO call parent
+      this.uploaded.emit("complete");
     });
   }
 }
