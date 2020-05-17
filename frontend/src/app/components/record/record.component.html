@@ -1,165 +1,153 @@
-<div *ngIf="textDto">
-  <p class="card">
-    Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speicher
-    <span class="glyphicon glyphicon-floppy-disk"></span>
-    Symbol.
-    <br />
-    Klicke danach auf das Mikrofon
-    <svg
-      class="bi bi-mic"
-      width="1em"
-      height="1em"
-      viewBox="0 0 16 16"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M3.5 6.5A.5.5 0 014 7v1a4 4 0 008 0V7a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V15h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 013 8V7a.5.5 0 01.5-.5z"
-        clip-rule="evenodd"
-      />
-      <path
-        fill-rule="evenodd"
-        d="M10 8V3a2 2 0 10-4 0v5a2 2 0 104 0zM8 0a3 3 0 00-3 3v5a3 3 0 006 0V3a3 3 0 00-3-3z"
-        clip-rule="evenodd"
-      />
-    </svg>
-    und lies den schweizerdeutschen Satz vor.
-
-    {{ translatedText.length }}
-  </p>
-
-  <mat-card class="center">
-    <app-excerpt
-      [excerpt_text]="textDto?.text"
-      [can_Edit]="false"
-      [is_Deactivated]="isTranslated"
-    ></app-excerpt>
-
-    <app-excerpt
-      [excerpt_text]="recording_sentence"
-      [can_Edit]="!isTranslated"
-      [is_Deactivated]="false"
-      (input)="translatedText = $event.target.value"
-    ></app-excerpt>
-    <br />
-
-    {{ test }}
-
-    <br />
-
-    <button
-      (click)="submit_text_text()"
-      type="button"
-      class="btn"
-      [class]="isTranslated ? 'btn-success' : 'btn-primary'"
-    >
-      <span
-        class="glyphicon"
-        [class]="
-          isTranslated
-            ? 'glyphicon-floppy-saved'
-            : 'glyphicon glyphicon-floppy-disk'
-        "
-      ></span>
-    </button>
-  </mat-card>
-
-  <div class="margin">
-    <div *ngIf="isTranslated">
-      <br />
-      <audio [src]="blobUrl" controls></audio>
-      <br />
-      <br />
-      <button
-        (click)="startRecord()"
-        *ngIf="!this.isRecording"
-        mat-raised-button
-        title="Start recording"
-        class="btn btn-danger"
-      >
-        <svg
-          class="bi bi-mic"
-          width="1em"
-          height="1em"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M3.5 6.5A.5.5 0 014 7v1a4 4 0 008 0V7a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V15h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 013 8V7a.5.5 0 01.5-.5z"
-            clip-rule="evenodd"
-          />
-          <path
-            fill-rule="evenodd"
-            d="M10 8V3a2 2 0 10-4 0v5a2 2 0 104 0zM8 0a3 3 0 00-3 3v5a3 3 0 006 0V3a3 3 0 00-3-3z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
+<div *ngIf="dataElement1">
+    <!-- Instructions-->
+    <div class="center">
+        <!-- Case: Text-Text -->
+        <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'TEXT'">
+            Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speichersymbol
+            <app-save-symbol></app-save-symbol>.
+        </span>
+        <!-- Case: Text-Recording -->
+        <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && !withTranslation">
+            Überlege dir einen schweizerdeutschen Satz und Spreche ihn wenn du bereit bist ein, indem du das Mikrofon
+            Symbol
+            <app-mic-symbol></app-mic-symbol> drückst.
+        </span>
+        <!-- Case: Text-Text-Recording -->
+        <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && withTranslation">
+            Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speichersymbol
+            <app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofon Symbol
+            <app-mic-symbol></app-mic-symbol> und lies den übersetzten Satz laut vor.
+        </span>
+        <!-- Case: Recording-Text -->
+        <span *ngIf="this.elementType1 === 'AUDIO' && this.elementType2 === 'TEXT'">
+            Höre dir die Aufnahme an, indem du die auf Play klickst, und transkribiere nachher die Aufnahme.
+        </span>
+        <!-- Case: Image-Recording -->
+        <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && !withTranslation">
+            Überlege dir einen zum Bild passenden schweizerdeutschen Satz. Spreche ihn, sobald du bereit bist ein, indem
+            du auf das Mikrofon Symbol <app-mic-symbol></app-mic-symbol> klickst.
+        </span>
+        <!-- Case: Image-Text -->
+        <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'TEXT'">
+            Schreibe einen passenden schweizerdeutschen Satz und klicke auf das Speicher Symbol
+            <app-save-symbol></app-save-symbol>.
+        </span>
+        <!-- Case: Image-Text-Recording -->
+        <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && withTranslation">
+            Schreibe einen passenden schweizerdeutschen Satz und klicke auf das Speicher Symbol
+            <app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofon Symbol
+            <app-mic-symbol></app-mic-symbol> und lies den Satz laut vor.
+        </span>
     </div>
 
     <br />
-    <br />
-    <button
-      (click)="stopRecord()"
-      *ngIf="this.isRecording"
-      mat-raised-button
-      title="Stop recording"
-    >
-      <mat-icon>stop</mat-icon>
-      <span>&nbsp;Stop</span>
-    </button>
-    <button (click)="skip()" mat-raised-button title="Skip">
-      <mat-icon>skip_next</mat-icon>
-      <span>&nbsp;Skip</span>
-    </button>
-    <button
-      *ngIf="false"
-      (click)="sentenceError()"
-      mat-raised-button
-      title="Mark as not a sentence"
-    >
-      <mat-icon>delete</mat-icon>
-      <span>&nbsp;Not a sentence</span>
-    </button>
-    <button
-      *ngIf="false"
-      (click)="private()"
-      [disabled]="textDto.isPrivate"
-      mat-raised-button
-      title="Mark as private"
-    >
-      <mat-icon>lock</mat-icon>
-      <span>&nbsp;Sensitive data</span>
-    </button>
-    <button
-      (click)="submit_text_recording()"
-      *ngIf="isReady()"
-      color="primary"
-      mat-raised-button
-      title="Submit your recording"
-    >
-      Submit
-    </button>
-    <span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>
-  </div>
-</div>
-<div *ngIf="!textDto" style="height: calc(100% - 100px);">
-  <div style="height: calc(100% - 90px);">
-    <mat-card
-      style="
-        margin: 15px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div style="font-weight: bold; font-size: 36px;">
-        No more Data available
-      </div>
+
+    <!-- The Two Data Elements -->
+    <mat-card class="center">
+        <img [src]="temp" alt="blub" />
+
+        <app-excerpt [excerpt_text]="textDto1.text" [can_Edit]="false" [is_Deactivated]="isTranslated"></app-excerpt>
+
+        <app-excerpt
+            [excerpt_text]="recording_sentence"
+            [can_Edit]="!isTranslated"
+            [is_Deactivated]="false"
+            (input)="translatedText = $event.target.value"
+        ></app-excerpt>
+        <br />
+
+        <br />
+
+        <button
+            (click)="submit_text_text()"
+            type="button"
+            class="btn"
+            [class]="isTranslated ? 'btn-success' : 'btn-primary'"
+        >
+            <span
+                class="glyphicon"
+                [class]="isTranslated ? 'glyphicon-floppy-saved' : 'glyphicon glyphicon-floppy-disk'"
+            ></span>
+        </button>
     </mat-card>
-  </div>
+
+    <div class="margin">
+        <div *ngIf="isTranslated">
+            <br />
+            <audio [src]="blobUrl" controls></audio>
+            <br />
+            <br />
+            <button
+                (click)="startRecord()"
+                *ngIf="!this.isRecording"
+                mat-raised-button
+                title="Start recording"
+                class="btn btn-danger"
+            >
+                <svg
+                    class="bi bi-mic"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M3.5 6.5A.5.5 0 014 7v1a4 4 0 008 0V7a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V15h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 013 8V7a.5.5 0 01.5-.5z"
+                        clip-rule="evenodd"
+                    />
+                    <path
+                        fill-rule="evenodd"
+                        d="M10 8V3a2 2 0 10-4 0v5a2 2 0 104 0zM8 0a3 3 0 00-3 3v5a3 3 0 006 0V3a3 3 0 00-3-3z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+            </button>
+        </div>
+
+        <br />
+        <br />
+        <button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
+            <mat-icon>stop</mat-icon>
+            <span>&nbsp;Stop</span>
+        </button>
+        <button (click)="skip()" mat-raised-button title="Skip">
+            <mat-icon>skip_next</mat-icon>
+            <span>&nbsp;Skip</span>
+        </button>
+        <button *ngIf="false" (click)="sentenceError()" mat-raised-button title="Mark as not a sentence">
+            <mat-icon>delete</mat-icon>
+            <span>&nbsp;Not a sentence</span>
+        </button>
+        <button
+            *ngIf="false"
+            (click)="private()"
+            [disabled]="textDto.isPrivate"
+            mat-raised-button
+            title="Mark as private"
+        >
+            <mat-icon>lock</mat-icon>
+            <span>&nbsp;Sensitive data</span>
+        </button>
+        <button
+            (click)="submit_text_recording()"
+            *ngIf="isReady()"
+            color="primary"
+            mat-raised-button
+            title="Submit your recording"
+        >
+            Submit
+        </button>
+        <span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>
+    </div>
+</div>
+<div *ngIf="!dataElement1" style="height: calc(100% - 100px);">
+    <div style="height: calc(100% - 90px);">
+        <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <div style="font-weight: bold; font-size: 36px;">
+                No more Data available
+            </div>
+        </mat-card>
+    </div>
 </div>

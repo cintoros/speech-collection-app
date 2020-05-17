@@ -1,11 +1,15 @@
 export class TextDto {
   id: number;
-  isPrivate: boolean;
+  dialectId: number;
+  dataElementId: number;
+  isSentenceError: boolean;
   text: string;
 
-  constructor(id: number, isPrivate: boolean, text: string) {
-    this.id = id;
-    this.isPrivate = isPrivate;
-    this.text = text;
+  constructor($id: number, $dialectId: number, $dataElementId: number, $isSentenceError: boolean, $text: string) {
+    this.id = $id;
+    this.dialectId = $dialectId;
+    this.dataElementId = $dataElementId;
+    this.isSentenceError = $isSentenceError;
+    this.text = $text;
   }
 }

@@ -1,0 +1,6 @@
+<button (click)="togglePlay()" *ngIf="!isPlaying" class="btn btn-primary" mat-raised-button>
+    <mat-icon>play_arrow</mat-icon>
+</button>
+<button (click)="togglePlay()" *ngIf="isPlaying" class="btn btn-secondary" mat-raised-button>
+    <mat-icon>pause</mat-icon>
+</button>

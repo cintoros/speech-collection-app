@@ -1,101 +1,104 @@
-<div *ngIf="occurrences.length === 0" style="height: calc(100% - 100px);">
-  <div style="height: calc(100% - 90px);">
-    <mat-card
-      style="
-        margin: 15px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div style="font-weight: bold; font-size: 36px;">
-        No more Data available
-      </div>
-    </mat-card>
-  </div>
-</div>
 <div *ngIf="occurrences.length > 0">
-  <p class="card">
-    Stimmt der Satz mit der Aufnahme überein? Dann klicke auf das
-    <span class="glyphicon glyphicon-ok-sign"></span> Symbol. <br />
-    Klicke sonst auf das
-    <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
-  </p>
+    <!-- The help text -->
+    <p class="card">
+        Stimmt
+        <span *ngIf="tuple.type1 === 'TEXT'">der Satz</span>
+        <span *ngIf="tuple.type1 === 'AUDIO'">die Aufnahme</span>
+        <span *ngIf="tuple.type1 === 'IMAGE'">das Bild</span>
+        mit
+        <span *ngIf="tuple.type2 === 'TEXT'">dem Satz</span>
+        <span *ngIf="tuple.type2 === 'AUDIO'">der Aufnahme</span>
+        <span *ngIf="tuple.type2 === 'IMAGE'">dem Bild</span>
+        überein? Dann klicke auf das
+        <span class="glyphicon glyphicon-ok-sign"></span> Symbol. <br />
+        Klicke sonst auf das
+        <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
+    </p>
 
-  <mat-card class="center">
-    <div class="excerpt_text">{{ occurrences[occurrences_idx].text }}</div>
+    <!-- The card component -->
+    <mat-card class="center">
+        <div class="excerpt_text">{{ occurrences[occurrences_idx].text }}</div>
+
+        <br />
+        <br />
+        <button
+            (click)="togglePlay()"
+            *ngIf="!isPlaying"
+            class="check-navigation-button btn btn-primary"
+            mat-raised-button
+        >
+            <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button
+            (click)="togglePlay()"
+            *ngIf="isPlaying"
+            class="check-navigation-button btn btn-secondary"
+            mat-raised-button
+        >
+            <mat-icon>pause</mat-icon>
+        </button>
+    </mat-card>
+
+    <br />
+
+    <div id="navigation-button-container">
+        <button
+            (click)="setCheckedType(checkedOccurrenceLabel.WRONG)"
+            [disabled]="!this.isReady"
+            class="check-navigation-button btn btn-danger"
+            mat-raised-button
+        >
+            <span class="glyphicon glyphicon-remove-sign"></span>
+        </button>
+
+        <button
+            (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)"
+            [disabled]="!this.isReady"
+            mat-raised-button
+            class="btn btn-success"
+        >
+            <span class="glyphicon glyphicon-ok-sign"></span>
+        </button>
+    </div>
 
     <br />
     <br />
-    <button
-      (click)="togglePlay()"
-      *ngIf="!isPlaying"
-      class="check-navigation-button btn btn-primary"
-      mat-raised-button
-    >
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-    <button
-      (click)="togglePlay()"
-      *ngIf="isPlaying"
-      class="check-navigation-button btn btn-secondary"
-      mat-raised-button
-    >
-      <mat-icon>pause</mat-icon>
-    </button>
-  </mat-card>
 
-  <br />
-
-  <div id="navigation-button-container">
-    <button
-      (click)="setCheckedType(checkedOccurrenceLabel.WRONG)"
-      [disabled]="!this.isReady"
-      class="check-navigation-button btn btn-danger"
-      mat-raised-button
-    >
-      <span class="glyphicon glyphicon-remove-sign"></span>
-    </button>
-
-    <button
-      (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)"
-      [disabled]="!this.isReady"
-      mat-raised-button
-      class="btn btn-success"
-    >
-      <span class="glyphicon glyphicon-ok-sign"></span>
-    </button>
-  </div>
-
-  <br />
-  <br />
-
-  <div id="navigation-button-container">
-    <button
-      (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)"
-      [disabled]="!this.isReady"
-      class="check-navigation-button btn btn-secondary"
-      mat-raised-button
-    >
-      <mat-icon>skip_next</mat-icon>
-      <span>&nbsp;Skip</span>
-    </button>
-    <button
-      (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)"
-      [disabled]="!this.isReady"
-      class="check-navigation-button btn btn-secondary"
-      mat-raised-button
-    >
-      <mat-icon>delete</mat-icon>
-      <span>&nbsp;Not a sentence</span>
-    </button>
-  </div>
+    <div id="navigation-button-container">
+        <button
+            (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)"
+            [disabled]="!this.isReady"
+            class="check-navigation-button btn btn-secondary"
+            mat-raised-button
+        >
+            <mat-icon>skip_next</mat-icon>
+            <span>&nbsp;Skip</span>
+        </button>
+        <button
+            (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)"
+            [disabled]="!this.isReady"
+            class="check-navigation-button btn btn-secondary"
+            mat-raised-button
+        >
+            <mat-icon>delete</mat-icon>
+            <span>&nbsp;Not a sentence</span>
+        </button>
+    </div>
 </div>
 <br />
 <br />
 <div id="shortcut-button">
-  <a (click)="openShortcutDialog()">
-    Hotkeys
-  </a>
+    <a (click)="openShortcutDialog()">
+        Hotkeys
+    </a>
+</div>
+
+<div *ngIf="occurrences.length === 0" style="height: calc(100% - 100px);">
+    <div style="height: calc(100% - 90px);">
+        <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <div style="font-weight: bold; font-size: 36px;">
+                No more Data available
+            </div>
+        </mat-card>
+    </div>
 </div>

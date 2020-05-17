@@ -1,11 +1,15 @@
+import { ElementType } from "./element-type";
+
 export class TupleDto {
-  private dataElementId1: number;
-  private dataElementId2: number;
-  private type: TupleType;
-  private finished: number;
-  private correct: number;
-  private wrong: number;
-  private skipped: number;
+  dataElementId1: number;
+  dataElementId2: number;
+  type: TupleType;
+  finished: number;
+  correct: number;
+  wrong: number;
+  skipped: number;
+  type1: ElementType;
+  type2: ElementType;
 
   constructor(
     $dataElementId1: number,
@@ -23,6 +27,13 @@ export class TupleDto {
     this.correct = $correct;
     this.wrong = $wrong;
     this.skipped = $skipped;
+
+    if ($type == TupleType.AUDIO_AUDIO || $type == TupleType.AUDIO_TEXT) this.type1 = ElementType.AUDIO;
+    else if ($type == TupleType.TEXT_AUDIO || $type == TupleType.TEXT_TEXT) this.type1 = ElementType.TEXT;
+    else if ($type == TupleType.IMAGE_AUDIO) this.type1 = ElementType.IMAGE;
+
+    if ($type == TupleType.AUDIO_AUDIO || $type == TupleType.TEXT_AUDIO || TupleType.IMAGE_AUDIO) this.type2 = ElementType.AUDIO;
+    else if ($type == TupleType.AUDIO_TEXT || $type == TupleType.TEXT_TEXT) this.type2 = ElementType.TEXT;
   }
 }
 

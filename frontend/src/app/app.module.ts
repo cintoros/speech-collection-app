@@ -56,6 +56,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
 import { ExcerptComponent } from './components/record/excerpt/excerpt.component';
+import { CheckTextComponent } from './components/check/check/check-text/check-text.component';
+import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol.component';
+import { MicSymbolComponent } from './components/record/mic-symbol/mic-symbol.component';
+import { AudioComponent } from './components/record/audio/audio.component';
 
 
 @NgModule({
@@ -78,7 +82,11 @@ import { ExcerptComponent } from './components/record/excerpt/excerpt.component'
     EditTextAudioComponent,
     DocumentOverviewComponent,
     VerificationTokenComponent,
-    ExcerptComponent
+    ExcerptComponent,
+    CheckTextComponent,
+    SaveSymbolComponent,
+    MicSymbolComponent,
+    AudioComponent
   ],
   imports: [
     BrowserModule,
