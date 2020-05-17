@@ -69,76 +69,28 @@
         </button>
     </mat-card>
 
-    <div class="margin">
-        <div *ngIf="isTranslated">
-            <br />
-            <audio [src]="blobUrl" controls></audio>
-            <br />
-            <br />
-            <button
-                (click)="startRecord()"
-                *ngIf="!this.isRecording"
-                mat-raised-button
-                title="Start recording"
-                class="btn btn-danger"
-            >
-                <svg
-                    class="bi bi-mic"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M3.5 6.5A.5.5 0 014 7v1a4 4 0 008 0V7a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V15h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 013 8V7a.5.5 0 01.5-.5z"
-                        clip-rule="evenodd"
-                    />
-                    <path
-                        fill-rule="evenodd"
-                        d="M10 8V3a2 2 0 10-4 0v5a2 2 0 104 0zM8 0a3 3 0 00-3 3v5a3 3 0 006 0V3a3 3 0 00-3-3z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-            </button>
-        </div>
+    <br />
 
-        <br />
-        <br />
-        <button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
-            <mat-icon>stop</mat-icon>
-            <span>&nbsp;Stop</span>
-        </button>
-        <button (click)="skip()" mat-raised-button title="Skip">
-            <mat-icon>skip_next</mat-icon>
-            <span>&nbsp;Skip</span>
-        </button>
-        <button *ngIf="false" (click)="sentenceError()" mat-raised-button title="Mark as not a sentence">
-            <mat-icon>delete</mat-icon>
-            <span>&nbsp;Not a sentence</span>
-        </button>
-        <button
-            *ngIf="false"
-            (click)="private()"
-            [disabled]="textDto.isPrivate"
-            mat-raised-button
-            title="Mark as private"
-        >
-            <mat-icon>lock</mat-icon>
-            <span>&nbsp;Sensitive data</span>
-        </button>
-        <button
-            (click)="submit_text_recording()"
-            *ngIf="isReady()"
-            color="primary"
-            mat-raised-button
-            title="Submit your recording"
-        >
-            Submit
-        </button>
-        <span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>
-    </div>
+    <app-recording
+        *ngIf="true"
+        [otherDataElement]="withTranslation ? dataElement2.id : dataElement1.id"
+    ></app-recording>
+
+    <br />
+    <br />
+
+    <button (click)="skip()" mat-raised-button title="Skip">
+        <mat-icon>skip_next</mat-icon>
+        <span>&nbsp;Skip</span>
+    </button>
+    <button *ngIf="false" (click)="sentenceError()" mat-raised-button title="Mark as not a sentence">
+        <mat-icon>delete</mat-icon>
+        <span>&nbsp;Not a sentence</span>
+    </button>
+    <button *ngIf="false" (click)="private()" [disabled]="textDto.isPrivate" mat-raised-button title="Mark as private">
+        <mat-icon>lock</mat-icon>
+        <span>&nbsp;Sensitive data</span>
+    </button>
 </div>
 <div *ngIf="!dataElement1" style="height: calc(100% - 100px);">
     <div style="height: calc(100% - 90px);">

@@ -61,6 +61,7 @@ import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol
 import { MicSymbolComponent } from './components/record/mic-symbol/mic-symbol.component';
 import { AudioComponent } from './components/record/audio/audio.component';
 import { ImageComponent } from './components/record/image/image.component';
+import { RecordingComponent } from './components/record/recording/recording.component';
 
 
 @NgModule({
@@ -88,7 +89,8 @@ import { ImageComponent } from './components/record/image/image.component';
     SaveSymbolComponent,
     MicSymbolComponent,
     AudioComponent,
-    ImageComponent
+    ImageComponent,
+    RecordingComponent
   ],
   imports: [
     BrowserModule,

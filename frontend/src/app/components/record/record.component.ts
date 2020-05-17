@@ -1,8 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { Observable, Subscription, timer } from "rxjs";
-import { ExcerptComponent } from "src/app/components/record/excerpt/excerpt.component";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-record",
@@ -10,7 +7,6 @@ import { ExcerptComponent } from "src/app/components/record/excerpt/excerpt.comp
   styleUrls: ["./record.component.scss"],
 })
 export class RecordComponent implements OnInit {
-  tempWrapper: ReturnWrapper = null;
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
 
@@ -25,12 +21,6 @@ export class RecordComponent implements OnInit {
   elementType1: ElementType = null;
   elementType2: ElementType = null;
 
-  // recording fields
-  isRecording = false; //is true when there is an active recording
-  recordingQuality = RecordingQuality;
-  recordingNoiseLevel = RecordingNoiseLevel;
-  selectedQuality = RecordingQuality.INTEGRATED;
-  selectedNoiseLevel = RecordingNoiseLevel.MODERATE_NOISE;
   isPrivate = false;
 
   // text fields
@@ -42,71 +32,17 @@ export class RecordComponent implements OnInit {
   // controlfields
   withTranslation = true;
 
-  blobUrl: SafeUrl;
-
-  // @ts-ignore
-  private mediaRecorder: MediaRecorder;
-  private audioChunks = [];
   private groupId = 1;
-  private elapsedTime = 0;
-  private numberObservable: Observable<number>;
-  private subscription: Subscription;
 
-  constructor(
-    private snackBarService: SnackBarService,
-    private detector: ChangeDetectorRef,
-    private httpClient: HttpClient,
-    private domSanitizer: DomSanitizer,
-    private userGroupService: UserGroupService
-  ) {
+  constructor(private snackBarService: SnackBarService, private httpClient: HttpClient, private userGroupService: UserGroupService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
   ngOnInit() {
     this.getNext();
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      // @ts-ignore
-      this.mediaRecorder = new MediaRecorder(stream, {
-        mimeType: "audio/webm",
-      });
-      this.mediaRecorder.ondataavailable = (event) => this.audioChunks.push(event.data);
-      this.mediaRecorder.onstop = () => {
-        this.blobUrl = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.audioChunks)));
-        this.detector.detectChanges();
-      };
-    });
-    this.numberObservable = timer(0, 1000);
   }
 
-  startRecord(): void {
-    this.audioChunks = [];
-    this.mediaRecorder.start();
-    this.elapsedTime = 0;
-    this.isRecording = true;
-    this.subscription = this.numberObservable.subscribe((value) => (this.elapsedTime = value));
-  }
-
-  stopRecord(): void {
-    this.subscription.unsubscribe();
-    this.mediaRecorder.stop();
-    this.isRecording = false;
-  }
-
-  submit_text_recording(): void {
-    const recording = new RecordingDto(this.translatedText_id, this.selectedQuality, this.selectedNoiseLevel);
-    const formData = new FormData();
-    formData.append(`file`, new Blob(this.audioChunks), "audio");
-    formData.append("recording", JSON.stringify(recording));
-    this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
-      this.audioChunks = [];
-      this.blobUrl = undefined;
-      this.snackBarService.openMessage("Successfully uploaded recording");
-      this.isTranslated = false;
-      this.translatedText = "";
-      this.getNext();
-    });
-  }
-
+  /* 
   submit_text_text(): void {
     if (this.translatedText.length < 3) return;
     const text = new TextDto(-1, -1, -1, false, this.translatedText);
@@ -121,6 +57,7 @@ export class RecordComponent implements OnInit {
       this.recording_sentence = this.translatedText;
     });
   }
+  */
 
   private() {
     this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
@@ -143,7 +80,6 @@ export class RecordComponent implements OnInit {
     });
   }
 
-  isReady = () => this.audioChunks.length > 0;
   private check = (type: CheckedDataElementType) =>
     this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${type}`, {});
 
@@ -169,14 +105,12 @@ export class RecordComponent implements OnInit {
 
 import { environment } from "../../../environments/environment";
 import { CheckedDataElementType } from "../../models/checked-data-element-type";
-import { RecordingDto, RecordingNoiseLevel, RecordingQuality } from "../../models/recording-dto";
+import { RecordingDto } from "../../models/recording-dto";
 import { TextDto } from "../../models/text-dto";
-import { LoginComponent } from "../login/login.component";
 
 import { SnackBarService } from "../../services/snack-bar.service";
 import { UserGroupService } from "../../services/user-group.service";
 import { DataElementDto } from "src/app/models/data-element-dto";
 import { ImageDto } from "src/app/models/image-dto";
-import { ReturnStatement } from "@angular/compiler";
 import { ReturnWrapper } from "src/app/models/return-wrapper";
 import { ElementType } from "src/app/models/element-type";
