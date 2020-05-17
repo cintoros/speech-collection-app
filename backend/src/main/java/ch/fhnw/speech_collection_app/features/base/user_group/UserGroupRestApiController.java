@@ -24,8 +24,11 @@ public class UserGroupRestApiController {
 
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording,
-            @RequestParam MultipartFile file) throws IOException {
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file);
+            @RequestParam MultipartFile file, @RequestParam String otherDataElement,
+            @RequestParam String otherElementType) throws IOException {
+        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file,
+                objectMapper.readValue(otherDataElement, DataElementDto.class),
+                ReturnWrapper.stringToElementType(otherElementType));
     }
 
     @PostMapping("element/{dataElementId}/checked")

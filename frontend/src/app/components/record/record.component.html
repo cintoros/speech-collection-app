@@ -73,7 +73,8 @@
 
     <app-recording
         *ngIf="true"
-        [otherDataElement]="withTranslation ? dataElement2.id : dataElement1.id"
+        [otherDataElement]="withTranslation ? dataElement2 : dataElement1"
+        [otherElementType]="withTranslation ? elementType2 : elementType1"
     ></app-recording>
 
     <br />

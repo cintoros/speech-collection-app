@@ -6,6 +6,8 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { UserGroupService } from "src/app/services/user-group.service";
 import { RecordingDto, RecordingQuality, RecordingNoiseLevel } from "src/app/models/recording-dto";
+import { ElementType } from 'src/app/models/element-type';
+import { DataElementDto } from 'src/app/models/data-element-dto';
 
 @Component({
   selector: "app-recording",
@@ -16,7 +18,8 @@ export class RecordingComponent implements OnInit {
   blobUrl: SafeUrl;
   isRecording = false; //is true when there is an active recording
 
-  @Input() otherDataElement: number;
+  @Input() otherDataElement: DataElementDto;
+  @Input() otherElementType: ElementType;
   @Output() uploaded = new EventEmitter<string>();
 
   private audioChunks = [];
@@ -73,6 +76,7 @@ export class RecordingComponent implements OnInit {
     formData.append(`file`, new Blob(this.audioChunks), "audio");
     formData.append("recording", JSON.stringify(recording));
     formData.append("otherDataElement", JSON.stringify(this.otherDataElement));
+    formData.append("otherElementType", JSON.stringify(this.otherElementType));
     this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
       this.audioChunks = [];
       this.blobUrl = undefined;

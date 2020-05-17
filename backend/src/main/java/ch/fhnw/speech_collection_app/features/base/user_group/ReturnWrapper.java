@@ -12,8 +12,8 @@ public class ReturnWrapper {
     public ReturnWrapper() {
     }
 
-    public ReturnWrapper(DataElementDto dataElementDto, TextDto textDto, RecordingDto recordingDto, ImageDto imageDto,
-            ElementType elementType) {
+    public ReturnWrapper(final DataElementDto dataElementDto, final TextDto textDto, final RecordingDto recordingDto,
+            final ImageDto imageDto, final ElementType elementType) {
         this.dataElementDto = dataElementDto;
         this.textDto = textDto;
         this.recordingDto = recordingDto;
@@ -25,7 +25,7 @@ public class ReturnWrapper {
         return this.dataElementDto;
     }
 
-    public void setDataElementDto(DataElementDto dataElementDto) {
+    public void setDataElementDto(final DataElementDto dataElementDto) {
         this.dataElementDto = dataElementDto;
     }
 
@@ -33,7 +33,7 @@ public class ReturnWrapper {
         return this.textDto;
     }
 
-    public void setTextDto(TextDto textDto) {
+    public void setTextDto(final TextDto textDto) {
         this.textDto = textDto;
     }
 
@@ -41,7 +41,7 @@ public class ReturnWrapper {
         return this.recordingDto;
     }
 
-    public void setRecordingDto(RecordingDto recordingDto) {
+    public void setRecordingDto(final RecordingDto recordingDto) {
         this.recordingDto = recordingDto;
     }
 
@@ -49,7 +49,7 @@ public class ReturnWrapper {
         return this.imageDto;
     }
 
-    public void setImageDto(ImageDto imageDto) {
+    public void setImageDto(final ImageDto imageDto) {
         this.imageDto = imageDto;
     }
 
@@ -57,43 +57,43 @@ public class ReturnWrapper {
         return this.elementType;
     }
 
-    public void setElementType(ElementType elementType) {
+    public void setElementType(final ElementType elementType) {
         this.elementType = elementType;
     }
 
-    public ReturnWrapper dataElementDto(DataElementDto dataElementDto) {
+    public ReturnWrapper dataElementDto(final DataElementDto dataElementDto) {
         this.dataElementDto = dataElementDto;
         return this;
     }
 
-    public ReturnWrapper textDto(TextDto textDto) {
+    public ReturnWrapper textDto(final TextDto textDto) {
         this.textDto = textDto;
         return this;
     }
 
-    public ReturnWrapper recordingDto(RecordingDto recordingDto) {
+    public ReturnWrapper recordingDto(final RecordingDto recordingDto) {
         this.recordingDto = recordingDto;
         return this;
     }
 
-    public ReturnWrapper imageDto(ImageDto imageDto) {
+    public ReturnWrapper imageDto(final ImageDto imageDto) {
         this.imageDto = imageDto;
         return this;
     }
 
-    public ReturnWrapper elementType(ElementType elementType) {
+    public ReturnWrapper elementType(final ElementType elementType) {
         this.elementType = elementType;
         return this;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == this)
             return true;
         if (!(o instanceof ReturnWrapper)) {
             return false;
         }
-        ReturnWrapper returnWrapper = (ReturnWrapper) o;
+        final ReturnWrapper returnWrapper = (ReturnWrapper) o;
         return Objects.equals(dataElementDto, returnWrapper.dataElementDto)
                 && Objects.equals(textDto, returnWrapper.textDto)
                 && Objects.equals(recordingDto, returnWrapper.recordingDto)
@@ -113,8 +113,18 @@ public class ReturnWrapper {
                 + ", elementType='" + getElementType() + "'" + "}";
     }
 
+    public static ElementType stringToElementType(final String type) {
+        if (type.equals("\"TEXT\""))
+            return ElementType.TEXT;
+        if (type.equals("\"AUDIO\""))
+            return ElementType.AUDIO;
+        if (type.equals("\"IMAGE\""))
+            return ElementType.IMAGE;
+        return null;
+    }
+
     public enum ElementType {
-        TEXT, RECORDING, IMAGE
+        TEXT, AUDIO, IMAGE
     }
 
 }

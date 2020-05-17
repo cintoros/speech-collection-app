@@ -30,7 +30,7 @@ export class RecordComponent implements OnInit {
   translatedText_id = -1;
 
   // controlfields
-  withTranslation = true;
+  withTranslation = false;
 
   private groupId = 1;
 

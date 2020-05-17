@@ -6,6 +6,8 @@ import ch.fhnw.speech_collection_app.features.base.user_group.ReturnWrapper.Elem
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+import ch.fhnw.speech_collection_app.jooq.tables.DataElement;
+
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,11 @@ public class UserGroupService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    public void postRecording(long groupId, RecordingDto recording, MultipartFile file) throws IOException {
+    public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElementDto otherDataElement,
+            ElementType otherElementType) throws IOException {
         checkAllowed(groupId);
+
+        // creation of the Recording component
         var element = dslContext.newRecord(DATA_ELEMENT);
         element.setFinished(true);
         element.setUserGroupId(groupId);
@@ -49,15 +54,34 @@ public class UserGroupService {
         audio.setPath("default");
         audio.setDataElementId(element.getId());
         audio.store();
+        // create the recording element to get an id
         var rawPath = Paths.get("recording", audio.getId() + ".webm");
+        // use the given id to save the relative path to the database
         audio.setPath(rawPath.toString());
+        // get the complete path to save the audio as webm to the drive
         rawPath = speechCollectionAppConfig.getBasePath().resolve(rawPath);
         Files.write(rawPath, file.getBytes());
+        // store the change in the audio entry
         audio.store();
+
+        // create the tuple Element
         var tuple = dslContext.newRecord(DATA_TUPLE);
-        tuple.setDataElementId_1(recording.getExcerptId());
+        // the other element id (either Audio, Text or Image)
+        tuple.setDataElementId_1(otherDataElement.getId());
+        // the audio id
         tuple.setDataElementId_2(element.getId());
-        tuple.setType(DataTupleType.RECORDING);
+        // set the tuple type
+        switch (otherElementType) {
+            case TEXT:
+                tuple.setType(DataTupleType.TEXT_AUDIO);
+                break;
+            case AUDIO:
+                System.out.println("TODO implement in DATABASE");
+                break;
+            case IMAGE:
+                tuple.setType(DataTupleType.IMAGE_AUDIO);
+                break;
+        }
         tuple.store();
     }
 
