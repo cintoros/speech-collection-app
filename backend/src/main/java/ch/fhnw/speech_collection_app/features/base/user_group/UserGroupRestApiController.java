@@ -1,6 +1,8 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
+import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -83,6 +85,13 @@ public class UserGroupRestApiController {
   @GetMapping("occurrence/next")
   public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
     return userGroupService.getNextOccurrences(groupId);
+  }
+
+  @PostMapping("check-next")
+  public TupleDto getNextTuple(@PathVariable long groupId,
+                               @RequestParam String selectedTupleType) {
+    return userGroupService.getNextTuple(
+        groupId, TupleDto.stringToDataTupleType(selectedTupleType));
   }
 
   @GetMapping(value = "occurrence/audio/{dataElementId}",

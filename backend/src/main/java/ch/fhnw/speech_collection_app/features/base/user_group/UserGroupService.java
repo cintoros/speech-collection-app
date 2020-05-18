@@ -169,6 +169,17 @@ public class UserGroupService {
     return new ReturnWrapper(data, text, recording, image, eType);
   }
 
+  public TupleDto getNextTuple(long groupId,
+                               DataTupleType dataTupleTypeSelector) {
+    checkAllowed(groupId);
+    return dslContext.select()
+        .from(DATA_TUPLE)
+        .where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector))
+        .orderBy(DSL.rand())
+        .limit(1)
+        .fetchOneInto(TupleDto.class);
+  }
+
   public AudioDto getAudio(Long groupId) {
     checkAllowed(groupId);
     return dslContext.select(AUDIO.asterisk())
