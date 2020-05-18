@@ -90,9 +90,36 @@
         <!-- Case: Image-Recording -->
         <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && !withTranslation">
             <app-image [dataElementId]="dataElement1.id"></app-image>
+            <br /><br />
             <app-recording
                 [otherDataElement]="dataElement1"
                 [otherElementType]="elementType1"
+                (uploaded)="resetAndNext($event)"
+            ></app-recording>
+        </span>
+        <!-- Case: Image-Text -->
+        <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'TEXT'">
+            <app-image [dataElementId]="dataElement1.id"></app-image>
+            <br /><br />
+            <app-translate
+                [otherDataElement]="dataElement1"
+                [otherElementType]="elementType1"
+                (uploaded)="resetAndNext($event)"
+            ></app-translate>
+        </span>
+        <!-- Case: Image-Text-Recording -->
+        <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && withTranslation">
+            <app-image [dataElementId]="dataElement1.id"></app-image>
+            <br /><br />
+            <app-translate
+                [otherDataElement]="dataElement1"
+                [otherElementType]="elementType1"
+                (uploaded)="triggerRecord($event)"
+            ></app-translate>
+            <app-recording
+                *ngIf="isTranslated"
+                [otherDataElement]="dataElementTranslation"
+                [otherElementType]="elementTypeTranslation"
                 (uploaded)="resetAndNext($event)"
             ></app-recording>
         </span>

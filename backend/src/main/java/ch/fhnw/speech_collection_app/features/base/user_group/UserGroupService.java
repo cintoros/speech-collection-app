@@ -159,7 +159,7 @@ public class UserGroupService {
     }
     if (imageAllowed) {
       image = getImageDto(groupId);
-      dataElementID = text.getDataElementId();
+      dataElementID = image.getDataElementId();
       eType = ElementType.IMAGE;
     }
 
@@ -235,7 +235,7 @@ public class UserGroupService {
    */
   public ImageDto getImageDto(Long groupId) {
     checkAllowed(groupId);
-    return dslContext.select(IMAGE.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE)
+    return dslContext.select(IMAGE.asterisk())
         .from(IMAGE.innerJoin(DATA_ELEMENT).onKey())
         .where(
             DATA_ELEMENT.USER_GROUP_ID
