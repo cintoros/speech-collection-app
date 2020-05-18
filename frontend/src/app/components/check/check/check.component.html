@@ -28,8 +28,20 @@
 
     <!-- The card component -->
     <mat-card class="center">
-        <br />
-        <br />
+        <!-- Case: TEXT_TEXT -->
+        <span *ngIf="tuple.type === 'TEXT_TEXT'">
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
+            <br />
+            <br />
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
+        </span>
+        <!-- Case: AUDIO_AUDIO -->
+        <span *ngIf="tuple.type === 'AUDIO_AUDIO'"
+            ><app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
+            <br />
+            <br />
+            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio
+        ></span>
     </mat-card>
 
     <br />
