@@ -70,7 +70,7 @@ public class UserGroupRestApiController {
     return userGroupService.getExcerpt(groupId);
   }
 
-  @GetMapping("textDto")
+  @GetMapping("textDto/{dataElementId}")
   public TextDto getTextDto(@PathVariable long dataElementID) {
     return userGroupService.getTextDto(dataElementID);
   }
