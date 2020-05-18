@@ -42,6 +42,34 @@
             <br />
             <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio
         ></span>
+        <!-- Case: TEXT_AUDIO -->
+        <span *ngIf="tuple.type === 'TEXT_AUDIO'"
+            ><app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
+            <br />
+            <br />
+            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio
+        ></span>
+        <!-- Case: AUDIO_TEXT -->
+        <span *ngIf="tuple.type === 'AUDIO_TEXT'">
+            <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
+            <br />
+            <br />
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
+        </span>
+        <!-- Case: IMAGE_AUDIO -->
+        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">
+            <app-image [dataElementId]="tuple.data_element_id_1"></app-image>
+            <br />
+            <br />
+            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
+        </span>
+        <!-- Case: IMAGE_TEXT -->
+        <span *ngIf="tuple.type === 'IMAGE_TEXT'">
+            <app-image [dataElementId]="tuple.data_element_id_1"></app-image>
+            <br />
+            <br />
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
+        </span>
     </mat-card>
 
     <br />
