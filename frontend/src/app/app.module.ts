@@ -65,6 +65,8 @@ import { RecordingComponent } from "./components/record/recording/recording.comp
 import { TranslateComponent } from "./components/record/translate/translate.component";
 import { TripletSelectorComponent } from './components/record/triplet-selector/triplet-selector.component';
 import { ElementSelectorComponent } from './components/record/element-selector/element-selector.component';
+import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
+import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +98,8 @@ import { ElementSelectorComponent } from './components/record/element-selector/e
     TranslateComponent,
     TripletSelectorComponent,
     ElementSelectorComponent,
+    TupleSelectorComponent,
+    ExcerptFromDataElemIdComponent,
   ],
   imports: [
     BrowserModule,

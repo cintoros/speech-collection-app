@@ -1,62 +1,45 @@
-<div *ngIf="occurrences.length > 0">
-    <!-- The help text -->
+<app-tuple-selector
+    [elementType]="selectedTupleType"
+    (elementTypeClicked)="onSelectorChange($event)"
+></app-tuple-selector>
+
+<div *ngIf="true">
+    <!-- instructions -->
     <p class="card">
-        Stimmt
-        <span *ngIf="tuple.type1 === 'TEXT'">der Satz</span>
-        <span *ngIf="tuple.type1 === 'AUDIO'">die Aufnahme</span>
-        <span *ngIf="tuple.type1 === 'IMAGE'">das Bild</span>
-        mit
-        <span *ngIf="tuple.type2 === 'TEXT'">dem Satz</span>
-        <span *ngIf="tuple.type2 === 'AUDIO'">der Aufnahme</span>
-        <span *ngIf="tuple.type2 === 'IMAGE'">dem Bild</span>
-        überein? Dann klicke auf das
-        <span class="glyphicon glyphicon-ok-sign"></span> Symbol. <br />
-        Klicke sonst auf das
+        <!-- Case: TEXT_TEXT -->
+        <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
+        <!-- Case: AUDIO_AUDIO -->
+        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
+        <!-- Case: TEXT_AUDIO -->
+        <span *ngIf="tuple.type === 'TEXT_AUDIO'">Passt der Satz und die Aufnahme zusammen?</span>
+        <!-- Case: AUDIO_TEXT -->
+        <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
+        <!-- Case: IMAGE_AUDIO -->
+        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
+        <!-- Case: IMAGE_TEXT -->
+        <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
+
+        <!-- Universal case -->
+        Dann klicke auf das
+        <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br />
+        sonst auf das
         <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
     </p>
 
     <!-- The card component -->
     <mat-card class="center">
-        <div class="excerpt_text">{{ occurrences[occurrences_idx].text }}</div>
-
         <br />
         <br />
-        <button
-            (click)="togglePlay()"
-            *ngIf="!isPlaying"
-            class="check-navigation-button btn btn-primary"
-            mat-raised-button
-        >
-            <mat-icon>play_arrow</mat-icon>
-        </button>
-        <button
-            (click)="togglePlay()"
-            *ngIf="isPlaying"
-            class="check-navigation-button btn btn-secondary"
-            mat-raised-button
-        >
-            <mat-icon>pause</mat-icon>
-        </button>
     </mat-card>
 
     <br />
 
     <div id="navigation-button-container">
-        <button
-            (click)="setCheckedType(checkedOccurrenceLabel.WRONG)"
-            [disabled]="!this.isReady"
-            class="check-navigation-button btn btn-danger"
-            mat-raised-button
-        >
+        <button class="btn btn-danger">
             <span class="glyphicon glyphicon-remove-sign"></span>
         </button>
 
-        <button
-            (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)"
-            [disabled]="!this.isReady"
-            mat-raised-button
-            class="btn btn-success"
-        >
+        <button class="btn btn-success">
             <span class="glyphicon glyphicon-ok-sign"></span>
         </button>
     </div>
@@ -65,23 +48,9 @@
     <br />
 
     <div id="navigation-button-container">
-        <button
-            (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)"
-            [disabled]="!this.isReady"
-            class="check-navigation-button btn btn-secondary"
-            mat-raised-button
-        >
+        <button class="btn btn-secondary" mat-raised-button>
             <mat-icon>skip_next</mat-icon>
             <span>&nbsp;Skip</span>
-        </button>
-        <button
-            (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)"
-            [disabled]="!this.isReady"
-            class="check-navigation-button btn btn-secondary"
-            mat-raised-button
-        >
-            <mat-icon>delete</mat-icon>
-            <span>&nbsp;Not a sentence</span>
         </button>
     </div>
 </div>
@@ -93,7 +62,7 @@
     </a>
 </div>
 
-<div *ngIf="occurrences.length === 0" style="height: calc(100% - 100px);">
+<div *ngIf="false">
     <div style="height: calc(100% - 90px);">
         <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
             <div style="font-weight: bold; font-size: 36px;">
