@@ -292,6 +292,13 @@ public class UserGroupService {
         .fetchOneInto(DataElementDto.class);
   }
 
+  public TextDto getTextDto(Long dataElementID) {
+    return dslContext.select()
+        .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
+        .where(DATA_ELEMENT.ID.eq(dataElementID))
+        .fetchOneInto(TextDto.class);
+  }
+
   public void postCheckedOccurrence(long groupId,
                                     CheckedOccurrence checkedOccurrence) {
     checkAllowed(groupId);

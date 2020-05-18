@@ -70,6 +70,11 @@ public class UserGroupRestApiController {
     return userGroupService.getExcerpt(groupId);
   }
 
+  @GetMapping("textDto")
+  public TextDto getTextDto(@PathVariable long dataElementID) {
+    return userGroupService.getTextDto(dataElementID);
+  }
+
   @GetMapping("image_dto")
   public ImageDto getImageDto(@PathVariable long groupId) {
     return userGroupService.getImageDto(groupId);
