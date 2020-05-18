@@ -13,72 +13,93 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user_group/{groupId}/")
 public class UserGroupRestApiController {
-    private final UserGroupService userGroupService;
-    private final ObjectMapper objectMapper;
+  private final UserGroupService userGroupService;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper) {
-        this.userGroupService = userGroupService;
-        this.objectMapper = objectMapper;
-    }
+  @Autowired
+  public UserGroupRestApiController(UserGroupService userGroupService,
+                                    ObjectMapper objectMapper) {
+    this.userGroupService = userGroupService;
+    this.objectMapper = objectMapper;
+  }
 
-    @PostMapping("recording")
-    public void postRecording(@PathVariable long groupId, @RequestParam String recording,
-            @RequestParam MultipartFile file, @RequestParam String otherDataElement,
-            @RequestParam String otherElementType) throws IOException {
-        userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file,
-                objectMapper.readValue(otherDataElement, DataElementDto.class),
-                ReturnWrapper.stringToElementType(otherElementType));
-    }
+  @PostMapping("recording")
+  public void postRecording(@PathVariable long groupId,
+                            @RequestParam String recording,
+                            @RequestParam MultipartFile file,
+                            @RequestParam String otherDataElement,
+                            @RequestParam String otherElementType)
+      throws IOException {
+    userGroupService.postRecording(
+        groupId, objectMapper.readValue(recording, RecordingDto.class), file,
+        objectMapper.readValue(otherDataElement, DataElementDto.class),
+        ReturnWrapper.stringToElementType(otherElementType));
+  }
 
-    @PostMapping("element/{dataElementId}/checked")
-    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId,
-            @RequestParam CheckedDataElementType type) {
-        userGroupService.postCheckedDataElement(groupId, dataElementId, type);
-    }
+  @PostMapping("element/{dataElementId}/checked")
+  public void
+  postCheckedDataElement(@PathVariable long groupId,
+                         @PathVariable long dataElementId,
+                         @RequestParam CheckedDataElementType type) {
+    userGroupService.postCheckedDataElement(groupId, dataElementId, type);
+  }
 
-    @PostMapping("excerpt")
-    public long postExcerpt(@PathVariable long groupId, @PathVariable long idOfOtherDataElement,
-            @RequestParam String text, @RequestParam String data_element) throws IOException {
-        return userGroupService.postExcerpt(groupId, idOfOtherDataElement, objectMapper.readValue(text, TextDto.class),
-                objectMapper.readValue(data_element, DataElementDto.class));
-    }
+  @PostMapping("excerpt")
+  public ReturnWrapper postExcerpt(@PathVariable long groupId,
+                                   @RequestParam String text,
+                                   @RequestParam String otherDataElement,
+                                   @RequestParam String otherElementType)
+      throws IOException {
+    return userGroupService.postExcerpt(
+        groupId, objectMapper.readValue(text, TextDto.class),
+        objectMapper.readValue(otherDataElement, DataElementDto.class),
+        ReturnWrapper.stringToElementType(otherElementType));
+  }
 
-    @PostMapping("next")
-    public ReturnWrapper getNext(@PathVariable long groupId, @RequestParam boolean textAllowed,
-            @RequestParam boolean audioAllowed, @RequestParam boolean imageAllowed) {
-        return userGroupService.getNext(groupId, textAllowed, audioAllowed, imageAllowed);
-    }
+  @PostMapping("next")
+  public ReturnWrapper getNext(@PathVariable long groupId,
+                               @RequestParam boolean textAllowed,
+                               @RequestParam boolean audioAllowed,
+                               @RequestParam boolean imageAllowed) {
+    return userGroupService.getNext(groupId, textAllowed, audioAllowed,
+                                    imageAllowed);
+  }
 
-    @GetMapping("excerpt")
-    public TextDto getExcerpt(@PathVariable long groupId) {
-        return userGroupService.getExcerpt(groupId);
-    }
+  @GetMapping("excerpt")
+  public TextDto getExcerpt(@PathVariable long groupId) {
+    return userGroupService.getExcerpt(groupId);
+  }
 
-    @GetMapping("image_dto")
-    public ImageDto getImageDto(@PathVariable long groupId) {
-        return userGroupService.getImageDto(groupId);
-    }
+  @GetMapping("image_dto")
+  public ImageDto getImageDto(@PathVariable long groupId) {
+    return userGroupService.getImageDto(groupId);
+  }
 
-    @PostMapping("occurrence/check")
-    public void postCheckedOccurrence(@PathVariable long groupId, @RequestBody CheckedOccurrence checkedOccurrence) {
-        userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
-    }
+  @PostMapping("occurrence/check")
+  public void
+  postCheckedOccurrence(@PathVariable long groupId,
+                        @RequestBody CheckedOccurrence checkedOccurrence) {
+    userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
+  }
 
-    @GetMapping("occurrence/next")
-    public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
-        return userGroupService.getNextOccurrences(groupId);
-    }
+  @GetMapping("occurrence/next")
+  public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
+    return userGroupService.getNextOccurrences(groupId);
+  }
 
-    @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseBody
-    public byte[] getAudio(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
-        return userGroupService.getAudio(groupId, dataElementId);
-    }
+  @GetMapping(value = "occurrence/audio/{dataElementId}",
+              produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  @ResponseBody
+  public byte[] getAudio(@PathVariable long groupId,
+                         @PathVariable long dataElementId) throws IOException {
+    return userGroupService.getAudio(groupId, dataElementId);
+  }
 
-    @GetMapping(value = "image/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseBody
-    public byte[] getImage(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
-        return userGroupService.getImage(groupId, dataElementId);
-    }
+  @GetMapping(value = "image/{dataElementId}",
+              produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  @ResponseBody
+  public byte[] getImage(@PathVariable long groupId,
+                         @PathVariable long dataElementId) throws IOException {
+    return userGroupService.getImage(groupId, dataElementId);
+  }
 }
