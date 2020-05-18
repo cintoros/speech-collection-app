@@ -63,6 +63,7 @@ import { AudioComponent } from "./components/record/audio/audio.component";
 import { ImageComponent } from "./components/record/image/image.component";
 import { RecordingComponent } from "./components/record/recording/recording.component";
 import { TranslateComponent } from "./components/record/translate/translate.component";
+import { TripletSelectorComponent } from './components/record/triplet-selector/triplet-selector.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { TranslateComponent } from "./components/record/translate/translate.comp
     ImageComponent,
     RecordingComponent,
     TranslateComponent,
+    TripletSelectorComponent,
   ],
   imports: [
     BrowserModule,

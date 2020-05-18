@@ -1,3 +1,7 @@
+<app-triplet-selector
+    [isThreeTuple]="withTranslation"
+    (threeTupleClicked)="this.withTranslation = $event"
+></app-triplet-selector>
 <div *ngIf="dataElement1">
     <!-- Instructions-->
     <div class="center">

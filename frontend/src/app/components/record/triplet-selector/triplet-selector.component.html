@@ -1,0 +1,10 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li (click)="threeTupleClicked.emit(true)" [class]="isThreeTuple ? 'active' : ''">
+            <a>Verwende 3-Tuple, falls möglich</a>
+        </li>
+        <li (click)="threeTupleClicked.emit(false)" [class]="!isThreeTuple ? 'active' : ''">
+            <a>Verwende nur 2-Tuple</a>
+        </li>
+    </ul>
+</nav>
