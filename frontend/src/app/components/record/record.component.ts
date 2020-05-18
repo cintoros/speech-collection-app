@@ -28,6 +28,7 @@ export class RecordComponent implements OnInit {
 
   // controlfields
   withTranslation = false;
+  selectedElement = ElementType.TEXT;
   isTranslated = false;
 
   private groupId = 1;
@@ -102,9 +103,7 @@ export class RecordComponent implements OnInit {
 
   private getNext() {
     const formData = new FormData();
-    formData.append(`textAllowed`, JSON.stringify(false));
-    formData.append(`audioAllowed`, JSON.stringify(false));
-    formData.append(`imageAllowed`, JSON.stringify(true));
+    formData.append(`selectedElement`, JSON.stringify(this.selectedElement));
 
     this.httpClient
         .post<ReturnWrapper>(

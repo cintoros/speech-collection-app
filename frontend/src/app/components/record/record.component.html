@@ -1,3 +1,8 @@
+<app-element-selector
+    [elementType]="selectedElement"
+    (elementTypeClicked)="this.selectedElement = $event"
+></app-element-selector>
+
 <app-triplet-selector
     [isThreeTuple]="withTranslation"
     (threeTupleClicked)="this.withTranslation = $event"

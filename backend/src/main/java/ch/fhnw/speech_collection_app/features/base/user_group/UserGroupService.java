@@ -137,8 +137,7 @@ public class UserGroupService {
     return result;
   }
 
-  public ReturnWrapper getNext(long groupId, boolean textAllowed,
-                               boolean audioAllowed, boolean imageAllowed) {
+  public ReturnWrapper getNext(long groupId, ElementType selectedElement) {
     checkAllowed(groupId);
 
     long dataElementID = 0;
@@ -147,20 +146,22 @@ public class UserGroupService {
     AudioDto recording = null;
 
     TextDto text = null;
-    if (textAllowed) {
+    switch (selectedElement) {
+    case TEXT:
       text = getExcerpt(groupId);
       dataElementID = text.getDataElementId();
       eType = ElementType.TEXT;
-    }
-    if (audioAllowed) {
+      break;
+    case AUDIO:
       recording = getAudio(groupId);
       dataElementID = recording.getDataElementId();
       eType = ElementType.AUDIO;
-    }
-    if (imageAllowed) {
+      break;
+    case IMAGE:
       image = getImageDto(groupId);
       dataElementID = image.getDataElementId();
       eType = ElementType.IMAGE;
+      break;
     }
 
     DataElementDto data = getDataElementDto(dataElementID);

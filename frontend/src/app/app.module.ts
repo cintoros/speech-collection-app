@@ -64,6 +64,7 @@ import { ImageComponent } from "./components/record/image/image.component";
 import { RecordingComponent } from "./components/record/recording/recording.component";
 import { TranslateComponent } from "./components/record/translate/translate.component";
 import { TripletSelectorComponent } from './components/record/triplet-selector/triplet-selector.component';
+import { ElementSelectorComponent } from './components/record/element-selector/element-selector.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { TripletSelectorComponent } from './components/record/triplet-selector/t
     RecordingComponent,
     TranslateComponent,
     TripletSelectorComponent,
+    ElementSelectorComponent,
   ],
   imports: [
     BrowserModule,

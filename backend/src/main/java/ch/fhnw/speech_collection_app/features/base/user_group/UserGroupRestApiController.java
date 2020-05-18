@@ -58,11 +58,9 @@ public class UserGroupRestApiController {
 
   @PostMapping("next")
   public ReturnWrapper getNext(@PathVariable long groupId,
-                               @RequestParam boolean textAllowed,
-                               @RequestParam boolean audioAllowed,
-                               @RequestParam boolean imageAllowed) {
-    return userGroupService.getNext(groupId, textAllowed, audioAllowed,
-                                    imageAllowed);
+                               @RequestParam String selectedElement) {
+    return userGroupService.getNext(
+        groupId, ReturnWrapper.stringToElementType(selectedElement));
   }
 
   @GetMapping("excerpt")
