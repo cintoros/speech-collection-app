@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DataTupleRecord extends UpdatableRecordImpl<DataTupleRecord> implements Record8<Long, Long, Long, DataTupleType, Boolean, Long, Long, Long> {
 
-    private static final long serialVersionUID = 216201091;
+    private static final long serialVersionUID = 1504678053;
 
     public void setId(Long value) {
         set(0, value);
@@ -51,7 +51,6 @@ public class DataTupleRecord extends UpdatableRecordImpl<DataTupleRecord> implem
         set(3, value);
     }
 
-    @NotNull
     public DataTupleType getType() {
         return (DataTupleType) get(3);
     }

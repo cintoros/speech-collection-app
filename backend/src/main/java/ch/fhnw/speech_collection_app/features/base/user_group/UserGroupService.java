@@ -80,7 +80,7 @@ public class UserGroupService {
       tuple.setType(DataTupleType.TEXT_AUDIO);
       break;
     case AUDIO:
-      System.out.println("TODO implement in DATABASE");
+      tuple.setType(DataTupleType.AUDIO_AUDIO);
       break;
     case IMAGE:
       tuple.setType(DataTupleType.IMAGE_AUDIO);
@@ -125,7 +125,7 @@ public class UserGroupService {
       tuple.setType(DataTupleType.AUDIO_TEXT);
       break;
     case IMAGE:
-      System.out.println("TODO implement in DATABASE");
+      tuple.setType(DataTupleType.IMAGE_TEXT);
       break;
     }
     tuple.store();

@@ -22,7 +22,9 @@ public enum DataTupleType implements EnumType {
 
     IMAGE_AUDIO("IMAGE_AUDIO"),
 
-    RECORDING("RECORDING");
+    RECORDING("RECORDING"),
+
+    IMAGE_TEXT("IMAGE_TEXT");
 
     private final String literal;
 
