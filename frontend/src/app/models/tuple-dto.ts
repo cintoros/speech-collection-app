@@ -2,8 +2,8 @@ import {ElementType} from './element-type';
 
 export class TupleDto {
   id: number;
-  dataElementId1: number;
-  dataElementId2: number;
+  data_element_id_1: number;
+  data_element_id_2: number;
   type: TupleType;
   finished: number;
   correct: number;
@@ -13,8 +13,8 @@ export class TupleDto {
   constructor(
       $dataElementId1: number, $dataElementId2: number, $type: TupleType,
       $finished: number, $correct: number, $wrong: number, $skipped: number) {
-    this.dataElementId1 = $dataElementId1;
-    this.dataElementId2 = $dataElementId2;
+    this.data_element_id_1 = $dataElementId1;
+    this.data_element_id_1 = $dataElementId2;
     this.type = $type;
     this.finished = $finished;
     this.correct = $correct;
