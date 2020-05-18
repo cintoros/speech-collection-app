@@ -74,6 +74,25 @@ export class RecordComponent implements OnInit {
           this.dataElement1.id}/checked?type=${type}`,
       {});
 
+  private resetAndNext(text) {
+    this.resetFields();
+    this.getNext();
+  }
+
+  private resetFields() {
+    this.dataElement1 = null;
+    this.dataElement2 = null;
+    this.textDto1 = null;
+    this.textDto2 = null;
+    this.recordingDto1 = null;
+    this.recordingDto2 = null;
+    this.imageDto1 = null;
+    this.imageDto2 = null;
+    this.elementType1 = null;
+    this.elementType2 = null;
+    this.isPrivate = false;
+  }
+
   private getNext() {
     const formData = new FormData();
     formData.append(`textAllowed`, JSON.stringify(true));

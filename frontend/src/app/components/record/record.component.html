@@ -50,7 +50,7 @@
             <app-translate
                 [otherDataElement]="withTranslation ? dataElement2 : dataElement1"
                 [otherElementType]="withTranslation ? elementType2 : elementType1"
-                (uploaded)="someMethod($event)"
+                (uploaded)="resetAndNext($event)"
             ></app-translate>
         </span>
         <!-- Case: Text-Recording -->
@@ -60,21 +60,9 @@
                 *ngIf="true"
                 [otherDataElement]="withTranslation ? dataElement2 : dataElement1"
                 [otherElementType]="withTranslation ? elementType2 : elementType1"
-                (uploaded)="someMethod($event)"
+                (uploaded)="resetAndNext($event)"
             ></app-recording>
         </span>
-
-        <app-excerpt [excerpt_text]="textDto1.text" [is_Deactivated]="isTranslated"></app-excerpt>
-
-        <app-translate
-            [otherDataElement]="withTranslation ? dataElement2 : dataElement1"
-            [otherElementType]="withTranslation ? elementType2 : elementType1"
-            (uploaded)="someMethod($event)"
-        ></app-translate>
-
-        <br />
-
-        <br />
     </mat-card>
 
     <br />
