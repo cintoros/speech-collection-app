@@ -94,7 +94,7 @@ public class UserGroupService {
                                    ElementType otherElementType) {
     checkAllowed(groupId);
 
-    // creation of the Audio component
+    // creation of the Text component
     var element = dslContext.newRecord(DATA_ELEMENT);
     element.setFinished(true);
     element.setUserGroupId(groupId);
@@ -143,6 +143,8 @@ public class UserGroupService {
 
     long dataElementID = 0;
     ElementType eType = null;
+    ImageDto image = null;
+    AudioDto recording = null;
 
     TextDto text = null;
     if (textAllowed) {
@@ -150,13 +152,29 @@ public class UserGroupService {
       dataElementID = text.getDataElementId();
       eType = ElementType.TEXT;
     }
-
-    ImageDto image = null;
-    RecordingDto recording = null;
+    if (audioAllowed) {
+      recording = getAudio(groupId);
+      dataElementID = recording.getDataElementId();
+      eType = ElementType.AUDIO;
+    }
+    if (imageAllowed) {
+      image = getImageDto(groupId);
+      dataElementID = text.getDataElementId();
+      eType = ElementType.IMAGE;
+    }
 
     DataElementDto data = getDataElementDto(dataElementID);
 
     return new ReturnWrapper(data, text, recording, image, eType);
+  }
+
+  public AudioDto getAudio(Long groupId) {
+    checkAllowed(groupId);
+    return dslContext.select(AUDIO.asterisk())
+        .from(AUDIO.innerJoin(DATA_ELEMENT).onKey())
+        .orderBy(DSL.rand())
+        .limit(1)
+        .fetchOneInto(AudioDto.class);
   }
 
   /**

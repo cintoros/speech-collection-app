@@ -9,28 +9,26 @@ import {Component, OnInit} from '@angular/core';
 export class RecordComponent implements OnInit {
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
+  dataElementTranslation: DataElementDto;
 
   // Depending on the current mode only two
   // of the fields below will be != null
   textDto1: TextDto = null;
   textDto2: TextDto = null;
+  textDtoTranslation: TextDto;
   recordingDto1: RecordingDto = null;
   recordingDto2: RecordingDto = null;
   imageDto1: ImageDto = null;
   imageDto2: ImageDto = null;
   elementType1: ElementType = null;
   elementType2: ElementType = null;
+  elementTypeTranslation: ElementType;
 
   isPrivate = false;
 
-  // text fields
-  recording_sentence = 'Satz auf Schweizerdeutsch';
-  isTranslated = false;
-  translatedText = '';
-  translatedText_id = -1;
-
   // controlfields
   withTranslation = false;
+  isTranslated = false;
 
   private groupId = 1;
 
@@ -43,10 +41,6 @@ export class RecordComponent implements OnInit {
   ngOnInit() {
     this.getNext();
   }
-
-  /*
-
-  */
 
   private() {
     this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
@@ -74,9 +68,17 @@ export class RecordComponent implements OnInit {
           this.dataElement1.id}/checked?type=${type}`,
       {});
 
-  private resetAndNext(text) {
+  private resetAndNext(elem: ReturnWrapper) {
     this.resetFields();
     this.getNext();
+  }
+
+  private triggerRecord(elem: ReturnWrapper) {
+    this.dataElementTranslation = elem.dataElementDto;
+    this.textDtoTranslation = elem.textDto;
+    this.elementTypeTranslation = elem.elementType;
+    this.isTranslated = true;
+    console.log(JSON.stringify(this.dataElementTranslation));
   }
 
   private resetFields() {
@@ -91,13 +93,18 @@ export class RecordComponent implements OnInit {
     this.elementType1 = null;
     this.elementType2 = null;
     this.isPrivate = false;
+    this.dataElementTranslation = null;
+    this.textDtoTranslation = null;
+    this.elementTypeTranslation = null;
+    this.withTranslation = true;
+    this.isTranslated = false;
   }
 
   private getNext() {
     const formData = new FormData();
-    formData.append(`textAllowed`, JSON.stringify(true));
+    formData.append(`textAllowed`, JSON.stringify(false));
     formData.append(`audioAllowed`, JSON.stringify(false));
-    formData.append(`imageAllowed`, JSON.stringify(false));
+    formData.append(`imageAllowed`, JSON.stringify(true));
 
     this.httpClient
         .post<ReturnWrapper>(

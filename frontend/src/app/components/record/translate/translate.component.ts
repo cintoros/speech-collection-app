@@ -15,7 +15,7 @@ import {environment} from 'src/environments/environment';
 export class TranslateComponent implements OnInit {
   @Input() otherDataElement: DataElementDto;
   @Input() otherElementType: ElementType;
-  @Output() uploaded = new EventEmitter<string>();
+  @Output() uploaded = new EventEmitter<ReturnWrapper>();
 
   recording_sentence = 'Satz auf Schweizerdeutsch';
   isTranslated = false;
@@ -47,8 +47,7 @@ export class TranslateComponent implements OnInit {
           this.textDto = res.textDto;
           this.dataElementDto = res.dataElementDto;
           this.isTranslated = true;
-          this.recording_sentence = this.translatedText;
-          this.uploaded.emit('translated');
+          this.uploaded.emit(res);
         });
   }
 }
