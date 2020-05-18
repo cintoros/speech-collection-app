@@ -10,7 +10,7 @@
 </button>
 <button
     (click)="submit_recording()"
-    *ngIf="isReady()"
+    *ngIf="this.submitable"
     color="primary"
     title="Submit your recording"
     class="btn btn-primary"
