@@ -27,7 +27,7 @@ export class RecordComponent implements OnInit {
   isPrivate = false;
 
   // controlfields
-  withTranslation = false;
+  withTranslation: boolean;
   selectedElement = ElementType.TEXT;
   isTranslated = false;
 
@@ -74,12 +74,23 @@ export class RecordComponent implements OnInit {
     this.getNext();
   }
 
+  selectorUpdate($event) {
+    this.resetFields();
+    this.selectedElement = $event;
+    this.getNext();
+  }
+
+  translationUpdate($event) {
+    this.resetFields();
+    this.withTranslation = $event;
+    this.getNext();
+  }
+
   private triggerRecord(elem: ReturnWrapper) {
     this.dataElementTranslation = elem.dataElementDto;
     this.textDtoTranslation = elem.textDto;
     this.elementTypeTranslation = elem.elementType;
     this.isTranslated = true;
-    console.log(JSON.stringify(this.dataElementTranslation));
   }
 
   private resetFields() {
@@ -97,7 +108,6 @@ export class RecordComponent implements OnInit {
     this.dataElementTranslation = null;
     this.textDtoTranslation = null;
     this.elementTypeTranslation = null;
-    this.withTranslation = true;
     this.isTranslated = false;
   }
 

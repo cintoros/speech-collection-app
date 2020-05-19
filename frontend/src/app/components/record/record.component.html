@@ -1,11 +1,11 @@
 <app-element-selector
     [elementType]="selectedElement"
-    (elementTypeClicked)="this.selectedElement = $event"
+    (elementTypeClicked)="selectorUpdate($event)"
 ></app-element-selector>
 
 <app-triplet-selector
     [isThreeTuple]="withTranslation"
-    (threeTupleClicked)="this.withTranslation = $event"
+    (threeTupleClicked)="translationUpdate($event)"
 ></app-triplet-selector>
 <div *ngIf="dataElement1">
     <!-- Instructions-->
