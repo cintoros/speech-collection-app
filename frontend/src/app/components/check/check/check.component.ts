@@ -56,6 +56,11 @@ export class CheckComponent implements OnInit {
     this.getTuple()
   }
 
+  afterCheck($event) {
+    this.tuple = null;
+    this.getTuple();
+  }
+
 
   private getTuple() {
     const formData = new FormData();
@@ -65,9 +70,7 @@ export class CheckComponent implements OnInit {
         .post<TupleDto>(
             `${environment.url}user_group/${this.groupId}/check-next`, formData)
         .subscribe((tuple) => {
-          console.log(tuple);
           this.tuple = tuple;
-          console.log(this.tuple)
         });
   }
 }

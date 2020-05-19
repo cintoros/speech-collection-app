@@ -3,6 +3,8 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -50,6 +52,13 @@ public class UserGroupRestApiController {
     @PostMapping("next")
     public ReturnWrapper getNext(@PathVariable long groupId, @RequestParam String selectedElement) {
         return userGroupService.getNext(groupId, ReturnWrapper.stringToElementType(selectedElement));
+    }
+
+    @PostMapping("checked-data-tuple")
+    public void postCheckedDataTuple(@PathVariable long groupId, @RequestParam String tuple,
+            @RequestParam String checkedDataTuple) throws JsonMappingException, JsonProcessingException {
+        userGroupService.postCheckedDataTuple(groupId, objectMapper.readValue(tuple, TupleDto.class),
+                objectMapper.readValue(checkedDataTuple, CheckedDataTuple.class));
     }
 
     @GetMapping("excerpt")

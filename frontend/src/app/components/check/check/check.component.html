@@ -3,7 +3,7 @@
     (elementTypeClicked)="onSelectorChange($event)"
 ></app-tuple-selector>
 
-<div *ngIf="true">
+<div *ngIf="tuple">
     <!-- instructions -->
     <p class="card">
         <!-- Case: TEXT_TEXT -->
@@ -73,36 +73,12 @@
     </mat-card>
 
     <br />
-
-    <div id="navigation-button-container">
-        <button class="btn btn-danger">
-            <span class="glyphicon glyphicon-remove-sign"></span>
-        </button>
-
-        <button class="btn btn-success">
-            <span class="glyphicon glyphicon-ok-sign"></span>
-        </button>
-    </div>
-
-    <br />
     <br />
 
-    <div id="navigation-button-container">
-        <button class="btn btn-secondary" mat-raised-button>
-            <mat-icon>skip_next</mat-icon>
-            <span>&nbsp;Skip</span>
-        </button>
-    </div>
-</div>
-<br />
-<br />
-<div id="shortcut-button">
-    <a (click)="openShortcutDialog()">
-        Hotkeys
-    </a>
+    <app-check-checker [tuple]="tuple" (completed)="afterCheck($event)"></app-check-checker>
 </div>
 
-<div *ngIf="false">
+<div *ngIf="!tuple">
     <div style="height: calc(100% - 90px);">
         <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
             <div style="font-weight: bold; font-size: 36px;">

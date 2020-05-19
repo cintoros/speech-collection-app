@@ -67,6 +67,7 @@ import { TripletSelectorComponent } from './components/record/triplet-selector/t
 import { ElementSelectorComponent } from './components/record/element-selector/element-selector.component';
 import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
 import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
+import { CheckCheckerComponent } from './components/check/check/check-checker/check-checker.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt
     ElementSelectorComponent,
     TupleSelectorComponent,
     ExcerptFromDataElemIdComponent,
+    CheckCheckerComponent,
   ],
   imports: [
     BrowserModule,

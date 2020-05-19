@@ -7,6 +7,7 @@ import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import ch.fhnw.speech_collection_app.jooq.tables.DataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.records.DataTupleRecord;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -325,5 +326,15 @@ public class UserGroupService {
     private void checkAllowed(long userGroupId) {
         if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+
+    public void postCheckedDataTuple(long groupId, TupleDto tuple, CheckedDataTuple checkedDataTuple) {
+        checkAllowed(groupId);
+        var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
+        checked.setDataTupleId(tuple.getId());
+        checked.setUserId(customUserDetailsService.getLoggedInUserId());
+        var type = CheckedDataTupleType.valueOf(checkedDataTuple.getType().toString());
+        checked.setType(type);
+        checked.store();
     }
 }
