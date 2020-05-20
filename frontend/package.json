@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "buildProd": "ng build --prod --base-href /speech-to-text-labeling-tool/",
+    "buildProd": "ng build --configuration=production --base-href /speech-to-text-labeling-tool/",
+    "buildProd2": "ng build --configuration=production,prod2 --base-href /",
     "lint": "ng lint"
   },
   "private": true,
