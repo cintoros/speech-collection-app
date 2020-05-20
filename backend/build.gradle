@@ -63,7 +63,11 @@ jooq {
     }
 }
 task buildProd {
-    dependsOn ':frontend:npmBuild'
+    dependsOn ':frontend:npmBuildProd'
+    finalizedBy 'build'
+}
+task buildProd2 {
+    dependsOn ':frontend:npmBuildProd2'
     finalizedBy 'build'
 }
 

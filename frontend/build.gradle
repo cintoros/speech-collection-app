@@ -8,4 +8,13 @@ task npmBuild(type: NpmTask) {
   dependsOn npmInstall
   args = ['run', 'buildProd']
 }
+task npmBuildProd(type: NpmTask) {
+  dependsOn npmInstall
+  args = ['run', 'buildProd']
+}
+
+task npmBuildProd2(type: NpmTask) {
+  dependsOn npmInstall
+  args = ['run', 'buildProd2']
+}
 

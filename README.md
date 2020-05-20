@@ -49,6 +49,8 @@ some additional packages may be needed (Ubuntu 18.04.3 ):
 **NOTE:** for deployments the default admin password should be changed.
 
 1. run `gradle buildProd` to build the production jar
+   1. In case of other servers without sub-url/proxie it is possible to just use  `gradle buildProd2`
+   1. In case of a different sub-url it is best to add another build-task/configuration based on `prod2`
 1. `rsync backend/build/libs/backend-1.0.0-SNAPSHOT.jar s1042:~/speech-collection-app/backend-1.0.0-SNAPSHOT.jar`
 1. `ssh s1042`
 1. `systemctl restart speech-collection-app`
