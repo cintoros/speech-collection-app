@@ -129,8 +129,7 @@ public class UserGroupService {
                 break;
         }
         tuple.store();
-
-        ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getExcerpt(text.getId()), null,
+        ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
                 null, ElementType.TEXT);
 
         return result;
