@@ -1,43 +1,42 @@
-#carousel {
-  margin-top: 15px;
-  height: calc(100% - 15px);
-}
-
-#carousel div {
-  border: 0;
-  height: 300px;
-  width: 500px;
-  top: 220px;
-}
-
-.item-carousel mat-card {
-  height: 100%;
-}
-
-.item-carousel mat-card div {
-  margin-top: 130px;
-}
-
-#navigation-button-container {
-  position: absolute;
-  bottom: calc(100% - 750px);
-  left: 0;
-  margin-left: auto;
-  margin-right: auto;
-  right: 0;
-  width: 400px;
-}
-
 .check-navigation-button {
   margin-left: 5px;
+  margin-top: 5px;
 }
 
-#shortcut-button {
+.header-card {
+  margin: 15px;
+}
+
+.shortcut-button {
   position: absolute;
   bottom: 58px;
   right: 15px;
 }
 
-#header-card {
-  margin: 15px;
+#carousel {
+  position: absolute;
+  left: 15px;
+}
+
+#carousel div {
+  border: 0;
+  height: 250px;
+  width: 500px;
+  alignment: left;
+  //top: 220px;
+}
+
+//.item-carousel mat-card {
+//  height: 100%;
+//}
+
+.item-carousel mat-card div {
+  margin-top: 50px;
+}
+
+#navigation-button-container {
+  position: absolute;
+  bottom: calc(100% - 500px);
+  left: 75px;
+  width: 400px;
 }

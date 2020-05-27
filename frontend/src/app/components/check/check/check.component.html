@@ -1,4 +1,4 @@
-<mat-card id="header-card"><h1>Check</h1>
+<mat-card class="header-card"><h1>Check</h1>
   <div style="color: grey;font-size: 0.8em">
     Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct Swiss
     German translation.
@@ -22,8 +22,8 @@
     </mat-card>
   </div>
 </div>
-<div *ngIf="occurrences.length>0">
-  <carousel-component #carousel [lockSlides]="true" [morePairSlides]="1" [perspective]="4000" id="carousel">
+<div *ngIf="occurrences.length>0" >
+  <carousel-component #carousel [lockSlides]="true" [morePairSlides]="1" [endInSlide]="true"  [perspective]="4000" id="carousel">
     <div *ngFor="let textAudio of occurrences;let i=index" class="item-carousel">
       <mat-card style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
         <div style="width: 100%;">{{textAudio.text}}</div>
@@ -33,38 +33,44 @@
     </div>
   </carousel-component>
   <div id="navigation-button-container">
-    <button (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)" [disabled]="!this.isReady" mat-raised-button>
-      <mat-icon>thumb_up</mat-icon>
-      <span>&nbsp;Correct</span>
-    </button>
     <button (click)="togglePlay();" *ngIf=" !isPlaying" class="check-navigation-button" mat-raised-button>
       <mat-icon>play_arrow</mat-icon>
+      [p]
     </button>
     <button (click)="togglePlay();" *ngIf="isPlaying" class="check-navigation-button" mat-raised-button>
       <mat-icon>pause</mat-icon>
-    </button>
-    <button (click)="setCheckedType(checkedOccurrenceLabel.WRONG)" [disabled]="!this.isReady"
-            class="check-navigation-button" mat-raised-button>
-      <mat-icon>thumb_down</mat-icon>
-      <span>&nbsp;Wrong</span>
+      [p]
     </button>
     <button (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)" [disabled]="!this.isReady"
             class="check-navigation-button" mat-raised-button>
       <mat-icon>skip_next</mat-icon>
-      <span>&nbsp;Skip</span>
+      <span>&nbsp;Skip [s]</span>
     </button>
+    <br>
+    <button (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)" [disabled]="!this.isReady" mat-raised-button
+            style="border-color: green;border-style: solid;border-width: 2px; ">
+      <mat-icon style="color: green">thumb_up</mat-icon>
+      <span>&nbsp;Correct [c]</span>
+    </button>
+    <button (click)="setCheckedType(checkedOccurrenceLabel.WRONG)" [disabled]="!this.isReady"
+            class="check-navigation-button" mat-raised-button
+            style="border-color: red;border-style: solid;border-width: 2px; ">
+      <mat-icon style="color: red">thumb_down</mat-icon>
+      <span>&nbsp;Wrong [w]</span>
+    </button>
+    <br>
     <button (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)" [disabled]="!this.isReady"
             class="check-navigation-button" mat-raised-button>
       <mat-icon>delete</mat-icon>
-      <span>&nbsp;Not a sentence</span>
+      <span>&nbsp;Not a Sentence</span>
     </button>
     <button (click)="setCheckedType(checkedOccurrenceLabel.PRIVATE)" [disabled]="!this.isReady"
             class="check-navigation-button" mat-raised-button>
       <mat-icon>lock</mat-icon>
-      <span>&nbsp;sensitive data</span>
+      <span>&nbsp;Sensitive Data</span>
     </button>
   </div>
-  <div id="shortcut-button">
+  <div class="shortcut-button">
     <button (click)="openShortcutDialog()" mat-raised-button>
       <mat-icon>keyboard</mat-icon>
     </button>

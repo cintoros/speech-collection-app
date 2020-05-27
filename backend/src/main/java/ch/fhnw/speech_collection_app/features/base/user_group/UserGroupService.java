@@ -67,7 +67,6 @@ public class UserGroupService {
      * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
-        //TODO change logic so it is also possible to return an image or use a different endpoint?
         checkAllowed(groupId);
         return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
@@ -106,15 +105,19 @@ public class UserGroupService {
      */
     public List<Occurrence> getNextOccurrences(long groupId) {
         checkAllowed(groupId);
-        //TODO change logic so it is also possible to return an image or use a different endpoint?
+        var loggedInUserId = customUserDetailsService.getLoggedInUserId();
+        var audio_element = DATA_ELEMENT.as("audio_element");
         return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
+                        .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID)
+                        .join(audio_element).on(audio_element.ID.eq(DATA_TUPLE.DATA_ELEMENT_ID_2)))
                 .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
                         .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
                         .and(DATA_TUPLE.FINISHED.isFalse())
+                        .and(audio_element.USER_ID.notEqual(loggedInUserId))
                         .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
                                 .from(CHECKED_DATA_TUPLE)
-                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(customUserDetailsService.getLoggedInUserId()))))
+                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(loggedInUserId))))
                 ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
     }
 
