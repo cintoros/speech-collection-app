@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
@@ -67,9 +69,8 @@ public class UserGroupService {
      * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
-        //TODO optimize this query if possible.
         checkAllowed(groupId);
-        return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
+        var res = dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
                         //only show the ones that are good.
@@ -86,8 +87,8 @@ public class UserGroupService {
                                         .from(CHECKED_DATA_ELEMENT)
                                         .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
-                .orderBy(DSL.rand())
-                .limit(1).fetchOneInto(TextDto.class);
+                .limit(20).fetchInto(TextDto.class);
+        return res.get(ThreadLocalRandom.current().nextInt(res.size()));
     }
 
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {

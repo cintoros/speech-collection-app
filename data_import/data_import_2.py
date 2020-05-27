@@ -36,7 +36,11 @@ def data_import_2():
                    [1, 1, sp, "CommonVoice", "CC-0"])
     source_id = get_last_insert_id(cursor)
     file1 = open(os.path.join(base_dir, sp), "r")
-    for idx, line in enumerate(file1.readlines()):
+    lines = file1.readlines()
+    # NOTE mysql/mariadb do not support tablesample so we need to shuffle the data before inserting.
+    import random
+    random.shuffle(lines)
+    for idx, line in enumerate(lines):
         cursor.execute("insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
                        [source_id, 1, False])
         element_id = get_last_insert_id(cursor)
