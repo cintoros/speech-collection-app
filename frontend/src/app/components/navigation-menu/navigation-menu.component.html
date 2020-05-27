@@ -2,50 +2,50 @@
 
 
 <header class="masthead mb-auto">
-  <div class="inner">
-    <h3 class="masthead-brand" (click)="redirectToPage('/home')">Voice Collection App</h3>
-    <nav class="nav nav-masthead justify-content-center">
-      <ng-container *ngIf="authService.checkAuthenticated()">
-        <a class="nav-link" (click)="redirectToPage('/record')">Aufnehmen</a>
-        <a class="nav-link" (click)="redirectToPage('/check')">Prüfen</a>
-        <a class="nav-link" (click)="redirectToPage('/profile')">
-          <ng-container *ngIf="authService.checkAuthenticated()">
-            <mat-menu #menu>
-              <mat-list style="padding: 0;">
-                <mat-list-item [routerLink]="['/profile']">Profile</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item (click)="authService.logout(true)">Log Out</mat-list-item>
-              </mat-list>
-            </mat-menu>
-          </ng-container> {{this.user.username}}
-        </a>
-        <a href="" class="nav-link">
-          <div class="quiz-medal">
-            <div class="quiz-medal__circle quiz-medal__circle--gold">
-              <span>
-                49
-              </span>
-            </div>
-            <div class="quiz-medal__ribbon quiz-medal__ribbon--left"></div>
-            <div class="quiz-medal__ribbon quiz-medal__ribbon--right"></div>
-          </div>
-        </a>
-      </ng-container>
-    </nav>
-  </div>
+    <div class="inner">
+        <h3 class="masthead-brand" (click)="redirectToPage('/home')">Voice Collection App</h3>
+        <nav class="nav nav-masthead justify-content-center">
+            <ng-container *ngIf="authService.checkAuthenticated()">
+                <a class="nav-link" (click)="redirectToPage('/record')">Aufnehmen</a>
+                <a class="nav-link" (click)="redirectToPage('/check')">Prüfen</a>
+                <a class="nav-link" (click)="redirectToPage('/profile')">
+                    <ng-container *ngIf="authService.checkAuthenticated()">
+                        <mat-menu #menu>
+                            <mat-list style="padding: 0;">
+                                <mat-list-item [routerLink]="['/profile']">Profile</mat-list-item>
+                                <mat-divider></mat-divider>
+                                <mat-list-item (click)="authService.logout(true)">Log Out</mat-list-item>
+                            </mat-list>
+                        </mat-menu>
+                    </ng-container> {{this.user.username}}
+                </a>
+                <a class="nav-link" (click)="redirectToPage('/gamification')">
+                    <div class="quiz-medal">
+                        <div class="quiz-medal__circle quiz-medal__circle--gold">
+                            <span>
+                                49
+                            </span>
+                        </div>
+                        <div class="quiz-medal__ribbon quiz-medal__ribbon--left"></div>
+                        <div class="quiz-medal__ribbon quiz-medal__ribbon--right"></div>
+                    </div>
+                </a>
+            </ng-container>
+        </nav>
+    </div>
 </header>
 <div class="container"></div>
 <div class="main">
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
 </div>
 <footer class="mastfoot mt-auto">
-  <p>Informationen zum App ... etc. Impressum link</p>
-  <a class="admin-links" (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">Prüfen Übersicht</a>
-  <a class="admin-links" (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">Dokument
-    Übersicht</a>
-  <a class="admin-links" (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">Benutzergruppen</a>
-  <a class="admin-links" (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()">Adminbereich</a>
+    <p>Informationen zum App ... etc. Impressum link</p>
+    <a class="admin-links" (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">Prüfen Übersicht</a>
+    <a class="admin-links" (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">Dokument
+        Übersicht</a>
+    <a class="admin-links" (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">Benutzergruppen</a>
+    <a class="admin-links" (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()">Adminbereich</a>
 
 </footer>

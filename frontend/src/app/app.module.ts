@@ -68,6 +68,7 @@ import { ElementSelectorComponent } from './components/record/element-selector/e
 import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
 import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
 import { CheckCheckerComponent } from './components/check/check/check-checker/check-checker.component';
+import { GamificationComponent } from './components/gamification/gamification.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { CheckCheckerComponent } from './components/check/check/check-checker/ch
     TupleSelectorComponent,
     ExcerptFromDataElemIdComponent,
     CheckCheckerComponent,
+    GamificationComponent,
   ],
   imports: [
     BrowserModule,
