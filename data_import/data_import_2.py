@@ -38,12 +38,14 @@ def data_import_2():
     file1 = open(os.path.join(base_dir, sp), "r")
     for idx, line in enumerate(file1.readlines()):
         cursor.execute("insert into data_element ( source_id,  user_group_id, finished)values (%s, %s, %s)",
-                       [source_id, 1, True])
+                       [source_id, 1, False])
         element_id = get_last_insert_id(cursor)
         cursor.execute("insert into text ( dialect_id,  data_element_id, text)values (%s, %s, %s)",
                        [27, element_id, line])
         if idx % 10000 == 0:
             logging.info('Loaded %s values', idx)
+            connection.commit()
+    connection.commit()
     logging.info('Done!')
 
 

@@ -67,6 +67,7 @@ public class UserGroupService {
      * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
+        //TODO optimize this query if possible.
         checkAllowed(groupId);
         return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
