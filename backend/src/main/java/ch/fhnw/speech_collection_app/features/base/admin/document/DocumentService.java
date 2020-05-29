@@ -1,6 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.features.base.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
 import org.apache.tika.config.TikaConfig;
@@ -10,6 +11,7 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.jooq.DSLContext;
+import org.jooq.SortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,13 +107,25 @@ public class DocumentService {
                 .execute();
     }
 
-    public List<TextElementDto> getTextElement(long groupId, long dataElementId) {
+    public PaginationResultDto<TextElementDto> getTextElement(
+            long groupId, long dataElementId, long pageIndex, long pageSize, String active, String direction
+    ) {
         isAllowed(groupId);
-        return dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
+        SortField<?> sortField;
+        if (active != null && direction != null) {
+            var field = (active.equals("is_sentence_error")) ? TEXT.IS_SENTENCE_ERROR : DATA_ELEMENT.field(active);
+            sortField = (direction.equals("desc")) ? field.desc() : field.asc();
+        } else sortField = DATA_ELEMENT.ID.asc();
+        var count = dslContext.fetchCount(DATA_ELEMENT, DATA_ELEMENT.SOURCE_ID.eq(dataElementId));
+        var items = dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
                 TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
+                .orderBy(sortField)
+                .offset(pageIndex * pageSize)
+                .limit(pageSize)
                 .fetchInto(TextElementDto.class);
+        return new PaginationResultDto<>(items, count);
     }
 
     public void deleteSource(long groupId, long sourceId) {
@@ -124,7 +138,7 @@ public class DocumentService {
     public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
         return dslContext.selectFrom(SOURCE)
-                .where(SOURCE.USER_GROUP_ID.eq(groupId).and(SOURCE.DOMAIN_ID.isNotNull()))
+                .where(SOURCE.USER_GROUP_ID.eq(groupId))
                 .fetchInto(Source.class);
     }
 

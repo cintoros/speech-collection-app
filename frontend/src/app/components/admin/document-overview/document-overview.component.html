@@ -41,7 +41,7 @@
     </button>
     <table [dataSource]="textElements" mat-table matSort style="width: 100%; ">
       <ng-container matColumnDef="text">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Text</th>
+        <th *matHeaderCellDef mat-header-cell>Text</th>
         <td *matCellDef="let element" mat-cell>{{element.text}}</td>
       </ng-container>
       <ng-container matColumnDef="skipped">
