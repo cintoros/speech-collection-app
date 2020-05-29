@@ -35,11 +35,11 @@
   <div id="navigation-button-container">
     <button (click)="togglePlay();" *ngIf=" !isPlaying" class="check-navigation-button" mat-raised-button>
       <mat-icon>play_arrow</mat-icon>
-      [p]
+      Play [p]
     </button>
     <button (click)="togglePlay();" *ngIf="isPlaying" class="check-navigation-button" mat-raised-button>
       <mat-icon>pause</mat-icon>
-      [p]
+      Pause [p]
     </button>
     <button (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)" [disabled]="!this.isReady"
             class="check-navigation-button" mat-raised-button>
