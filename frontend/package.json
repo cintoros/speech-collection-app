@@ -21,7 +21,6 @@
     "@angular/platform-browser-dynamic": "^9.1.9",
     "@angular/router": "^9.1.9",
     "export-to-csv": "^0.2.1",
-    "ngx-carousel-lib": "^0.1.2",
     "ngx-markdown": "^9.1.1",
     "rxjs": "^6.5.5",
     "tslib": "^1.13.0",

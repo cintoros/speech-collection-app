@@ -6,12 +6,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {CarouselModule} from 'ngx-carousel-lib';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthGuardService} from './guards/auth-guard.service';
 import {ProfileComponent} from './components/profile/profile.component';
 import {AvatarComponent} from './components/multi-use/avatar/avatar.component';
-import {CheckMoreComponent} from './components/check/check-more/check-more.component';
 import {OverviewComponent} from './components/admin/overview/overview.component';
 import {CheckComponent} from './components/check/check/check.component';
 import {LoginComponent} from './components/login/login.component';
@@ -54,7 +52,7 @@ import {MarkdownModule, MarkdownService} from 'ngx-markdown';
 import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
+import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
 
 
 @NgModule({
@@ -67,7 +65,6 @@ import { VerificationTokenComponent } from './components/verification-token/veri
     LoginComponent,
     ProfileComponent,
     AvatarComponent,
-    CheckMoreComponent,
     RecordComponent,
     ProfileEditorComponent,
     AdminComponent,
@@ -83,7 +80,6 @@ import { VerificationTokenComponent } from './components/verification-token/veri
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    CarouselModule,
     ReactiveFormsModule,
     FormsModule,
     MatCardModule,
@@ -141,8 +137,7 @@ import { VerificationTokenComponent } from './components/verification-token/veri
     AppComponent
   ],
   entryComponents: [
-    ShortcutComponent,
-    CheckMoreComponent
+    ShortcutComponent
   ]
 })
 export class AppModule {
