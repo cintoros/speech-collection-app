@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {UserGroupService} from '../../../services/user-group.service';
@@ -42,13 +42,14 @@ interface TextElementDto {
   templateUrl: './document-overview.component.html',
   styleUrls: ['./document-overview.component.scss']
 })
-export class DocumentOverviewComponent implements OnInit, AfterViewInit {
+export class DocumentOverviewComponent implements OnInit {
   documents: Source[] = [];
   textElements: Array<TextElementDto>;
   private baseUrl: string;
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   private domains: Domain[] = [];
   private selectedSource: Source;
+  private lastBefore: boolean;
 
   constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
   }
@@ -101,21 +102,24 @@ export class DocumentOverviewComponent implements OnInit, AfterViewInit {
     } else if (pageEvent.pageIndex >= Math.floor(pageEvent.length / pageEvent.pageSize)) {
       return this.loadLastPage();
     } else {
-      const before = pageEvent.previousPageIndex < pageEvent.pageIndex;
-      const key = (before) ? this.textElements[pageEvent.pageSize - 1] : this.textElements[0];
+      const before = pageEvent.previousPageIndex > pageEvent.pageIndex;
+      //NOTE this hack is needed becase of https://github.com/jOOQ/jOOQ/issues/6380
+      //TODO we need to save if the last element was also before -> in this case we again need the  [pageEvent.pageSize - 1];
+      const key = (before && !this.lastBefore) ? this.textElements[0] : this.textElements[pageEvent.pageSize - 1];
       return this.loadFromRest(this.paginator.pageSize, key.id, before);
     }
   }
 
   private loadFirstPage() {
-    return this.loadFromRest(this.paginator.pageSize, 0x7ffffffffffffff, true);
-  }
-
-  private loadLastPage() {
     return this.loadFromRest(this.paginator.pageSize, 0, false);
   }
 
+  private loadLastPage() {
+    return this.loadFromRest(this.paginator.pageSize, 0x7ffffffffffffff, true);
+  }
+
   private loadFromRest(pageSize: number, lastId: number, before: boolean) {
+    this.lastBefore = before;
     const url = `${this.baseUrl + this.selectedSource.id}/element?lastId=${lastId}&pageSize=${pageSize}&before=${before}`;
     return this.httpClient.get<PaginationResultDto<TextElementDto>>(url);
   }

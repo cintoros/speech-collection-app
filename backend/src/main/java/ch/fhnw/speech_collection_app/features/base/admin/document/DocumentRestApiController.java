@@ -1,8 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
-import ch.fhnw.speech_collection_app.features.base.pagination.PaginationResultDto;
+import ch.fhnw.speech_collection_app.features.base.admin.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

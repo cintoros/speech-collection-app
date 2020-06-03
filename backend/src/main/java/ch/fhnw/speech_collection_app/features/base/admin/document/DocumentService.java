@@ -1,7 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
-import ch.fhnw.speech_collection_app.features.base.pagination.PaginationResultDto;
+import ch.fhnw.speech_collection_app.features.base.admin.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
 import org.apache.tika.config.TikaConfig;
@@ -11,7 +11,6 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.jooq.DSLContext;
-import org.jooq.SortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

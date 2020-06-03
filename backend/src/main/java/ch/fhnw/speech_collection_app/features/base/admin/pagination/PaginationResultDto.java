@@ -1,4 +1,4 @@
-package ch.fhnw.speech_collection_app.features.base.pagination;
+package ch.fhnw.speech_collection_app.features.base.admin.pagination;
 
 import java.util.List;
 
