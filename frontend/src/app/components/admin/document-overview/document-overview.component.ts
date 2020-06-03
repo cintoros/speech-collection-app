@@ -103,8 +103,7 @@ export class DocumentOverviewComponent implements OnInit {
       return this.loadLastPage();
     } else {
       const before = pageEvent.previousPageIndex > pageEvent.pageIndex;
-      //NOTE this hack is needed becase of https://github.com/jOOQ/jOOQ/issues/6380
-      //TODO we need to save if the last element was also before -> in this case we again need the  [pageEvent.pageSize - 1];
+      //this hack is needed becase of https://github.com/jOOQ/jOOQ/issues/6380
       const key = (before && !this.lastBefore) ? this.textElements[0] : this.textElements[pageEvent.pageSize - 1];
       return this.loadFromRest(this.paginator.pageSize, key.id, before);
     }
