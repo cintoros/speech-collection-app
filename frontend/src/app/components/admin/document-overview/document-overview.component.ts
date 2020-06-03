@@ -2,8 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {UserGroupService} from '../../../services/user-group.service';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, SortDirection} from '@angular/material/sort';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {Domain} from '../../../models/domain';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
@@ -45,11 +44,9 @@ interface TextElementDto {
 })
 export class DocumentOverviewComponent implements OnInit, AfterViewInit {
   documents: Source[] = [];
-  // TODO refactor this so it works with biiiiig documents.
   textElements: Array<TextElementDto>;
   private baseUrl: string;
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) private sort: MatSort;
   private domains: Domain[] = [];
   private selectedSource: Source;
 
@@ -63,20 +60,14 @@ export class DocumentOverviewComponent implements OnInit, AfterViewInit {
     this.reload();
   }
 
-  ngAfterViewInit() {
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-  }
-
   edit(text: Source) {
     this.selectedSource = text;
-    merge(this.sort.sortChange, this.paginator.page)
+    const pe = new PageEvent();
+    pe.pageIndex = 0;
+    merge(this.paginator.page)
       .pipe(
-        startWith({}),
-        switchMap(() => {
-          return this.getTextElementDto(
-            this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-        }),
+        startWith(pe),
+        switchMap((value: PageEvent) => this.loadFromRestPE(value)),
         map(data => {
           this.paginator.length = data.totalCount;
           return data.items;
@@ -104,19 +95,28 @@ export class DocumentOverviewComponent implements OnInit, AfterViewInit {
   findDomain = (id: number) => this.domains.find(value => value.id === id);
   back = () => this.textElements = undefined;
 
-  private getTextElementDto(active: string, direction: SortDirection, pageIndex: number, pageSize: number) {
-    if (active === 'isPrivate') {
-      active = 'is_private';
-    } else if (active === 'isSentenceError') {
-      active = 'is_sentence_error';
+  private loadFromRestPE(pageEvent: PageEvent) {
+    if (pageEvent.pageIndex === 0) {
+      return this.loadFirstPage();
+    } else if (pageEvent.pageIndex >= Math.floor(pageEvent.length / pageEvent.pageSize)) {
+      return this.loadLastPage();
+    } else {
+      const before = pageEvent.previousPageIndex < pageEvent.pageIndex;
+      const key = (before) ? this.textElements[pageEvent.pageSize - 1] : this.textElements[0];
+      return this.loadFromRest(this.paginator.pageSize, key.id, before);
     }
-    let url = `${this.baseUrl + this.selectedSource.id}/element?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    if (active) {
-      url = `${url}&active=${active}`;
-    }
-    if (direction) {
-      url = `${url}&direction=${direction}`;
-    }
+  }
+
+  private loadFirstPage() {
+    return this.loadFromRest(this.paginator.pageSize, 0x7ffffffffffffff, true);
+  }
+
+  private loadLastPage() {
+    return this.loadFromRest(this.paginator.pageSize, 0, false);
+  }
+
+  private loadFromRest(pageSize: number, lastId: number, before: boolean) {
+    const url = `${this.baseUrl + this.selectedSource.id}/element?lastId=${lastId}&pageSize=${pageSize}&before=${before}`;
     return this.httpClient.get<PaginationResultDto<TextElementDto>>(url);
   }
 

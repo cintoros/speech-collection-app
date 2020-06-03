@@ -107,22 +107,15 @@ public class DocumentService {
                 .execute();
     }
 
-    public PaginationResultDto<TextElementDto> getTextElement(
-            long groupId, long dataElementId, long pageIndex, long pageSize, String active, String direction
-    ) {
+    public PaginationResultDto<TextElementDto> getTextElement(long groupId, long dataElementId, long lastIndex, long pageSize, boolean before) {
         isAllowed(groupId);
-        SortField<?> sortField;
-        if (active != null && direction != null) {
-            var field = (active.equals("is_sentence_error")) ? TEXT.IS_SENTENCE_ERROR : DATA_ELEMENT.field(active);
-            sortField = (direction.equals("desc")) ? field.desc() : field.asc();
-        } else sortField = DATA_ELEMENT.ID.asc();
         var count = dslContext.fetchCount(DATA_ELEMENT, DATA_ELEMENT.SOURCE_ID.eq(dataElementId));
         var items = dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
                 TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
-                .orderBy(sortField)
-                .offset(pageIndex * pageSize)
+                .orderBy(before ? DATA_ELEMENT.ID.desc() : DATA_ELEMENT.ID.asc())
+                .seek(lastIndex)
                 .limit(pageSize)
                 .fetchInto(TextElementDto.class);
         return new PaginationResultDto<>(items, count);

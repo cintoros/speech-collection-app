@@ -34,10 +34,10 @@ public class DocumentRestApiController {
 
     @GetMapping("{dataElementId}/element")
     public PaginationResultDto<TextElementDto> getTextElement(
-            @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam long pageIndex,
-            @RequestParam long pageSize, @RequestParam @Nullable String active, @RequestParam @Nullable String direction
+            @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam long lastId,
+            @RequestParam long pageSize, @RequestParam boolean before
     ) {
-        return documentService.getTextElement(groupId, dataElementId, pageIndex, pageSize, active, direction);
+        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize,before);
     }
 
     @DeleteMapping("{sourceId}/element/{dataElementId}")
