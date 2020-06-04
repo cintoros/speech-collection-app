@@ -65,8 +65,9 @@ export class CheckComponent implements OnInit {
           .subscribe(value => this.snackBarService.openMessage('successfully updated element.'));
       } else {
         const cta = new CheckedOccurrence(this.occurrence.id, checkType);
-        this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta).subscribe();
-        this.getNextLabeledTextAudio();
+        this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta)
+          // get the next one after we have already marked the old one or else we might get the same one.
+          .subscribe(() => this.getNextLabeledTextAudio());
       }
     }
   }
@@ -104,6 +105,7 @@ export class CheckComponent implements OnInit {
           this.httpClient.get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${occurrence.dataElementId_2}`, {responseType: 'blob'})
             .subscribe(resp => {
               this.blobUrl = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(resp));
+              this.audioPlayer().onplaying = () => this.isReady = true;
               this.audioPlayer().onended = () => this.isPlaying = false;
             });
         }

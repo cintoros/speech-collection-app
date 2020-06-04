@@ -112,7 +112,7 @@ public class UserGroupService {
                 .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
                         .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID)
                         .join(audio_element).on(audio_element.ID.eq(DATA_TUPLE.DATA_ELEMENT_ID_2)))
-                .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
+                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
                         .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
                         .and(DATA_TUPLE.FINISHED.isFalse())
                         .and(audio_element.USER_ID.notEqual(loggedInUserId))
