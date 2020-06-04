@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {RecordingDto, RecordingNoiseLevel, RecordingQuality} from '../../models/recording-dto';
+import {AudioNoiseLevel, AudioQuality, RecordingDto} from '../../models/recording-dto';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SnackBarService} from '../../services/snack-bar.service';
@@ -18,10 +18,10 @@ export class RecordComponent implements OnInit {
   textDto: TextDto = null;
   isRecording = false;
   blobUrl: SafeUrl;
-  recordingQuality = RecordingQuality;
-  recordingNoiseLevel = RecordingNoiseLevel;
-  selectedQuality = RecordingQuality.INTEGRATED;
-  selectedNoiseLevel = RecordingNoiseLevel.MODERATE_NOISE;
+  recordingQuality = AudioQuality;
+  recordingNoiseLevel = AudioNoiseLevel;
+  selectedQuality = AudioQuality.INTEGRATED;
+  selectedNoiseLevel = AudioNoiseLevel.MODERATE_NOISE;
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
   private audioChunks = [];
@@ -29,6 +29,7 @@ export class RecordComponent implements OnInit {
   private elapsedTime = 0;
   private numberObservable: Observable<number>;
   private subscription: Subscription;
+  private browserVersion: string;
 
   constructor(
     private snackBarService: SnackBarService, private detector: ChangeDetectorRef, private httpClient: HttpClient,
@@ -38,6 +39,7 @@ export class RecordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.browserVersion = window.navigator.userAgent;
     this.getNext();
     navigator.mediaDevices.getUserMedia({audio: true})
       .then(stream => {
@@ -67,7 +69,7 @@ export class RecordComponent implements OnInit {
   }
 
   submit(): void {
-    const recording = new RecordingDto(this.textDto.id, this.selectedQuality, this.selectedNoiseLevel);
+    const recording = new RecordingDto(this.textDto.id, this.selectedQuality, this.selectedNoiseLevel, this.browserVersion);
     const formData = new FormData();
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
     formData.append('recording', JSON.stringify(recording));

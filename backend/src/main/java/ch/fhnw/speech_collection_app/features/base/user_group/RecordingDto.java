@@ -7,6 +7,7 @@ public class RecordingDto {
     private Long excerptId;
     private AudioQuality audioQuality;
     private AudioNoiseLevel audioNoiseLevel;
+    private String browserVersion;
 
     public Long getExcerptId() {
         return excerptId;
@@ -30,5 +31,13 @@ public class RecordingDto {
 
     public void setAudioNoiseLevel(AudioNoiseLevel audioNoiseLevel) {
         this.audioNoiseLevel = audioNoiseLevel;
+    }
+
+    public String getBrowserVersion() {
+        return browserVersion;
+    }
+
+    public void setBrowserVersion(String browserVersion) {
+        this.browserVersion = browserVersion;
     }
 }

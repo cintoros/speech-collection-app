@@ -43,6 +43,7 @@ public class UserGroupService {
         element.store();
         var audio = dslContext.newRecord(AUDIO);
         audio.setNoiseLevel(recording.getAudioNoiseLevel());
+        audio.setBrowserVersion(recording.getBrowserVersion());
         audio.setQuality(recording.getAudioQuality());
         audio.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
         audio.setPath("default");
