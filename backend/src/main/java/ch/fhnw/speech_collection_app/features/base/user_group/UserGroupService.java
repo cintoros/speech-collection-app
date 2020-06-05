@@ -65,7 +65,7 @@ public class UserGroupService {
      * return a text to be recorded based on:<br>
      * 1. if the text is not easy to understand (no more than 3 skips)<br>
      * 2. the text does not contain an error<br>
-     * 3. the text was not already recorded with the same dialect<br>
+     * 3. the text was not already recorded<br>
      * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
@@ -80,8 +80,7 @@ public class UserGroupService {
                         .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
                                 .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2).innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
                                 //only show the ones that need an additional dialect
-                                .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)
-                                        .and(AUDIO.DIALECT_ID.eq(customUserDetailsService.getLoggedInUserDialectId()))))
+                                .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)))
                                 //only show the ones that are not already skipped.
                                 .and(DATA_ELEMENT.ID.notIn(dslContext.select(CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID)
                                         .from(CHECKED_DATA_ELEMENT)
