@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 
 interface SeriesValueDto {
-  name: string
+  name: Date
   value: number
 }
 
@@ -28,7 +28,9 @@ export class StatisticsComponent implements OnInit {
     this.httpClient.get<Array<SeriesDto>>(`${environment.url}admin/statistics?since=${date.toISOString()}`)
       .subscribe(array => {
         console.log(array);
-        // TODO we need to stretch this in case we have not not enough data
+        // we need to convert the json date-string into a javascript string
+        array.forEach(v => v.series.forEach(v1 => v1.name = new Date(v1.name)));
+        console.log(array);
         this.multi = array;
       });
   }
