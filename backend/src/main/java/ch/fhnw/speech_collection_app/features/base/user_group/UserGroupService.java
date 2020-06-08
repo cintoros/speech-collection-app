@@ -16,7 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
@@ -42,6 +43,7 @@ public class UserGroupService {
         element.store();
         var audio = dslContext.newRecord(AUDIO);
         audio.setNoiseLevel(recording.getAudioNoiseLevel());
+        audio.setBrowserVersion(recording.getBrowserVersion());
         audio.setQuality(recording.getAudioQuality());
         audio.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
         audio.setPath("default");
@@ -63,13 +65,12 @@ public class UserGroupService {
      * return a text to be recorded based on:<br>
      * 1. if the text is not easy to understand (no more than 3 skips)<br>
      * 2. the text does not contain an error<br>
-     * 3. the text was not already recorded with the same dialect<br>
+     * 3. the text was not already recorded<br>
      * 4. the text was not already skipped by the user.<br>
      */
     public TextDto getExcerpt(Long groupId) {
-        //TODO change logic so it is also possible to return an image or use a different endpoint?
         checkAllowed(groupId);
-        return dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
+        var res = dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
                         //only show the ones that are good.
@@ -79,15 +80,14 @@ public class UserGroupService {
                         .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
                                 .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2).innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
                                 //only show the ones that need an additional dialect
-                                .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)
-                                        .and(AUDIO.DIALECT_ID.eq(customUserDetailsService.getLoggedInUserDialectId()))))
+                                .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)))
                                 //only show the ones that are not already skipped.
                                 .and(DATA_ELEMENT.ID.notIn(dslContext.select(CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID)
                                         .from(CHECKED_DATA_ELEMENT)
                                         .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
-                .orderBy(DSL.rand())
-                .limit(1).fetchOneInto(TextDto.class);
+                .limit(20).fetchInto(TextDto.class);
+        return res.get(ThreadLocalRandom.current().nextInt(res.size()));
     }
 
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {
@@ -101,21 +101,27 @@ public class UserGroupService {
     }
 
     /**
-     * returns the next occurrences to check based on the groupId and available data.<br>
+     * returns the next occurrence to check based on the groupId and available data.<br>
      * occurrences are labeled until it is clear that they clearly wrong|correct.<br>
      */
-    public List<Occurrence> getNextOccurrences(long groupId) {
+    public Optional<Occurrence> getNextOccurrence(long groupId) {
         checkAllowed(groupId);
-        //TODO change logic so it is also possible to return an image or use a different endpoint?
-        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
-                .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
+        var loggedInUserId = customUserDetailsService.getLoggedInUserId();
+        var audio_element = DATA_ELEMENT.as("audio_element");
+        var res = dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
+                        .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID)
+                        .join(audio_element).on(audio_element.ID.eq(DATA_TUPLE.DATA_ELEMENT_ID_2)))
+                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).le(speechCollectionAppConfig.getMinNumChecks())
                         .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
                         .and(DATA_TUPLE.FINISHED.isFalse())
+                        .and(audio_element.USER_ID.notEqual(loggedInUserId))
                         .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
                                 .from(CHECKED_DATA_TUPLE)
-                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(customUserDetailsService.getLoggedInUserId()))))
-                ).orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
+                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(loggedInUserId))))
+                ).limit(20).fetchInto(Occurrence.class);
+        if (res.isEmpty()) return Optional.empty();
+        return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
     }
 
     public byte[] getAudio(long groupId, long dataElementId) throws IOException {

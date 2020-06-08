@@ -56,8 +56,6 @@ public class UserGroupAdminService {
 
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
-        //TODO implement pagination for increased performance
-        //TODO not sure how we want to handle the images for now we just filter based on the type.
         return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE, DATA_TUPLE.DATA_ELEMENT_ID_2)
                 .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)

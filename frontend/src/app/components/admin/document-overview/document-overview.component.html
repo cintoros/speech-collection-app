@@ -39,25 +39,25 @@
     <button (click)="back()" mat-icon-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <table [dataSource]="textElements" mat-table matSort style="width: 100%; ">
+    <table [dataSource]="textElements" mat-table style="width: 100%; ">
       <ng-container matColumnDef="text">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Text</th>
+        <th *matHeaderCellDef mat-header-cell>Text</th>
         <td *matCellDef="let element" mat-cell>{{element.text}}</td>
       </ng-container>
       <ng-container matColumnDef="skipped">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Skipped</th>
+        <th *matHeaderCellDef mat-header-cell>Skipped</th>
         <td *matCellDef="let element" mat-cell>{{element.skipped}}</td>
       </ng-container>
       <ng-container matColumnDef="isPrivate">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Private</th>
+        <th *matHeaderCellDef mat-header-cell>Private</th>
         <td *matCellDef="let element" mat-cell>{{element.isPrivate}}</td>
       </ng-container>
       <ng-container matColumnDef="isSentenceError">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Sentence error</th>
+        <th *matHeaderCellDef mat-header-cell>Sentence error</th>
         <td *matCellDef="let element" mat-cell>{{element.isSentenceError}}</td>
       </ng-container>
       <ng-container matColumnDef="options">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <th *matHeaderCellDef mat-header-cell></th>
         <td *matCellDef="let element" mat-cell>
           <button (click)="deleteTextElement(element)" mat-icon-button>
             <mat-icon>delete</mat-icon>

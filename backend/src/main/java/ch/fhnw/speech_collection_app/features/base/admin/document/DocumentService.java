@@ -1,6 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.features.base.admin.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
 import org.apache.tika.config.TikaConfig;
@@ -105,13 +106,18 @@ public class DocumentService {
                 .execute();
     }
 
-    public List<TextElementDto> getTextElement(long groupId, long dataElementId) {
+    public PaginationResultDto<TextElementDto> getTextElement(long groupId, long dataElementId, long lastIndex, long pageSize, boolean before) {
         isAllowed(groupId);
-        return dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
+        var count = dslContext.fetchCount(DATA_ELEMENT, DATA_ELEMENT.SOURCE_ID.eq(dataElementId));
+        var items = dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
                 TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.join(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
+                .orderBy(before ? DATA_ELEMENT.ID.desc() : DATA_ELEMENT.ID.asc())
+                .seek(lastIndex)
+                .limit(pageSize)
                 .fetchInto(TextElementDto.class);
+        return new PaginationResultDto<>(items, count);
     }
 
     public void deleteSource(long groupId, long sourceId) {
@@ -124,7 +130,7 @@ public class DocumentService {
     public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
         return dslContext.selectFrom(SOURCE)
-                .where(SOURCE.USER_GROUP_ID.eq(groupId).and(SOURCE.DOMAIN_ID.isNotNull()))
+                .where(SOURCE.USER_GROUP_ID.eq(groupId))
                 .fetchInto(Source.class);
     }
 

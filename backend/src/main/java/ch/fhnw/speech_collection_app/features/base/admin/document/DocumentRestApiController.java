@@ -1,5 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
+import ch.fhnw.speech_collection_app.features.base.admin.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +32,11 @@ public class DocumentRestApiController {
     }
 
     @GetMapping("{dataElementId}/element")
-    public List<TextElementDto> getTextElement(@PathVariable long groupId, @PathVariable long dataElementId) {
-        return documentService.getTextElement(groupId, dataElementId);
+    public PaginationResultDto<TextElementDto> getTextElement(
+            @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam long lastId,
+            @RequestParam long pageSize, @RequestParam boolean before
+    ) {
+        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize,before);
     }
 
     @DeleteMapping("{sourceId}/element/{dataElementId}")
