@@ -58,6 +58,10 @@
             <mat-icon>supervised_user_circle</mat-icon>
             <span>Admin</span>
           </mat-list-item>
+          <mat-list-item (click)="redirectToPage('/admin/statistics')" *ngIf="isAdmin()" >
+            <mat-icon>show_chart</mat-icon>
+            <span>Statistics</span>
+          </mat-list-item>
         </ng-container>
       </mat-list>
     </div>

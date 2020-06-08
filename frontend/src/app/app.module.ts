@@ -53,6 +53,8 @@ import {DocumentOverviewComponent} from './components/admin/document-overview/do
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
+import { StatisticsComponent } from './components/admin/statistics/statistics.component';
+import {LineChartModule} from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -73,7 +75,8 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
     UserGroupRoleComponent,
     EditTextAudioComponent,
     DocumentOverviewComponent,
-    VerificationTokenComponent
+    VerificationTokenComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -110,6 +113,7 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
     }),
     MatTabsModule,
     MatCheckboxModule,
+    LineChartModule,
   ],
   providers: [
     HttpClient,
