@@ -3,6 +3,7 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.features.base.user_group.ReturnWrapper.ElementType;
+import ch.fhnw.speech_collection_app.features.base.user_group.AchievementsService;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
@@ -22,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
@@ -31,13 +34,15 @@ public class UserGroupService {
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
     private final SpeechCollectionAppConfig speechCollectionAppConfig;
+    private final AchievementsService achievementsService;
 
     @Autowired
     public UserGroupService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
-            SpeechCollectionAppConfig speechCollectionAppConfig) {
+            SpeechCollectionAppConfig speechCollectionAppConfig, AchievementsService achievementsService) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
+        this.achievementsService = achievementsService;
     }
 
     public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElementDto otherDataElement,
@@ -89,6 +94,10 @@ public class UserGroupService {
                 break;
         }
         tuple.store();
+
+        Date date = new Date();
+        Long achievementID = achievementsService.getMonthAudioAchievement(new Timestamp(date.getTime()));
+        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
     }
 
     public ReturnWrapper postExcerpt(long groupId, TextDto textDto, DataElementDto otherDataElement,
@@ -131,6 +140,11 @@ public class UserGroupService {
                 break;
         }
         tuple.store();
+
+        Date date = new Date();
+        Long achievementID = achievementsService.getMonthTextAchievement(new Timestamp(date.getTime()));
+        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
+
         ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
                 null, ElementType.TEXT);
 
