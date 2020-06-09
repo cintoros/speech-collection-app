@@ -24,7 +24,7 @@ export class RecordComponent implements OnInit {
   selectedNoiseLevel = AudioNoiseLevel.MODERATE_NOISE;
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
-  private audioChunks = [];
+  private audioChunks: Blob[] = [];
   private groupId = 1;
   private elapsedTime = 0;
   private numberObservable: Observable<number>;
