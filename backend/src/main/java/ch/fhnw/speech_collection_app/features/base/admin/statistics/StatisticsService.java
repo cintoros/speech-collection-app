@@ -34,20 +34,20 @@ public class StatisticsService {
         var select = dslContext.select(date, DSL.count())
                 .from(CHECKED_DATA_ELEMENT)
                 .where(CHECKED_DATA_ELEMENT.TYPE.notEqual(CheckedDataElementType.SKIPPED)
-                        .and(CHECKED_DATA_ELEMENT.CREATED_TIME.ge(timestamp)));
+                        .and(CHECKED_DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)));
         var checkedTexts = toSeriesDto(select, "checked texts", since, date);
 
         date = DSL.date(CHECKED_DATA_TUPLE.CREATED_TIME);
         select = dslContext.select(date, DSL.count())
                 .from(CHECKED_DATA_TUPLE)
                 .where(CHECKED_DATA_TUPLE.TYPE.notEqual(CheckedDataTupleType.SKIPPED)
-                        .and(CHECKED_DATA_TUPLE.CREATED_TIME.ge(timestamp)));
+                        .and(CHECKED_DATA_TUPLE.CREATED_TIME.greaterOrEqual(timestamp)));
         var checkedRecordings = toSeriesDto(select, "checked recordings", since, date);
 
         date = DSL.date(DATA_ELEMENT.CREATED_TIME);
         select = dslContext.select(date, DSL.count())
                 .from(DATA_ELEMENT).innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
-                .where((DATA_ELEMENT.CREATED_TIME.ge(timestamp)));
+                .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)));
         var recordings = toSeriesDto(select, "recordings", since, date);
 
         return List.of(checkedTexts, checkedRecordings, recordings);
