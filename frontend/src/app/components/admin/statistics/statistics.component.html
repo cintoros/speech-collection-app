@@ -1,15 +1,15 @@
 <div class="margin">
-  <h3>Statistics</h3>
+  <h3>Speech Collection App Statistics</h3>
   <mat-form-field class="margin">
     <mat-label>Choose a date</mat-label>
-    <mat-datepicker-toggle [for]="myDatepicker" matSuffix></mat-datepicker-toggle >
-    <input (dateChange)="changeDate($event)" [matDatepicker]="myDatepicker" matInput [value]="myDate"><!---->
+    <mat-datepicker-toggle [for]="myDatepicker" matSuffix></mat-datepicker-toggle>
+    <input (dateChange)="changeDate($event)" [matDatepicker]="myDatepicker" [value]="myDate" matInput>
     <mat-datepicker #myDatepicker></mat-datepicker>
   </mat-form-field>
 </div>
 <div style="height: 50%;width: 50%">
   <ngx-charts-line-chart [activeEntries]="multi" [results]="multi" [showXAxisLabel]="true" [showYAxisLabel]="true"
-                         [xAxisLabel]="'Date'" [xAxis]="true" [yAxisLabel]="'Count'" [yAxis]="true" legend="true"
+                         [xAxisLabel]="'Day'" [xAxis]="true" [yAxisLabel]="'Count per Day'" [yAxis]="true" legend="true"
                          showRefLabels="true">
   </ngx-charts-line-chart>
 </div>
