@@ -1,81 +1,75 @@
 <form (ngSubmit)="register()" [formGroup]="registerForm">
-  <mat-form-field class="max-width">
-    <input autocomplete="given-name" disabled="true" formControlName="firstName" matInput placeholder="First Name"
-           type="text">
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <input autocomplete="family-name" formControlName="lastName" matInput placeholder="Last Name" type="text">
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <input autocomplete="username" formControlName="username" matInput placeholder="Username*" type="text">
-    <mat-error *ngIf="isUNError('required')">Please enter your username</mat-error>
-    <mat-error *ngIf="isUNError('pattern')">Username may not contain any special characters</mat-error>
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <input autocomplete="email" formControlName="email" matInput placeholder="Email*" type="email">
-    <mat-error *ngIf="isEmailError('required')">Please enter your email or username</mat-error>
-    <mat-error *ngIf="isEmailError('pattern')">Please enter a valid email adress</mat-error>
-  </mat-form-field>
-  <mat-form-field *ngIf="isNewUser" class="max-width">
-    <input autocomplete="password" formControlName="password" matInput placeholder="Password*" type="password">
-    <mat-error *ngIf="isPwError('required')">Please enter your password</mat-error>
-    <mat-error *ngIf="isPwError('minlength')">At least 8 characters</mat-error>
-    <mat-error *ngIf="isPwError('maxlength')">Maximum 50 characters</mat-error>
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <mat-label>Sex</mat-label>
-    <mat-select formControlName="sex">
-      <mat-option value="NONE">None</mat-option>
-      <mat-option value="M">m</mat-option>
-      <mat-option value="F">f</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <mat-label>Age</mat-label>
-    <mat-select formControlName="age">
-      <mat-option value="NONE">None</mat-option>
-      <mat-option value="U20">0-19</mat-option>
-      <mat-option value="U30">20-29</mat-option>
-      <mat-option value="U40">30-39</mat-option>
-      <mat-option value="U50">40-49</mat-option>
-      <mat-option value="U60">50-59</mat-option>
-      <mat-option value="U70">60-69</mat-option>
-      <mat-option value="U80">70-79</mat-option>
-      <mat-option value="O80">80+</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="max-width">
-    <!--TODO add a link/disclaimer here what the difference is-->
-    <mat-label>Licence*</mat-label>
-    <mat-select formControlName="licence">
-      <mat-option value="ACADEMIC">Academic</mat-option>
-      <mat-option value="PUBLIC">Public</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <p style="color: grey;font-size: 0.8em">* Indicates a required field</p>
-  <mat-card>
-    <h4 style="color: grey;font-size: 0.8em">Dialect</h4>
-    <p style="color: grey;font-size: 0.8em">Please enter the zip code of your last school years. If your dialect changed
-      a lot since then, please also select the canton which describes your current dialect best. If your last school
-      years were outside of Switzerland, tick the checkbox and select the canton describing your current dialect best
-      instead.</p>
     <mat-form-field class="max-width">
-      <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="Zip Code" type="text">
-      <mat-error *ngIf="isZipError('pattern')">Not a valid zip code</mat-error>
+        <input autocomplete="given-name" disabled="true" formControlName="firstName" matInput placeholder="Vorname"
+            type="text">
     </mat-form-field>
-    <mat-checkbox formControlName="notCH">outside of Switzerland</mat-checkbox>
     <mat-form-field class="max-width">
-      <mat-label>Canton</mat-label>
-      <mat-select formControlName="canton">
-        <mat-option>None</mat-option>
-        <mat-option *ngFor="let canton of dialects"
-                    [value]="canton.id">{{canton.countyName}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="isCanctonError('required')">Canton is required</mat-error>
+        <input autocomplete="family-name" formControlName="lastName" matInput placeholder="Nachname" type="text">
     </mat-form-field>
-  </mat-card>
-  <div *ngIf="!disabled">
-    <button class="custom-button" mat-button type="submit">Save</button>
-    <button (click)="cancel()" class="custom-button" mat-button type="button">Cancel</button>
-  </div>
+    <mat-form-field class="max-width">
+        <input autocomplete="username" formControlName="username" matInput placeholder="Benutzername*" type="text">
+        <mat-error *ngIf="isUNError('required')">Bitte gib ein Benutzername ein</mat-error>
+        <mat-error *ngIf="isUNError('pattern')">Keine Sonderzeichen im Benutzername!</mat-error>
+    </mat-form-field>
+    <mat-form-field class="max-width">
+        <input autocomplete="email" formControlName="email" matInput placeholder="Email*" type="email">
+        <mat-error *ngIf="isEmailError('required')">Bitte gib dein Benutzername oder Email an.</mat-error>
+        <mat-error *ngIf="isEmailError('pattern')">Bitte gib einen gültige Email adresse ein.</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="isNewUser" class="max-width">
+        <input autocomplete="password" formControlName="password" matInput placeholder="Password*" type="password">
+        <mat-error *ngIf="isPwError('required')">Bitte gib dein passwort ein.</mat-error>
+        <mat-error *ngIf="isPwError('minlength')">min. 8 Zeichen</mat-error>
+        <mat-error *ngIf="isPwError('maxlength')">max. 50 Zeichen</mat-error>
+    </mat-form-field>
+    <mat-form-field class="max-width">
+        <mat-label>Bitte gib dein Geschlecht an.</mat-label>
+        <mat-select formControlName="sex">
+            <mat-option value="F">Weiblich</mat-option>
+            <mat-option value="M">Männlich</mat-option>
+            <mat-option value="NONE">Will ich nicht angeben</mat-option>
+            <mat-option value="NONE">Weitere</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="max-width">
+        <mat-label>Bitte gib deine Altersklasse an.</mat-label>
+        <mat-select formControlName="age">
+            <mat-option value="NONE">Will ich nicht angeben</mat-option>
+            <mat-option value="U20">0-19</mat-option>
+            <mat-option value="U30">20-29</mat-option>
+            <mat-option value="U40">30-39</mat-option>
+            <mat-option value="U50">40-49</mat-option>
+            <mat-option value="U60">50-59</mat-option>
+            <mat-option value="U70">60-69</mat-option>
+            <mat-option value="U80">70-79</mat-option>
+            <mat-option value="O80">80+</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <p style="color: grey;font-size: 0.8em">*: Pflichtfelder</p>
+    <mat-card>
+        <h4 style="color: grey;font-size: 0.8em">Dialekt</h4>
+        <p style="color: grey;font-size: 0.8em">Bitte gib die PLZ deiner letzten Schuljahre an. Falls du nicht in der
+            Schweiz zur Schule gegangen bist, wähle "Ausserhalb der Schweiz".</p>
+        <mat-form-field class="max-width">
+            <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="Zip Code" type="text">
+            <mat-error *ngIf="isZipError('pattern')">Das ist keine gültige PLZ!</mat-error>
+        </mat-form-field>
+        <mat-checkbox formControlName="notCH">Ausserhalb der Schweiz</mat-checkbox>
+        <mat-form-field class="max-width">
+            <mat-label>Bitte wähle ein Kanton welcher deinem Dialekt am nächsten kommt.</mat-label>
+            <mat-select formControlName="canton">
+                <mat-option>Will ich nicht angeben</mat-option>
+                <mat-option *ngFor="let canton of dialects" [value]="canton.id">{{canton.countyName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="isCanctonError('required')">Bitte gib einen Kanton an, oder wähle: "Will ich nicht
+                angeben".</mat-error>
+        </mat-form-field>
+    </mat-card>
+
+    <br>
+
+    <div *ngIf="!disabled">
+        <button (click)="cancel()" class="btn btn-default" type="button">Abbrechen</button>
+        <button class="btn btn-primary" type="submit">Speichern</button>
+    </div>
 </form>
