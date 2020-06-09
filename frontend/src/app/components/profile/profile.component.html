@@ -1,6 +1,5 @@
-<div *ngIf="user"
-    style="height: 40%; margin-top: -12px; background-color: #303f9f; display: flex; justify-content: center;">
-    <mat-card *ngIf="user" id="header-card" style="margin: 15px; width: 50%; position: absolute;">
+<div *ngIf="user" style="height: 40%; margin-top: -12px;  display: flex; justify-content: center;">
+    <mat-card *ngIf="user" id="header-card" style="margin: 15px; width: 50%; ">
         <br>
         <div>
             <app-profile-editor (output)="toggleProfileEdit()" *ngIf="!isPasswordEdit" [disabled]="!isProfileEdit"
@@ -41,15 +40,12 @@
                             <button (click)="togglePasswordEdit()" mat-button
                                 style="border: lightgray 1px solid; padding: 0 12px; line-height: 48px; bottom: 0;"
                                 type="button">
-                                Cancel
+                                Abbrechen
                             </button>
                         </div>
                     </div>
                 </form>
             </ng-container>
-
         </div>
-
-
     </mat-card>
 </div>
