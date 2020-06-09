@@ -20,7 +20,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row11;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements extends TableImpl<AchievementsRecord> {
 
-    private static final long serialVersionUID = 1443266436;
+    private static final long serialVersionUID = 1618715476;
 
     public static final Achievements ACHIEVEMENTS = new Achievements();
 
@@ -46,6 +46,8 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     public final TableField<AchievementsRecord, Long> DOMAIN_ID = createField(DSL.name("domain_id"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     public final TableField<AchievementsRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<AchievementsRecord, String> BATCH_NAME = createField(DSL.name("batch_name"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public final TableField<AchievementsRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
@@ -142,11 +144,11 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, Long, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row12<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }

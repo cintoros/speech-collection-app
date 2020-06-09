@@ -16,11 +16,12 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements implements Serializable {
 
-    private static final long serialVersionUID = -132946832;
+    private static final long serialVersionUID = -1143495700;
 
     private Long                  id;
     private Long                  domainId;
     private String                name;
+    private String                batchName;
     private String                description;
     private Timestamp             startTime;
     private Timestamp             endTime;
@@ -36,6 +37,7 @@ public class Achievements implements Serializable {
         this.id = value.id;
         this.domainId = value.domainId;
         this.name = value.name;
+        this.batchName = value.batchName;
         this.description = value.description;
         this.startTime = value.startTime;
         this.endTime = value.endTime;
@@ -50,6 +52,7 @@ public class Achievements implements Serializable {
         Long                  id,
         Long                  domainId,
         String                name,
+        String                batchName,
         String                description,
         Timestamp             startTime,
         Timestamp             endTime,
@@ -62,6 +65,7 @@ public class Achievements implements Serializable {
         this.id = id;
         this.domainId = domainId;
         this.name = name;
+        this.batchName = batchName;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -95,6 +99,15 @@ public class Achievements implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Size(max = 65535)
+    public String getBatchName() {
+        return this.batchName;
+    }
+
+    public void setBatchName(String batchName) {
+        this.batchName = batchName;
     }
 
     @Size(max = 65535)
@@ -170,6 +183,7 @@ public class Achievements implements Serializable {
         sb.append(id);
         sb.append(", ").append(domainId);
         sb.append(", ").append(name);
+        sb.append(", ").append(batchName);
         sb.append(", ").append(description);
         sb.append(", ").append(startTime);
         sb.append(", ").append(endTime);

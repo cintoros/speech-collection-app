@@ -3,6 +3,7 @@ CREATE TABLE achievements
     id            BIGINT   NOT NULL AUTO_INCREMENT,
     domain_id     BIGINT            DEFAULT NULL,
     name          TEXT              DEFAULT NULL,
+    batch_name    TEXT              DEFAULT NULL,
     description   TEXT              DEFAULT NULL,
     start_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     end_time      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
