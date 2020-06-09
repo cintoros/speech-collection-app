@@ -39,6 +39,21 @@ export class GamificationComponent implements OnInit {
     return 0;
   }
 
+  private getProgressColor(achievementWrapper: AchievementWrapper): String {
+    var lvl = this.getLevel(achievementWrapper);
+    switch (lvl) {
+      case 0:
+        return 'bronze';
+      case 1:
+        return 'silver';
+      case 2:
+        return 'gold';
+      case 3:
+      case 4:
+        return 'green';
+    }
+  }
+
   private getAchievements(): void {
     this.httpClient
         .get<AchievementWrapper[]>(

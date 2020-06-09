@@ -1,14 +1,18 @@
 <h2>Deine Errungenschaften</h2>
 
-<div class="row">
-    <div class="col-sm-3" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
-        <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
-            [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
-        </app-glyphicons-batch>
-        <div class="progress">
-            <div class="progress-bar bronze" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                aria-valuemax="100">25%</div>
-        </div>
+<div class="row form-group">
+    <div class="col-sm-4" style="padding: 15px;" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
+        <mat-card>
+            <h3>{{achievementWrapper.achievementDto.description}}</h3>
+            <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
+                [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
+            </app-glyphicons-batch>
+            <p>nächste Auszeichnung in:</p>
+            <div class="progress">
+                <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
+                    style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+            </div>
+        </mat-card>
     </div>
 </div>
 
