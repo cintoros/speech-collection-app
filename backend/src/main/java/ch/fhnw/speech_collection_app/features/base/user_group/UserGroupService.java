@@ -351,5 +351,9 @@ public class UserGroupService {
         var type = CheckedDataTupleType.valueOf(checkedDataTuple.getType().toString());
         checked.setType(type);
         checked.store();
+
+        Date date = new Date();
+        Long achievementID = achievementsService.getMonthCheckAchievement(new Timestamp(date.getTime()));
+        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
     }
 }
