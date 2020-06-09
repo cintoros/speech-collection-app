@@ -19,11 +19,14 @@ import java.util.List;
 public class UserGroupRestApiController {
     private final UserGroupService userGroupService;
     private final ObjectMapper objectMapper;
+    private final AchievementsService achievementsService;
 
     @Autowired
-    public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper) {
+    public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper,
+            AchievementsService achievementsService) {
         this.userGroupService = userGroupService;
         this.objectMapper = objectMapper;
+        this.achievementsService = achievementsService;
     }
 
     @PostMapping("recording")
@@ -101,5 +104,10 @@ public class UserGroupRestApiController {
     @ResponseBody
     public byte[] getImage(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {
         return userGroupService.getImage(groupId, dataElementId);
+    }
+
+    @GetMapping(value = "achievements")
+    public List<AchievementWrapper> getAchievements() {
+        return achievementsService.getAchievements();
     }
 }

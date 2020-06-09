@@ -2,22 +2,25 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
 public class AchievementsService {
 
+    private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
     private final SpeechCollectionAppConfig speechCollectionAppConfig;
 
@@ -27,7 +30,9 @@ public class AchievementsService {
     private final Long LVL4 = 100L;
 
     @Autowired
-    public AchievementsService(DSLContext dslContext, SpeechCollectionAppConfig speechCollectionAppConfig) {
+    public AchievementsService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
+            SpeechCollectionAppConfig speechCollectionAppConfig) {
+        this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
@@ -114,6 +119,26 @@ public class AchievementsService {
 
         userAchievement.setPoints(userAchievement.getPoints() + 1L);
         userAchievement.store();
+
+    }
+
+    public List<UserAchievementDto> getUserAchievements(Long userId) {
+        return dslContext.select().from(USER_ACHIEVEMENTS).where(USER_ACHIEVEMENTS.USER_ID.eq(userId))
+                .fetchInto(UserAchievementDto.class);
+    }
+
+    public AchievementDto getAchievement(Long achievementId) {
+        return dslContext.select().from(ACHIEVEMENTS).where(ACHIEVEMENTS.ID.eq(achievementId)).limit(1)
+                .fetchOneInto(AchievementDto.class);
+    }
+
+    public List<AchievementWrapper> getAchievements() {
+        List<UserAchievementDto> userAchievements = getUserAchievements(customUserDetailsService.getLoggedInUserId());
+        List<AchievementWrapper> res = new Vector<AchievementWrapper>();
+        for (UserAchievementDto userAchievement : userAchievements) {
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
+        }
+        return res;
 
     }
 }
