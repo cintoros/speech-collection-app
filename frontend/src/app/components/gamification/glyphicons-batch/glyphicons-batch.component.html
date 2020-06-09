@@ -1,0 +1,9 @@
+<div class="medals">
+    <fa-layers>
+        <fa-icon [icon]="['fas', 'circle']" stackItemSize="2x" class="{{this.color}}"></fa-icon>
+        <fa-icon [icon]="['fas', 'circle']" stackItemSize="2x" transform="shrink-3" class={{this.color2}}></fa-icon>
+        <fa-icon [icon]="['fas', this.glyph]" transform="shrink-9 up-1" class={{this.color}} stackItemSize="2x">
+        </fa-icon>
+        <fa-layers-text content="{{text}}" class={{color3}} transform="shrink-9 right-32 down-18"></fa-layers-text>
+    </fa-layers>
+</div>
