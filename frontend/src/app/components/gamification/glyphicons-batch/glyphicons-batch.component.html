@@ -1,4 +1,4 @@
-<div class="medals">
+<div class="medals" [class]="level == 0 ? 'medals-occluded':''">
     <fa-layers>
         <fa-icon [icon]="['fas', 'circle']" stackItemSize="1x" class="{{this.color}}"></fa-icon>
         <fa-icon [icon]="['fas', 'circle']" stackItemSize="1x" transform="shrink-3" class={{this.color2}}></fa-icon>

@@ -50,7 +50,11 @@
   font-size: 16rem;
   margin: 0rem;
   font-family: fantasy;
-  font-weight: 700;
+  max-width: 24rem;
+}
+
+.medals-occluded{
+  opacity: 0.2;
 }
 
 

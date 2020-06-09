@@ -1,42 +1,38 @@
+<h2>Deine Errungenschaften</h2>
+
+<div class="row">
+    <div class="col-sm-3" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
+        <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
+            [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
+        </app-glyphicons-batch>
+        <div class="progress">
+            <div class="progress-bar bronze" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
+                aria-valuemax="100">25%</div>
+        </div>
+    </div>
+</div>
+
 <h2>Badges Beispiel</h2>
 
-<p>Das Icon kann frei von fontawesome gewählt werden. Es sind 4 Levels vorhanden (Bronze, Silber, Gold, Grün). Der Text
+<p>Das Icon kann frei von fontawesome gewählt werden. Es sind 4 Levels vorhanden (Bronze, Silber, Gold, Platin). Der
+    Text
     kann personalisiert werden.</p>
 
 <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <app-glyphicons-batch [glyph]="'trophy'" [level]="0" [text]="'Mai'"></app-glyphicons-batch>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <app-glyphicons-batch [glyph]="'brain'" [level]="1" [text]="'Juni'"></app-glyphicons-batch>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <app-glyphicons-batch [glyph]="'binoculars'" [level]="2" [text]="'Juli'"></app-glyphicons-batch>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <app-glyphicons-batch [glyph]="'trophy'" [level]="3" [text]="'August'"></app-glyphicons-batch>
     </div>
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'check-square'" [level]="2" [text]="'April'"></app-glyphicons-batch>
-    </div>
 </div>
-<div class="row">
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'star'" [level]="1" [text]="'April'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'clock'" [level]="1" [text]="'April'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'bullseye'" [level]="0" [text]="'März'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'file-audio'" [level]="3" [text]="'Januar'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-2">
-        <app-glyphicons-batch [glyph]="'bug'" [level]="1" [text]="'Februar'"></app-glyphicons-batch>
-    </div>
-</div>
+
 
 <br>
 <br>
