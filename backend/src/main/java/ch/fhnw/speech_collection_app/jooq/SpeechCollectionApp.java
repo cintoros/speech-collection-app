@@ -4,6 +4,7 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
+import ch.fhnw.speech_collection_app.jooq.tables.Achievements;
 import ch.fhnw.speech_collection_app.jooq.tables.Audio;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
@@ -17,6 +18,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.Language;
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
 import ch.fhnw.speech_collection_app.jooq.tables.Text;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
+import ch.fhnw.speech_collection_app.jooq.tables.UserAchievements;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroup;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
@@ -33,9 +35,11 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SpeechCollectionApp extends SchemaImpl {
 
-    private static final long serialVersionUID = -189764183;
+    private static final long serialVersionUID = -1297787489;
 
     public static final SpeechCollectionApp SPEECH_COLLECTION_APP = new SpeechCollectionApp();
+
+    public final Achievements ACHIEVEMENTS = ch.fhnw.speech_collection_app.jooq.tables.Achievements.ACHIEVEMENTS;
 
     public final Audio AUDIO = ch.fhnw.speech_collection_app.jooq.tables.Audio.AUDIO;
 
@@ -63,6 +67,8 @@ public class SpeechCollectionApp extends SchemaImpl {
 
     public final User USER = ch.fhnw.speech_collection_app.jooq.tables.User.USER;
 
+    public final UserAchievements USER_ACHIEVEMENTS = ch.fhnw.speech_collection_app.jooq.tables.UserAchievements.USER_ACHIEVEMENTS;
+
     public final UserGroup USER_GROUP = ch.fhnw.speech_collection_app.jooq.tables.UserGroup.USER_GROUP;
 
     public final UserGroupRole USER_GROUP_ROLE = ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole.USER_GROUP_ROLE;
@@ -88,6 +94,7 @@ public class SpeechCollectionApp extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            Achievements.ACHIEVEMENTS,
             Audio.AUDIO,
             CheckedDataElement.CHECKED_DATA_ELEMENT,
             CheckedDataTuple.CHECKED_DATA_TUPLE,
@@ -101,6 +108,7 @@ public class SpeechCollectionApp extends SchemaImpl {
             Source.SOURCE,
             Text.TEXT,
             User.USER,
+            UserAchievements.USER_ACHIEVEMENTS,
             UserGroup.USER_GROUP,
             UserGroupRole.USER_GROUP_ROLE,
             VerificationToken.VERIFICATION_TOKEN);

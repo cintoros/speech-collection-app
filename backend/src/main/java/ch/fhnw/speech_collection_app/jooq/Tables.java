@@ -4,6 +4,7 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
+import ch.fhnw.speech_collection_app.jooq.tables.Achievements;
 import ch.fhnw.speech_collection_app.jooq.tables.Audio;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
@@ -17,6 +18,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.Language;
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
 import ch.fhnw.speech_collection_app.jooq.tables.Text;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
+import ch.fhnw.speech_collection_app.jooq.tables.UserAchievements;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroup;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
@@ -24,6 +26,8 @@ import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    public static final Achievements ACHIEVEMENTS = Achievements.ACHIEVEMENTS;
 
     public static final Audio AUDIO = Audio.AUDIO;
 
@@ -50,6 +54,8 @@ public class Tables {
     public static final Text TEXT = Text.TEXT;
 
     public static final User USER = User.USER;
+
+    public static final UserAchievements USER_ACHIEVEMENTS = UserAchievements.USER_ACHIEVEMENTS;
 
     public static final UserGroup USER_GROUP = UserGroup.USER_GROUP;
 
