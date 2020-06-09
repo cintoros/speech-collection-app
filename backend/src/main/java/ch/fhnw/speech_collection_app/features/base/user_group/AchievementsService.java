@@ -2,6 +2,7 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -134,7 +135,7 @@ public class AchievementsService {
 
     public List<AchievementWrapper> getAchievements() {
         List<UserAchievementDto> userAchievements = getUserAchievements(customUserDetailsService.getLoggedInUserId());
-        List<AchievementWrapper> res = new Vector<AchievementWrapper>();
+        List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (UserAchievementDto userAchievement : userAchievements) {
             res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
         }
