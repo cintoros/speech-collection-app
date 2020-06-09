@@ -20,7 +20,7 @@ import {ProfileEditorComponent} from './components/multi-use/profile-editor/prof
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
-import {MatOptionModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
@@ -53,8 +53,9 @@ import {DocumentOverviewComponent} from './components/admin/document-overview/do
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
-import { StatisticsComponent } from './components/admin/statistics/statistics.component';
+import {StatisticsComponent} from './components/admin/statistics/statistics.component';
 import {LineChartModule} from '@swimlane/ngx-charts';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -114,6 +115,8 @@ import {LineChartModule} from '@swimlane/ngx-charts';
     MatTabsModule,
     MatCheckboxModule,
     LineChartModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [
     HttpClient,
