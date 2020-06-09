@@ -50,6 +50,7 @@ public class UserGroupService {
         element.setUserGroupId(groupId);
         element.setUserId(customUserDetailsService.getLoggedInUserId());
         element.setIsPrivate(false);
+        element.setSourceId(otherDataElement.getSourceId());
         element.store();
         var audio = dslContext.newRecord(AUDIO);
         audio.setNoiseLevel(recording.getAudioNoiseLevel());
@@ -100,6 +101,7 @@ public class UserGroupService {
         element.setUserGroupId(groupId);
         element.setUserId(customUserDetailsService.getLoggedInUserId());
         element.setIsPrivate(false);
+        element.setSourceId(otherDataElement.getSourceId());
         element.store();
         var text = dslContext.newRecord(TEXT);
         text.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
