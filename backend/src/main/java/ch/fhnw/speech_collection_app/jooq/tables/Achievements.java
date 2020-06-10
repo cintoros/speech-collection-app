@@ -20,7 +20,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Row16;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements extends TableImpl<AchievementsRecord> {
 
-    private static final long serialVersionUID = 1618715476;
+    private static final long serialVersionUID = -1888786468;
 
     public static final Achievements ACHIEVEMENTS = new Achievements();
 
@@ -49,7 +49,7 @@ public class Achievements extends TableImpl<AchievementsRecord> {
 
     public final TableField<AchievementsRecord, String> BATCH_NAME = createField(DSL.name("batch_name"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
-    public final TableField<AchievementsRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+    public final TableField<AchievementsRecord, String> TITLE = createField(DSL.name("title"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public final TableField<AchievementsRecord, Timestamp> START_TIME = createField(DSL.name("start_time"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("current_timestamp()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
@@ -62,6 +62,14 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     public final TableField<AchievementsRecord, Long> POINTS_LVL3 = createField(DSL.name("points_lvl3"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     public final TableField<AchievementsRecord, Long> POINTS_LVL4 = createField(DSL.name("points_lvl4"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+
+    public final TableField<AchievementsRecord, String> DESCRIPTION_LVL1 = createField(DSL.name("description_lvl1"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<AchievementsRecord, String> DESCRIPTION_LVL2 = createField(DSL.name("description_lvl2"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<AchievementsRecord, String> DESCRIPTION_LVL3 = createField(DSL.name("description_lvl3"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<AchievementsRecord, String> DESCRIPTION_LVL4 = createField(DSL.name("description_lvl4"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public final TableField<AchievementsRecord, AchievementsDependsOn> DEPENDS_ON = createField(DSL.name("depends_on"), org.jooq.impl.SQLDataType.VARCHAR(19).nullable(false).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn.class), this, "");
 
@@ -144,11 +152,11 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row16 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> fieldsRow() {
+        return (Row16) super.fieldsRow();
     }
 }

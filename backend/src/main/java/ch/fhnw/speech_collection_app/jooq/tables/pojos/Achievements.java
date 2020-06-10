@@ -16,19 +16,23 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements implements Serializable {
 
-    private static final long serialVersionUID = -1143495700;
+    private static final long serialVersionUID = -1975890826;
 
     private Long                  id;
     private Long                  domainId;
     private String                name;
     private String                batchName;
-    private String                description;
+    private String                title;
     private Timestamp             startTime;
     private Timestamp             endTime;
     private Long                  pointsLvl1;
     private Long                  pointsLvl2;
     private Long                  pointsLvl3;
     private Long                  pointsLvl4;
+    private String                descriptionLvl1;
+    private String                descriptionLvl2;
+    private String                descriptionLvl3;
+    private String                descriptionLvl4;
     private AchievementsDependsOn dependsOn;
 
     public Achievements() {}
@@ -38,13 +42,17 @@ public class Achievements implements Serializable {
         this.domainId = value.domainId;
         this.name = value.name;
         this.batchName = value.batchName;
-        this.description = value.description;
+        this.title = value.title;
         this.startTime = value.startTime;
         this.endTime = value.endTime;
         this.pointsLvl1 = value.pointsLvl1;
         this.pointsLvl2 = value.pointsLvl2;
         this.pointsLvl3 = value.pointsLvl3;
         this.pointsLvl4 = value.pointsLvl4;
+        this.descriptionLvl1 = value.descriptionLvl1;
+        this.descriptionLvl2 = value.descriptionLvl2;
+        this.descriptionLvl3 = value.descriptionLvl3;
+        this.descriptionLvl4 = value.descriptionLvl4;
         this.dependsOn = value.dependsOn;
     }
 
@@ -53,26 +61,34 @@ public class Achievements implements Serializable {
         Long                  domainId,
         String                name,
         String                batchName,
-        String                description,
+        String                title,
         Timestamp             startTime,
         Timestamp             endTime,
         Long                  pointsLvl1,
         Long                  pointsLvl2,
         Long                  pointsLvl3,
         Long                  pointsLvl4,
+        String                descriptionLvl1,
+        String                descriptionLvl2,
+        String                descriptionLvl3,
+        String                descriptionLvl4,
         AchievementsDependsOn dependsOn
     ) {
         this.id = id;
         this.domainId = domainId;
         this.name = name;
         this.batchName = batchName;
-        this.description = description;
+        this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.pointsLvl1 = pointsLvl1;
         this.pointsLvl2 = pointsLvl2;
         this.pointsLvl3 = pointsLvl3;
         this.pointsLvl4 = pointsLvl4;
+        this.descriptionLvl1 = descriptionLvl1;
+        this.descriptionLvl2 = descriptionLvl2;
+        this.descriptionLvl3 = descriptionLvl3;
+        this.descriptionLvl4 = descriptionLvl4;
         this.dependsOn = dependsOn;
     }
 
@@ -111,12 +127,12 @@ public class Achievements implements Serializable {
     }
 
     @Size(max = 65535)
-    public String getDescription() {
-        return this.description;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Timestamp getStartTime() {
@@ -167,6 +183,42 @@ public class Achievements implements Serializable {
         this.pointsLvl4 = pointsLvl4;
     }
 
+    @Size(max = 65535)
+    public String getDescriptionLvl1() {
+        return this.descriptionLvl1;
+    }
+
+    public void setDescriptionLvl1(String descriptionLvl1) {
+        this.descriptionLvl1 = descriptionLvl1;
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl2() {
+        return this.descriptionLvl2;
+    }
+
+    public void setDescriptionLvl2(String descriptionLvl2) {
+        this.descriptionLvl2 = descriptionLvl2;
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl3() {
+        return this.descriptionLvl3;
+    }
+
+    public void setDescriptionLvl3(String descriptionLvl3) {
+        this.descriptionLvl3 = descriptionLvl3;
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl4() {
+        return this.descriptionLvl4;
+    }
+
+    public void setDescriptionLvl4(String descriptionLvl4) {
+        this.descriptionLvl4 = descriptionLvl4;
+    }
+
     @NotNull
     public AchievementsDependsOn getDependsOn() {
         return this.dependsOn;
@@ -184,13 +236,17 @@ public class Achievements implements Serializable {
         sb.append(", ").append(domainId);
         sb.append(", ").append(name);
         sb.append(", ").append(batchName);
-        sb.append(", ").append(description);
+        sb.append(", ").append(title);
         sb.append(", ").append(startTime);
         sb.append(", ").append(endTime);
         sb.append(", ").append(pointsLvl1);
         sb.append(", ").append(pointsLvl2);
         sb.append(", ").append(pointsLvl3);
         sb.append(", ").append(pointsLvl4);
+        sb.append(", ").append(descriptionLvl1);
+        sb.append(", ").append(descriptionLvl2);
+        sb.append(", ").append(descriptionLvl3);
+        sb.append(", ").append(descriptionLvl4);
         sb.append(", ").append(dependsOn);
 
         sb.append(")");

@@ -14,15 +14,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record12;
-import org.jooq.Row12;
+import org.jooq.Record16;
+import org.jooq.Row16;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> implements Record12<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> {
+public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> implements Record16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> {
 
-    private static final long serialVersionUID = 181062440;
+    private static final long serialVersionUID = 985681996;
 
     public void setId(Long value) {
         set(0, value);
@@ -58,12 +58,12 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         return (String) get(3);
     }
 
-    public void setDescription(String value) {
+    public void setTitle(String value) {
         set(4, value);
     }
 
     @Size(max = 65535)
-    public String getDescription() {
+    public String getTitle() {
         return (String) get(4);
     }
 
@@ -115,13 +115,49 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         return (Long) get(10);
     }
 
-    public void setDependsOn(AchievementsDependsOn value) {
+    public void setDescriptionLvl1(String value) {
         set(11, value);
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl1() {
+        return (String) get(11);
+    }
+
+    public void setDescriptionLvl2(String value) {
+        set(12, value);
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl2() {
+        return (String) get(12);
+    }
+
+    public void setDescriptionLvl3(String value) {
+        set(13, value);
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl3() {
+        return (String) get(13);
+    }
+
+    public void setDescriptionLvl4(String value) {
+        set(14, value);
+    }
+
+    @Size(max = 65535)
+    public String getDescriptionLvl4() {
+        return (String) get(14);
+    }
+
+    public void setDependsOn(AchievementsDependsOn value) {
+        set(15, value);
     }
 
     @NotNull
     public AchievementsDependsOn getDependsOn() {
-        return (AchievementsDependsOn) get(11);
+        return (AchievementsDependsOn) get(15);
     }
 
     // -------------------------------------------------------------------------
@@ -134,17 +170,17 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Record12 type implementation
+    // Record16 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> fieldsRow() {
+        return (Row16) super.fieldsRow();
     }
 
     @Override
-    public Row12<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, AchievementsDependsOn> valuesRow() {
-        return (Row12) super.valuesRow();
+    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> valuesRow() {
+        return (Row16) super.valuesRow();
     }
 
     @Override
@@ -169,7 +205,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
 
     @Override
     public Field<String> field5() {
-        return Achievements.ACHIEVEMENTS.DESCRIPTION;
+        return Achievements.ACHIEVEMENTS.TITLE;
     }
 
     @Override
@@ -203,7 +239,27 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
-    public Field<AchievementsDependsOn> field12() {
+    public Field<String> field12() {
+        return Achievements.ACHIEVEMENTS.DESCRIPTION_LVL1;
+    }
+
+    @Override
+    public Field<String> field13() {
+        return Achievements.ACHIEVEMENTS.DESCRIPTION_LVL2;
+    }
+
+    @Override
+    public Field<String> field14() {
+        return Achievements.ACHIEVEMENTS.DESCRIPTION_LVL3;
+    }
+
+    @Override
+    public Field<String> field15() {
+        return Achievements.ACHIEVEMENTS.DESCRIPTION_LVL4;
+    }
+
+    @Override
+    public Field<AchievementsDependsOn> field16() {
         return Achievements.ACHIEVEMENTS.DEPENDS_ON;
     }
 
@@ -229,7 +285,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
 
     @Override
     public String component5() {
-        return getDescription();
+        return getTitle();
     }
 
     @Override
@@ -263,7 +319,27 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
-    public AchievementsDependsOn component12() {
+    public String component12() {
+        return getDescriptionLvl1();
+    }
+
+    @Override
+    public String component13() {
+        return getDescriptionLvl2();
+    }
+
+    @Override
+    public String component14() {
+        return getDescriptionLvl3();
+    }
+
+    @Override
+    public String component15() {
+        return getDescriptionLvl4();
+    }
+
+    @Override
+    public AchievementsDependsOn component16() {
         return getDependsOn();
     }
 
@@ -289,7 +365,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
 
     @Override
     public String value5() {
-        return getDescription();
+        return getTitle();
     }
 
     @Override
@@ -323,7 +399,27 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
-    public AchievementsDependsOn value12() {
+    public String value12() {
+        return getDescriptionLvl1();
+    }
+
+    @Override
+    public String value13() {
+        return getDescriptionLvl2();
+    }
+
+    @Override
+    public String value14() {
+        return getDescriptionLvl3();
+    }
+
+    @Override
+    public String value15() {
+        return getDescriptionLvl4();
+    }
+
+    @Override
+    public AchievementsDependsOn value16() {
         return getDependsOn();
     }
 
@@ -353,7 +449,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
 
     @Override
     public AchievementsRecord value5(String value) {
-        setDescription(value);
+        setTitle(value);
         return this;
     }
 
@@ -394,13 +490,37 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
-    public AchievementsRecord value12(AchievementsDependsOn value) {
+    public AchievementsRecord value12(String value) {
+        setDescriptionLvl1(value);
+        return this;
+    }
+
+    @Override
+    public AchievementsRecord value13(String value) {
+        setDescriptionLvl2(value);
+        return this;
+    }
+
+    @Override
+    public AchievementsRecord value14(String value) {
+        setDescriptionLvl3(value);
+        return this;
+    }
+
+    @Override
+    public AchievementsRecord value15(String value) {
+        setDescriptionLvl4(value);
+        return this;
+    }
+
+    @Override
+    public AchievementsRecord value16(AchievementsDependsOn value) {
         setDependsOn(value);
         return this;
     }
 
     @Override
-    public AchievementsRecord values(Long value1, Long value2, String value3, String value4, String value5, Timestamp value6, Timestamp value7, Long value8, Long value9, Long value10, Long value11, AchievementsDependsOn value12) {
+    public AchievementsRecord values(Long value1, Long value2, String value3, String value4, String value5, Timestamp value6, Timestamp value7, Long value8, Long value9, Long value10, Long value11, String value12, String value13, String value14, String value15, AchievementsDependsOn value16) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -413,6 +533,10 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         value10(value10);
         value11(value11);
         value12(value12);
+        value13(value13);
+        value14(value14);
+        value15(value15);
+        value16(value16);
         return this;
     }
 
@@ -424,20 +548,24 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         super(Achievements.ACHIEVEMENTS);
     }
 
-    public AchievementsRecord(Long id, Long domainId, String name, String batchName, String description, Timestamp startTime, Timestamp endTime, Long pointsLvl1, Long pointsLvl2, Long pointsLvl3, Long pointsLvl4, AchievementsDependsOn dependsOn) {
+    public AchievementsRecord(Long id, Long domainId, String name, String batchName, String title, Timestamp startTime, Timestamp endTime, Long pointsLvl1, Long pointsLvl2, Long pointsLvl3, Long pointsLvl4, String descriptionLvl1, String descriptionLvl2, String descriptionLvl3, String descriptionLvl4, AchievementsDependsOn dependsOn) {
         super(Achievements.ACHIEVEMENTS);
 
         set(0, id);
         set(1, domainId);
         set(2, name);
         set(3, batchName);
-        set(4, description);
+        set(4, title);
         set(5, startTime);
         set(6, endTime);
         set(7, pointsLvl1);
         set(8, pointsLvl2);
         set(9, pointsLvl3);
         set(10, pointsLvl4);
-        set(11, dependsOn);
+        set(11, descriptionLvl1);
+        set(12, descriptionLvl2);
+        set(13, descriptionLvl3);
+        set(14, descriptionLvl4);
+        set(15, dependsOn);
     }
 }
