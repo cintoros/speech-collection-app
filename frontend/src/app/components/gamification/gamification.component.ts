@@ -54,6 +54,21 @@ export class GamificationComponent implements OnInit {
     }
   }
 
+  private getProgressPercent(achievementWrapper: AchievementWrapper): number {
+    var lvl = this.getLevel(achievementWrapper);
+    if (lvl == 4) return 100;
+    var points = achievementWrapper.userAchievementDto.points;
+    if (lvl == 3)
+      return (points / achievementWrapper.achievementDto.points_lvl4) * 100;
+    if (lvl == 2)
+      return (points / achievementWrapper.achievementDto.points_lvl3) * 100;
+    if (lvl == 1)
+      return (points / achievementWrapper.achievementDto.points_lvl2) * 100;
+    if (lvl == 0)
+      return (points / achievementWrapper.achievementDto.points_lvl1) * 100;
+    return 0;
+  }
+
   private getAchievements(): void {
     this.httpClient
         .get<AchievementWrapper[]>(
