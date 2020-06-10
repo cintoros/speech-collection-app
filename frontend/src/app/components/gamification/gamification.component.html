@@ -7,7 +7,8 @@
             <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
                 [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
             </app-glyphicons-batch>
-            <p *ngIf="getLevel(achievementWrapper) < 4">nächste Auszeichnung in:</p>
+            <p *ngIf="getLevel(achievementWrapper) < 4"><span *ngIf="getLevel(achievementWrapper) > 0">nächste
+                </span>Auszeichnung in:</p>
             <div class="progress">
                 <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
                     style="width: {{getProgressPercent(achievementWrapper)}}%"
