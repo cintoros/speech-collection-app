@@ -1,19 +1,16 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
@@ -23,7 +20,6 @@ public class AchievementsService {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
-    private final SpeechCollectionAppConfig speechCollectionAppConfig;
 
     private final Long LVL1 = 10L;
     private final Long LVL2 = 20L;
@@ -31,11 +27,9 @@ public class AchievementsService {
     private final Long LVL4 = 100L;
 
     @Autowired
-    public AchievementsService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
-            SpeechCollectionAppConfig speechCollectionAppConfig) {
+    public AchievementsService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
-        this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
     public Long createAchievement(String name, String batch_name, String description, Long domain_id,
@@ -78,7 +72,7 @@ public class AchievementsService {
         System.out.println(month);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
