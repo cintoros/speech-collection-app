@@ -4,7 +4,6 @@
 package ch.fhnw.speech_collection_app.jooq.tables;
 
 
-import ch.fhnw.speech_collection_app.jooq.Indexes;
 import ch.fhnw.speech_collection_app.jooq.Keys;
 import ch.fhnw.speech_collection_app.jooq.SpeechCollectionApp;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRecord;
@@ -12,25 +11,27 @@ import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRecord;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroup extends TableImpl<UserGroupRecord> {
 
-    private static final long serialVersionUID = -1457515415;
+    private static final long serialVersionUID = 752073665;
 
     public static final UserGroup USER_GROUP = new UserGroup();
 
@@ -64,7 +65,7 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     }
 
     private UserGroup(Name alias, Table<UserGroupRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> UserGroup(Table<O> child, ForeignKey<O, UserGroupRecord> key) {
@@ -74,11 +75,6 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     @Override
     public Schema getSchema() {
         return SpeechCollectionApp.SPEECH_COLLECTION_APP;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_GROUP_PRIMARY);
     }
 
     @Override
@@ -94,6 +90,13 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     @Override
     public List<UniqueKey<UserGroupRecord>> getKeys() {
         return Arrays.<UniqueKey<UserGroupRecord>>asList(Keys.KEY_USER_GROUP_PRIMARY);
+    }
+
+    @Override
+    public List<Check<UserGroupRecord>> getChecks() {
+        return Arrays.<Check<UserGroupRecord>>asList(
+              Internal.createCheck(this, DSL.name("meta_information"), "json_valid(`meta_information`)", true)
+        );
     }
 
     @Override

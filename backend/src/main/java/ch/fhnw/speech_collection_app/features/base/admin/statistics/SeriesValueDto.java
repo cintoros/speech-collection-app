@@ -1,12 +1,10 @@
 package ch.fhnw.speech_collection_app.features.base.admin.statistics;
 
-import java.time.LocalDate;
-
 public class SeriesValueDto {
-    public final LocalDate name;
-    public final Integer value;
+    public final Object name;
+    public final Number value;
 
-    public SeriesValueDto(LocalDate name, Integer value) {
+    public SeriesValueDto(Object name, Number value) {
         this.name = name;
         this.value = value;
     }

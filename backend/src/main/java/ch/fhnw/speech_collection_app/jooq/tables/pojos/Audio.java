@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Audio implements Serializable {
 
-    private static final long serialVersionUID = 363241167;
+    private static final long serialVersionUID = -1248698259;
 
     private Long            id;
     private Long            dialectId;
@@ -27,6 +27,7 @@ public class Audio implements Serializable {
     private String          browserVersion;
     private Double          audioStart;
     private Double          audioEnd;
+    private Double          duration;
 
     public Audio() {}
 
@@ -40,6 +41,7 @@ public class Audio implements Serializable {
         this.browserVersion = value.browserVersion;
         this.audioStart = value.audioStart;
         this.audioEnd = value.audioEnd;
+        this.duration = value.duration;
     }
 
     public Audio(
@@ -51,7 +53,8 @@ public class Audio implements Serializable {
         AudioNoiseLevel noiseLevel,
         String          browserVersion,
         Double          audioStart,
-        Double          audioEnd
+        Double          audioEnd,
+        Double          duration
     ) {
         this.id = id;
         this.dialectId = dialectId;
@@ -62,6 +65,7 @@ public class Audio implements Serializable {
         this.browserVersion = browserVersion;
         this.audioStart = audioStart;
         this.audioEnd = audioEnd;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -141,6 +145,14 @@ public class Audio implements Serializable {
         this.audioEnd = audioEnd;
     }
 
+    public Double getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Audio (");
@@ -154,6 +166,7 @@ public class Audio implements Serializable {
         sb.append(", ").append(browserVersion);
         sb.append(", ").append(audioStart);
         sb.append(", ").append(audioEnd);
+        sb.append(", ").append(duration);
 
         sb.append(")");
         return sb.toString();

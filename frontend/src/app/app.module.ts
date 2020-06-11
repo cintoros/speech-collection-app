@@ -54,7 +54,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
 import {StatisticsComponent} from './components/admin/statistics/statistics.component';
-import {LineChartModule} from '@swimlane/ngx-charts';
+import {BarChartModule, LineChartModule} from '@swimlane/ngx-charts';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
@@ -117,6 +117,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     LineChartModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    BarChartModule,
   ],
   providers: [
     HttpClient,

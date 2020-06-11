@@ -24,6 +24,7 @@ import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CheckedDataTuple extends TableImpl<CheckedDataTupleRecord> {
 
-    private static final long serialVersionUID = -1559909895;
+    private static final long serialVersionUID = -647865115;
 
     public static final CheckedDataTuple CHECKED_DATA_TUPLE = new CheckedDataTuple();
 
@@ -68,7 +69,7 @@ public class CheckedDataTuple extends TableImpl<CheckedDataTupleRecord> {
     }
 
     private CheckedDataTuple(Name alias, Table<CheckedDataTupleRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the label of a data_tuple by a user so we can revert it in case a user produces nonsense"));
+        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the label of a data_tuple by a user so we can revert it in case a user produces nonsense"), TableOptions.table());
     }
 
     public <O extends Record> CheckedDataTuple(Table<O> child, ForeignKey<O, CheckedDataTupleRecord> key) {
@@ -82,7 +83,7 @@ public class CheckedDataTuple extends TableImpl<CheckedDataTupleRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CHECKED_DATA_TUPLE_DATA_TUPLE_ID, Indexes.CHECKED_DATA_TUPLE_PRIMARY, Indexes.CHECKED_DATA_TUPLE_USER_ID);
+        return Arrays.<Index>asList(Indexes.CHECKED_DATA_TUPLE_DATA_TUPLE_ID, Indexes.CHECKED_DATA_TUPLE_USER_ID);
     }
 
     @Override

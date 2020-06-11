@@ -5,8 +5,11 @@ import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+import org.apache.tika.io.IOUtils;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -112,7 +116,7 @@ public class UserGroupService {
                 .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
                         .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID)
                         .join(audio_element).on(audio_element.ID.eq(DATA_TUPLE.DATA_ELEMENT_ID_2)))
-                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).lessThan(speechCollectionAppConfig.getMinNumChecks()-1)
+                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).lessThan(speechCollectionAppConfig.getMinNumChecks())
                         .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
                         .and(DATA_TUPLE.FINISHED.isFalse())
                         .and(audio_element.USER_ID.notEqual(loggedInUserId))

@@ -22,6 +22,7 @@ import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -30,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Dialect extends TableImpl<DialectRecord> {
 
-    private static final long serialVersionUID = -930689355;
+    private static final long serialVersionUID = 1846088294;
 
     public static final Dialect DIALECT = new Dialect();
 
@@ -64,7 +65,7 @@ public class Dialect extends TableImpl<DialectRecord> {
     }
 
     private Dialect(Name alias, Table<DialectRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> Dialect(Table<O> child, ForeignKey<O, DialectRecord> key) {
@@ -78,7 +79,7 @@ public class Dialect extends TableImpl<DialectRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DIALECT_LANGUAGE_ID, Indexes.DIALECT_PRIMARY);
+        return Arrays.<Index>asList(Indexes.DIALECT_LANGUAGE_ID);
     }
 
     @Override

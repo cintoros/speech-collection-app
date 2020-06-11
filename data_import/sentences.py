@@ -89,6 +89,18 @@ if __name__ == '__main__':
                 audio_segment = audio_segment.set_channels(1)
                 audio_segment.export(os.path.join(base_dir, "text_audio", audio_path_to_file),
                                      format='flac')
+            connection.commit()
+        # calculate the duration of all recordings that are not calculated already. this is needed because:
+        # 1. there is no java library that supports webm (vorbis).
+        # 2. chrome does not set the duration header of the webm/vorbis (firefox 77.0 does set it).
+        # see https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+        elif (command == "3"):
+            cursor.execute("select id,path from audio where duration=0")
+            paths = cursor.fetchall()
+            for path in paths:
+                seconds = len(AudioSegment.from_file(os.path.join(base_dir, path['path']))) / 1000
+                cursor.execute('update audio set duration=%s where audio.id = %s', [seconds, path['id']])
+            connection.commit()
     finally:
         cursor.close()
         connection.close()

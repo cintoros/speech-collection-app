@@ -23,4 +23,9 @@ public class StatisticsController {
     public List<SeriesDto> getStatisticsSince(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime since) {
         return statisticsService.getStatisticsSince(since.toLocalDate());
     }
+
+    @RequestMapping("/audio_duration_statistics")
+    public List<SeriesDto> getAudioDurationStatisticsSince(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime since) {
+        return statisticsService.getAudioDurationStatisticsSince(since.toLocalDate());
+    }
 }

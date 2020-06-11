@@ -23,6 +23,7 @@ import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DataElement extends TableImpl<DataElementRecord> {
 
-    private static final long serialVersionUID = 1121231405;
+    private static final long serialVersionUID = -1057701891;
 
     public static final DataElement DATA_ELEMENT = new DataElement();
 
@@ -73,7 +74,7 @@ public class DataElement extends TableImpl<DataElementRecord> {
     }
 
     private DataElement(Name alias, Table<DataElementRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("the data_element can be an audio,text or image.\nIn case of text & audio it can be uploaded normally or generated using a source i.e. transcript, text-document\nThe finished flag is used to prevent cycles like text=>recording=>text=>recording=>..."));
+        super(alias, null, aliased, parameters, DSL.comment("the data_element can be an audio,text or image.\nIn case of text & audio it can be uploaded normally or generated using a source i.e. transcript, text-document\nThe finished flag is used to prevent cycles like text=>recording=>text=>recording=>..."), TableOptions.table());
     }
 
     public <O extends Record> DataElement(Table<O> child, ForeignKey<O, DataElementRecord> key) {
@@ -87,7 +88,7 @@ public class DataElement extends TableImpl<DataElementRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DATA_ELEMENT_PRIMARY, Indexes.DATA_ELEMENT_SOURCE_ID, Indexes.DATA_ELEMENT_USER_GROUP_ID, Indexes.DATA_ELEMENT_USER_ID);
+        return Arrays.<Index>asList(Indexes.DATA_ELEMENT_SOURCE_ID, Indexes.DATA_ELEMENT_USER_GROUP_ID, Indexes.DATA_ELEMENT_USER_ID);
     }
 
     @Override

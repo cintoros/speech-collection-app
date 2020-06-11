@@ -19,8 +19,10 @@ interface SeriesDto {
   styleUrls: ['./statistics.component.scss']
 })
 export class StatisticsComponent implements OnInit {
-  multi: SeriesDto[] = [];
   myDate: Date;
+  multi: SeriesDto[] = [];
+  multi2: SeriesDto[];
+  single1: SeriesValueDto[] = [];
 
   constructor(private httpClient: HttpClient) {
   }
@@ -38,11 +40,14 @@ export class StatisticsComponent implements OnInit {
   private reload(date: Date) {
     this.httpClient.get<Array<SeriesDto>>(`${environment.url}admin/statistics?since=${date.toISOString()}`)
       .subscribe(array => {
-        console.log(array);
         // we need to convert the json date-string into a javascript string
         array.forEach(v => v.series.forEach(v1 => v1.name = new Date(v1.name)));
-        console.log(array);
         this.multi = array;
+      });
+    this.httpClient.get<Array<SeriesDto>>(`${environment.url}admin/audio_duration_statistics?since=${date.toISOString()}`)
+      .subscribe(array => {
+        this.multi2 = [array[0]];
+        this.single1 = array[1].series;
       });
   }
 }
