@@ -76,7 +76,7 @@ public class StatisticsService {
         }
         Timestamp timestamp = Timestamp.valueOf(since.atStartOfDay());
         var date = DSL.date(DATA_ELEMENT.CREATED_TIME);
-        var select1 = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(360))
+        var select1 = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID)))
                 .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)))
                 .groupBy(date)
@@ -86,9 +86,9 @@ public class StatisticsService {
                 .map(r -> new SeriesValueDto(r.component1().toLocalDate(), r.component2()))
                 .collect(Collectors.toList());
 
-        var select2 = dslContext.select(USER.USERNAME, DSL.sum(AUDIO.DURATION).divide(360))
+        var select2 = dslContext.select(USER.USERNAME, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
-                        .join(USER).on(DATA_ELEMENT.USER_ID.eq(USER.ID)))
+                        .innerJoin(USER).on(DATA_ELEMENT.USER_ID.eq(USER.ID)))
                 .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)))
                 .groupBy(DATA_ELEMENT.USER_ID)
                 .fetch()
