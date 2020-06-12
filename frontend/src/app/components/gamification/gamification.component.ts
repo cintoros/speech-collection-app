@@ -69,12 +69,34 @@ export class GamificationComponent implements OnInit {
     return 0;
   }
 
+  private getDescription(achievementWrapper: AchievementWrapper): Text {
+    var lvl = this.getLevel(achievementWrapper);
+    switch (lvl) {
+      case 0:
+      case 1:
+        return achievementWrapper.achievementDto.description_lvl1;
+      case 2:
+        return achievementWrapper.achievementDto.description_lvl2;
+      case 3:
+        return achievementWrapper.achievementDto.description_lvl3;
+      case 4:
+      default:
+        return achievementWrapper.achievementDto.description_lvl4;
+    }
+  }
+
+  private getRemainingDays(achievementWrapper: AchievementWrapper): String {
+    return 'TODO IMPLEMENT';
+  }
+
   private getAchievements(): void {
     this.httpClient
         .get<AchievementWrapper[]>(
             `${environment.url}user_group/${this.groupId}/achievements`)
         .subscribe((value) => {
           this.achievementsWrapper = value;
+          console.log('blub');
+          console.log(this.achievementsWrapper);
         });
   }
 }

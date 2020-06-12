@@ -53,6 +53,7 @@ public class AchievementsService {
 
         var achievement = dslContext.newRecord(ACHIEVEMENTS);
         achievement.setName(name);
+        achievement.setTitle(title);
         achievement.setBatchName(batch_name);
         achievement.setDescriptionLvl1(description_lvl1);
         achievement.setDescriptionLvl2(description_lvl2);
@@ -78,7 +79,7 @@ public class AchievementsService {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
-        String year = cal.getDisplayName(Calendar.YEAR, Calendar.LONG, Locale.GERMAN);
+        String year = Integer.toString(cal.get(Calendar.YEAR));
         System.out.println(month);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);

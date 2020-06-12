@@ -1,13 +1,16 @@
-<h2>Deine Errungenschaften</h2>
+<h2>Deine Aktiven Errungenschaften</h2>
 
 <div class="row form-group">
     <div class="col-sm-4" style="padding: 15px;" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
         <mat-card>
-            <h3>{{achievementWrapper.achievementDto.description}}</h3>
+            <h3>{{achievementWrapper.achievementDto.title}}</h3>
+            <p>{{getDescription(achievementWrapper)}}</p>
             <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
                 [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
             </app-glyphicons-batch>
-            <p *ngIf="getLevel(achievementWrapper) < 4"><span *ngIf="getLevel(achievementWrapper) > 0">nächste
+            <p>Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}}</p>
+            <p *ngIf="getLevel(achievementWrapper) < 4">Du bekommst die <span
+                    *ngIf="getLevel(achievementWrapper) > 0">nächste
                 </span>Auszeichnung in:</p>
             <div class="progress">
                 <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
@@ -19,15 +22,12 @@
     </div>
 </div>
 
-<h2>Badges Beispiel</h2>
+<h2>Deine Abgeschlossenen Errungenschaften</h2>
 
-<p>Das Icon kann frei von fontawesome gewählt werden. Es sind 4 Levels vorhanden (Bronze, Silber, Gold, Platin). Der
-    Text
-    kann personalisiert werden.</p>
 
 <div class="row">
     <div class="col-sm-3">
-        <app-glyphicons-batch [glyph]="'trophy'" [level]="0" [text]="'Mai'"></app-glyphicons-batch>
+        <app-glyphicons-batch [glyph]="'trophy'" [level]="4" [text]="'Mai'"></app-glyphicons-batch>
     </div>
     <div class="col-sm-3">
         <app-glyphicons-batch [glyph]="'brain'" [level]="1" [text]="'Juni'"></app-glyphicons-batch>
