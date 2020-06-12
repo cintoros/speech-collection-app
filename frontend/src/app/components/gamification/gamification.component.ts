@@ -86,7 +86,13 @@ export class GamificationComponent implements OnInit {
   }
 
   private getRemainingDays(achievementWrapper: AchievementWrapper): String {
+    var s = new Date(achievementWrapper.achievementDto.end_time);
+    console.log(s.valueOf() - Date.now().valueOf());
     return 'TODO IMPLEMENT';
+  }
+
+  private millisecondsToDays(ms: number): number {
+    return ms / ()
   }
 
   private getAchievements(): void {
@@ -95,8 +101,6 @@ export class GamificationComponent implements OnInit {
             `${environment.url}user_group/${this.groupId}/achievements`)
         .subscribe((value) => {
           this.achievementsWrapper = value;
-          console.log('blub');
-          console.log(this.achievementsWrapper);
         });
   }
 }
