@@ -8,7 +8,8 @@
             <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
                 [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
             </app-glyphicons-batch>
-            <p>Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}}</p>
+            <p>Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}} Tag<span
+                    *ngIf="getRemainingDays(achievementWrapper) > 1">e</span> </p>
             <p *ngIf="getLevel(achievementWrapper) < 4">Du bekommst die <span
                     *ngIf="getLevel(achievementWrapper) > 0">nächste
                 </span>Auszeichnung in:</p>
@@ -25,21 +26,7 @@
 <h2>Deine Abgeschlossenen Errungenschaften</h2>
 
 
-<div class="row">
-    <div class="col-sm-3">
-        <app-glyphicons-batch [glyph]="'trophy'" [level]="4" [text]="'Mai'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-3">
-        <app-glyphicons-batch [glyph]="'brain'" [level]="1" [text]="'Juni'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-3">
-        <app-glyphicons-batch [glyph]="'binoculars'" [level]="2" [text]="'Juli'"></app-glyphicons-batch>
-    </div>
-    <div class="col-sm-3">
-        <app-glyphicons-batch [glyph]="'trophy'" [level]="3" [text]="'August'"></app-glyphicons-batch>
-    </div>
-</div>
-
+<p>TODO Implement</p>
 
 
 <br>

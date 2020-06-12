@@ -85,14 +85,15 @@ export class GamificationComponent implements OnInit {
     }
   }
 
-  private getRemainingDays(achievementWrapper: AchievementWrapper): String {
+
+  private getRemainingDays(achievementWrapper: AchievementWrapper): number {
     var s = new Date(achievementWrapper.achievementDto.end_time);
     console.log(s.valueOf() - Date.now().valueOf());
-    return 'TODO IMPLEMENT';
+    return this.millisecondsToDays(s.valueOf() - Date.now().valueOf());
   }
 
   private millisecondsToDays(ms: number): number {
-    return ms / ()
+    return Math.ceil(ms / 1000 / 60 / 60 / 24);
   }
 
   private getAchievements(): void {
