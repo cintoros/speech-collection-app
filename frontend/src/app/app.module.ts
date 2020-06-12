@@ -31,7 +31,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {far} from '@fortawesome/free-regular-svg-icons';
 import {fas} from '@fortawesome/free-solid-svg-icons';
-import {CarouselModule} from 'ngx-carousel-lib';
 import {MarkdownModule, MarkdownService} from 'ngx-markdown';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -116,7 +115,6 @@ import {LoadingInterceptorService} from './services/loading-interceptor.service'
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    CarouselModule,
     ReactiveFormsModule,
     FormsModule,
     MatCardModule,
