@@ -47,7 +47,6 @@ public class AchievementsService {
                         .and(ACHIEVEMENTS.DEPENDS_ON.eq(depends_on)))
                 .limit(1).fetchOneInto(AchievementDto.class);
 
-        System.out.println(batch);
         if (!(batch == null))
             return batch.getId();
 
@@ -80,7 +79,6 @@ public class AchievementsService {
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
         String year = Integer.toString(cal.get(Calendar.YEAR));
-        System.out.println(month);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.HOUR_OF_DAY, 0);
