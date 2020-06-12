@@ -1,5 +1,5 @@
 <div *ngIf="user" style="height: 40%; margin-top: -12px;  display: flex; justify-content: center;">
-    <mat-card *ngIf="user" id="header-card" style="margin: 15px; width: 50%; ">
+    <mat-card class="card" *ngIf="user" id="header-card">
         <br>
         <div>
             <app-profile-editor (output)="toggleProfileEdit()" *ngIf="!isPasswordEdit" [disabled]="!isProfileEdit"
