@@ -1,0 +1,53 @@
+<div class="margin">
+  <h3>Speech Collection App Statistics</h3>
+  <mat-form-field class="margin">
+    <mat-label>Choose a date</mat-label>
+    <mat-datepicker-toggle [for]="myDatepicker" matSuffix></mat-datepicker-toggle>
+    <input (dateChange)="changeDate($event)" [matDatepicker]="myDatepicker" [value]="myDate" matInput>
+    <mat-datepicker #myDatepicker></mat-datepicker>
+  </mat-form-field>
+
+</div>
+<mat-grid-list cols="2" rowHeight="fit" style="height: 75%;">
+  <mat-grid-tile>
+    <mat-card style="height: 90%;width: 90%">
+      <mat-card-header><h3>Basic Statistics</h3><br></mat-card-header>
+      <mat-card-content style="height: 70%;">
+        <ngx-charts-line-chart [results]="multi" [showXAxisLabel]="true" [showYAxisLabel]="true"
+                               [xAxisLabel]="'Day'" [xAxis]="true"
+                               [yAxisLabel]="'Count per Day'" [yAxis]="true" legend="true" showRefLabels="true">
+        </ngx-charts-line-chart>
+      </mat-card-content>
+      <p>
+        "checked recording" are for the recordings/tuples i.e. correct/wrong.<br>
+        "checked texts" are for the texts i.e. sentence_error/private
+      </p>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card style="height: 90%;width: 90%">
+      <mat-card-header><h3>Audio per Date </h3><br></mat-card-header>
+      <mat-card-content style="height: 70%;">
+        <ngx-charts-line-chart [results]="multi2" [showXAxisLabel]="true"
+                               [showYAxisLabel]="true" [xAxisLabel]="'Day'" [xAxis]="true"
+                               [yAxisLabel]="'Audio hours per day'" [yAxis]="true" showRefLabels="true">
+        </ngx-charts-line-chart>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card style="height: 90%;width: 90%">
+      <mat-card-header><h3>Audio per User </h3><br></mat-card-header>
+      <mat-card-content style="height: 70%;">
+        <ngx-charts-bar-vertical [results]="single1" [showXAxisLabel]="true"
+                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
+                                 [yAxisLabel]="'Audio hours'" [yAxis]="true">
+        </ngx-charts-bar-vertical>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+
+

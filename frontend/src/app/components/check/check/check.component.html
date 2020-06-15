@@ -1,12 +1,12 @@
 <mat-card class="header-card"><h1>Check</h1>
-  <div style="color: grey;font-size: 0.8em">
-    Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct Swiss
-    German translation.
+  <div style="color: grey;font-size: 1em">
+    <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct
+      Swiss German translation.</strong>
     <ul>
       <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
       <li>Wrong: Recording is not a correct Swiss German translation</li>
       <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
-      <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
+      <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
         step, longer texts are automatically split to sentences, so use this button also if you suspect that the
         sentence
         splitting went wrong.
@@ -55,12 +55,10 @@
   <br>
   <button (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)" [disabled]="!this.isReady"
           class="check-navigation-button" mat-raised-button>
-    <mat-icon>delete</mat-icon>
-    <span>&nbsp;Not a Sentence</span>
+    <span>&nbsp;Not a Single Standard German Sentence</span>
   </button>
   <button (click)="setCheckedType(checkedOccurrenceLabel.PRIVATE)" [disabled]="!this.isReady"
           class="check-navigation-button" mat-raised-button>
-    <mat-icon>lock</mat-icon>
     <span>&nbsp;Sensitive Data</span>
   </button>
 </div>

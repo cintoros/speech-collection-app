@@ -62,7 +62,7 @@ export class CheckComponent implements OnInit {
       this.stop();
       if ((checkType === CheckedOccurrenceLabel.SENTENCE_ERROR || checkType === CheckedOccurrenceLabel.PRIVATE)) {
         this.httpClient.post(`${environment.url}user_group/${this.groupId}/element/${this.occurrence.dataElementId_1}/checked?type=${checkType}`, {})
-          .subscribe(value => this.snackBarService.openMessage('successfully updated element.'));
+          .subscribe(value => this.snackBarService.openMessage('data successfully flagged.'));
       } else {
         const cta = new CheckedOccurrence(this.occurrence.id, checkType);
         this.httpClient.post(`${environment.url}user_group/${this.groupId}/occurrence/check`, cta)

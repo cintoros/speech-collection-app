@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
@@ -23,15 +24,17 @@ import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Source extends TableImpl<SourceRecord> {
 
-    private static final long serialVersionUID = 1816117793;
+    private static final long serialVersionUID = -32360772;
 
     public static final Source SOURCE = new Source();
 
@@ -77,7 +80,7 @@ public class Source extends TableImpl<SourceRecord> {
     }
 
     private Source(Name alias, Table<SourceRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("a source can be generated based on something uploaded by the user i.e a text document.\nOr it can be imported by a script this is why most fields are optional."));
+        super(alias, null, aliased, parameters, DSL.comment("a source can be generated based on something uploaded by the user i.e a text document.\nOr it can be imported by a script this is why most fields are optional."), TableOptions.table());
     }
 
     public <O extends Record> Source(Table<O> child, ForeignKey<O, SourceRecord> key) {
@@ -91,7 +94,7 @@ public class Source extends TableImpl<SourceRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.SOURCE_DIALECT_ID, Indexes.SOURCE_DOMAIN_ID, Indexes.SOURCE_PRIMARY, Indexes.SOURCE_USER_GROUP_ID, Indexes.SOURCE_USER_ID);
+        return Arrays.<Index>asList(Indexes.SOURCE_DIALECT_ID, Indexes.SOURCE_DOMAIN_ID, Indexes.SOURCE_USER_GROUP_ID, Indexes.SOURCE_USER_ID);
     }
 
     @Override
@@ -128,6 +131,13 @@ public class Source extends TableImpl<SourceRecord> {
 
     public UserGroup userGroup() {
         return new UserGroup(this, Keys.SOURCE_IBFK_4);
+    }
+
+    @Override
+    public List<Check<SourceRecord>> getChecks() {
+        return Arrays.<Check<SourceRecord>>asList(
+              Internal.createCheck(this, DSL.name("meta_information"), "json_valid(`meta_information`)", true)
+        );
     }
 
     @Override

@@ -20,7 +20,7 @@ import {ProfileEditorComponent} from './components/multi-use/profile-editor/prof
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
-import {MatOptionModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
@@ -53,6 +53,10 @@ import {DocumentOverviewComponent} from './components/admin/document-overview/do
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
+import {StatisticsComponent} from './components/admin/statistics/statistics.component';
+import {BarChartModule, LineChartModule} from '@swimlane/ngx-charts';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {AboutComponent} from './components/about/about.component';
 
 
 @NgModule({
@@ -73,7 +77,9 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
     UserGroupRoleComponent,
     EditTextAudioComponent,
     DocumentOverviewComponent,
-    VerificationTokenComponent
+    VerificationTokenComponent,
+    StatisticsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -110,6 +116,10 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
     }),
     MatTabsModule,
     MatCheckboxModule,
+    LineChartModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    BarChartModule,
   ],
   providers: [
     HttpClient,

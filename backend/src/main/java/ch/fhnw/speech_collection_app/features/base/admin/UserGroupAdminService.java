@@ -56,10 +56,11 @@ public class UserGroupAdminService {
 
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
+        //TODO add seek-pagination for greater recording lists
         return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE, DATA_TUPLE.DATA_ELEMENT_ID_2)
                 .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
-                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)
-                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO))))
+                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
+                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO)))
                 )
                 .fetchInto(OverviewOccurrence.class);
     }

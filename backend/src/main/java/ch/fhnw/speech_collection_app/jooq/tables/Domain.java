@@ -4,7 +4,6 @@
 package ch.fhnw.speech_collection_app.jooq.tables;
 
 
-import ch.fhnw.speech_collection_app.jooq.Indexes;
 import ch.fhnw.speech_collection_app.jooq.Keys;
 import ch.fhnw.speech_collection_app.jooq.SpeechCollectionApp;
 import ch.fhnw.speech_collection_app.jooq.tables.records.DomainRecord;
@@ -15,13 +14,13 @@ import java.util.List;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -30,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Domain extends TableImpl<DomainRecord> {
 
-    private static final long serialVersionUID = 970436519;
+    private static final long serialVersionUID = -95917101;
 
     public static final Domain DOMAIN = new Domain();
 
@@ -60,7 +59,7 @@ public class Domain extends TableImpl<DomainRecord> {
     }
 
     private Domain(Name alias, Table<DomainRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> Domain(Table<O> child, ForeignKey<O, DomainRecord> key) {
@@ -70,11 +69,6 @@ public class Domain extends TableImpl<DomainRecord> {
     @Override
     public Schema getSchema() {
         return SpeechCollectionApp.SPEECH_COLLECTION_APP;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DOMAIN_PRIMARY);
     }
 
     @Override

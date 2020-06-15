@@ -22,6 +22,7 @@ import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -30,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Text extends TableImpl<TextRecord> {
 
-    private static final long serialVersionUID = -577170184;
+    private static final long serialVersionUID = 306317956;
 
     public static final Text TEXT = new Text();
 
@@ -66,7 +67,7 @@ public class Text extends TableImpl<TextRecord> {
     }
 
     private Text(Name alias, Table<TextRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> Text(Table<O> child, ForeignKey<O, TextRecord> key) {
@@ -80,7 +81,7 @@ public class Text extends TableImpl<TextRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.TEXT_DATA_ELEMENT_ID, Indexes.TEXT_DIALECT_ID, Indexes.TEXT_PRIMARY);
+        return Arrays.<Index>asList(Indexes.TEXT_DATA_ELEMENT_ID, Indexes.TEXT_DIALECT_ID);
     }
 
     @Override

@@ -4,7 +4,6 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,11 +14,11 @@ import org.jooq.impl.CatalogImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultCatalog extends CatalogImpl {
 
-    private static final long serialVersionUID = 646151837;
+    private static final long serialVersionUID = 2029479866;
 
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
 
-    public final SpeechCollectionApp SPEECH_COLLECTION_APP = ch.fhnw.speech_collection_app.jooq.SpeechCollectionApp.SPEECH_COLLECTION_APP;
+    public final SpeechCollectionApp SPEECH_COLLECTION_APP = SpeechCollectionApp.SPEECH_COLLECTION_APP;
 
     private DefaultCatalog() {
         super("");
@@ -27,12 +26,6 @@ public class DefaultCatalog extends CatalogImpl {
 
     @Override
     public final List<Schema> getSchemas() {
-        List result = new ArrayList();
-        result.addAll(getSchemas0());
-        return result;
-    }
-
-    private final List<Schema> getSchemas0() {
         return Arrays.<Schema>asList(
             SpeechCollectionApp.SPEECH_COLLECTION_APP);
     }
