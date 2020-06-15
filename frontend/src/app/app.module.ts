@@ -56,6 +56,7 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
 import {StatisticsComponent} from './components/admin/statistics/statistics.component';
 import {BarChartModule, LineChartModule} from '@swimlane/ngx-charts';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {AboutComponent} from './components/about/about.component';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     EditTextAudioComponent,
     DocumentOverviewComponent,
     VerificationTokenComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

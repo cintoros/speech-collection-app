@@ -42,6 +42,10 @@
             <mat-icon>check</mat-icon>
             <span>Check</span>
           </mat-list-item>
+          <mat-list-item (click)="redirectToPage('/about')" >
+            <mat-icon>contact_mail</mat-icon>
+            <span>About</span>
+          </mat-list-item>
           <mat-list-item (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">
             <mat-icon>view_list</mat-icon>
             <span>Overview</span>

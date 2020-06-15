@@ -15,6 +15,7 @@ import {CheckComponent} from './components/check/check/check.component';
 import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
 import {StatisticsComponent} from './components/admin/statistics/statistics.component';
+import {AboutComponent} from './components/about/about.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'about',
+        component: AboutComponent,
       }
     ]
   },

@@ -1,7 +1,7 @@
 <div *ngIf="textDto">
   <mat-card class="margin">
     <h1>Record</h1>
-    <div style="color: grey;font-size: 0.8em">
+    <div style="color: grey;font-size: 1em">
       Record Swiss German speech for a Standard German sentence. Please think about the Swiss German translation of the
       sentence first before starting to record.<br>
       When you have spoken a sentence, you can play it back (simply with the play symbol).<br>
@@ -10,7 +10,7 @@
       <ul>
         <li>Start: Start recording speech</li>
         <li>Skip: I don't want to read this sentence aloud, give me another one.</li>
-        <li>Not a sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
+        <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
           step, longer texts are automatically split to sentences, so use this button also if you suspect that the
           sentence
           splitting went wrong.
@@ -36,8 +36,6 @@
       </mat-select>
     </mat-form-field>
     <br>
-    <mat-icon *ngIf="textDto.isPrivate">lock</mat-icon>
-    <mat-icon *ngIf="!textDto.isPrivate">lock_open</mat-icon>
     <b>Excerpt: </b><span>{{textDto?.text}}</span>
     <br>
     <audio [src]="blobUrl" controls></audio>
@@ -56,12 +54,10 @@
       <span>&nbsp;Skip</span>
     </button>
     <br>
-    <button (click)="sentenceError()" mat-raised-button title="Mark as not a sentence">
-      <mat-icon>delete</mat-icon>
-      <span>&nbsp;Not a Sentence</span>
+    <button (click)="sentenceError()" mat-raised-button title="Mark as 'Not a Single Standard German Sentence'">
+      <span>&nbsp;Not a Single Standard German Sentence</span>
     </button>
     <button (click)="private()" [disabled]="textDto.isPrivate" mat-raised-button title="Mark as private">
-      <mat-icon>lock</mat-icon>
       <span>&nbsp;Sensitive Data</span>
     </button>
     <button (click)="submit()" *ngIf="isReady()" color="primary" mat-raised-button

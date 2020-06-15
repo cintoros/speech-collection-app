@@ -83,25 +83,19 @@ export class RecordComponent implements OnInit {
 
   private() {
     this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
-      this.snackBarService.openMessage('marked as private');
+      this.snackBarService.openMessage('data successfully flagged.');
       this.textDto.isPrivate = true;
-    });
-  }
-
-  skip() {
-    this.check(CheckedDataElementType.SKIPPED).subscribe(() => {
-      this.snackBarService.openMessage('marked as skipped');
-      this.getNext();
     });
   }
 
   sentenceError() {
     this.check(CheckedDataElementType.SENTENCE_ERROR).subscribe(() => {
-      this.snackBarService.openMessage('marked as "Not a sentence"');
+      this.snackBarService.openMessage('data successfully flagged.');
       this.getNext();
     });
   }
 
+  skip = () => this.check(CheckedDataElementType.SKIPPED).subscribe(() => this.getNext());
   isReady = () => this.audioChunks.length > 0;
   private check = (type: CheckedDataElementType) => this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.textDto.id}/checked?type=${type}`, {});
 
