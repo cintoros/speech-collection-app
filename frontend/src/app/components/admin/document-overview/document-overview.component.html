@@ -2,7 +2,7 @@
   <mat-card id="header-card"><h1>Document Overview</h1></mat-card>
 </div>
 <div class="margin">
-  <div *ngIf="!excerpts">
+  <div *ngIf="!textElements">
     <table [dataSource]="documents" mat-table style="width: 100%; ">
       <ng-container matColumnDef="licence">
         <th *matHeaderCellDef mat-header-cell>Licence</th>
@@ -16,9 +16,9 @@
         <th *matHeaderCellDef mat-header-cell>Name</th>
         <td *matCellDef="let element" mat-cell>{{element.name}}</td>
       </ng-container>
-      <ng-container matColumnDef="time">
+      <ng-container matColumnDef="createdTime">
         <th *matHeaderCellDef mat-header-cell>Time</th>
-        <td *matCellDef="let element" mat-cell>{{element.time}}</td>
+        <td *matCellDef="let element" mat-cell>{{element.createdTime | date:'short'}}</td>
       </ng-container>
       <ng-container matColumnDef="options">
         <th *matHeaderCellDef mat-header-cell></th>
@@ -26,47 +26,47 @@
           <button (click)="edit(element)" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
-          <button (click)="delete(element)" mat-icon-button>
+          <button (click)="deleteDocument(element)" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['time','licence','domain','name','options'];sticky: true" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['time','licence','domain','name','options'];" mat-row></tr>
+      <tr *matHeaderRowDef="['createdTime','licence','domain','name','options'];sticky: true" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: ['createdTime','licence','domain','name','options'];" mat-row></tr>
     </table>
   </div>
-  <div [hidden]="!excerpts" style=" height: 800px;width: 100%; overflow: auto;">
+  <div [hidden]="!textElements" style=" height: 800px;width: 100%; overflow: auto;">
     <button (click)="back()" mat-icon-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <table [dataSource]="excerpts" mat-table matSort style="width: 100%; ">
-      <ng-container matColumnDef="excerpt">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Excerpt</th>
-        <td *matCellDef="let element" mat-cell>{{element.excerpt}}</td>
+    <table [dataSource]="textElements" mat-table style="width: 100%; ">
+      <ng-container matColumnDef="text">
+        <th *matHeaderCellDef mat-header-cell>Text</th>
+        <td *matCellDef="let element" mat-cell>{{element.text}}</td>
       </ng-container>
-      <ng-container matColumnDef="isSkipped">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Skipped</th>
-        <td *matCellDef="let element" mat-cell>{{element.isSkipped}}</td>
+      <ng-container matColumnDef="skipped">
+        <th *matHeaderCellDef mat-header-cell>Skipped</th>
+        <td *matCellDef="let element" mat-cell>{{element.skipped}}</td>
       </ng-container>
       <ng-container matColumnDef="isPrivate">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Private</th>
+        <th *matHeaderCellDef mat-header-cell>Private</th>
         <td *matCellDef="let element" mat-cell>{{element.isPrivate}}</td>
       </ng-container>
       <ng-container matColumnDef="isSentenceError">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Sentence error</th>
+        <th *matHeaderCellDef mat-header-cell>Sentence error</th>
         <td *matCellDef="let element" mat-cell>{{element.isSentenceError}}</td>
       </ng-container>
       <ng-container matColumnDef="options">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <th *matHeaderCellDef mat-header-cell></th>
         <td *matCellDef="let element" mat-cell>
-          <button (click)="deleteE(element)" mat-icon-button>
+          <button (click)="deleteTextElement(element)" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="['excerpt','isSkipped','isPrivate','isSentenceError','options'];sticky: true"
+      <tr *matHeaderRowDef="['text','skipped','isPrivate','isSentenceError','options'];sticky: true"
           mat-header-row></tr>
-      <tr *matRowDef="let row; columns: ['excerpt','isSkipped','isPrivate','isSentenceError','options'];" mat-row></tr>
+      <tr *matRowDef="let row; columns: ['text','skipped','isPrivate','isSentenceError','options'];" mat-row></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

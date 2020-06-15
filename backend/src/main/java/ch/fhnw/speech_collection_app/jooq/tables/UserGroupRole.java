@@ -23,6 +23,7 @@ import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroupRole extends TableImpl<UserGroupRoleRecord> {
 
-    private static final long serialVersionUID = -1058611051;
+    private static final long serialVersionUID = 155283762;
 
     public static final UserGroupRole USER_GROUP_ROLE = new UserGroupRole();
 
@@ -65,7 +66,7 @@ public class UserGroupRole extends TableImpl<UserGroupRoleRecord> {
     }
 
     private UserGroupRole(Name alias, Table<UserGroupRoleRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> UserGroupRole(Table<O> child, ForeignKey<O, UserGroupRoleRecord> key) {
@@ -79,7 +80,7 @@ public class UserGroupRole extends TableImpl<UserGroupRoleRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_GROUP_ROLE_PRIMARY, Indexes.USER_GROUP_ROLE_USER_GROUP_ID, Indexes.USER_GROUP_ROLE_USER_ID);
+        return Arrays.<Index>asList(Indexes.USER_GROUP_ROLE_USER_GROUP_ID, Indexes.USER_GROUP_ROLE_USER_ID);
     }
 
     @Override

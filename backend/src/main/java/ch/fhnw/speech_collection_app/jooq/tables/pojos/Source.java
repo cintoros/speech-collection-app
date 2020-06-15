@@ -5,6 +5,7 @@ package ch.fhnw.speech_collection_app.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,40 +14,56 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Source implements Serializable {
 
-    private static final long serialVersionUID = 879100151;
+    private static final long serialVersionUID = 299010333;
 
-    private Long   id;
-    private String description;
-    private String name;
-    private String rawAudioPath;
-    private String rawFilePath;
-    private String licence;
+    private Long      id;
+    private Long      userId;
+    private Long      dialectId;
+    private Long      domainId;
+    private Long      userGroupId;
+    private Timestamp createdTime;
+    private String    pathToRawFile;
+    private String    name;
+    private String    licence;
+    private String    metaInformation;
 
     public Source() {}
 
     public Source(Source value) {
         this.id = value.id;
-        this.description = value.description;
+        this.userId = value.userId;
+        this.dialectId = value.dialectId;
+        this.domainId = value.domainId;
+        this.userGroupId = value.userGroupId;
+        this.createdTime = value.createdTime;
+        this.pathToRawFile = value.pathToRawFile;
         this.name = value.name;
-        this.rawAudioPath = value.rawAudioPath;
-        this.rawFilePath = value.rawFilePath;
         this.licence = value.licence;
+        this.metaInformation = value.metaInformation;
     }
 
     public Source(
-        Long   id,
-        String description,
-        String name,
-        String rawAudioPath,
-        String rawFilePath,
-        String licence
+        Long      id,
+        Long      userId,
+        Long      dialectId,
+        Long      domainId,
+        Long      userGroupId,
+        Timestamp createdTime,
+        String    pathToRawFile,
+        String    name,
+        String    licence,
+        String    metaInformation
     ) {
         this.id = id;
-        this.description = description;
+        this.userId = userId;
+        this.dialectId = dialectId;
+        this.domainId = domainId;
+        this.userGroupId = userGroupId;
+        this.createdTime = createdTime;
+        this.pathToRawFile = pathToRawFile;
         this.name = name;
-        this.rawAudioPath = rawAudioPath;
-        this.rawFilePath = rawFilePath;
         this.licence = licence;
+        this.metaInformation = metaInformation;
     }
 
     public Long getId() {
@@ -58,17 +75,57 @@ public class Source implements Serializable {
     }
 
     @NotNull
-    @Size(max = 16777215)
-    public String getDescription() {
-        return this.description;
+    public Long getUserId() {
+        return this.userId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getDialectId() {
+        return this.dialectId;
+    }
+
+    public void setDialectId(Long dialectId) {
+        this.dialectId = dialectId;
+    }
+
+    public Long getDomainId() {
+        return this.domainId;
+    }
+
+    public void setDomainId(Long domainId) {
+        this.domainId = domainId;
     }
 
     @NotNull
-    @Size(max = 45)
+    public Long getUserGroupId() {
+        return this.userGroupId;
+    }
+
+    public void setUserGroupId(Long userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
+    public Timestamp getCreatedTime() {
+        return this.createdTime;
+    }
+
+    public void setCreatedTime(Timestamp createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    @Size(max = 65535)
+    public String getPathToRawFile() {
+        return this.pathToRawFile;
+    }
+
+    public void setPathToRawFile(String pathToRawFile) {
+        this.pathToRawFile = pathToRawFile;
+    }
+
+    @Size(max = 65535)
     public String getName() {
         return this.name;
     }
@@ -77,27 +134,7 @@ public class Source implements Serializable {
         this.name = name;
     }
 
-    @NotNull
-    @Size(max = 255)
-    public String getRawAudioPath() {
-        return this.rawAudioPath;
-    }
-
-    public void setRawAudioPath(String rawAudioPath) {
-        this.rawAudioPath = rawAudioPath;
-    }
-
-    @NotNull
-    @Size(max = 255)
-    public String getRawFilePath() {
-        return this.rawFilePath;
-    }
-
-    public void setRawFilePath(String rawFilePath) {
-        this.rawFilePath = rawFilePath;
-    }
-
-    @Size(max = 16777215)
+    @Size(max = 65535)
     public String getLicence() {
         return this.licence;
     }
@@ -106,16 +143,28 @@ public class Source implements Serializable {
         this.licence = licence;
     }
 
+    public String getMetaInformation() {
+        return this.metaInformation;
+    }
+
+    public void setMetaInformation(String metaInformation) {
+        this.metaInformation = metaInformation;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Source (");
 
         sb.append(id);
-        sb.append(", ").append(description);
+        sb.append(", ").append(userId);
+        sb.append(", ").append(dialectId);
+        sb.append(", ").append(domainId);
+        sb.append(", ").append(userGroupId);
+        sb.append(", ").append(createdTime);
+        sb.append(", ").append(pathToRawFile);
         sb.append(", ").append(name);
-        sb.append(", ").append(rawAudioPath);
-        sb.append(", ").append(rawFilePath);
         sb.append(", ").append(licence);
+        sb.append(", ").append(metaInformation);
 
         sb.append(")");
         return sb.toString();

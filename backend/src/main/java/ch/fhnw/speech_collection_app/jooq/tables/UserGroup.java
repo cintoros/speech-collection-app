@@ -4,7 +4,6 @@
 package ch.fhnw.speech_collection_app.jooq.tables;
 
 
-import ch.fhnw.speech_collection_app.jooq.Indexes;
 import ch.fhnw.speech_collection_app.jooq.Keys;
 import ch.fhnw.speech_collection_app.jooq.SpeechCollectionApp;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRecord;
@@ -12,25 +11,27 @@ import ch.fhnw.speech_collection_app.jooq.tables.records.UserGroupRecord;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroup extends TableImpl<UserGroupRecord> {
 
-    private static final long serialVersionUID = -1763818116;
+    private static final long serialVersionUID = 752073665;
 
     public static final UserGroup USER_GROUP = new UserGroup();
 
@@ -44,6 +45,8 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     public final TableField<UserGroupRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(100).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     public final TableField<UserGroupRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    public final TableField<UserGroupRecord, String> META_INFORMATION = createField(DSL.name("meta_information"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "contains meta_information. for example which features are activated per user_group");
 
     public UserGroup() {
         this(DSL.name("user_group"), null);
@@ -62,7 +65,7 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     }
 
     private UserGroup(Name alias, Table<UserGroupRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> UserGroup(Table<O> child, ForeignKey<O, UserGroupRecord> key) {
@@ -72,11 +75,6 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     @Override
     public Schema getSchema() {
         return SpeechCollectionApp.SPEECH_COLLECTION_APP;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_GROUP_PRIMARY);
     }
 
     @Override
@@ -92,6 +90,13 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     @Override
     public List<UniqueKey<UserGroupRecord>> getKeys() {
         return Arrays.<UniqueKey<UserGroupRecord>>asList(Keys.KEY_USER_GROUP_PRIMARY);
+    }
+
+    @Override
+    public List<Check<UserGroupRecord>> getChecks() {
+        return Arrays.<Check<UserGroupRecord>>asList(
+              Internal.createCheck(this, DSL.name("meta_information"), "json_valid(`meta_information`)", true)
+        );
     }
 
     @Override
@@ -115,11 +120,11 @@ public class UserGroup extends TableImpl<UserGroupRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, String, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, String, String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

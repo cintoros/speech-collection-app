@@ -1,12 +1,13 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {Recording, RecordingNoiseLevel, RecordingQuality} from '../../models/recording';
+import {AudioNoiseLevel, AudioQuality, RecordingDto} from '../../models/recording-dto';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SnackBarService} from '../../services/snack-bar.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {Excerpt} from '../../models/excerpt';
+import {TextDto} from '../../models/text-dto';
 import {UserGroupService} from '../../services/user-group.service';
 import {Observable, Subscription, timer} from 'rxjs';
+import {CheckedDataElementType} from '../../models/checked-data-element-type';
 
 @Component({
   selector: 'app-record',
@@ -14,20 +15,21 @@ import {Observable, Subscription, timer} from 'rxjs';
   styleUrls: ['./record.component.scss']
 })
 export class RecordComponent implements OnInit {
-  excerpt: Excerpt = null;
+  textDto: TextDto = null;
   isRecording = false;
   blobUrl: SafeUrl;
-  recordingQuality = RecordingQuality;
-  recordingNoiseLevel = RecordingNoiseLevel;
-  selectedQuality = RecordingQuality.INTEGRATED;
-  selectedNoiseLevel = RecordingNoiseLevel.MODERATE_NOISE;
+  recordingQuality = AudioQuality;
+  recordingNoiseLevel = AudioNoiseLevel;
+  selectedQuality = AudioQuality.INTEGRATED;
+  selectedNoiseLevel = AudioNoiseLevel.MODERATE_NOISE;
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
-  private audioChunks = [];
+  private audioChunks: Blob[] = [];
   private groupId = 1;
   private elapsedTime = 0;
   private numberObservable: Observable<number>;
   private subscription: Subscription;
+  private browserVersion: string;
 
   constructor(
     private snackBarService: SnackBarService, private detector: ChangeDetectorRef, private httpClient: HttpClient,
@@ -37,6 +39,7 @@ export class RecordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.browserVersion = window.navigator.userAgent;
     this.getNext();
     navigator.mediaDevices.getUserMedia({audio: true})
       .then(stream => {
@@ -66,7 +69,7 @@ export class RecordComponent implements OnInit {
   }
 
   submit(): void {
-    const recording = new Recording(undefined, this.excerpt.id, undefined, undefined, undefined, this.selectedQuality, this.selectedNoiseLevel);
+    const recording = new RecordingDto(this.textDto.id, this.selectedQuality, this.selectedNoiseLevel, this.browserVersion);
     const formData = new FormData();
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
     formData.append('recording', JSON.stringify(recording));
@@ -79,32 +82,24 @@ export class RecordComponent implements OnInit {
   }
 
   private() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/private`, {})
-      .subscribe(() => {
-        this.snackBarService.openMessage('marked as private');
-        this.excerpt.isPrivate = true;
-      });
+    this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
+      this.snackBarService.openMessage('data successfully flagged.');
+      this.textDto.isPrivate = true;
+    });
   }
-
-  skip() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/skipped`, {})
-      .subscribe(() => {
-        this.snackBarService.openMessage('marked as skipped');
-        this.getNext();
-      });
-  }
-
-  isReady = () => this.audioChunks.length > 0;
 
   sentenceError() {
-    this.httpClient.put<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt/${this.excerpt.id}/sentence_error`, {})
-      .subscribe(() => {
-        this.snackBarService.openMessage('marked as "Not a sentence"');
-        this.getNext();
-      });
+    this.check(CheckedDataElementType.SENTENCE_ERROR).subscribe(() => {
+      this.snackBarService.openMessage('data successfully flagged.');
+      this.getNext();
+    });
   }
 
+  skip = () => this.check(CheckedDataElementType.SKIPPED).subscribe(() => this.getNext());
+  isReady = () => this.audioChunks.length > 0;
+  private check = (type: CheckedDataElementType) => this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.textDto.id}/checked?type=${type}`, {});
+
   private getNext() {
-    this.httpClient.get<Excerpt>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.excerpt = value);
+    this.httpClient.get<TextDto>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.textDto = value);
   }
 }

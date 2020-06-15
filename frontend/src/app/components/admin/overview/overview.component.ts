@@ -46,7 +46,7 @@ export class OverviewComponent implements OnInit {
   }
 
   play(occurrence: OverviewOccurrence) {
-    this.httpClient.get(`${this.baseUrl}occurrence/audio/${occurrence.id}?mode=${occurrence.mode}`, {responseType: 'blob'})
+    this.httpClient.get(`${this.baseUrl}occurrence/audio/${occurrence.dataElementId_2}`, {responseType: 'blob'})
       .subscribe(resp => {
         this.audioPlayer.pause();
         this.audioPlayer = new Audio(URL.createObjectURL(resp));

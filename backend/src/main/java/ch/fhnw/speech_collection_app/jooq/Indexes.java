@@ -4,20 +4,17 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedRecording;
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedTextAudio;
+import ch.fhnw.speech_collection_app.jooq.tables.Audio;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
+import ch.fhnw.speech_collection_app.jooq.tables.DataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.DataTuple;
 import ch.fhnw.speech_collection_app.jooq.tables.Dialect;
-import ch.fhnw.speech_collection_app.jooq.tables.Domain;
-import ch.fhnw.speech_collection_app.jooq.tables.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.FlywaySchemaHistory;
-import ch.fhnw.speech_collection_app.jooq.tables.Language;
-import ch.fhnw.speech_collection_app.jooq.tables.OriginalText;
-import ch.fhnw.speech_collection_app.jooq.tables.Recording;
+import ch.fhnw.speech_collection_app.jooq.tables.Image;
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
-import ch.fhnw.speech_collection_app.jooq.tables.Speaker;
-import ch.fhnw.speech_collection_app.jooq.tables.TextAudio;
+import ch.fhnw.speech_collection_app.jooq.tables.Text;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
-import ch.fhnw.speech_collection_app.jooq.tables.UserGroup;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
 
@@ -33,41 +30,29 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index CHECKED_RECORDING_PRIMARY = Indexes0.CHECKED_RECORDING_PRIMARY;
-    public static final Index CHECKED_RECORDING_RECORDING_ID = Indexes0.CHECKED_RECORDING_RECORDING_ID;
-    public static final Index CHECKED_RECORDING_USER_ID = Indexes0.CHECKED_RECORDING_USER_ID;
-    public static final Index CHECKED_TEXT_AUDIO_PRIMARY = Indexes0.CHECKED_TEXT_AUDIO_PRIMARY;
-    public static final Index CHECKED_TEXT_AUDIO_TEXT_AUDIO_ID = Indexes0.CHECKED_TEXT_AUDIO_TEXT_AUDIO_ID;
-    public static final Index CHECKED_TEXT_AUDIO_USER_ID = Indexes0.CHECKED_TEXT_AUDIO_USER_ID;
+    public static final Index AUDIO_DATA_ELEMENT_ID = Indexes0.AUDIO_DATA_ELEMENT_ID;
+    public static final Index AUDIO_DIALECT_ID = Indexes0.AUDIO_DIALECT_ID;
+    public static final Index CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID = Indexes0.CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID;
+    public static final Index CHECKED_DATA_ELEMENT_USER_ID = Indexes0.CHECKED_DATA_ELEMENT_USER_ID;
+    public static final Index CHECKED_DATA_TUPLE_DATA_TUPLE_ID = Indexes0.CHECKED_DATA_TUPLE_DATA_TUPLE_ID;
+    public static final Index CHECKED_DATA_TUPLE_USER_ID = Indexes0.CHECKED_DATA_TUPLE_USER_ID;
+    public static final Index DATA_ELEMENT_SOURCE_ID = Indexes0.DATA_ELEMENT_SOURCE_ID;
+    public static final Index DATA_ELEMENT_USER_GROUP_ID = Indexes0.DATA_ELEMENT_USER_GROUP_ID;
+    public static final Index DATA_ELEMENT_USER_ID = Indexes0.DATA_ELEMENT_USER_ID;
+    public static final Index DATA_TUPLE_DATA_ELEMENT_ID_1 = Indexes0.DATA_TUPLE_DATA_ELEMENT_ID_1;
+    public static final Index DATA_TUPLE_DATA_ELEMENT_ID_2 = Indexes0.DATA_TUPLE_DATA_ELEMENT_ID_2;
     public static final Index DIALECT_LANGUAGE_ID = Indexes0.DIALECT_LANGUAGE_ID;
-    public static final Index DIALECT_PRIMARY = Indexes0.DIALECT_PRIMARY;
-    public static final Index DOMAIN_PRIMARY = Indexes0.DOMAIN_PRIMARY;
-    public static final Index EXCERPT_ORIGINAL_TEXT_ID = Indexes0.EXCERPT_ORIGINAL_TEXT_ID;
-    public static final Index EXCERPT_PRIMARY = Indexes0.EXCERPT_PRIMARY;
     public static final Index FLYWAY_SCHEMA_HISTORY_FLYWAY_SCHEMA_HISTORY_S_IDX = Indexes0.FLYWAY_SCHEMA_HISTORY_FLYWAY_SCHEMA_HISTORY_S_IDX;
-    public static final Index FLYWAY_SCHEMA_HISTORY_PRIMARY = Indexes0.FLYWAY_SCHEMA_HISTORY_PRIMARY;
-    public static final Index LANGUAGE_PRIMARY = Indexes0.LANGUAGE_PRIMARY;
-    public static final Index ORIGINAL_TEXT_DOMAIN_ID = Indexes0.ORIGINAL_TEXT_DOMAIN_ID;
-    public static final Index ORIGINAL_TEXT_PRIMARY = Indexes0.ORIGINAL_TEXT_PRIMARY;
-    public static final Index ORIGINAL_TEXT_USER_GROUP_ID = Indexes0.ORIGINAL_TEXT_USER_GROUP_ID;
-    public static final Index ORIGINAL_TEXT_USER_ID = Indexes0.ORIGINAL_TEXT_USER_ID;
-    public static final Index RECORDING_EXCERPT_ID = Indexes0.RECORDING_EXCERPT_ID;
-    public static final Index RECORDING_PRIMARY = Indexes0.RECORDING_PRIMARY;
-    public static final Index RECORDING_USER_ID = Indexes0.RECORDING_USER_ID;
-    public static final Index SOURCE_PRIMARY = Indexes0.SOURCE_PRIMARY;
-    public static final Index SPEAKER_PRIMARY = Indexes0.SPEAKER_PRIMARY;
-    public static final Index TEXT_AUDIO_PRIMARY = Indexes0.TEXT_AUDIO_PRIMARY;
-    public static final Index TEXT_AUDIO_SOURCE_ID = Indexes0.TEXT_AUDIO_SOURCE_ID;
-    public static final Index TEXT_AUDIO_SPEAKER_ID = Indexes0.TEXT_AUDIO_SPEAKER_ID;
+    public static final Index IMAGE_DATA_ELEMENT_ID = Indexes0.IMAGE_DATA_ELEMENT_ID;
+    public static final Index SOURCE_DIALECT_ID = Indexes0.SOURCE_DIALECT_ID;
+    public static final Index SOURCE_DOMAIN_ID = Indexes0.SOURCE_DOMAIN_ID;
+    public static final Index SOURCE_USER_GROUP_ID = Indexes0.SOURCE_USER_GROUP_ID;
+    public static final Index SOURCE_USER_ID = Indexes0.SOURCE_USER_ID;
+    public static final Index TEXT_DATA_ELEMENT_ID = Indexes0.TEXT_DATA_ELEMENT_ID;
+    public static final Index TEXT_DIALECT_ID = Indexes0.TEXT_DIALECT_ID;
     public static final Index USER_DIALECT_ID = Indexes0.USER_DIALECT_ID;
-    public static final Index USER_EMAIL = Indexes0.USER_EMAIL;
-    public static final Index USER_PRIMARY = Indexes0.USER_PRIMARY;
-    public static final Index USER_USERNAME = Indexes0.USER_USERNAME;
-    public static final Index USER_GROUP_PRIMARY = Indexes0.USER_GROUP_PRIMARY;
-    public static final Index USER_GROUP_ROLE_PRIMARY = Indexes0.USER_GROUP_ROLE_PRIMARY;
     public static final Index USER_GROUP_ROLE_USER_GROUP_ID = Indexes0.USER_GROUP_ROLE_USER_GROUP_ID;
     public static final Index USER_GROUP_ROLE_USER_ID = Indexes0.USER_GROUP_ROLE_USER_ID;
-    public static final Index VERIFICATION_TOKEN_PRIMARY = Indexes0.VERIFICATION_TOKEN_PRIMARY;
     public static final Index VERIFICATION_TOKEN_USER_ID = Indexes0.VERIFICATION_TOKEN_USER_ID;
 
     // -------------------------------------------------------------------------
@@ -75,41 +60,29 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
-        public static Index CHECKED_RECORDING_PRIMARY = Internal.createIndex("PRIMARY", CheckedRecording.CHECKED_RECORDING, new OrderField[] { CheckedRecording.CHECKED_RECORDING.ID }, true);
-        public static Index CHECKED_RECORDING_RECORDING_ID = Internal.createIndex("recording_id", CheckedRecording.CHECKED_RECORDING, new OrderField[] { CheckedRecording.CHECKED_RECORDING.RECORDING_ID }, false);
-        public static Index CHECKED_RECORDING_USER_ID = Internal.createIndex("user_id", CheckedRecording.CHECKED_RECORDING, new OrderField[] { CheckedRecording.CHECKED_RECORDING.USER_ID }, false);
-        public static Index CHECKED_TEXT_AUDIO_PRIMARY = Internal.createIndex("PRIMARY", CheckedTextAudio.CHECKED_TEXT_AUDIO, new OrderField[] { CheckedTextAudio.CHECKED_TEXT_AUDIO.ID }, true);
-        public static Index CHECKED_TEXT_AUDIO_TEXT_AUDIO_ID = Internal.createIndex("text_audio_id", CheckedTextAudio.CHECKED_TEXT_AUDIO, new OrderField[] { CheckedTextAudio.CHECKED_TEXT_AUDIO.TEXT_AUDIO_ID }, false);
-        public static Index CHECKED_TEXT_AUDIO_USER_ID = Internal.createIndex("user_id", CheckedTextAudio.CHECKED_TEXT_AUDIO, new OrderField[] { CheckedTextAudio.CHECKED_TEXT_AUDIO.USER_ID }, false);
+        public static Index AUDIO_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", Audio.AUDIO, new OrderField[] { Audio.AUDIO.DATA_ELEMENT_ID }, false);
+        public static Index AUDIO_DIALECT_ID = Internal.createIndex("dialect_id", Audio.AUDIO, new OrderField[] { Audio.AUDIO.DIALECT_ID }, false);
+        public static Index CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", CheckedDataElement.CHECKED_DATA_ELEMENT, new OrderField[] { CheckedDataElement.CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID }, false);
+        public static Index CHECKED_DATA_ELEMENT_USER_ID = Internal.createIndex("user_id", CheckedDataElement.CHECKED_DATA_ELEMENT, new OrderField[] { CheckedDataElement.CHECKED_DATA_ELEMENT.USER_ID }, false);
+        public static Index CHECKED_DATA_TUPLE_DATA_TUPLE_ID = Internal.createIndex("data_tuple_id", CheckedDataTuple.CHECKED_DATA_TUPLE, new OrderField[] { CheckedDataTuple.CHECKED_DATA_TUPLE.DATA_TUPLE_ID }, false);
+        public static Index CHECKED_DATA_TUPLE_USER_ID = Internal.createIndex("user_id", CheckedDataTuple.CHECKED_DATA_TUPLE, new OrderField[] { CheckedDataTuple.CHECKED_DATA_TUPLE.USER_ID }, false);
+        public static Index DATA_ELEMENT_SOURCE_ID = Internal.createIndex("source_id", DataElement.DATA_ELEMENT, new OrderField[] { DataElement.DATA_ELEMENT.SOURCE_ID }, false);
+        public static Index DATA_ELEMENT_USER_GROUP_ID = Internal.createIndex("user_group_id", DataElement.DATA_ELEMENT, new OrderField[] { DataElement.DATA_ELEMENT.USER_GROUP_ID }, false);
+        public static Index DATA_ELEMENT_USER_ID = Internal.createIndex("user_id", DataElement.DATA_ELEMENT, new OrderField[] { DataElement.DATA_ELEMENT.USER_ID }, false);
+        public static Index DATA_TUPLE_DATA_ELEMENT_ID_1 = Internal.createIndex("data_element_id_1", DataTuple.DATA_TUPLE, new OrderField[] { DataTuple.DATA_TUPLE.DATA_ELEMENT_ID_1 }, false);
+        public static Index DATA_TUPLE_DATA_ELEMENT_ID_2 = Internal.createIndex("data_element_id_2", DataTuple.DATA_TUPLE, new OrderField[] { DataTuple.DATA_TUPLE.DATA_ELEMENT_ID_2 }, false);
         public static Index DIALECT_LANGUAGE_ID = Internal.createIndex("language_id", Dialect.DIALECT, new OrderField[] { Dialect.DIALECT.LANGUAGE_ID }, false);
-        public static Index DIALECT_PRIMARY = Internal.createIndex("PRIMARY", Dialect.DIALECT, new OrderField[] { Dialect.DIALECT.ID }, true);
-        public static Index DOMAIN_PRIMARY = Internal.createIndex("PRIMARY", Domain.DOMAIN, new OrderField[] { Domain.DOMAIN.ID }, true);
-        public static Index EXCERPT_ORIGINAL_TEXT_ID = Internal.createIndex("original_text_id", Excerpt.EXCERPT, new OrderField[] { Excerpt.EXCERPT.ORIGINAL_TEXT_ID }, false);
-        public static Index EXCERPT_PRIMARY = Internal.createIndex("PRIMARY", Excerpt.EXCERPT, new OrderField[] { Excerpt.EXCERPT.ID }, true);
         public static Index FLYWAY_SCHEMA_HISTORY_FLYWAY_SCHEMA_HISTORY_S_IDX = Internal.createIndex("flyway_schema_history_s_idx", FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, new OrderField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.SUCCESS }, false);
-        public static Index FLYWAY_SCHEMA_HISTORY_PRIMARY = Internal.createIndex("PRIMARY", FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, new OrderField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
-        public static Index LANGUAGE_PRIMARY = Internal.createIndex("PRIMARY", Language.LANGUAGE, new OrderField[] { Language.LANGUAGE.ID }, true);
-        public static Index ORIGINAL_TEXT_DOMAIN_ID = Internal.createIndex("domain_id", OriginalText.ORIGINAL_TEXT, new OrderField[] { OriginalText.ORIGINAL_TEXT.DOMAIN_ID }, false);
-        public static Index ORIGINAL_TEXT_PRIMARY = Internal.createIndex("PRIMARY", OriginalText.ORIGINAL_TEXT, new OrderField[] { OriginalText.ORIGINAL_TEXT.ID }, true);
-        public static Index ORIGINAL_TEXT_USER_GROUP_ID = Internal.createIndex("user_group_id", OriginalText.ORIGINAL_TEXT, new OrderField[] { OriginalText.ORIGINAL_TEXT.USER_GROUP_ID }, false);
-        public static Index ORIGINAL_TEXT_USER_ID = Internal.createIndex("user_id", OriginalText.ORIGINAL_TEXT, new OrderField[] { OriginalText.ORIGINAL_TEXT.USER_ID }, false);
-        public static Index RECORDING_EXCERPT_ID = Internal.createIndex("excerpt_id", Recording.RECORDING, new OrderField[] { Recording.RECORDING.EXCERPT_ID }, false);
-        public static Index RECORDING_PRIMARY = Internal.createIndex("PRIMARY", Recording.RECORDING, new OrderField[] { Recording.RECORDING.ID }, true);
-        public static Index RECORDING_USER_ID = Internal.createIndex("user_id", Recording.RECORDING, new OrderField[] { Recording.RECORDING.USER_ID }, false);
-        public static Index SOURCE_PRIMARY = Internal.createIndex("PRIMARY", Source.SOURCE, new OrderField[] { Source.SOURCE.ID }, true);
-        public static Index SPEAKER_PRIMARY = Internal.createIndex("PRIMARY", Speaker.SPEAKER, new OrderField[] { Speaker.SPEAKER.ID }, true);
-        public static Index TEXT_AUDIO_PRIMARY = Internal.createIndex("PRIMARY", TextAudio.TEXT_AUDIO, new OrderField[] { TextAudio.TEXT_AUDIO.ID }, true);
-        public static Index TEXT_AUDIO_SOURCE_ID = Internal.createIndex("source_id", TextAudio.TEXT_AUDIO, new OrderField[] { TextAudio.TEXT_AUDIO.SOURCE_ID }, false);
-        public static Index TEXT_AUDIO_SPEAKER_ID = Internal.createIndex("speaker_id", TextAudio.TEXT_AUDIO, new OrderField[] { TextAudio.TEXT_AUDIO.SPEAKER_ID }, false);
+        public static Index IMAGE_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", Image.IMAGE, new OrderField[] { Image.IMAGE.DATA_ELEMENT_ID }, false);
+        public static Index SOURCE_DIALECT_ID = Internal.createIndex("dialect_id", Source.SOURCE, new OrderField[] { Source.SOURCE.DIALECT_ID }, false);
+        public static Index SOURCE_DOMAIN_ID = Internal.createIndex("domain_id", Source.SOURCE, new OrderField[] { Source.SOURCE.DOMAIN_ID }, false);
+        public static Index SOURCE_USER_GROUP_ID = Internal.createIndex("user_group_id", Source.SOURCE, new OrderField[] { Source.SOURCE.USER_GROUP_ID }, false);
+        public static Index SOURCE_USER_ID = Internal.createIndex("user_id", Source.SOURCE, new OrderField[] { Source.SOURCE.USER_ID }, false);
+        public static Index TEXT_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", Text.TEXT, new OrderField[] { Text.TEXT.DATA_ELEMENT_ID }, false);
+        public static Index TEXT_DIALECT_ID = Internal.createIndex("dialect_id", Text.TEXT, new OrderField[] { Text.TEXT.DIALECT_ID }, false);
         public static Index USER_DIALECT_ID = Internal.createIndex("dialect_id", User.USER, new OrderField[] { User.USER.DIALECT_ID }, false);
-        public static Index USER_EMAIL = Internal.createIndex("email", User.USER, new OrderField[] { User.USER.EMAIL }, true);
-        public static Index USER_PRIMARY = Internal.createIndex("PRIMARY", User.USER, new OrderField[] { User.USER.ID }, true);
-        public static Index USER_USERNAME = Internal.createIndex("username", User.USER, new OrderField[] { User.USER.USERNAME }, true);
-        public static Index USER_GROUP_PRIMARY = Internal.createIndex("PRIMARY", UserGroup.USER_GROUP, new OrderField[] { UserGroup.USER_GROUP.ID }, true);
-        public static Index USER_GROUP_ROLE_PRIMARY = Internal.createIndex("PRIMARY", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.ID }, true);
         public static Index USER_GROUP_ROLE_USER_GROUP_ID = Internal.createIndex("user_group_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_GROUP_ID }, false);
         public static Index USER_GROUP_ROLE_USER_ID = Internal.createIndex("user_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_ID }, false);
-        public static Index VERIFICATION_TOKEN_PRIMARY = Internal.createIndex("PRIMARY", VerificationToken.VERIFICATION_TOKEN, new OrderField[] { VerificationToken.VERIFICATION_TOKEN.ID }, true);
         public static Index VERIFICATION_TOKEN_USER_ID = Internal.createIndex("user_id", VerificationToken.VERIFICATION_TOKEN, new OrderField[] { VerificationToken.VERIFICATION_TOKEN.USER_ID }, false);
     }
 }

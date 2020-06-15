@@ -12,6 +12,7 @@ import ch.fhnw.speech_collection_app.jooq.enums.UserLicence;
 import ch.fhnw.speech_collection_app.jooq.enums.UserSex;
 import ch.fhnw.speech_collection_app.jooq.tables.records.UserRecord;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,10 +22,11 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row13;
+import org.jooq.Row14;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -33,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -657353899;
+    private static final long serialVersionUID = -634442244;
 
     public static final User USER = new User();
 
@@ -68,6 +70,8 @@ public class User extends TableImpl<UserRecord> {
 
     public final TableField<UserRecord, String> ZIP_CODE = createField(DSL.name("zip_code"), org.jooq.impl.SQLDataType.VARCHAR(45).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
+    public final TableField<UserRecord, Timestamp> LAST_ONLINE = createField(DSL.name("last_online"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("current_timestamp()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
     public User() {
         this(DSL.name("user"), null);
     }
@@ -85,7 +89,7 @@ public class User extends TableImpl<UserRecord> {
     }
 
     private User(Name alias, Table<UserRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> User(Table<O> child, ForeignKey<O, UserRecord> key) {
@@ -99,7 +103,7 @@ public class User extends TableImpl<UserRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_DIALECT_ID, Indexes.USER_EMAIL, Indexes.USER_PRIMARY, Indexes.USER_USERNAME);
+        return Arrays.<Index>asList(Indexes.USER_DIALECT_ID);
     }
 
     @Override
@@ -147,11 +151,11 @@ public class User extends TableImpl<UserRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row14 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 }

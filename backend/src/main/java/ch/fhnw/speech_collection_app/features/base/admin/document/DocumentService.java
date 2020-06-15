@@ -1,10 +1,9 @@
 package ch.fhnw.speech_collection_app.features.base.admin.document;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.features.base.admin.pagination.PaginationResultDto;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.Excerpt;
-import ch.fhnw.speech_collection_app.jooq.tables.pojos.OriginalText;
-import ch.fhnw.speech_collection_app.jooq.tables.records.OriginalTextRecord;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Source;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.IOUtils;
@@ -25,13 +24,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ch.fhnw.speech_collection_app.jooq.Tables.EXCERPT;
-import static ch.fhnw.speech_collection_app.jooq.Tables.ORIGINAL_TEXT;
+import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
 public class DocumentService {
@@ -47,7 +46,7 @@ public class DocumentService {
         this.speechCollectionAppConfig = speechCollectionAppConfig;
     }
 
-    public void postOriginalText(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
+    public void postDocumentSource(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
         isAllowed(groupId);
         var parser = new AutoDetectParser(TikaConfig.getDefaultConfig());
         var path = speechCollectionAppConfig.getBasePath().resolve("extracted_text");
@@ -65,12 +64,24 @@ public class DocumentService {
                 metadata.add(Metadata.CONTENT_TYPE, file.getContentType());
                 parser.parse(new ByteArrayInputStream(file.getBytes()), bodyContentHandler, metadata);
                 var text = bodyContentHandler.toString();
-                OriginalText originalText = new OriginalText(null, groupId, domainId, customUserDetailsService.getLoggedInUserId(), null, documentLicence, file.getOriginalFilename());
-                OriginalTextRecord textRecord = dslContext.newRecord(ORIGINAL_TEXT, originalText);
-                textRecord.store();
-                Long id = textRecord.getId();
+
+                var source = dslContext.newRecord(SOURCE);
+                source.setUserGroupId(groupId);
+                source.setDomainId(domainId);
+                source.setUserId(customUserDetailsService.getLoggedInUserId());
+                source.setLicence(documentLicence);
+                source.setName(file.getOriginalFilename());
+                source.setPathToRawFile("default");
+                source.setUserGroupId(groupId);
+                source.store();
+                var id = source.getId();
+                var rawFilePath = Paths.get("original_text", id + ".bin");
+                source.setPathToRawFile(rawFilePath.toString());
+                rawFilePath = speechCollectionAppConfig.getBasePath().resolve(rawFilePath);
+                Files.write(rawFilePath, file.getBytes());
+                source.store();
+
                 Files.writeString(path.resolve(id + ".txt"), text, StandardCharsets.UTF_8);
-                Files.write(speechCollectionAppConfig.getBasePath().resolve("original_text/" + id + ".bin"), file.getBytes());
                 return Optional.of(id);
             } catch (IOException | TikaException | SAXException ex) {
                 logger.error("failed to parse original text: ", ex);
@@ -78,7 +89,7 @@ public class DocumentService {
             }
         }).flatMap(Optional::stream).map(Object::toString).collect(Collectors.joining(","));
         try {
-            Process process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 1 " + collect);
+            var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 1 " + collect);
             List<String> list = IOUtils.readLines(process.getErrorStream());
             if (!list.isEmpty()) {
                 logger.error(String.join("\n", list));
@@ -88,32 +99,39 @@ public class DocumentService {
         }
     }
 
-    public void deleteExcerpt(long groupId, long originalTextId, long excerptId) {
+    public void deleteDataElement(long groupId, long sourceId, long dataElementId) {
         isAllowed(groupId);
-        dslContext.delete(EXCERPT)
-                .where(EXCERPT.ID.eq(excerptId).and(EXCERPT.ORIGINAL_TEXT_ID.eq(originalTextId)))
+        dslContext.delete(DATA_ELEMENT)
+                .where(DATA_ELEMENT.ID.eq(dataElementId).and(DATA_ELEMENT.SOURCE_ID.eq(sourceId)))
                 .execute();
     }
 
-    public List<Excerpt> getExcerpt(long groupId, long originalTextId) {
+    public PaginationResultDto<TextElementDto> getTextElement(long groupId, long dataElementId, long lastIndex, long pageSize, boolean before) {
         isAllowed(groupId);
-        return dslContext.selectFrom(EXCERPT)
-                .where(EXCERPT.ORIGINAL_TEXT_ID.eq(originalTextId))
-                .fetchInto(Excerpt.class);
+        var count = dslContext.fetchCount(DATA_ELEMENT, DATA_ELEMENT.SOURCE_ID.eq(dataElementId));
+        var items = dslContext.select(DATA_ELEMENT.ID, DATA_ELEMENT.SOURCE_ID, DATA_ELEMENT.SKIPPED, DATA_ELEMENT.IS_PRIVATE,
+                TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
+                .from(TEXT.join(DATA_ELEMENT).onKey())
+                .where(DATA_ELEMENT.SOURCE_ID.eq(dataElementId))
+                .orderBy(before ? DATA_ELEMENT.ID.desc() : DATA_ELEMENT.ID.asc())
+                .seek(lastIndex)
+                .limit(pageSize)
+                .fetchInto(TextElementDto.class);
+        return new PaginationResultDto<>(items, count);
     }
 
-    public void deleteOriginalText(long groupId, long originalTextId) {
+    public void deleteSource(long groupId, long sourceId) {
         isAllowed(groupId);
-        dslContext.delete(ORIGINAL_TEXT)
-                .where(ORIGINAL_TEXT.ID.eq(originalTextId))
+        dslContext.delete(SOURCE)
+                .where(SOURCE.ID.eq(sourceId))
                 .execute();
     }
 
-    public List<OriginalText> getOriginalText(long groupId) {
+    public List<Source> getDocumentSource(long groupId) {
         isAllowed(groupId);
-        return dslContext.selectFrom(ORIGINAL_TEXT)
-                .where(ORIGINAL_TEXT.USER_GROUP_ID.eq(groupId))
-                .fetchInto(OriginalText.class);
+        return dslContext.selectFrom(SOURCE)
+                .where(SOURCE.USER_GROUP_ID.eq(groupId))
+                .fetchInto(Source.class);
     }
 
     private void isAllowed(long groupId) {

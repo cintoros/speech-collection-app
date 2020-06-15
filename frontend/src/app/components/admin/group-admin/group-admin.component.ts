@@ -42,8 +42,11 @@ export class GroupAdminComponent implements OnInit {
     formData.append('domainId', this.selectedDomain.id.toFixed(0));
     formData.append('documentLicence', this.documentLicence);
     localStorage.setItem('documentLicence', this.documentLicence);
-    this.httpClient.post(`${this.baseUrl}original_text/`, formData).subscribe(() => {
-    });
+    // do not upload anything in case the input was canceled after a previous upload.
+    if (fileList.length > 0) {
+      this.httpClient.post(`${this.baseUrl}source/`, formData).subscribe(() => {
+      });
+    }
   }
 
   saveGroupDescription() {

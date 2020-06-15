@@ -103,7 +103,8 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     const licence = this.registerForm.controls.licence.value;
     const age = this.registerForm.controls.age.value;
     const notCh = this.registerForm.controls.notCH.value;
-    const user: User = new User(this.user.id, firstName, lastName, email, username, password, dialectId, sex, licence, age, zipCode, notCh);
+    const user: User = new User(this.user.id, firstName, lastName, email, username, password, dialectId, sex, licence, age, zipCode, notCh,
+      undefined);
 
     if (this.registerForm.valid) {
       if (this.isNewUser) {

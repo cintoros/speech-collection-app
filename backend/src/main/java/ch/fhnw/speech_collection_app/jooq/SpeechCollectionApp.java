@@ -4,24 +4,23 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedRecording;
-import ch.fhnw.speech_collection_app.jooq.tables.CheckedTextAudio;
+import ch.fhnw.speech_collection_app.jooq.tables.Audio;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
+import ch.fhnw.speech_collection_app.jooq.tables.DataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.DataTuple;
 import ch.fhnw.speech_collection_app.jooq.tables.Dialect;
 import ch.fhnw.speech_collection_app.jooq.tables.Domain;
-import ch.fhnw.speech_collection_app.jooq.tables.Excerpt;
 import ch.fhnw.speech_collection_app.jooq.tables.FlywaySchemaHistory;
+import ch.fhnw.speech_collection_app.jooq.tables.Image;
 import ch.fhnw.speech_collection_app.jooq.tables.Language;
-import ch.fhnw.speech_collection_app.jooq.tables.OriginalText;
-import ch.fhnw.speech_collection_app.jooq.tables.Recording;
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
-import ch.fhnw.speech_collection_app.jooq.tables.Speaker;
-import ch.fhnw.speech_collection_app.jooq.tables.TextAudio;
+import ch.fhnw.speech_collection_app.jooq.tables.Text;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroup;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,41 +32,41 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SpeechCollectionApp extends SchemaImpl {
 
-    private static final long serialVersionUID = -691132788;
+    private static final long serialVersionUID = 242600870;
 
     public static final SpeechCollectionApp SPEECH_COLLECTION_APP = new SpeechCollectionApp();
 
-    public final CheckedRecording CHECKED_RECORDING = ch.fhnw.speech_collection_app.jooq.tables.CheckedRecording.CHECKED_RECORDING;
+    public final Audio AUDIO = Audio.AUDIO;
 
-    public final CheckedTextAudio CHECKED_TEXT_AUDIO = ch.fhnw.speech_collection_app.jooq.tables.CheckedTextAudio.CHECKED_TEXT_AUDIO;
+    public final CheckedDataElement CHECKED_DATA_ELEMENT = CheckedDataElement.CHECKED_DATA_ELEMENT;
 
-    public final Dialect DIALECT = ch.fhnw.speech_collection_app.jooq.tables.Dialect.DIALECT;
+    public final CheckedDataTuple CHECKED_DATA_TUPLE = CheckedDataTuple.CHECKED_DATA_TUPLE;
 
-    public final Domain DOMAIN = ch.fhnw.speech_collection_app.jooq.tables.Domain.DOMAIN;
+    public final DataElement DATA_ELEMENT = DataElement.DATA_ELEMENT;
 
-    public final Excerpt EXCERPT = ch.fhnw.speech_collection_app.jooq.tables.Excerpt.EXCERPT;
+    public final DataTuple DATA_TUPLE = DataTuple.DATA_TUPLE;
 
-    public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = ch.fhnw.speech_collection_app.jooq.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
+    public final Dialect DIALECT = Dialect.DIALECT;
 
-    public final Language LANGUAGE = ch.fhnw.speech_collection_app.jooq.tables.Language.LANGUAGE;
+    public final Domain DOMAIN = Domain.DOMAIN;
 
-    public final OriginalText ORIGINAL_TEXT = ch.fhnw.speech_collection_app.jooq.tables.OriginalText.ORIGINAL_TEXT;
+    public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
-    public final Recording RECORDING = ch.fhnw.speech_collection_app.jooq.tables.Recording.RECORDING;
+    public final Image IMAGE = Image.IMAGE;
 
-    public final Source SOURCE = ch.fhnw.speech_collection_app.jooq.tables.Source.SOURCE;
+    public final Language LANGUAGE = Language.LANGUAGE;
 
-    public final Speaker SPEAKER = ch.fhnw.speech_collection_app.jooq.tables.Speaker.SPEAKER;
+    public final Source SOURCE = Source.SOURCE;
 
-    public final TextAudio TEXT_AUDIO = ch.fhnw.speech_collection_app.jooq.tables.TextAudio.TEXT_AUDIO;
+    public final Text TEXT = Text.TEXT;
 
-    public final User USER = ch.fhnw.speech_collection_app.jooq.tables.User.USER;
+    public final User USER = User.USER;
 
-    public final UserGroup USER_GROUP = ch.fhnw.speech_collection_app.jooq.tables.UserGroup.USER_GROUP;
+    public final UserGroup USER_GROUP = UserGroup.USER_GROUP;
 
-    public final UserGroupRole USER_GROUP_ROLE = ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole.USER_GROUP_ROLE;
+    public final UserGroupRole USER_GROUP_ROLE = UserGroupRole.USER_GROUP_ROLE;
 
-    public final VerificationToken VERIFICATION_TOKEN = ch.fhnw.speech_collection_app.jooq.tables.VerificationToken.VERIFICATION_TOKEN;
+    public final VerificationToken VERIFICATION_TOKEN = VerificationToken.VERIFICATION_TOKEN;
 
     private SpeechCollectionApp() {
         super("speech_collection_app", null);
@@ -81,25 +80,19 @@ public class SpeechCollectionApp extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        List result = new ArrayList();
-        result.addAll(getTables0());
-        return result;
-    }
-
-    private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
-            CheckedRecording.CHECKED_RECORDING,
-            CheckedTextAudio.CHECKED_TEXT_AUDIO,
+            Audio.AUDIO,
+            CheckedDataElement.CHECKED_DATA_ELEMENT,
+            CheckedDataTuple.CHECKED_DATA_TUPLE,
+            DataElement.DATA_ELEMENT,
+            DataTuple.DATA_TUPLE,
             Dialect.DIALECT,
             Domain.DOMAIN,
-            Excerpt.EXCERPT,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
+            Image.IMAGE,
             Language.LANGUAGE,
-            OriginalText.ORIGINAL_TEXT,
-            Recording.RECORDING,
             Source.SOURCE,
-            Speaker.SPEAKER,
-            TextAudio.TEXT_AUDIO,
+            Text.TEXT,
             User.USER,
             UserGroup.USER_GROUP,
             UserGroupRole.USER_GROUP_ROLE,

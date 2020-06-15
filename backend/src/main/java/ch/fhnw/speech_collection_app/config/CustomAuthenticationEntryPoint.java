@@ -18,7 +18,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         if (authException instanceof DisabledException) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Please verify your email before you can login.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "You need to activate your account before logging in. Please check your mails for the account activation email and click the activation link.");
         } else if (authException instanceof BadCredentialsException) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Password or username incorrect.");
         } else {

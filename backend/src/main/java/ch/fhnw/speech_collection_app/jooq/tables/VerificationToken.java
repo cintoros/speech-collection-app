@@ -24,6 +24,7 @@ import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VerificationToken extends TableImpl<VerificationTokenRecord> {
 
-    private static final long serialVersionUID = 1087911319;
+    private static final long serialVersionUID = 1239239223;
 
     public static final VerificationToken VERIFICATION_TOKEN = new VerificationToken();
 
@@ -68,7 +69,7 @@ public class VerificationToken extends TableImpl<VerificationTokenRecord> {
     }
 
     private VerificationToken(Name alias, Table<VerificationTokenRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> VerificationToken(Table<O> child, ForeignKey<O, VerificationTokenRecord> key) {
@@ -82,7 +83,7 @@ public class VerificationToken extends TableImpl<VerificationTokenRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.VERIFICATION_TOKEN_PRIMARY, Indexes.VERIFICATION_TOKEN_USER_ID);
+        return Arrays.<Index>asList(Indexes.VERIFICATION_TOKEN_USER_ID);
     }
 
     @Override

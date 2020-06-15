@@ -14,6 +14,8 @@ import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {CheckComponent} from './components/check/check/check.component';
 import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
+import {StatisticsComponent} from './components/admin/statistics/statistics.component';
+import {AboutComponent} from './components/about/about.component';
 
 const routes: Routes = [
   {
@@ -30,6 +32,11 @@ const routes: Routes = [
         path: 'admin',
         canActivate: [AdminGuardService],
         component: AdminComponent,
+      },
+      {
+        path: 'statistics',
+        canActivate: [AdminGuardService],
+        component: StatisticsComponent,
       },
       {
         path: 'overview',
@@ -63,6 +70,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'about',
+        component: AboutComponent,
       }
     ]
   },
