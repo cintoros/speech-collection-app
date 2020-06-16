@@ -173,8 +173,10 @@ public class AchievementsService {
         } else {
             res = dslContext.select(ACHIEVEMENTS.ID).from(ACHIEVEMENTS).where(ACHIEVEMENTS.DEPENDS_ON.in(dependsOns)).fetchInto(Long.class);
         }
-        System.out.println(res);
 
+        for (Long id : res) {
+            updateUserAchievement(userId, id);
+        }
     }
 
     public List<UserAchievementDto> getUserAchievements(Long userId) {

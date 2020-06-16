@@ -3,16 +3,11 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.features.base.user_group.ReturnWrapper.ElementType;
-import ch.fhnw.speech_collection_app.features.base.user_group.AchievementsService;
+import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
-import ch.fhnw.speech_collection_app.jooq.tables.DataElement;
-import ch.fhnw.speech_collection_app.jooq.tables.records.DataTupleRecord;
-
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectLimitPercentStep;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +33,7 @@ public class UserGroupService {
 
     @Autowired
     public UserGroupService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
-            SpeechCollectionAppConfig speechCollectionAppConfig, AchievementsService achievementsService) {
+                            SpeechCollectionAppConfig speechCollectionAppConfig, AchievementsService achievementsService) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
@@ -46,7 +41,7 @@ public class UserGroupService {
     }
 
     public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElementDto otherDataElement,
-            ElementType otherElementType) throws IOException {
+                              ElementType otherElementType) throws IOException {
         checkAllowed(groupId);
 
         // creation of the Recording component
@@ -96,12 +91,19 @@ public class UserGroupService {
         tuple.store();
 
         Date date = new Date();
-        Long achievementID = achievementsService.getMonthAudioAchievement(new Timestamp(date.getTime()));
-        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
+        achievementsService.getMonthAudioAchievement(new Timestamp(date.getTime()));
+
+        achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
+                AchievementsDependsOn.AUDIO_CREATED,
+                getDomainIdFromSourceId(otherDataElement.getSourceId()));
+    }
+
+    private Long getDomainIdFromSourceId(Long sourceId) {
+        return dslContext.select(SOURCE.DOMAIN_ID).from(SOURCE).where(SOURCE.ID.eq(sourceId)).limit(1).fetchOneInto(Long.class);
     }
 
     public ReturnWrapper postExcerpt(long groupId, TextDto textDto, DataElementDto otherDataElement,
-            ElementType otherElementType) {
+                                     ElementType otherElementType) {
         checkAllowed(groupId);
 
         // creation of the Text component
@@ -143,7 +145,10 @@ public class UserGroupService {
 
         Date date = new Date();
         Long achievementID = achievementsService.getMonthTextAchievement(new Timestamp(date.getTime()));
-        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
+
+        achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
+                AchievementsDependsOn.TEXT_CREATED,
+                getDomainIdFromSourceId(otherDataElement.getSourceId()));
 
         ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
                 null, ElementType.TEXT);
@@ -354,6 +359,9 @@ public class UserGroupService {
 
         Date date = new Date();
         Long achievementID = achievementsService.getMonthCheckAchievement(new Timestamp(date.getTime()));
-        achievementsService.updateUserAchievement(customUserDetailsService.getLoggedInUserId(), achievementID);
+
+        achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
+                AchievementsDependsOn.AUDIO_CREATED,
+                -1L);
     }
 }
