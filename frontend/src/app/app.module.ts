@@ -73,6 +73,7 @@ import {GroupAdminGuardService} from './guards/group-admin-guard.service';
 import {AuthHeaderInterceptorService} from './services/auth-header-interceptor.service';
 import {ErrorInterceptorService} from './services/error-interceptor.service';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
+import { BatchComponent } from './components/gamification/batch/batch.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import {LoadingInterceptorService} from './services/loading-interceptor.service'
     CheckCheckerComponent,
     GamificationComponent,
     GlyphiconsBatchComponent,
+    BatchComponent,
   ],
   imports: [
     BrowserModule,
