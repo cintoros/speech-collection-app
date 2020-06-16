@@ -128,14 +128,15 @@ public class StatisticsService {
     }
 
     public List<SeriesValueDto> getCumulativeCounts() {
-        var audioDuration = dslContext.select(DSL.sum(AUDIO.DURATION))
+        var record = dslContext.select(DSL.sum(AUDIO.DURATION), DSL.count())
                 .from(AUDIO)
-                .fetchOne().component1();
-        var audioCount = dslContext.select(DSL.count())
-                .from(AUDIO).fetchOne().component1();
+                .fetchOne();
+        var audioDuration = record.component1();
+        var audioCount = record.component2();
         var checkedRecordings = dslContext.select(DSL.count())
-                .from(CHECKED_DATA_ELEMENT)
-                .where(CHECKED_DATA_ELEMENT.TYPE.notEqual(CheckedDataElementType.SKIPPED)).fetchOne().component1();
+                .from(CHECKED_DATA_TUPLE)
+                .where(CHECKED_DATA_TUPLE.TYPE.notEqual(CheckedDataTupleType.SKIPPED))
+                .fetchOne().component1();
         var meanAudioDuration = audioDuration.divide(BigDecimal.valueOf(audioCount), 2, RoundingMode.HALF_DOWN);
         return List.of(new SeriesValueDto("checked recordings", checkedRecordings), new SeriesValueDto("number of recording", audioCount),
                 new SeriesValueDto("mean recording duration in sec", meanAudioDuration), new SeriesValueDto("total recordings duration in h",
