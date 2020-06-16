@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/")
+@RequestMapping("/api/")
 public class StatisticsController {
     private final StatisticsService statisticsService;
 
@@ -19,13 +19,23 @@ public class StatisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @RequestMapping("/statistics")
-    public List<SeriesDto> getStatisticsSince(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime since) {
+    @RequestMapping("admin/statistics/basic")
+    public List<SeriesDto> getBasicStatisticsSince(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime since) {
         return statisticsService.getStatisticsSince(since.toLocalDate());
     }
 
-    @RequestMapping("/audio_duration_statistics")
+    @RequestMapping("admin/statistics/audio_duration_statistics")
     public List<SeriesDto> getAudioDurationStatisticsSince(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime since) {
         return statisticsService.getAudioDurationStatisticsSince(since.toLocalDate());
+    }
+
+    @RequestMapping("statistics/top_3_user")
+    public List<List<SeriesValueDto>> getTop3User() {
+        return statisticsService.getTop3User();
+    }
+
+    @RequestMapping("statistics/cumulative_counts")
+    public List<SeriesValueDto> getCumulativeCounts() {
+        return statisticsService.getCumulativeCounts();
     }
 }

@@ -36,3 +36,30 @@
   <br>
   <markdown [data]="getSelectedGroupDescription()"></markdown>
 </div>
+<div class="margin">
+  <p *ngFor="let count of counts"><strong>{{count.name}}: </strong><i>{{count.value}}</i></p>
+</div>
+<mat-grid-list cols="3" rowHeight="fit" style="height: 40%; width: 100%">
+  <mat-grid-tile>
+    <mat-card style="height: 90%;width: 90%">
+      <mat-card-header><h3>Top 3 Users (recording) </h3><br></mat-card-header>
+      <mat-card-content style="height: 70%;">
+        <ngx-charts-bar-vertical [results]="single1" [showXAxisLabel]="true"
+                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
+                                 [yAxisLabel]="'Audio hours'" [yAxis]="true">
+        </ngx-charts-bar-vertical>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card style="height: 90%;width: 90%">
+      <mat-card-header><h3>Top 3 Users (checking) </h3><br></mat-card-header>
+      <mat-card-content style="height: 70%;">
+        <ngx-charts-bar-vertical [results]="single2" [showXAxisLabel]="true"
+                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
+                                 [yAxisLabel]="'Audio hours'" [yAxis]="true">
+        </ngx-charts-bar-vertical>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
