@@ -73,6 +73,41 @@ export class BatchComponent implements OnInit {
     }
   }
 
+  getRemainingPoints(achievementWrapper: AchievementWrapper): String {
+    var lvl = this.getLevel(achievementWrapper);
+    var points = achievementWrapper.userAchievementDto.points.toString();
+    if (lvl == 4) return points;
+
+    if (lvl == 3)
+      return points + '/' +
+          achievementWrapper.achievementDto.points_lvl4.toString();
+    if (lvl == 2)
+      return points + '/' +
+          achievementWrapper.achievementDto.points_lvl3.toString();
+    if (lvl == 1)
+      return points + '/' +
+          achievementWrapper.achievementDto.points_lvl2.toString();
+    if (lvl == 0)
+      return points + '/' +
+          achievementWrapper.achievementDto.points_lvl1.toString();
+    return '0';
+  }
+
+  getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
+    var lvl = this.getLevel(achievementWrapper);
+    if (lvl == 4)
+      return achievementWrapper.achievementDto.points_lvl4.toString();
+    if (lvl == 3)
+      return achievementWrapper.achievementDto.points_lvl4.toString();
+    if (lvl == 2)
+      return achievementWrapper.achievementDto.points_lvl3.toString();
+    if (lvl == 1)
+      return achievementWrapper.achievementDto.points_lvl2.toString();
+    if (lvl == 0)
+      return achievementWrapper.achievementDto.points_lvl1.toString();
+    return '0';
+  }
+
 
   getRemainingDays(achievementWrapper: AchievementWrapper): number {
     var s = new Date(achievementWrapper.achievementDto.end_time);

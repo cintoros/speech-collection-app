@@ -11,13 +11,15 @@
         </p>
         <p>
             Du bekommst die
-            <span *ngIf="getLevel(achievementWrapper) > 0">nächste </span>Auszeichnung in:
-        </p>
+            <span *ngIf="getLevel(achievementWrapper) > 0">nächste </span>Auszeichnung mit
+            {{getNextLevelPoints(achievementWrapper)}} Punkten. </p>
+        <p> Du hast bis jetzt:</p>
+
         <div class="progress">
             <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
                 style="width: {{getProgressPercent(achievementWrapper)}}%"
                 aria-valuenow="{{getProgressPercent(achievementWrapper)}}" aria-valuemin="0" aria-valuemax="100">
-                {{getProgressPercent(achievementWrapper)}}%
+                {{getRemainingPoints(achievementWrapper)}}
             </div>
         </div>
     </div>
