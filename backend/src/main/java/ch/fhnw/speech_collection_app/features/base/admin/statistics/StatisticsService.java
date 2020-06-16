@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -127,7 +128,7 @@ public class StatisticsService {
     }
 
     public List<SeriesValueDto> getCumulativeCounts() {
-        var audioDuration = dslContext.select(DSL.sum(AUDIO.DURATION).divide(3600))
+        var audioDuration = dslContext.select(DSL.sum(AUDIO.DURATION))
                 .from(AUDIO)
                 .fetchOne().component1();
         var audioCount = dslContext.select(DSL.count())
@@ -135,9 +136,10 @@ public class StatisticsService {
         var checkedRecordings = dslContext.select(DSL.count())
                 .from(CHECKED_DATA_ELEMENT)
                 .where(CHECKED_DATA_ELEMENT.TYPE.notEqual(CheckedDataElementType.SKIPPED)).fetchOne().component1();
-        var meanAudioDuration = audioDuration.divideToIntegralValue(BigDecimal.valueOf(audioCount));
-        return List.of(new SeriesValueDto("checked recordings", checkedRecordings), new SeriesValueDto("audio count", audioCount),
-                new SeriesValueDto("mean audio duration", meanAudioDuration), new SeriesValueDto("audio duration in h", audioDuration));
+        var meanAudioDuration = audioDuration.divide(BigDecimal.valueOf(audioCount), 2, RoundingMode.HALF_DOWN);
+        return List.of(new SeriesValueDto("checked recordings", checkedRecordings), new SeriesValueDto("number of recording", audioCount),
+                new SeriesValueDto("mean recording duration in sec", meanAudioDuration), new SeriesValueDto("total recordings duration in h",
+                        audioDuration.divide(BigDecimal.valueOf(3600), 2, RoundingMode.HALF_DOWN)));
     }
 
     public List<List<SeriesValueDto>> getTop3User() {
