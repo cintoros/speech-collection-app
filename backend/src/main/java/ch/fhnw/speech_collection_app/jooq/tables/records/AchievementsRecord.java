@@ -14,15 +14,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record16;
-import org.jooq.Row16;
+import org.jooq.Record17;
+import org.jooq.Row17;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> implements Record16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> {
+public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> implements Record17<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn, Boolean> {
 
-    private static final long serialVersionUID = 985681996;
+    private static final long serialVersionUID = 1769976380;
 
     public void setId(Long value) {
         set(0, value);
@@ -160,6 +160,14 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         return (AchievementsDependsOn) get(15);
     }
 
+    public void setIsVisible(Boolean value) {
+        set(16, value);
+    }
+
+    public Boolean getIsVisible() {
+        return (Boolean) get(16);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -170,17 +178,17 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Record16 type implementation
+    // Record17 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> fieldsRow() {
-        return (Row16) super.fieldsRow();
+    public Row17<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn, Boolean> fieldsRow() {
+        return (Row17) super.fieldsRow();
     }
 
     @Override
-    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> valuesRow() {
-        return (Row16) super.valuesRow();
+    public Row17<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn, Boolean> valuesRow() {
+        return (Row17) super.valuesRow();
     }
 
     @Override
@@ -264,6 +272,11 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
+    public Field<Boolean> field17() {
+        return Achievements.ACHIEVEMENTS.IS_VISIBLE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -344,6 +357,11 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
+    public Boolean component17() {
+        return getIsVisible();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -421,6 +439,11 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     @Override
     public AchievementsDependsOn value16() {
         return getDependsOn();
+    }
+
+    @Override
+    public Boolean value17() {
+        return getIsVisible();
     }
 
     @Override
@@ -520,7 +543,13 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
     }
 
     @Override
-    public AchievementsRecord values(Long value1, Long value2, String value3, String value4, String value5, Timestamp value6, Timestamp value7, Long value8, Long value9, Long value10, Long value11, String value12, String value13, String value14, String value15, AchievementsDependsOn value16) {
+    public AchievementsRecord value17(Boolean value) {
+        setIsVisible(value);
+        return this;
+    }
+
+    @Override
+    public AchievementsRecord values(Long value1, Long value2, String value3, String value4, String value5, Timestamp value6, Timestamp value7, Long value8, Long value9, Long value10, Long value11, String value12, String value13, String value14, String value15, AchievementsDependsOn value16, Boolean value17) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -537,6 +566,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         value14(value14);
         value15(value15);
         value16(value16);
+        value17(value17);
         return this;
     }
 
@@ -548,7 +578,7 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         super(Achievements.ACHIEVEMENTS);
     }
 
-    public AchievementsRecord(Long id, Long domainId, String name, String batchName, String title, Timestamp startTime, Timestamp endTime, Long pointsLvl1, Long pointsLvl2, Long pointsLvl3, Long pointsLvl4, String descriptionLvl1, String descriptionLvl2, String descriptionLvl3, String descriptionLvl4, AchievementsDependsOn dependsOn) {
+    public AchievementsRecord(Long id, Long domainId, String name, String batchName, String title, Timestamp startTime, Timestamp endTime, Long pointsLvl1, Long pointsLvl2, Long pointsLvl3, Long pointsLvl4, String descriptionLvl1, String descriptionLvl2, String descriptionLvl3, String descriptionLvl4, AchievementsDependsOn dependsOn, Boolean isVisible) {
         super(Achievements.ACHIEVEMENTS);
 
         set(0, id);
@@ -567,5 +597,6 @@ public class AchievementsRecord extends UpdatableRecordImpl<AchievementsRecord> 
         set(13, descriptionLvl3);
         set(14, descriptionLvl4);
         set(15, dependsOn);
+        set(16, isVisible);
     }
 }

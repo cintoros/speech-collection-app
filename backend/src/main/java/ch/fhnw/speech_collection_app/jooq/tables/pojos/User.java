@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -1856201516;
+    private static final long serialVersionUID = -1188364624;
 
     private Long        id;
     private String      firstName;
@@ -34,6 +34,7 @@ public class User implements Serializable {
     private Boolean     notCh;
     private String      zipCode;
     private Timestamp   lastOnline;
+    private Boolean     gamificationOn;
 
     public User() {}
 
@@ -52,6 +53,7 @@ public class User implements Serializable {
         this.notCh = value.notCh;
         this.zipCode = value.zipCode;
         this.lastOnline = value.lastOnline;
+        this.gamificationOn = value.gamificationOn;
     }
 
     public User(
@@ -68,7 +70,8 @@ public class User implements Serializable {
         Long        dialectId,
         Boolean     notCh,
         String      zipCode,
-        Timestamp   lastOnline
+        Timestamp   lastOnline,
+        Boolean     gamificationOn
     ) {
         this.id = id;
         this.firstName = firstName;
@@ -84,6 +87,7 @@ public class User implements Serializable {
         this.notCh = notCh;
         this.zipCode = zipCode;
         this.lastOnline = lastOnline;
+        this.gamificationOn = gamificationOn;
     }
 
     public Long getId() {
@@ -208,6 +212,14 @@ public class User implements Serializable {
         this.lastOnline = lastOnline;
     }
 
+    public Boolean getGamificationOn() {
+        return this.gamificationOn;
+    }
+
+    public void setGamificationOn(Boolean gamificationOn) {
+        this.gamificationOn = gamificationOn;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("User (");
@@ -226,6 +238,7 @@ public class User implements Serializable {
         sb.append(", ").append(notCh);
         sb.append(", ").append(zipCode);
         sb.append(", ").append(lastOnline);
+        sb.append(", ").append(gamificationOn);
 
         sb.append(")");
         return sb.toString();

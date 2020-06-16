@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements implements Serializable {
 
-    private static final long serialVersionUID = -1975890826;
+    private static final long serialVersionUID = -979373674;
 
     private Long                  id;
     private Long                  domainId;
@@ -34,6 +34,7 @@ public class Achievements implements Serializable {
     private String                descriptionLvl3;
     private String                descriptionLvl4;
     private AchievementsDependsOn dependsOn;
+    private Boolean               isVisible;
 
     public Achievements() {}
 
@@ -54,6 +55,7 @@ public class Achievements implements Serializable {
         this.descriptionLvl3 = value.descriptionLvl3;
         this.descriptionLvl4 = value.descriptionLvl4;
         this.dependsOn = value.dependsOn;
+        this.isVisible = value.isVisible;
     }
 
     public Achievements(
@@ -72,7 +74,8 @@ public class Achievements implements Serializable {
         String                descriptionLvl2,
         String                descriptionLvl3,
         String                descriptionLvl4,
-        AchievementsDependsOn dependsOn
+        AchievementsDependsOn dependsOn,
+        Boolean               isVisible
     ) {
         this.id = id;
         this.domainId = domainId;
@@ -90,6 +93,7 @@ public class Achievements implements Serializable {
         this.descriptionLvl3 = descriptionLvl3;
         this.descriptionLvl4 = descriptionLvl4;
         this.dependsOn = dependsOn;
+        this.isVisible = isVisible;
     }
 
     public Long getId() {
@@ -228,6 +232,14 @@ public class Achievements implements Serializable {
         this.dependsOn = dependsOn;
     }
 
+    public Boolean getIsVisible() {
+        return this.isVisible;
+    }
+
+    public void setIsVisible(Boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Achievements (");
@@ -248,6 +260,7 @@ public class Achievements implements Serializable {
         sb.append(", ").append(descriptionLvl3);
         sb.append(", ").append(descriptionLvl4);
         sb.append(", ").append(dependsOn);
+        sb.append(", ").append(isVisible);
 
         sb.append(")");
         return sb.toString();

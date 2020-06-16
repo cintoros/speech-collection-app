@@ -10,12 +10,13 @@ import java.io.Serializable;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserAchievements implements Serializable {
 
-    private static final long serialVersionUID = -1241073308;
+    private static final long serialVersionUID = -552837808;
 
-    private Long id;
-    private Long userId;
-    private Long achievementsId;
-    private Long points;
+    private Long    id;
+    private Long    userId;
+    private Long    achievementsId;
+    private Long    points;
+    private Boolean isNew;
 
     public UserAchievements() {}
 
@@ -24,18 +25,21 @@ public class UserAchievements implements Serializable {
         this.userId = value.userId;
         this.achievementsId = value.achievementsId;
         this.points = value.points;
+        this.isNew = value.isNew;
     }
 
     public UserAchievements(
-        Long id,
-        Long userId,
-        Long achievementsId,
-        Long points
+        Long    id,
+        Long    userId,
+        Long    achievementsId,
+        Long    points,
+        Boolean isNew
     ) {
         this.id = id;
         this.userId = userId;
         this.achievementsId = achievementsId;
         this.points = points;
+        this.isNew = isNew;
     }
 
     public Long getId() {
@@ -70,6 +74,14 @@ public class UserAchievements implements Serializable {
         this.points = points;
     }
 
+    public Boolean getIsNew() {
+        return this.isNew;
+    }
+
+    public void setIsNew(Boolean isNew) {
+        this.isNew = isNew;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserAchievements (");
@@ -78,6 +90,7 @@ public class UserAchievements implements Serializable {
         sb.append(", ").append(userId);
         sb.append(", ").append(achievementsId);
         sb.append(", ").append(points);
+        sb.append(", ").append(isNew);
 
         sb.append(")");
         return sb.toString();

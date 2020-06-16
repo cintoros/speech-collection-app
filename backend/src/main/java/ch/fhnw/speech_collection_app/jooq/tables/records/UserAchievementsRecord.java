@@ -8,15 +8,15 @@ import ch.fhnw.speech_collection_app.jooq.tables.UserAchievements;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record4;
-import org.jooq.Row4;
+import org.jooq.Record5;
+import org.jooq.Row5;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievementsRecord> implements Record4<Long, Long, Long, Long> {
+public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievementsRecord> implements Record5<Long, Long, Long, Long, Boolean> {
 
-    private static final long serialVersionUID = 1402635862;
+    private static final long serialVersionUID = 2104149318;
 
     public void setId(Long value) {
         set(0, value);
@@ -50,6 +50,14 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
         return (Long) get(3);
     }
 
+    public void setIsNew(Boolean value) {
+        set(4, value);
+    }
+
+    public Boolean getIsNew() {
+        return (Boolean) get(4);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -60,17 +68,17 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
     }
 
     // -------------------------------------------------------------------------
-    // Record4 type implementation
+    // Record5 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, Long, Long, Long> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Long, Long, Long, Long, Boolean> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 
     @Override
-    public Row4<Long, Long, Long, Long> valuesRow() {
-        return (Row4) super.valuesRow();
+    public Row5<Long, Long, Long, Long, Boolean> valuesRow() {
+        return (Row5) super.valuesRow();
     }
 
     @Override
@@ -94,6 +102,11 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
     }
 
     @Override
+    public Field<Boolean> field5() {
+        return UserAchievements.USER_ACHIEVEMENTS.IS_NEW;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -114,6 +127,11 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
     }
 
     @Override
+    public Boolean component5() {
+        return getIsNew();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -131,6 +149,11 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
     @Override
     public Long value4() {
         return getPoints();
+    }
+
+    @Override
+    public Boolean value5() {
+        return getIsNew();
     }
 
     @Override
@@ -158,11 +181,18 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
     }
 
     @Override
-    public UserAchievementsRecord values(Long value1, Long value2, Long value3, Long value4) {
+    public UserAchievementsRecord value5(Boolean value) {
+        setIsNew(value);
+        return this;
+    }
+
+    @Override
+    public UserAchievementsRecord values(Long value1, Long value2, Long value3, Long value4, Boolean value5) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
+        value5(value5);
         return this;
     }
 
@@ -174,12 +204,13 @@ public class UserAchievementsRecord extends UpdatableRecordImpl<UserAchievements
         super(UserAchievements.USER_ACHIEVEMENTS);
     }
 
-    public UserAchievementsRecord(Long id, Long userId, Long achievementsId, Long points) {
+    public UserAchievementsRecord(Long id, Long userId, Long achievementsId, Long points, Boolean isNew) {
         super(UserAchievements.USER_ACHIEVEMENTS);
 
         set(0, id);
         set(1, userId);
         set(2, achievementsId);
         set(3, points);
+        set(4, isNew);
     }
 }

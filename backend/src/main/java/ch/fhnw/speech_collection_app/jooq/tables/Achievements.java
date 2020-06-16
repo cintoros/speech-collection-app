@@ -20,7 +20,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row16;
+import org.jooq.Row17;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements extends TableImpl<AchievementsRecord> {
 
-    private static final long serialVersionUID = -1888786468;
+    private static final long serialVersionUID = 1161610024;
 
     public static final Achievements ACHIEVEMENTS = new Achievements();
 
@@ -72,6 +72,8 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     public final TableField<AchievementsRecord, String> DESCRIPTION_LVL4 = createField(DSL.name("description_lvl4"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
 
     public final TableField<AchievementsRecord, AchievementsDependsOn> DEPENDS_ON = createField(DSL.name("depends_on"), org.jooq.impl.SQLDataType.VARCHAR(19).nullable(false).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn.class), this, "");
+
+    public final TableField<AchievementsRecord, Boolean> IS_VISIBLE = createField(DSL.name("is_visible"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public Achievements() {
         this(DSL.name("achievements"), null);
@@ -152,11 +154,11 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row16 type methods
+    // Row17 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row16<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn> fieldsRow() {
-        return (Row16) super.fieldsRow();
+    public Row17<Long, Long, String, String, String, Timestamp, Timestamp, Long, Long, Long, Long, String, String, String, String, AchievementsDependsOn, Boolean> fieldsRow() {
+        return (Row17) super.fieldsRow();
     }
 }

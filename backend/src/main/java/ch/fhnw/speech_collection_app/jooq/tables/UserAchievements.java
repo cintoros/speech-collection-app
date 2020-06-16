@@ -18,7 +18,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserAchievements extends TableImpl<UserAchievementsRecord> {
 
-    private static final long serialVersionUID = -1214573603;
+    private static final long serialVersionUID = 866509626;
 
     public static final UserAchievements USER_ACHIEVEMENTS = new UserAchievements();
 
@@ -46,6 +46,8 @@ public class UserAchievements extends TableImpl<UserAchievementsRecord> {
     public final TableField<UserAchievementsRecord, Long> ACHIEVEMENTS_ID = createField(DSL.name("achievements_id"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     public final TableField<UserAchievementsRecord, Long> POINTS = createField(DSL.name("points"), org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+
+    public final TableField<UserAchievementsRecord, Boolean> IS_NEW = createField(DSL.name("is_new"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     public UserAchievements() {
         this(DSL.name("user_achievements"), null);
@@ -130,11 +132,11 @@ public class UserAchievements extends TableImpl<UserAchievementsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, Long, Long, Long> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Long, Long, Long, Long, Boolean> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }
