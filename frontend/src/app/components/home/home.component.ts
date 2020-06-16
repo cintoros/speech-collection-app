@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     this.httpClient.get<SeriesValueDto[]>(`${environment.url}statistics/cumulative_counts`).subscribe(v => this.counts = v);
     this.httpClient.get<SeriesValueDto[][]>(`${environment.url}statistics/top_3_user`).subscribe(v => {
       this.single1 = v[0];
-      this.single2 = v[0];
+      this.single2 = v[1];
     });
   }
 }
