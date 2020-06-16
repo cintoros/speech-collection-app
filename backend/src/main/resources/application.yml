@@ -9,8 +9,8 @@ spring:
 server:
   port: 8084
 speech-collection-app:
-  base-path: /home/stt/speech-collection-app/data
-  conda-exec: "/home/stt/miniconda3/condabin/conda run -n speech_collection_app python /home/stt/speech-collection-app/data_import/sentences.py"
+  base-path: /home/vzuest/Dokumente/speech-collection-app/data/
+  conda-exec: "/home/vzuest/Dokumente/miniconda3/condabin/conda run -n speech_collection_app python /home/vzuest/Dokumente/speech-collection-app/data_import/sentences.py"
   public-group-id: 1
   features:
     email-integration: false

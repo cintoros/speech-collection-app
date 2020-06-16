@@ -1,33 +1,51 @@
 <h2>Deine Aktiven Errungenschaften</h2>
 
 <div class="row form-group">
-    <div class="col-sm-4" style="padding: 15px;" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
-        <mat-card>
-            <h3>{{achievementWrapper.achievementDto.title}}</h3>
-            <p>{{getDescription(achievementWrapper)}}</p>
-            <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name"
-                [level]="getLevel(achievementWrapper)" [text]="achievementWrapper.achievementDto.name">
-            </app-glyphicons-batch>
-            <p>Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}} Tag<span
-                    *ngIf="getRemainingDays(achievementWrapper) > 1">e</span> </p>
-            <p *ngIf="getLevel(achievementWrapper) < 4">Du bekommst die <span
-                    *ngIf="getLevel(achievementWrapper) > 0">nächste
-                </span>Auszeichnung in:</p>
-            <div class="progress">
-                <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
-                    style="width: {{getProgressPercent(achievementWrapper)}}%"
-                    aria-valuenow="{{getProgressPercent(achievementWrapper)}}" aria-valuemin="0" aria-valuemax="100">
-                    {{getProgressPercent(achievementWrapper)}}%</div>
-            </div>
-        </mat-card>
-    </div>
+  <div
+    class="col-sm-4"
+    style="padding: 15px;"
+    *ngFor="let achievementWrapper of achievementsWrapper; index as i"
+  >
+    <mat-card>
+      <h3>{{achievementWrapper.achievementDto.title}}</h3>
+      <p>{{getDescription(achievementWrapper)}}</p>
+      <app-glyphicons-batch
+        [glyph]="achievementWrapper.achievementDto.batch_name"
+        [level]="getLevel(achievementWrapper)"
+        [text]="achievementWrapper.achievementDto.name"
+      >
+      </app-glyphicons-batch>
+      <p>
+        Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}} Tag<span
+          *ngIf="getRemainingDays(achievementWrapper) > 1"
+          >e</span
+        >
+      </p>
+      <p *ngIf="getLevel(achievementWrapper) < 4">
+        Du bekommst die
+        <span *ngIf="getLevel(achievementWrapper) > 0">nächste </span
+        >Auszeichnung in:
+      </p>
+      <div class="progress">
+        <div
+          class="progress-bar"
+          [class]="getProgressColor(achievementWrapper)"
+          role="progressbar"
+          style="width: {{getProgressPercent(achievementWrapper)}}%"
+          aria-valuenow="{{getProgressPercent(achievementWrapper)}}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          {{getProgressPercent(achievementWrapper)}}%
+        </div>
+      </div>
+    </mat-card>
+  </div>
 </div>
 
 <h2>Deine Abgeschlossenen Errungenschaften</h2>
 
-
 <p>TODO Implement</p>
 
-
-<br>
-<br>
+<br />
+<br />

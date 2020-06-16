@@ -1,19 +1,16 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
+import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
-import static ch.fhnw.speech_collection_app.jooq.Tables.*;
+import java.sql.Timestamp;
+import java.util.*;
+
+import static ch.fhnw.speech_collection_app.jooq.Tables.ACHIEVEMENTS;
+import static ch.fhnw.speech_collection_app.jooq.Tables.USER_ACHIEVEMENTS;
 
 @Service
 public class AchievementsService {
@@ -33,9 +30,9 @@ public class AchievementsService {
     }
 
     public Long createAchievement(String name, String batch_name, String title, Long domain_id, Timestamp start_time,
-            Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
-            String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+                                  Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
+                                  String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
+                                  AchievementsDependsOn depends_on) {
 
         AchievementDto batch = dslContext.select().from(ACHIEVEMENTS)
                 .where(ACHIEVEMENTS.NAME.eq(name).and(ACHIEVEMENTS.BATCH_NAME.eq(batch_name))
@@ -73,8 +70,8 @@ public class AchievementsService {
     }
 
     public Long createMonthAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
-            String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+                                       String description_lvl2, String description_lvl3, String description_lvl4,
+                                       AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
@@ -140,6 +137,43 @@ public class AchievementsService {
 
         userAchievement.setPoints(userAchievement.getPoints() + 1L);
         userAchievement.store();
+
+        updateAllUserAchievements(userId, AchievementsDependsOn.TOTAL_CHECKED, -1L);
+
+    }
+
+    public void updateAllUserAchievements(Long userId, AchievementsDependsOn achievementsDependsOn, Long domainId) {
+        // find all achievements, which fulfill the depends on AND are currently active
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+
+        // we create a list with all the corresponding depends on
+        List<AchievementsDependsOn> dependsOns = new ArrayList<AchievementsDependsOn>();
+        dependsOns.add(achievementsDependsOn);
+
+        // we have to add the ALL and Total created case to the Audio,Text and Image Created case
+        if (achievementsDependsOn == AchievementsDependsOn.AUDIO_CREATED || achievementsDependsOn ==
+                AchievementsDependsOn.TEXT_CREATED || achievementsDependsOn == AchievementsDependsOn.IMAGE_CREATED) {
+            dependsOns.add(AchievementsDependsOn.ALL);
+            dependsOns.add(AchievementsDependsOn.TOTAL_CREATED);
+            // we have to add the ALL and TOTAL_CHECKED case to all the checked cases
+        } else if (achievementsDependsOn == AchievementsDependsOn.AUDIO_AUDIO_CHECKED ||
+                achievementsDependsOn == AchievementsDependsOn.AUDIO_TEXT_CHECKED ||
+                achievementsDependsOn == AchievementsDependsOn.IMAGE_AUDIO_CHECKED ||
+                achievementsDependsOn == AchievementsDependsOn.IMAGE_TEXT_CHECKED ||
+                achievementsDependsOn == AchievementsDependsOn.TEXT_AUDIO_CHECKED ||
+                achievementsDependsOn == AchievementsDependsOn.TEXT_TEXT_CHECKED) {
+            dependsOns.add(AchievementsDependsOn.ALL);
+            dependsOns.add(AchievementsDependsOn.TOTAL_CHECKED);
+        }
+
+        List<Long> res = new ArrayList<Long>();
+        if (!(domainId == -1)) {
+            res = dslContext.select(ACHIEVEMENTS.ID).from(ACHIEVEMENTS).where(ACHIEVEMENTS.DEPENDS_ON.in(dependsOns).and(ACHIEVEMENTS.DOMAIN_ID.eq(domainId))).fetchInto(Long.class);
+        } else {
+            res = dslContext.select(ACHIEVEMENTS.ID).from(ACHIEVEMENTS).where(ACHIEVEMENTS.DEPENDS_ON.in(dependsOns)).fetchInto(Long.class);
+        }
+        System.out.println(res);
 
     }
 

@@ -19,7 +19,6 @@ dependencies:
   - importlib-metadata=1.6.0=py37hc8dfbb8_0
   - importlib_metadata=1.6.0=0
   - jsonschema=3.2.0=py37hc8dfbb8_1
-  - ld_impl_linux-64=2.34=h53a641e_0
   - libblas=3.8.0=16_openblas
   - libcblas=3.8.0=16_openblas
   - libffi=3.2.1=he1b5a44_1007
