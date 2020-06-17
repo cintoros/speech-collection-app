@@ -195,13 +195,44 @@ public class AchievementsService {
                 .fetchOneInto(AchievementDto.class);
     }
 
-    public List<AchievementWrapper> getAchievements() {
-        List<UserAchievementDto> userAchievements = getUserAchievements(customUserDetailsService.getLoggedInUserId());
+    public List<UserAchievementDto> getActiveUserAchievements(Long userId) {
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+
+        return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
+                        .and(ACHIEVEMENTS.START_TIME.le(time))
+                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS)))
+                .fetchInto(UserAchievementDto.class);
+    }
+
+    public List<UserAchievementDto> getNonActiveUserAchievements(Long userId) {
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+
+        return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(
+                        (ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))))
+                .fetchInto(UserAchievementDto.class);
+    }
+
+    public List<AchievementWrapper> getActiveAchievements() {
+        List<UserAchievementDto> userAchievements = getActiveUserAchievements(
+                customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (UserAchievementDto userAchievement : userAchievements) {
             res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
         }
         return res;
+    }
 
+    public List<AchievementWrapper> getNonActiveAchievements() {
+        List<UserAchievementDto> userAchievements = getNonActiveUserAchievements(
+                customUserDetailsService.getLoggedInUserId());
+        List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
+        for (UserAchievementDto userAchievement : userAchievements) {
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
+        }
+        return res;
     }
 }

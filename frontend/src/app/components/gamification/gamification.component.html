@@ -1,14 +1,20 @@
 <h2>Deine Aktiven Errungenschaften</h2>
 
 <div class="row form-group">
-    <div class="col-sm-4" style="padding: 15px;" *ngFor="let achievementWrapper of achievementsWrapper; index as i">
+    <div class="col-sm-4" style="padding: 15px;"
+        *ngFor="let achievementWrapper of activeAchievementsWrapper; index as i">
         <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
     </div>
 </div>
 
 <h2>Deine Abgeschlossenen Errungenschaften</h2>
 
-<p>TODO Implement</p>
+<div class="row form-group">
+    <div class="col-sm-4" style="padding: 15px;"
+        *ngFor="let achievementWrapper of nonActiveAchievementsWrapper; index as i">
+        <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
+    </div>
+</div>
 
 <br />
 <br />

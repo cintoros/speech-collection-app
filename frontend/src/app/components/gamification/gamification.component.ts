@@ -12,7 +12,8 @@ import {environment} from 'src/environments/environment';
 export class GamificationComponent implements OnInit {
   private groupId = 1;
 
-  achievementsWrapper: AchievementWrapper[];
+  activeAchievementsWrapper: AchievementWrapper[];
+  nonActiveAchievementsWrapper: AchievementWrapper[];
   levels: number[];
 
   constructor(
@@ -22,17 +23,26 @@ export class GamificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAchievements()
+    this.getActiveAchievements();
+    this.getNonActiveAchievements();
   }
 
 
-
-  private getAchievements(): void {
+  private getActiveAchievements(): void {
     this.httpClient
         .get<AchievementWrapper[]>(
-            `${environment.url}user_group/${this.groupId}/achievements`)
+            `${environment.url}user_group/${this.groupId}/achievements/active`)
         .subscribe((value) => {
-          this.achievementsWrapper = value;
+          this.activeAchievementsWrapper = value;
+        });
+  }
+
+  private getNonActiveAchievements(): void {
+    this.httpClient
+        .get<AchievementWrapper[]>(`${environment.url}user_group/${
+            this.groupId}/achievements/nonactive`)
+        .subscribe((value) => {
+          this.nonActiveAchievementsWrapper = value;
         });
   }
 }

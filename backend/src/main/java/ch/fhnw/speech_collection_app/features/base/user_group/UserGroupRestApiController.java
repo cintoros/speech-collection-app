@@ -106,8 +106,13 @@ public class UserGroupRestApiController {
         return userGroupService.getImage(groupId, dataElementId);
     }
 
-    @GetMapping(value = "achievements")
-    public List<AchievementWrapper> getAchievements() {
-        return achievementsService.getAchievements();
+    @GetMapping(value = "achievements/active")
+    public List<AchievementWrapper> getActiveAchievements() {
+        return achievementsService.getActiveAchievements();
+    }
+
+    @GetMapping(value = "achievements/nonactive")
+    public List<AchievementWrapper> getNonActiveAchievements() {
+        return achievementsService.getNonActiveAchievements();
     }
 }
