@@ -136,7 +136,10 @@ class GoogleApi:
             self.voice_index = 0
         return voice_name
 
-
+# TODO refactor this so we do not go over the limits of the corresponding apis -> also maybe make it multi-threaded so we can process multiple apis
+# TODO filter already done texts
+# TODO refactor database so we calculate at the begging which api takes how many characters
+# TODO maybe add some processing to remove special characters per api as some doe not like i.e "
 class SequentualApiFetcher:
     def __init__(self):
         self.connection = mysql.connector.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
@@ -180,3 +183,4 @@ class SequentualApiFetcher:
 if __name__ == '__main__':
     api_fetcher = SequentualApiFetcher()
     api_fetcher.request_all()
+    
