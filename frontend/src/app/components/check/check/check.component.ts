@@ -30,6 +30,8 @@ export class CheckComponent implements OnInit {
   private groupId = 1;
   tuple: TupleDto;
 
+  isDebug = false;
+
   constructor(
       private httpClient: HttpClient, private dialog: MatDialog,
       private authService: AuthService, private router: Router,
@@ -41,7 +43,16 @@ export class CheckComponent implements OnInit {
   ngOnInit() {
     this.authService.getUser().subscribe(
         (user) => (this.userId = user.principal.user.id));
-    this.getTuple();
+    this.isDebug ? this.getTupleWithSelection() : this.getTuple();
+  }
+
+  getTuple() {
+    this.httpClient
+        .get<TupleDto>(
+            `${environment.url}user_group/${this.groupId}/check-next`)
+        .subscribe((tuple) => {
+          this.tuple = tuple;
+        });
   }
 
 
@@ -53,16 +64,16 @@ export class CheckComponent implements OnInit {
 
   onSelectorChange($event) {
     this.selectedTupleType = $event;
-    this.getTuple()
+    this.isDebug ? this.getTupleWithSelection() : this.getTuple();
   }
 
   afterCheck($event) {
     this.tuple = null;
-    this.getTuple();
+    this.isDebug ? this.getTupleWithSelection() : this.getTuple();
   }
 
 
-  private getTuple() {
+  private getTupleWithSelection() {
     const formData = new FormData();
     formData.append(
         `selectedTupleType`, JSON.stringify(this.selectedTupleType));

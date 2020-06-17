@@ -94,6 +94,11 @@ public class UserGroupRestApiController {
         return userGroupService.getNextTuple(groupId, TupleDto.stringToDataTupleType(selectedTupleType));
     }
 
+    @GetMapping("check-next")
+    public TupleDto getNextTuple(@PathVariable long groupId) {
+        return userGroupService.getNextTuple(groupId);
+    }
+
     @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public byte[] getAudio(@PathVariable long groupId, @PathVariable long dataElementId) throws IOException {

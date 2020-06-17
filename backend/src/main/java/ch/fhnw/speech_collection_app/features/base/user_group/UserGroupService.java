@@ -207,6 +207,12 @@ public class UserGroupService {
                 .limit(1).fetchOneInto(TupleDto.class);
     }
 
+    public TupleDto getNextTuple(long groupId) {
+        checkAllowed(groupId);
+
+        return dslContext.select().from(DATA_TUPLE).orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+    }
+
     public AudioDto getAudio(Long groupId) {
         checkAllowed(groupId);
         return dslContext.select(AUDIO.asterisk()).from(AUDIO.innerJoin(DATA_ELEMENT).onKey()).orderBy(DSL.rand())

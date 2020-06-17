@@ -1,7 +1,5 @@
-<app-tuple-selector
-    [elementType]="selectedTupleType"
-    (elementTypeClicked)="onSelectorChange($event)"
-></app-tuple-selector>
+<app-tuple-selector *ngIf="isDebug" [elementType]="selectedTupleType" (elementTypeClicked)="onSelectorChange($event)">
+</app-tuple-selector>
 
 <div *ngIf="tuple">
     <!-- instructions -->
@@ -36,19 +34,19 @@
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
         <!-- Case: AUDIO_AUDIO -->
-        <span *ngIf="tuple.type === 'AUDIO_AUDIO'"
-            ><app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
+        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">
+            <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
             <br />
             <br />
-            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio
-        ></span>
+            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
+        </span>
         <!-- Case: TEXT_AUDIO -->
-        <span *ngIf="tuple.type === 'TEXT_AUDIO'"
-            ><app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
+        <span *ngIf="tuple.type === 'TEXT_AUDIO'">
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
             <br />
             <br />
-            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio
-        ></span>
+            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
+        </span>
         <!-- Case: AUDIO_TEXT -->
         <span *ngIf="tuple.type === 'AUDIO_TEXT'">
             <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
