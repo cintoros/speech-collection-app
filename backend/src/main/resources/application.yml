@@ -18,3 +18,4 @@ speech-collection-app:
   features:
     email-integration: false
   min-num-checks: 3
+  num-random-select: 40
