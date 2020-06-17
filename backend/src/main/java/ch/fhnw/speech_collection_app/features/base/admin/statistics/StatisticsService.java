@@ -12,8 +12,11 @@ import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -60,11 +63,17 @@ public class StatisticsService {
         return List.of(checkedTexts, checkedRecordings, recordings);
     }
 
-    public List<SeriesDto> getAudioDurationStatisticsSince(LocalDate since) {
-        // calculate size of audio file. this is needed because:
-        // 1. there is no java libary that supports webm/vorbis
-        // 2. chrome does not set the duration header of the webm/vorbis (firefox 77.0 does set it).
-        // see https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+    /**
+     * calculate size of audio file every hour.<br>
+     * <br>
+     * this is needed because:<br>
+     * 1. there is no java libary that supports webm/vorbis<br>
+     * 2. chrome does not set the duration header of the webm/vorbis (firefox 77.0 does set it).<br>
+     * see https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+     */
+    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    public void calculateAudioFileSizes() {
+        logger.info("scheduled calculateAudioFileSizes");
         try {
             var process = Runtime.getRuntime().exec(speechCollectionAppConfig.getCondaExec() + " 3 ");
             List<String> list = IOUtils.readLines(process.getErrorStream());
@@ -74,6 +83,9 @@ public class StatisticsService {
         } catch (Exception e) {
             logger.error("Exception Raised", e);
         }
+    }
+
+    public List<SeriesDto> getAudioDurationStatisticsSince(LocalDate since) {
         Timestamp timestamp = Timestamp.valueOf(since.atStartOfDay());
         var date = DSL.date(DATA_ELEMENT.CREATED_TIME);
         var select1 = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
@@ -113,5 +125,45 @@ public class StatisticsService {
             res.add(new SeriesValueDto(name, 0));
         }
         return new SeriesDto(checked_texts, res);
+    }
+
+    public List<SeriesValueDto> getCumulativeCounts() {
+        var record = dslContext.select(DSL.sum(AUDIO.DURATION), DSL.count())
+                .from(AUDIO)
+                .fetchOne();
+        var audioDuration = record.component1();
+        var audioCount = record.component2();
+        var checkedRecordings = dslContext.select(DSL.count())
+                .from(CHECKED_DATA_TUPLE)
+                .where(CHECKED_DATA_TUPLE.TYPE.notEqual(CheckedDataTupleType.SKIPPED))
+                .fetchOne().component1();
+        var meanAudioDuration = audioDuration.divide(BigDecimal.valueOf(audioCount), 2, RoundingMode.HALF_DOWN);
+        return List.of(new SeriesValueDto("checked recordings", checkedRecordings), new SeriesValueDto("number of recording", audioCount),
+                new SeriesValueDto("mean recording duration in sec", meanAudioDuration), new SeriesValueDto("total recordings duration in h",
+                        audioDuration.divide(BigDecimal.valueOf(3600), 2, RoundingMode.HALF_DOWN)));
+    }
+
+    public List<List<SeriesValueDto>> getTop3User() {
+        var topRecording = dslContext.select(USER.USERNAME, DSL.count())
+                .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
+                        .innerJoin(USER).on(DATA_ELEMENT.USER_ID.eq(USER.ID)))
+                .groupBy(DATA_ELEMENT.USER_ID).orderBy(DSL.count().desc())
+                .limit(3)
+                .fetch()
+                .stream()
+                .filter(r -> r.component1() != null)
+                .map(r -> new SeriesValueDto(r.component1(), r.component2()))
+                .collect(Collectors.toList());
+        var topChecking = dslContext.select(USER.USERNAME, DSL.count())
+                .from(CHECKED_DATA_TUPLE
+                        .innerJoin(USER).on(CHECKED_DATA_TUPLE.USER_ID.eq(USER.ID)))
+                .groupBy(CHECKED_DATA_TUPLE.USER_ID).orderBy(DSL.count().desc())
+                .limit(3)
+                .fetch()
+                .stream()
+                .filter(r -> r.component1() != null)
+                .map(r -> new SeriesValueDto(r.component1(), r.component2()))
+                .collect(Collectors.toList());
+        return List.of(topRecording, topChecking);
     }
 }

@@ -5,11 +5,8 @@ import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
-import org.apache.tika.io.IOUtils;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -90,7 +86,7 @@ public class UserGroupService {
                                         .from(CHECKED_DATA_ELEMENT)
                                         .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
-                .limit(20).fetchInto(TextDto.class);
+                .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(TextDto.class);
         return res.get(ThreadLocalRandom.current().nextInt(res.size()));
     }
 
@@ -123,7 +119,7 @@ public class UserGroupService {
                         .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
                                 .from(CHECKED_DATA_TUPLE)
                                 .where(CHECKED_DATA_TUPLE.USER_ID.eq(loggedInUserId))))
-                ).limit(20).fetchInto(Occurrence.class);
+                ).limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(Occurrence.class);
         if (res.isEmpty()) return Optional.empty();
         return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
     }
