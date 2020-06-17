@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-record',
@@ -7,6 +7,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./record.component.scss'],
 })
 export class RecordComponent implements OnInit {
+  @Input() selectedElement: ElementType;
+
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
   dataElementTranslation: DataElementDto;
@@ -27,9 +29,11 @@ export class RecordComponent implements OnInit {
   isPrivate = false;
 
   // controlfields
-  withTranslation: boolean;
-  selectedElement = ElementType.TEXT;
+  withTranslation = true;
   isTranslated = false;
+
+  // this controls the visibility of the selector component
+  isDebug = false;
 
   private groupId = 1;
 
@@ -112,9 +116,10 @@ export class RecordComponent implements OnInit {
   }
 
   private getNext() {
+    console.log(this.selectedElement);
     const formData = new FormData();
     formData.append(`selectedElement`, JSON.stringify(this.selectedElement));
-
+    console.log(formData);
     this.httpClient
         .post<ReturnWrapper>(
             `${environment.url}user_group/${this.groupId}/next`, formData)
@@ -125,11 +130,9 @@ export class RecordComponent implements OnInit {
           this.imageDto1 = value.imageDto;
           this.elementType1 = value.elementType;
           if (this.elementType1 == ElementType.TEXT)
-            this.elementType2 =
-                Math.random() < 0.5 ? ElementType.TEXT : ElementType.AUDIO;
+            this.elementType2 = ElementType.AUDIO;
           if (this.elementType1 == ElementType.IMAGE)
-            this.elementType2 =
-                Math.random() < 0.5 ? ElementType.TEXT : ElementType.AUDIO;
+            this.elementType2 = ElementType.AUDIO;
           if (this.elementType1 == ElementType.AUDIO)
             this.elementType2 = ElementType.TEXT;
           if (this.elementType2 == ElementType.TEXT)

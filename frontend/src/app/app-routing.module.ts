@@ -11,6 +11,7 @@ import {HomeComponent} from './components/home/home.component';
 import {LoginComponent} from './components/login/login.component';
 import {NavigationMenuComponent} from './components/navigation-menu/navigation-menu.component';
 import {ProfileComponent} from './components/profile/profile.component';
+import {RecordRandomComponent} from './components/record/record-random/record-random.component';
 import {RecordComponent} from './components/record/record.component';
 import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
 import {AdminGuardService} from './guards/admin-guard.service';
@@ -59,8 +60,8 @@ const routes: Routes = [
         component: CheckComponent,
       },
       {
-        path: 'record',
-        component: RecordComponent,
+        path: 'record/all',
+        component: RecordRandomComponent,
       },
       {
         path: 'profile',

@@ -74,6 +74,7 @@ import {AuthHeaderInterceptorService} from './services/auth-header-interceptor.s
 import {ErrorInterceptorService} from './services/error-interceptor.service';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
 import { BatchComponent } from './components/gamification/batch/batch.component';
+import { RecordRandomComponent } from './components/record/record-random/record-random.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { BatchComponent } from './components/gamification/batch/batch.component'
     GamificationComponent,
     GlyphiconsBatchComponent,
     BatchComponent,
+    RecordRandomComponent,
   ],
   imports: [
     BrowserModule,

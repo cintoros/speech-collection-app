@@ -180,6 +180,19 @@ public class UserGroupService {
                 dataElementID = image.getDataElementId();
                 eType = ElementType.IMAGE;
                 break;
+            default:
+                // create random choice of Text or Image
+                java.util.Random random = new java.util.Random();
+                if (random.nextInt(10) > 2) {
+                    text = getExcerpt(groupId);
+                    dataElementID = text.getDataElementId();
+                    eType = ElementType.TEXT;
+                } else {
+                    image = getImageDto(groupId);
+                    dataElementID = image.getDataElementId();
+                    eType = ElementType.IMAGE;
+                }
+                break;
         }
 
         DataElementDto data = getDataElementDto(dataElementID);

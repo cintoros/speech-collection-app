@@ -6,7 +6,7 @@
         <h3 class="masthead-brand" (click)="redirectToPage('/home')">Voice Collection App</h3>
         <nav class="nav nav-masthead justify-content-center">
             <ng-container *ngIf="authService.checkAuthenticated()">
-                <a class="nav-link" (click)="redirectToPage('/record')">Erstellen</a>
+                <a class="nav-link" (click)="redirectToPage('/record/all')">Erstellen</a>
                 <a class="nav-link" (click)="redirectToPage('/check')">Prüfen</a>
                 <a class="nav-link" (click)="redirectToPage('/profile')">
                     {{this.user.username}}
