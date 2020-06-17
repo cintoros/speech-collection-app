@@ -1,7 +1,6 @@
 <div class="container-fluid">
     <br>
     <br>
-
     <div class="row">
         <div class="col-sm-6">
             <a href="/record/all">
@@ -15,22 +14,27 @@
                     Prüfen
                 </button>
             </a></div>
+    </div>
 
+    <div class="row">
         <div class="col-sm-6">
             <img src="assets/img/sva.png" class="img-responsive" alt="image loading failed :(" />
         </div>
         <div class="col-sm-6">
+            <h3>Unser Anliegen</h3>
             <p>Sprache ist natürlich, Sprache ist menschlich. Deshalb haben wir grosses Interesse
                 daran, brauchbare Technologien
                 zur Spracherkennung für unsere Geräte zu erschaffen. Allerdings wird zur Entwicklung sprachbasierter
                 Systeme
                 eine sehr grosse Menge an Aufnahmen von gesprochener Sprache benötigt.</p>
-        </div>
-
-        <div class="col-sm-6">
             <p> Nun ist es an Dir! Hilf uns, indem du Deine Stimme spendest, eine gemeinfreie schweizerdeutsche
                 Sprachdatenbank
                 aufzubauen, mit der jeder von nun an innovative Geräte- oder Webanwendungen erschaffen kann.</p>
+        </div>
+
+        <div class="col-sm-4">
+            <h3>Nächste Errungenschaft</h3>
+            <app-batch [achievementWrapper]="activeAchievementWrapper"></app-batch>
         </div>
     </div>
 </div>

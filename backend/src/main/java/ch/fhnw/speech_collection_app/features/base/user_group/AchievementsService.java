@@ -3,6 +3,7 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -214,6 +215,22 @@ public class AchievementsService {
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(
                         (ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))))
                 .fetchInto(UserAchievementDto.class);
+    }
+
+    public AchievementWrapper getActiveAchievement() {
+        UserAchievementDto userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
+        return new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement);
+    }
+
+    private UserAchievementDto getActiveUserAchievement(Long userId) {
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+
+        return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
+                        .and(ACHIEVEMENTS.START_TIME.le(time))
+                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS)))
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievementDto.class);
     }
 
     public List<AchievementWrapper> getActiveAchievements() {

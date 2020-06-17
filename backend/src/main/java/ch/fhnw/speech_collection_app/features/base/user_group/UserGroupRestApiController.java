@@ -120,4 +120,9 @@ public class UserGroupRestApiController {
     public List<AchievementWrapper> getNonActiveAchievements() {
         return achievementsService.getNonActiveAchievements();
     }
+
+    @GetMapping(value = "achievement/active")
+    public AchievementWrapper getActiveAchievement() {
+        return achievementsService.getActiveAchievement();
+    }
 }

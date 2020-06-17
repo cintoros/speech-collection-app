@@ -1,6 +1,10 @@
+import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
-import {UserGroupService} from '../../services/user-group.service';
+import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import {environment} from 'src/environments/environment';
+
 import {UserGroup} from '../../models/user-group';
+import {UserGroupService} from '../../services/user-group.service';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +12,27 @@ import {UserGroup} from '../../models/user-group';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  userGroups: UserGroup[] = [];
+  private groupId = 1;
 
-  constructor(public userGroupService: UserGroupService) {
+  activeAchievementWrapper: AchievementWrapper;
+
+  constructor(
+      private httpClient: HttpClient,
+      private userGroupService: UserGroupService) {
+    this.groupId = this.userGroupService.userGroupId;
   }
 
   ngOnInit(): void {
-    this.userGroupService.getUserGroups().subscribe(v => this.userGroups = v);
+    this.getActiveAchievement();
   }
 
-  getSelectedGroupDescription() {
-    const userGroup = this.userGroups.find(value => value.id === this.userGroupService.userGroupId);
-    return userGroup ? userGroup.description : undefined;
+
+  private getActiveAchievement(): void {
+    this.httpClient
+        .get<AchievementWrapper>(
+            `${environment.url}user_group/${this.groupId}/achievement/active`)
+        .subscribe((value) => {
+          this.activeAchievementWrapper = value;
+        });
   }
 }
