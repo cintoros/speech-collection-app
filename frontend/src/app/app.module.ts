@@ -77,6 +77,7 @@ import { BatchComponent } from './components/gamification/batch/batch.component'
 import { RecordRandomComponent } from './components/record/record-random/record-random.component';
 import { RecordAnimationComponent } from './components/home/record-animation/record-animation.component';
 import { CheckAnimationComponent } from './components/home/check-animation/check-animation.component';
+import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { CheckAnimationComponent } from './components/home/check-animation/check
     RecordRandomComponent,
     RecordAnimationComponent,
     CheckAnimationComponent,
+    ProgressbarComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,6 @@
+<div class="progress">
+    <div class="progress-bar" [class]="getProgressColor(achievementWrapper)" role="progressbar"
+        [style.width.%]="getProgressPercent(achievementWrapper)" aria-valuemin="0" aria-valuemax="100">
+        {{getRemainingPoints(achievementWrapper)}}
+    </div>
+</div>

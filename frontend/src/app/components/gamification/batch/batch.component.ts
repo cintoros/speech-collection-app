@@ -27,35 +27,7 @@ export class BatchComponent implements OnInit {
     return 0;
   }
 
-  getProgressColor(achievementWrapper: AchievementWrapper): String {
-    var lvl = this.getLevel(achievementWrapper);
-    switch (lvl) {
-      case 0:
-        return 'bronze';
-      case 1:
-        return 'silver';
-      case 2:
-        return 'gold';
-      case 3:
-      case 4:
-        return 'green';
-    }
-  }
 
-  getProgressPercent(achievementWrapper: AchievementWrapper): number {
-    var lvl = this.getLevel(achievementWrapper);
-    if (lvl == 4) return 100;
-    var points = achievementWrapper.userAchievementDto.points;
-    if (lvl == 3)
-      return (points / achievementWrapper.achievementDto.points_lvl4) * 100;
-    if (lvl == 2)
-      return (points / achievementWrapper.achievementDto.points_lvl3) * 100;
-    if (lvl == 1)
-      return (points / achievementWrapper.achievementDto.points_lvl2) * 100;
-    if (lvl == 0)
-      return (points / achievementWrapper.achievementDto.points_lvl1) * 100;
-    return 0;
-  }
 
   getDescription(achievementWrapper: AchievementWrapper): Text {
     var lvl = this.getLevel(achievementWrapper);
@@ -73,25 +45,7 @@ export class BatchComponent implements OnInit {
     }
   }
 
-  getRemainingPoints(achievementWrapper: AchievementWrapper): String {
-    var lvl = this.getLevel(achievementWrapper);
-    var points = achievementWrapper.userAchievementDto.points.toString();
-    if (lvl == 4) return points;
 
-    if (lvl == 3)
-      return points + '/' +
-          achievementWrapper.achievementDto.points_lvl4.toString();
-    if (lvl == 2)
-      return points + '/' +
-          achievementWrapper.achievementDto.points_lvl3.toString();
-    if (lvl == 1)
-      return points + '/' +
-          achievementWrapper.achievementDto.points_lvl2.toString();
-    if (lvl == 0)
-      return points + '/' +
-          achievementWrapper.achievementDto.points_lvl1.toString();
-    return '0';
-  }
 
   getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
     var lvl = this.getLevel(achievementWrapper);
