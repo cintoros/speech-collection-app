@@ -123,7 +123,7 @@ public class AchievementsService {
         String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen geschrieben.";
         String des4 = "Du hast in diesem Monat " + LVL4 + " Übersetzungen geschrieben.";
 
-        return createMonthAchievement(time, "edit", "Fleissiger schreiber", des1, des2, des3, des4,
+        return createMonthAchievement(time, "edit", "Fleissiger Schreiber", des1, des2, des3, des4,
                 AchievementsDependsOn.TEXT_CREATED);
     }
 
@@ -133,7 +133,7 @@ public class AchievementsService {
         String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen aufgenommen.";
         String des4 = "Du hast in diesem Monat " + LVL4 + " Übersetzungen aufgenommen.";
 
-        return createMonthAchievement(time, "microphone-alt", "Fleissiger sprecher", des1, des2, des3, des4,
+        return createMonthAchievement(time, "microphone-alt", "Fleissiger Sprecher", des1, des2, des3, des4,
                 AchievementsDependsOn.AUDIO_CREATED);
     }
 
@@ -143,7 +143,7 @@ public class AchievementsService {
         String des3 = "Du hast in diesem Monat " + LVL3 + " Tupel geprüft.";
         String des4 = "Du hast in diesem Monat " + LVL4 + " Tupel geprüft.";
 
-        return createMonthAchievement(time, "check-square", "Fleissiger prüfer", des1, des2, des3, des4,
+        return createMonthAchievement(time, "check-square", "Fleissiger Prüfer", des1, des2, des3, des4,
                 AchievementsDependsOn.TOTAL_CHECKED);
     }
 
@@ -153,7 +153,7 @@ public class AchievementsService {
         String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel geprüft.";
         String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel geprüft.";
 
-        return createDayAchievement(time, "check-square", "Fleissiger prüfer", des1, des2, des3, des4,
+        return createDayAchievement(time, "check-square", "Tagesziel prüfen", des1, des2, des3, des4,
                 AchievementsDependsOn.TOTAL_CHECKED);
     }
 
@@ -163,7 +163,7 @@ public class AchievementsService {
         String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel erschaffen.";
         String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel erschaffen.";
 
-        return createDayAchievement(time, "equals", "Fleissiger prüfer", des1, des2, des3, des4,
+        return createDayAchievement(time, "equals", "Tagesziel erschaffen", des1, des2, des3, des4,
                 AchievementsDependsOn.TOTAL_CREATED);
     }
 
