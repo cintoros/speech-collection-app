@@ -93,7 +93,7 @@ public class AchievementsService {
                 LVL4, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on);
     }
 
-    public Long getMonthTextAchievement(Timestamp time) {
+    private Long getMonthTextAchievement(Timestamp time) {
         String des1 = "Du hast in diesem Monat " + LVL1 + " Übersetzungen geschrieben.";
         String des2 = "Du hast in diesem Monat " + LVL2 + " Übersetzungen geschrieben.";
         String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen geschrieben.";
@@ -103,7 +103,7 @@ public class AchievementsService {
                 AchievementsDependsOn.TEXT_CREATED);
     }
 
-    public Long getMonthAudioAchievement(Timestamp time) {
+    private Long getMonthAudioAchievement(Timestamp time) {
         String des1 = "Du hast in diesem Monat " + LVL1 + " Übersetzungen aufgenommen.";
         String des2 = "Du hast in diesem Monat " + LVL2 + " Übersetzungen aufgenommen.";
         String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen aufgenommen.";
@@ -113,7 +113,7 @@ public class AchievementsService {
                 AchievementsDependsOn.AUDIO_CREATED);
     }
 
-    public Long getMonthCheckAchievement(Timestamp time) {
+    private Long getMonthCheckAchievement(Timestamp time) {
         String des1 = "Du hast in diesem Monat " + LVL1 + " Tupel geprüft.";
         String des2 = "Du hast in diesem Monat " + LVL2 + " Tupel geprüft.";
         String des3 = "Du hast in diesem Monat " + LVL3 + " Tupel geprüft.";
@@ -123,7 +123,7 @@ public class AchievementsService {
                 AchievementsDependsOn.TOTAL_CHECKED);
     }
 
-    public void updateUserAchievement(Long userId, Long achievementId) {
+    public void updateUserAchievement(Long userId, Long achievementId, Long amount) {
         var userAchievement = dslContext.select().from(USER_ACHIEVEMENTS)
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)))
                 .limit(1).fetchOneInto(USER_ACHIEVEMENTS);
@@ -136,7 +136,7 @@ public class AchievementsService {
             userAchievement.store();
         }
 
-        userAchievement.setPoints(userAchievement.getPoints() + 1L);
+        userAchievement.setPoints(userAchievement.getPoints() + amount);
         userAchievement.store();
 
     }
@@ -182,7 +182,7 @@ public class AchievementsService {
                 .fetchInto(Long.class));
 
         for (Long id : res) {
-            updateUserAchievement(userId, id);
+            updateUserAchievement(userId, id, 1L);
         }
     }
 
@@ -197,6 +197,7 @@ public class AchievementsService {
     }
 
     public List<UserAchievementDto> getActiveUserAchievements(Long userId) {
+        createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
 
@@ -209,6 +210,7 @@ public class AchievementsService {
     }
 
     public List<UserAchievementDto> getNonActiveUserAchievements(Long userId) {
+        createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
 
@@ -220,11 +222,13 @@ public class AchievementsService {
     }
 
     public AchievementWrapper getActiveAchievement() {
+        createAutomaticAchievements();
         UserAchievementDto userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
         return new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement);
     }
 
     private UserAchievementDto getActiveUserAchievement(Long userId) {
+        createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
 
@@ -237,6 +241,7 @@ public class AchievementsService {
     }
 
     public List<AchievementWrapper> getActiveAchievements() {
+        createAutomaticAchievements();
         List<UserAchievementDto> userAchievements = getActiveUserAchievements(
                 customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
@@ -247,6 +252,7 @@ public class AchievementsService {
     }
 
     public List<AchievementWrapper> getNonActiveAchievements() {
+        createAutomaticAchievements();
         List<UserAchievementDto> userAchievements = getNonActiveUserAchievements(
                 customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
@@ -254,5 +260,13 @@ public class AchievementsService {
             res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
         }
         return res;
+    }
+
+    public void createAutomaticAchievements() {
+        Date date = new Date();
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        updateUserAchievement(userId, getMonthAudioAchievement(new Timestamp(date.getTime())), 0L);
+        updateUserAchievement(userId, getMonthTextAchievement(new Timestamp(date.getTime())), 0L);
+        updateUserAchievement(userId, getMonthCheckAchievement(new Timestamp(date.getTime())), 0L);
     }
 }

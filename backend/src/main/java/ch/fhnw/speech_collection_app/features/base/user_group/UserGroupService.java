@@ -90,8 +90,7 @@ public class UserGroupService {
         }
         tuple.store();
 
-        Date date = new Date();
-        achievementsService.getMonthAudioAchievement(new Timestamp(date.getTime()));
+        achievementsService.createAutomaticAchievements();
 
         achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
                 AchievementsDependsOn.AUDIO_CREATED, getDomainIdFromSourceId(otherDataElement.getSourceId()));
@@ -143,8 +142,7 @@ public class UserGroupService {
         }
         tuple.store();
 
-        Date date = new Date();
-        Long achievementID = achievementsService.getMonthTextAchievement(new Timestamp(date.getTime()));
+        achievementsService.createAutomaticAchievements();
 
         achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
                 AchievementsDependsOn.TEXT_CREATED, getDomainIdFromSourceId(otherDataElement.getSourceId()));
@@ -375,8 +373,7 @@ public class UserGroupService {
         checked.setType(type);
         checked.store();
 
-        Date date = new Date();
-        achievementsService.getMonthCheckAchievement(new Timestamp(date.getTime()));
+        achievementsService.createAutomaticAchievements();
 
         AchievementsDependsOn achievementType;
 
