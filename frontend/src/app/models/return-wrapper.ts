@@ -1,8 +1,9 @@
-import { DataElementDto } from "./data-element-dto";
-import { TextDto } from "./text-dto";
-import { RecordingDto } from "./recording-dto";
-import { ImageDto } from "./image-dto";
-import { ElementType } from "./element-type";
+import {AchievementWrapper} from './achievement-wrapper';
+import {DataElementDto} from './data-element-dto';
+import {ElementType} from './element-type';
+import {ImageDto} from './image-dto';
+import {RecordingDto} from './recording-dto';
+import {TextDto} from './text-dto';
 
 export class ReturnWrapper {
   dataElementDto: DataElementDto;
@@ -10,18 +11,17 @@ export class ReturnWrapper {
   recordingDto: RecordingDto;
   imageDto: ImageDto;
   elementType: ElementType;
+  achievementWrapper: AchievementWrapper;
 
   constructor(
-    $dataElementDto: DataElementDto,
-    $textDto: TextDto,
-    $recordingDto: RecordingDto,
-    $imageDto: ImageDto,
-    $elementType: ElementType
-  ) {
+      $dataElementDto: DataElementDto, $textDto: TextDto,
+      $recordingDto: RecordingDto, $imageDto: ImageDto,
+      $elementType: ElementType, $achievementWrapper: AchievementWrapper) {
     this.dataElementDto = $dataElementDto;
     this.textDto = $textDto;
     this.recordingDto = $recordingDto;
     this.imageDto = $imageDto;
     this.elementType = $elementType;
+    this.achievementWrapper = $achievementWrapper;
   }
 }

@@ -147,7 +147,7 @@ public class AchievementsService {
                 AchievementsDependsOn.TOTAL_CHECKED);
     }
 
-    private Long getDayCheckAchievement(Timestamp time) {
+    Long getDayCheckAchievement(Timestamp time) {
         String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel geprüft.";
         String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel geprüft.";
         String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel geprüft.";
@@ -157,7 +157,7 @@ public class AchievementsService {
                 AchievementsDependsOn.TOTAL_CHECKED);
     }
 
-    private Long getDayCreateAchievement(Timestamp time) {
+    Long getDayCreateAchievement(Timestamp time) {
         String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel erschaffen.";
         String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel erschaffen.";
         String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel erschaffen.";
@@ -233,6 +233,12 @@ public class AchievementsService {
     public List<UserAchievementDto> getUserAchievements(Long userId) {
         return dslContext.select().from(USER_ACHIEVEMENTS).where(USER_ACHIEVEMENTS.USER_ID.eq(userId))
                 .fetchInto(UserAchievementDto.class);
+    }
+
+    public UserAchievementDto getUserAchievement(Long userId, Long achievementId) {
+        return dslContext.select().from(USER_ACHIEVEMENTS)
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)))
+                .limit(1).fetchOneInto(UserAchievementDto.class);
     }
 
     public AchievementDto getAchievement(Long achievementId) {

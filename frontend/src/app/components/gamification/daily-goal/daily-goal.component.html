@@ -1,0 +1,7 @@
+<h3>Tagesziel</h3>
+<p *ngIf="getLevel(achievementWrapper) < 4">
+    Bald hast du das {{getColorofNextLevel(achievementWrapper)}} Level deines Tagesziels erreicht.
+</p>
+<p *ngIf="getLevel(achievementWrapper)==4"> Du hast das Platin Level deines Tagesziels erreicht. </p>
+<app-progressbar *ngIf=" getLevel(achievementWrapper) < 4 " [achievementWrapper]=" achievementWrapper">
+</app-progressbar>

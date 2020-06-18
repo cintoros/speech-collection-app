@@ -78,6 +78,7 @@ import { RecordRandomComponent } from './components/record/record-random/record-
 import { RecordAnimationComponent } from './components/home/record-animation/record-animation.component';
 import { CheckAnimationComponent } from './components/home/check-animation/check-animation.component';
 import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
+import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +120,7 @@ import { ProgressbarComponent } from './components/gamification/progressbar/prog
     RecordAnimationComponent,
     CheckAnimationComponent,
     ProgressbarComponent,
+    DailyGoalComponent,
   ],
   imports: [
     BrowserModule,

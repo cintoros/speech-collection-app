@@ -99,17 +99,24 @@
             <app-recording *ngIf="isTranslated" [otherDataElement]="dataElementTranslation"
                 [otherElementType]="elementTypeTranslation" (uploaded)="resetAndNext($event)"></app-recording>
         </span>
+
+        <br><br>
+
+        <button (click)="skip()" mat-raised-button title="Skip">
+            <mat-icon>skip_next</mat-icon>
+            <span>&nbsp;Überspringen</span>
+        </button>
     </mat-card>
 
     <br />
 
-    <br />
-    <br />
+    <app-daily-goal [achievementWrapper]="achievementWrapper"></app-daily-goal>
 
-    <button (click)="skip()" mat-raised-button title="Skip">
-        <mat-icon>skip_next</mat-icon>
-        <span>&nbsp;Skip</span>
-    </button>
+
+
+
+
+
 </div>
 <div *ngIf="!dataElement1" style="height: calc(100% - 100px);">
     <div style="height: calc(100% - 90px);">

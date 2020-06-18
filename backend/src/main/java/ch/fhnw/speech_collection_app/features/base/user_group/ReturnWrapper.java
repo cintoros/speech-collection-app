@@ -8,17 +8,19 @@ public class ReturnWrapper {
     private AudioDto audioDto;
     private ImageDto imageDto;
     private ElementType elementType;
+    private AchievementWrapper achievementWrapper;
 
     public ReturnWrapper() {
     }
 
     public ReturnWrapper(DataElementDto dataElementDto, TextDto textDto, AudioDto audioDto, ImageDto imageDto,
-            ElementType elementType) {
+            ElementType elementType, AchievementWrapper achievementWrapper) {
         this.dataElementDto = dataElementDto;
         this.textDto = textDto;
         this.audioDto = audioDto;
         this.imageDto = imageDto;
         this.elementType = elementType;
+        this.achievementWrapper = achievementWrapper;
     }
 
     public DataElementDto getDataElementDto() {
@@ -61,6 +63,14 @@ public class ReturnWrapper {
         this.elementType = elementType;
     }
 
+    public AchievementWrapper getAchievementWrapper() {
+        return this.achievementWrapper;
+    }
+
+    public void setAchievementWrapper(AchievementWrapper achievementWrapper) {
+        this.achievementWrapper = achievementWrapper;
+    }
+
     public ReturnWrapper dataElementDto(DataElementDto dataElementDto) {
         this.dataElementDto = dataElementDto;
         return this;
@@ -86,6 +96,11 @@ public class ReturnWrapper {
         return this;
     }
 
+    public ReturnWrapper achievementWrapper(AchievementWrapper achievementWrapper) {
+        this.achievementWrapper = achievementWrapper;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -97,19 +112,20 @@ public class ReturnWrapper {
         return Objects.equals(dataElementDto, returnWrapper.dataElementDto)
                 && Objects.equals(textDto, returnWrapper.textDto) && Objects.equals(audioDto, returnWrapper.audioDto)
                 && Objects.equals(imageDto, returnWrapper.imageDto)
-                && Objects.equals(elementType, returnWrapper.elementType);
+                && Objects.equals(elementType, returnWrapper.elementType)
+                && Objects.equals(achievementWrapper, returnWrapper.achievementWrapper);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataElementDto, textDto, audioDto, imageDto, elementType);
+        return Objects.hash(dataElementDto, textDto, audioDto, imageDto, elementType, achievementWrapper);
     }
 
     @Override
     public String toString() {
         return "{" + " dataElementDto='" + getDataElementDto() + "'" + ", textDto='" + getTextDto() + "'"
                 + ", audioDto='" + getAudioDto() + "'" + ", imageDto='" + getImageDto() + "'" + ", elementType='"
-                + getElementType() + "'" + "}";
+                + getElementType() + "'" + ", achievementWrapper='" + getAchievementWrapper() + "'" + "}";
     }
 
     public static ElementType stringToElementType(final String type) {

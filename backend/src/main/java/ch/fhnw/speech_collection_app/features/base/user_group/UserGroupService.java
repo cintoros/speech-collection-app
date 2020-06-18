@@ -147,8 +147,14 @@ public class UserGroupService {
         achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(),
                 AchievementsDependsOn.TEXT_CREATED, getDomainIdFromSourceId(otherDataElement.getSourceId()));
 
+        Date date = new Date();
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
+        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
+        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+
         ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
-                null, ElementType.TEXT);
+                null, ElementType.TEXT, new AchievementWrapper(achievementDto, userAchievementDto));
 
         return result;
     }
@@ -195,7 +201,14 @@ public class UserGroupService {
 
         DataElementDto data = getDataElementDto(dataElementID);
 
-        return new ReturnWrapper(data, text, recording, image, eType);
+        Date date = new Date();
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
+        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
+        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+
+        return new ReturnWrapper(data, text, recording, image, eType,
+                new AchievementWrapper(achievementDto, userAchievementDto));
     }
 
     public TupleDto getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {

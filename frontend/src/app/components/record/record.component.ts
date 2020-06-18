@@ -12,6 +12,7 @@ export class RecordComponent implements OnInit {
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
   dataElementTranslation: DataElementDto;
+  achievementWrapper: AchievementWrapper;
 
   // Depending on the current mode only two
   // of the fields below will be != null
@@ -137,6 +138,7 @@ export class RecordComponent implements OnInit {
             this.elementType2 = ElementType.TEXT;
           if (this.elementType2 == ElementType.TEXT)
             this.withTranslation = false;
+          this.achievementWrapper = value.achievementWrapper;
         });
   }
 }
@@ -152,3 +154,4 @@ import {DataElementDto} from 'src/app/models/data-element-dto';
 import {ImageDto} from 'src/app/models/image-dto';
 import {ReturnWrapper} from 'src/app/models/return-wrapper';
 import {ElementType} from 'src/app/models/element-type';
+import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
