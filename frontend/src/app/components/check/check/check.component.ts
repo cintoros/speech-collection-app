@@ -2,6 +2,8 @@ import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
+import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import {CheckWrapper} from 'src/app/models/check-wrapper';
 import {TupleDto, TupleType} from 'src/app/models/tuple-dto';
 
 import {environment} from '../../../../environments/environment';
@@ -31,6 +33,7 @@ export class CheckComponent implements OnInit {
   tuple: TupleDto;
 
   isDebug = false;
+  achievementWrapper: AchievementWrapper;
 
   constructor(
       private httpClient: HttpClient, private dialog: MatDialog,
@@ -48,14 +51,19 @@ export class CheckComponent implements OnInit {
 
   getTuple() {
     this.httpClient
-        .get<TupleDto>(
+        .get<CheckWrapper>(
             `${environment.url}user_group/${this.groupId}/check-next`)
-        .subscribe((tuple) => {
-          this.tuple = tuple;
+        .subscribe((value: CheckWrapper) => {
+          console.log(value);
+          console.log(value.achievementWrapper);
+          console.log(value.tupleDto);
+          var res: CheckWrapper = value;
+          console.log(res);
+          console.log(res.tupleDto);
+          this.tuple = value.tupleDto;
+          this.achievementWrapper = value.achievementWrapper;
         });
   }
-
-
 
   openShortcutDialog = () => this.dialog.open(ShortcutComponent, {
     width: '500px',
@@ -78,10 +86,11 @@ export class CheckComponent implements OnInit {
     formData.append(
         `selectedTupleType`, JSON.stringify(this.selectedTupleType));
     this.httpClient
-        .post<TupleDto>(
+        .post<CheckWrapper>(
             `${environment.url}user_group/${this.groupId}/check-next`, formData)
-        .subscribe((tuple) => {
-          this.tuple = tuple;
+        .subscribe((value: CheckWrapper) => {
+          this.tuple = value.tupleDto;
+          this.achievementWrapper = value.achievementWrapper;
         });
   }
 }

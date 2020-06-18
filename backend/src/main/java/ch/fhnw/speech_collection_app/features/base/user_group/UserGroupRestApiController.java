@@ -90,12 +90,12 @@ public class UserGroupRestApiController {
     }
 
     @PostMapping("check-next")
-    public TupleDto getNextTuple(@PathVariable long groupId, @RequestParam String selectedTupleType) {
+    public CheckWrapper getNextTuple(@PathVariable long groupId, @RequestParam String selectedTupleType) {
         return userGroupService.getNextTuple(groupId, TupleDto.stringToDataTupleType(selectedTupleType));
     }
 
     @GetMapping("check-next")
-    public TupleDto getNextTuple(@PathVariable long groupId) {
+    public CheckWrapper getNextTuple(@PathVariable long groupId) {
         return userGroupService.getNextTuple(groupId);
     }
 

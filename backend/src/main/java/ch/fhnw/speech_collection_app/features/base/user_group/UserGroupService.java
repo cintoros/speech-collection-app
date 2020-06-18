@@ -87,6 +87,8 @@ public class UserGroupService {
             case IMAGE:
                 tuple.setType(DataTupleType.IMAGE_AUDIO);
                 break;
+            default:
+                break;
         }
         tuple.store();
 
@@ -138,6 +140,8 @@ public class UserGroupService {
                 break;
             case IMAGE:
                 tuple.setType(DataTupleType.IMAGE_TEXT);
+                break;
+            default:
                 break;
         }
         tuple.store();
@@ -211,17 +215,31 @@ public class UserGroupService {
                 new AchievementWrapper(achievementDto, userAchievementDto));
     }
 
-    public TupleDto getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
+    public CheckWrapper getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
         checkAllowed(groupId);
+        TupleDto tupleDto = dslContext.select().from(DATA_TUPLE).where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector))
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+        Date date = new Date();
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
+        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
+        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
 
-        return dslContext.select().from(DATA_TUPLE).where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector)).orderBy(DSL.rand())
-                .limit(1).fetchOneInto(TupleDto.class);
+        return new CheckWrapper(tupleDto, new AchievementWrapper(achievementDto, userAchievementDto));
     }
 
-    public TupleDto getNextTuple(long groupId) {
+    public CheckWrapper getNextTuple(long groupId) {
         checkAllowed(groupId);
 
-        return dslContext.select().from(DATA_TUPLE).orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+        TupleDto tupleDto = dslContext.select().from(DATA_TUPLE).orderBy(DSL.rand()).limit(1)
+                .fetchOneInto(TupleDto.class);
+        Date date = new Date();
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
+        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
+        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+
+        return new CheckWrapper(tupleDto, new AchievementWrapper(achievementDto, userAchievementDto));
     }
 
     public AudioDto getAudio(Long groupId) {
