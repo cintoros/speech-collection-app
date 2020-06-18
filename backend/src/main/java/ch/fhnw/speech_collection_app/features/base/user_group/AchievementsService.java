@@ -203,7 +203,8 @@ public class AchievementsService {
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
                         .and(ACHIEVEMENTS.START_TIME.le(time))
-                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS)))
+                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
+                        .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
                 .fetchInto(UserAchievementDto.class);
     }
 
@@ -212,8 +213,9 @@ public class AchievementsService {
         Timestamp time = new Timestamp(date.getTime());
 
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
-                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(
-                        (ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))))
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId)
+                        .and((ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))
+                                .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))))
                 .fetchInto(UserAchievementDto.class);
     }
 
@@ -229,7 +231,8 @@ public class AchievementsService {
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
                         .and(ACHIEVEMENTS.START_TIME.le(time))
-                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS)))
+                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
+                        .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
                 .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievementDto.class);
     }
 
