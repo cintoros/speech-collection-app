@@ -125,4 +125,9 @@ public class UserGroupRestApiController {
     public AchievementWrapper getActiveAchievement() {
         return achievementsService.getActiveAchievement();
     }
+
+    @GetMapping(value = "numNewAchievements")
+    public Long numberOfNewAchievements() {
+        return achievementsService.numberOfNewAchievements();
+    }
 }

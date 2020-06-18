@@ -2,6 +2,8 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
+import net.sf.ehcache.search.aggregator.Count;
+
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -320,5 +322,12 @@ public class AchievementsService {
         updateUserAchievement(userId, getMonthCheckAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getDayCheckAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getDayCreateAchievement(new Timestamp(date.getTime())), 0L);
+    }
+
+    public Long numberOfNewAchievements() {
+        Long userId = customUserDetailsService.getLoggedInUserId();
+        return dslContext.selectCount().from(USER_ACHIEVEMENTS)
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.IS_NEW.eq(true))).limit(1)
+                .fetchOneInto(Long.class);
     }
 }
