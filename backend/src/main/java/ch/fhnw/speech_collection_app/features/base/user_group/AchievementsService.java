@@ -33,7 +33,7 @@ public class AchievementsService {
     public Long createAchievement(String name, String batch_name, String title, Long domain_id, Timestamp start_time,
             Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
             String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+            AchievementsDependsOn depends_on, Boolean isVisible) {
 
         AchievementDto batch = dslContext.select().from(ACHIEVEMENTS)
                 .where(ACHIEVEMENTS.NAME.eq(name).and(ACHIEVEMENTS.BATCH_NAME.eq(batch_name))
@@ -65,6 +65,7 @@ public class AchievementsService {
         achievement.setPointsLvl3(points_lvl3);
         achievement.setPointsLvl4(points_lvl4);
         achievement.setDependsOn(depends_on);
+        achievement.setIsVisible(isVisible);
         achievement.store();
 
         return achievement.getId();
@@ -90,7 +91,30 @@ public class AchievementsService {
         Timestamp end_time = new Timestamp(cal.getTimeInMillis());
 
         return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, LVL1, LVL2, LVL3,
-                LVL4, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on);
+                LVL4, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on, true);
+    }
+
+    public Long createDayAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
+            String description_lvl2, String description_lvl3, String description_lvl4,
+            AchievementsDependsOn depends_on) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(time);
+        String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
+        String year = Integer.toString(cal.get(Calendar.YEAR));
+
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Timestamp start_time = new Timestamp(cal.getTimeInMillis());
+
+        cal.add(Calendar.DAY_OF_YEAR, 1);
+        cal.add(Calendar.SECOND, -1);
+        Timestamp end_time = new Timestamp(cal.getTimeInMillis());
+
+        return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, LVL1 / 2, LVL2 / 2,
+                LVL3 / 2, LVL4 / 2, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on,
+                false);
     }
 
     private Long getMonthTextAchievement(Timestamp time) {
@@ -121,6 +145,26 @@ public class AchievementsService {
 
         return createMonthAchievement(time, "check-square", "Fleissiger prüfer", des1, des2, des3, des4,
                 AchievementsDependsOn.TOTAL_CHECKED);
+    }
+
+    private Long getDayCheckAchievement(Timestamp time) {
+        String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel geprüft.";
+        String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel geprüft.";
+        String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel geprüft.";
+        String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel geprüft.";
+
+        return createDayAchievement(time, "check-square", "Fleissiger prüfer", des1, des2, des3, des4,
+                AchievementsDependsOn.TOTAL_CHECKED);
+    }
+
+    private Long getDayCreateAchievement(Timestamp time) {
+        String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel erschaffen.";
+        String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel erschaffen.";
+        String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel erschaffen.";
+        String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel erschaffen.";
+
+        return createDayAchievement(time, "equals", "Fleissiger prüfer", des1, des2, des3, des4,
+                AchievementsDependsOn.TOTAL_CREATED);
     }
 
     public void updateUserAchievement(Long userId, Long achievementId, Long amount) {
@@ -268,5 +312,7 @@ public class AchievementsService {
         updateUserAchievement(userId, getMonthAudioAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getMonthTextAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getMonthCheckAchievement(new Timestamp(date.getTime())), 0L);
+        updateUserAchievement(userId, getDayCheckAchievement(new Timestamp(date.getTime())), 0L);
+        updateUserAchievement(userId, getDayCreateAchievement(new Timestamp(date.getTime())), 0L);
     }
 }
