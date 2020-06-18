@@ -75,6 +75,8 @@ import {ErrorInterceptorService} from './services/error-interceptor.service';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
 import { BatchComponent } from './components/gamification/batch/batch.component';
 import { RecordRandomComponent } from './components/record/record-random/record-random.component';
+import { RecordAnimationComponent } from './components/home/record-animation/record-animation.component';
+import { CheckAnimationComponent } from './components/home/check-animation/check-animation.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,8 @@ import { RecordRandomComponent } from './components/record/record-random/record-
     GlyphiconsBatchComponent,
     BatchComponent,
     RecordRandomComponent,
+    RecordAnimationComponent,
+    CheckAnimationComponent,
   ],
   imports: [
     BrowserModule,

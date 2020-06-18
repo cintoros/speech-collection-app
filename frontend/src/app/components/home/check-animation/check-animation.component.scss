@@ -1,0 +1,32 @@
+html, body {
+	height: 100%;
+}
+
+
+.loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  height: 500px;
+	
+}
+
+#tick{
+  max-width: 80%;
+  width: auto;
+}
+
+.element{
+  margin: auto;
+}
+
+.text {
+  text-align: left;
+  color: black;
+  position: absolute;
+  z-index: 5;
+  top: 0; left: 0;
+  font-size: larger;
+  background-color: rgba($color: white, $alpha: 0.9);
+  margin: 5%;
+}
