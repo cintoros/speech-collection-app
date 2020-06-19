@@ -79,6 +79,7 @@ import { RecordAnimationComponent } from './components/home/record-animation/rec
 import { CheckAnimationComponent } from './components/home/check-animation/check-animation.component';
 import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
 import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
+import { NumNewAchievementsComponent } from './components/gamification/num-new-achievements/num-new-achievements.component';
 
 @NgModule({
   declarations: [
@@ -121,6 +122,7 @@ import { DailyGoalComponent } from './components/gamification/daily-goal/daily-g
     CheckAnimationComponent,
     ProgressbarComponent,
     DailyGoalComponent,
+    NumNewAchievementsComponent,
   ],
   imports: [
     BrowserModule,

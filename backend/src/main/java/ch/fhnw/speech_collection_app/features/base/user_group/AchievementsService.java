@@ -326,8 +326,10 @@ public class AchievementsService {
 
     public Long numberOfNewAchievements() {
         Long userId = customUserDetailsService.getLoggedInUserId();
-        return dslContext.selectCount().from(USER_ACHIEVEMENTS)
-                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.IS_NEW.eq(true))).limit(1)
-                .fetchOneInto(Long.class);
+        return dslContext.selectCount().from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
+                .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.IS_NEW.eq(true))
+                        .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))
+                        .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL1)))
+                .limit(1).fetchOneInto(Long.class);
     }
 }

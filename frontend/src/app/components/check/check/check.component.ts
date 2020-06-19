@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 import {CheckWrapper} from 'src/app/models/check-wrapper';
 import {TupleDto, TupleType} from 'src/app/models/tuple-dto';
+import {NumAchievementsService} from 'src/app/services/num-achievements.service';
 
 import {environment} from '../../../../environments/environment';
 import {AuthService} from '../../../services/auth.service';
@@ -35,11 +36,14 @@ export class CheckComponent implements OnInit {
   isDebug = false;
   achievementWrapper: AchievementWrapper;
 
+  message: string;
+
   constructor(
       private httpClient: HttpClient, private dialog: MatDialog,
       private authService: AuthService, private router: Router,
       private userGroupService: UserGroupService,
-      private snackBarService: SnackBarService) {
+      private snackBarService: SnackBarService,
+      private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -47,6 +51,8 @@ export class CheckComponent implements OnInit {
     this.authService.getUser().subscribe(
         (user) => (this.userId = user.principal.user.id));
     this.isDebug ? this.getTupleWithSelection() : this.getTuple();
+    this.numAchievementsService.currentMessage.subscribe(
+        message => this.message = message);
   }
 
   getTuple() {
@@ -62,6 +68,7 @@ export class CheckComponent implements OnInit {
           console.log(res.tupleDto);
           this.tuple = value.tupleDto;
           this.achievementWrapper = value.achievementWrapper;
+          this.numAchievementsService.getNumber();
         });
   }
 
