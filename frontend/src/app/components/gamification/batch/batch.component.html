@@ -13,7 +13,7 @@
             Du bekommst die
             <span *ngIf="getLevel(achievementWrapper) > 0">nächste </span>Auszeichnung mit
             {{getNextLevelPoints(achievementWrapper)}} Punkten. </p>
-        <p> Du hast bis jetzt:</p>
+        <p> Du hast bis jetzt: {{getPoints(achievementWrapper)}}</p>
         <app-progressbar [achievementWrapper]="achievementWrapper"></app-progressbar>
     </div>
 </mat-card>

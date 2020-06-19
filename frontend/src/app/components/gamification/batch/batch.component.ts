@@ -45,6 +45,10 @@ export class BatchComponent implements OnInit {
     }
   }
 
+  getPoints(achievementWrapper: AchievementWrapper): String {
+    return achievementWrapper.userAchievementDto.points.toString();
+  }
+
 
 
   getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
