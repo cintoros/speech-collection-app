@@ -4,6 +4,7 @@ import {DataElementDto} from 'src/app/models/data-element-dto';
 import {ElementType} from 'src/app/models/element-type';
 import {ReturnWrapper} from 'src/app/models/return-wrapper';
 import {TextDto} from 'src/app/models/text-dto';
+import {NumAchievementsService} from 'src/app/services/num-achievements.service';
 import {UserGroupService} from 'src/app/services/user-group.service';
 import {environment} from 'src/environments/environment';
 
@@ -26,7 +27,8 @@ export class TranslateComponent implements OnInit {
 
   constructor(
       private httpClient: HttpClient,
-      private userGroupService: UserGroupService) {
+      private userGroupService: UserGroupService,
+      private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -48,6 +50,7 @@ export class TranslateComponent implements OnInit {
           this.dataElementDto = res.dataElementDto;
           this.isTranslated = true;
           this.uploaded.emit(res);
+          this.numAchievementsService.getNumber();
         });
   }
 }

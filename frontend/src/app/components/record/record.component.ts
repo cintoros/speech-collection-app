@@ -40,7 +40,8 @@ export class RecordComponent implements OnInit {
 
   constructor(
       private snackBarService: SnackBarService, private httpClient: HttpClient,
-      private userGroupService: UserGroupService) {
+      private userGroupService: UserGroupService,
+      private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -139,6 +140,7 @@ export class RecordComponent implements OnInit {
           if (this.elementType2 == ElementType.TEXT)
             this.withTranslation = false;
           this.achievementWrapper = value.achievementWrapper;
+          this.numAchievementsService.getNumber();
         });
   }
 }
@@ -155,3 +157,4 @@ import {ImageDto} from 'src/app/models/image-dto';
 import {ReturnWrapper} from 'src/app/models/return-wrapper';
 import {ElementType} from 'src/app/models/element-type';
 import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import {NumAchievementsService} from 'src/app/services/num-achievements.service';

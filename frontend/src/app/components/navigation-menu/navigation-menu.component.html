@@ -12,16 +12,9 @@
                     {{this.user.username}}
                 </a>
                 <a class="nav-link" (click)="redirectToPage('/gamification')">
-                    Errungenschaften
-                    <div class="quiz-medal">
-                        <div class="quiz-medal__circle quiz-medal__circle--gold">
-                            <span>
-                                <app-num-new-achievements></app-num-new-achievements>
-                            </span>
-                        </div>
-                        <div class="quiz-medal__ribbon quiz-medal__ribbon--left"></div>
-                        <div class="quiz-medal__ribbon quiz-medal__ribbon--right"></div>
-                    </div>
+                    Errungenschaften &nbsp;
+                    <app-small-medal *ngIf="message > 0" [withRibons]="false" [message]="message" [level]="5">
+                    </app-small-medal>
                 </a>
             </ng-container>
         </nav>

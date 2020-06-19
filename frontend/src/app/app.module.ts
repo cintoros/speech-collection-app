@@ -80,6 +80,7 @@ import { CheckAnimationComponent } from './components/home/check-animation/check
 import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
 import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
 import { NumNewAchievementsComponent } from './components/gamification/num-new-achievements/num-new-achievements.component';
+import { SmallMedalComponent } from './components/gamification/small-medal/small-medal.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import { NumNewAchievementsComponent } from './components/gamification/num-new-a
     ProgressbarComponent,
     DailyGoalComponent,
     NumNewAchievementsComponent,
+    SmallMedalComponent,
   ],
   imports: [
     BrowserModule,
