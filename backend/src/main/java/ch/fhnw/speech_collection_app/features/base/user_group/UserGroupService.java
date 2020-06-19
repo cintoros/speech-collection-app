@@ -232,10 +232,13 @@ public class UserGroupService {
         checkAllowed(groupId);
         Long userId = customUserDetailsService.getLoggedInUserId();
 
-        TupleDto tupleDto = dslContext.select(DATA_TUPLE.asterisk())
-                .from(DATA_TUPLE.leftOuterJoin(CHECKED_DATA_TUPLE).onKey())
-                .where(CHECKED_DATA_TUPLE.USER_ID.isNull().or(CHECKED_DATA_TUPLE.USER_ID.ne(userId)))
+        TupleDto tupleDto = dslContext.select(DATA_TUPLE.asterisk()).from(DATA_TUPLE)
+                .except(dslContext.select(DATA_TUPLE.asterisk())
+                        .from(DATA_TUPLE.join(CHECKED_DATA_TUPLE)
+                                .on(DATA_TUPLE.ID.eq(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)))
+                        .where(CHECKED_DATA_TUPLE.USER_ID.eq(userId)))
                 .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+
         Date date = new Date();
 
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
