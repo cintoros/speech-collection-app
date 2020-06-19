@@ -230,11 +230,14 @@ public class UserGroupService {
 
     public CheckWrapper getNextTuple(long groupId) {
         checkAllowed(groupId);
-
-        TupleDto tupleDto = dslContext.select().from(DATA_TUPLE).orderBy(DSL.rand()).limit(1)
-                .fetchOneInto(TupleDto.class);
-        Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
+
+        TupleDto tupleDto = dslContext.select(DATA_TUPLE.asterisk())
+                .from(DATA_TUPLE.leftOuterJoin(CHECKED_DATA_TUPLE).onKey())
+                .where(CHECKED_DATA_TUPLE.USER_ID.isNull().or(CHECKED_DATA_TUPLE.USER_ID.ne(userId)))
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+        Date date = new Date();
+
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
         AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
         UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
