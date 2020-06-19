@@ -60,7 +60,7 @@ const routes: Routes = [
         component: CheckComponent,
       },
       {
-        path: 'record/all',
+        path: 'record',
         component: RecordRandomComponent,
       },
       {
