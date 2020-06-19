@@ -300,6 +300,10 @@ public class AchievementsService {
         for (UserAchievementDto userAchievement : userAchievements) {
             res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
         }
+        for (AchievementWrapper aw : res) {
+            Long id = aw.getUserAchievementDto().getId();
+            markUserAchievementAsNotNew(id);
+        }
         return res;
     }
 
@@ -310,6 +314,10 @@ public class AchievementsService {
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (UserAchievementDto userAchievement : userAchievements) {
             res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
+        }
+        for (AchievementWrapper aw : res) {
+            Long id = aw.getUserAchievementDto().getId();
+            markUserAchievementAsNotNew(id);
         }
         return res;
     }
@@ -331,5 +339,10 @@ public class AchievementsService {
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))
                         .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL1)))
                 .limit(1).fetchOneInto(Long.class);
+    }
+
+    private void markUserAchievementAsNotNew(Long id) {
+        dslContext.update(USER_ACHIEVEMENTS).set(USER_ACHIEVEMENTS.IS_NEW, false).where(USER_ACHIEVEMENTS.ID.eq(id))
+                .execute();
     }
 }

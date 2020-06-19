@@ -25,6 +25,7 @@ export class GamificationComponent implements OnInit {
   ngOnInit(): void {
     this.getActiveAchievements();
     this.getNonActiveAchievements();
+    this.activeAchievementsWrapper.length
   }
 
 

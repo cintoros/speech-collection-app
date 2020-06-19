@@ -1,4 +1,4 @@
-<h2>Deine Aktiven Errungenschaften</h2>
+<h2 *ngIf="activeAchievementsWrapper.length > 0">Deine Aktiven Errungenschaften</h2>
 
 <div class="row form-group">
     <div class="col-sm-4" style="padding: 15px;"
@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<h2>Deine Abgeschlossenen Errungenschaften</h2>
+<h2 *ngIf="nonActiveAchievementsWrapper.length > 0">Deine Abgeschlossenen Errungenschaften</h2>
 
 <div class="row form-group">
     <div class="col-sm-4" style="padding: 15px;"
