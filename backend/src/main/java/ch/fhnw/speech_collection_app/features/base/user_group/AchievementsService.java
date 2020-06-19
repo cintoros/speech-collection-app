@@ -192,7 +192,7 @@ public class AchievementsService {
         Long lvl3 = achievementDto.getPoints_lvl1();
         Long lvl4 = achievementDto.getPoints_lvl1();
 
-        if (user_points == lvl1 || user_points == lvl2 || user_points == lvl3 || user_points == lvl4) {
+        if ((user_points == lvl1 || user_points == lvl2 || user_points == lvl3 || user_points == lvl4) && amount != 0) {
             userAchievement.setIsNew(true);
             userAchievement.store();
         }
