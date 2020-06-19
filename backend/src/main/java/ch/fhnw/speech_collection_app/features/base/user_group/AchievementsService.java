@@ -185,6 +185,17 @@ public class AchievementsService {
         userAchievement.setPoints(userAchievement.getPoints() + amount);
         userAchievement.store();
 
+        AchievementDto achievementDto = getAchievement(achievementId);
+        Long user_points = userAchievement.getPoints();
+        Long lvl1 = achievementDto.getPoints_lvl1();
+        Long lvl2 = achievementDto.getPoints_lvl1();
+        Long lvl3 = achievementDto.getPoints_lvl1();
+        Long lvl4 = achievementDto.getPoints_lvl1();
+
+        if (user_points == lvl1 || user_points == lvl2 || user_points == lvl3 || user_points == lvl4) {
+            userAchievement.setIsNew(true);
+            userAchievement.store();
+        }
     }
 
     public void updateAllUserAchievements(Long userId, AchievementsDependsOn achievementsDependsOn, Long domainId) {

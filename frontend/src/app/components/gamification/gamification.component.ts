@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import {NumAchievementsService} from 'src/app/services/num-achievements.service';
 import {UserGroupService} from 'src/app/services/user-group.service';
 import {environment} from 'src/environments/environment';
 
@@ -18,7 +19,8 @@ export class GamificationComponent implements OnInit {
 
   constructor(
       private httpClient: HttpClient,
-      private userGroupService: UserGroupService) {
+      private userGroupService: UserGroupService,
+      private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -35,6 +37,7 @@ export class GamificationComponent implements OnInit {
             `${environment.url}user_group/${this.groupId}/achievements/active`)
         .subscribe((value) => {
           this.activeAchievementsWrapper = value;
+          this.numAchievementsService.getNumber();
         });
   }
 
