@@ -51,12 +51,12 @@
         <p style="color: grey;font-size: 0.8em">Bitte gib die PLZ deiner letzten Schuljahre an. Falls du nicht in der
             Schweiz zur Schule gegangen bist, wähle "Ausserhalb der Schweiz".</p>
         <mat-form-field class="max-width">
-            <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="Zip Code" type="text">
+            <input autocomplete="family-name" formControlName="zipCode" matInput placeholder="PLZ" type="text">
             <mat-error *ngIf="isZipError('pattern')">Das ist keine gültige PLZ!</mat-error>
         </mat-form-field>
         <mat-checkbox formControlName="notCH">Ausserhalb der Schweiz</mat-checkbox>
         <mat-form-field class="max-width">
-            <mat-label>Bitte wähle ein Kanton welcher deinem Dialekt am nächsten kommt.</mat-label>
+            <mat-label>Wähle einem zu deinem Dialekt passenden Kanton</mat-label>
             <mat-select formControlName="canton">
                 <mat-option>Will ich nicht angeben</mat-option>
                 <mat-option *ngFor="let canton of dialects" [value]="canton.id">{{canton.countyName}}</mat-option>
