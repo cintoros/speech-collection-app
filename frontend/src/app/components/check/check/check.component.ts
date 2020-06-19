@@ -60,12 +60,7 @@ export class CheckComponent implements OnInit {
         .get<CheckWrapper>(
             `${environment.url}user_group/${this.groupId}/check-next`)
         .subscribe((value: CheckWrapper) => {
-          console.log(value);
-          console.log(value.achievementWrapper);
-          console.log(value.tupleDto);
           var res: CheckWrapper = value;
-          console.log(res);
-          console.log(res.tupleDto);
           this.tuple = value.tupleDto;
           this.achievementWrapper = value.achievementWrapper;
           this.numAchievementsService.getNumber();

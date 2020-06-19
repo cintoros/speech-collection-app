@@ -69,7 +69,6 @@ export class BatchComponent implements OnInit {
 
   getRemainingDays(achievementWrapper: AchievementWrapper): number {
     var s = new Date(achievementWrapper.achievementDto.end_time);
-    console.log(s.valueOf() - Date.now().valueOf());
     return this.millisecondsToDays(s.valueOf() - Date.now().valueOf());
   }
 

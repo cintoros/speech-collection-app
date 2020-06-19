@@ -118,10 +118,8 @@ export class RecordComponent implements OnInit {
   }
 
   private getNext() {
-    console.log(this.selectedElement);
     const formData = new FormData();
     formData.append(`selectedElement`, JSON.stringify(this.selectedElement));
-    console.log(formData);
     this.httpClient
         .post<ReturnWrapper>(
             `${environment.url}user_group/${this.groupId}/next`, formData)
