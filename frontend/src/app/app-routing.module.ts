@@ -75,7 +75,7 @@ const routes: Routes = [
   },
   {path: 'login', component: LoginComponent},
   {path: 'token', component: VerificationTokenComponent},
-  {path: '**', redirectTo: '/overview'}
+  {path: '**', redirectTo: '/home'}
 ];
 
 @NgModule({imports: [RouterModule.forRoot(routes)], exports: [RouterModule]})

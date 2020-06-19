@@ -20,6 +20,12 @@ snack-bar-container.snack-bar-message {
 
 /* Custom default button */
 
+.container {
+  width: 95%;
+  padding: 0;
+  max-width: 80em;
+}
+
 .btn-secondary,
 .btn-secondary:hover,
 .btn-secondary:focus {
