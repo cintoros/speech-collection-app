@@ -6,9 +6,9 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./small-medal.component.scss']
 })
 export class SmallMedalComponent implements OnInit {
-  @Input() withRibons: Boolean;
-  @Input() message: String;
-  @Input() level: number;
+  @Input() withRibons: Boolean = false;
+  @Input() message: String = '';
+  @Input() level: number = 0;
 
   constructor() {}
 

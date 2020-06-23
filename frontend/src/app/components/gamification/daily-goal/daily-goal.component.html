@@ -1,4 +1,7 @@
-<h3>Tagesziel</h3>
+<h3>Tagesziel <app-small-medal *ngIf="getLevel(achievementWrapper) > 0 " [level]="getLevel(achievementWrapper)">
+    </app-small-medal>
+</h3>
+
 <p *ngIf="getLevel(achievementWrapper) < 4">
     Bald hast du das {{getColorofNextLevel(achievementWrapper)}} Level deines Tagesziels erreicht.
 </p>
