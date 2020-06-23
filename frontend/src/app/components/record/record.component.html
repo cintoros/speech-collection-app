@@ -100,14 +100,7 @@
                 [otherElementType]="elementTypeTranslation" (uploaded)="resetAndNext($event)"></app-recording>
         </span>
 
-        <br>
-        <br>
-        <p class="skip">Überspringen</p>
 
-        <button (click)="skip()" mat-raised-button title="Skip">
-            <mat-icon>skip_next</mat-icon>
-            <span></span>
-        </button>
     </mat-card>
 
     <br />
@@ -115,7 +108,14 @@
     <app-daily-goal [achievementWrapper]="achievementWrapper"></app-daily-goal>
 
 
+    <br>
+    <br>
+    <p class="skip">Überspringen</p>
 
+    <button (click)="skip()" mat-raised-button title="Skip">
+        <mat-icon>skip_next</mat-icon>
+        <span></span>
+    </button>
 
 
 
