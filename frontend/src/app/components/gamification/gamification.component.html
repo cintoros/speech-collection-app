@@ -3,6 +3,7 @@
 <div class="row form-group">
     <div class="col-sm-4" style="padding: 15px;"
         *ngFor="let achievementWrapper of activeAchievementsWrapper; index as i">
+        <p>{{achievementWrapper.percentOfUsers}}% der Benutzer haben diese Errungenschaft freigeschaltet.</p>
         <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
     </div>
 </div>

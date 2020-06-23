@@ -158,7 +158,9 @@ public class UserGroupService {
         UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
 
         ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
-                null, ElementType.TEXT, new AchievementWrapper(achievementDto, userAchievementDto));
+                null, ElementType.TEXT,
+                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
+                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
 
         return result;
     }
@@ -212,7 +214,8 @@ public class UserGroupService {
         UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
 
         return new ReturnWrapper(data, text, recording, image, eType,
-                new AchievementWrapper(achievementDto, userAchievementDto));
+                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
+                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
     }
 
     public CheckWrapper getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
@@ -225,7 +228,9 @@ public class UserGroupService {
         AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
         UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(tupleDto, new AchievementWrapper(achievementDto, userAchievementDto));
+        return new CheckWrapper(tupleDto,
+                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
+                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
     }
 
     public CheckWrapper getNextTuple(long groupId) {
@@ -248,7 +253,9 @@ public class UserGroupService {
         AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
         UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(tupleDto, new AchievementWrapper(achievementDto, userAchievementDto));
+        return new CheckWrapper(tupleDto,
+                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
+                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
     }
 
     public AudioDto getAudio(Long groupId) {

@@ -287,7 +287,58 @@ public class AchievementsService {
     public AchievementWrapper getActiveAchievement() {
         createAutomaticAchievements();
         UserAchievementDto userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
-        return new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement);
+        return new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
+                getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement)));
+    }
+
+    public Long getLevel(UserAchievementDto userAchievement) {
+        AchievementDto achiev = getAchievement(userAchievement.getAchievements_id());
+        if (achiev.getPoints_lvl4() >= userAchievement.getPoints())
+            return 4L;
+        if (achiev.getPoints_lvl3() >= userAchievement.getPoints())
+            return 3L;
+        if (achiev.getPoints_lvl2() >= userAchievement.getPoints())
+            return 2L;
+        if (achiev.getPoints_lvl1() >= userAchievement.getPoints())
+            return 1L;
+        return 1L;
+    }
+
+    public long getAchievementPercent(Long achievementId, Long level) {
+        float total = dslContext.selectCount().from(USER_ACHIEVEMENTS)
+                .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)).limit(1).fetchOneInto(Long.class);
+        float achieved = total;
+        if (level == 1) {
+            achieved = dslContext.selectCount()
+                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
+                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
+                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
+                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL1)))
+                    .limit(1).fetchOneInto(Long.class);
+        } else if (level == 2) {
+            achieved = dslContext.selectCount()
+                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
+                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
+                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
+                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL2)))
+                    .limit(1).fetchOneInto(Long.class);
+        } else if (level == 3) {
+            achieved = dslContext.selectCount()
+                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
+                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
+                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
+                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL3)))
+                    .limit(1).fetchOneInto(Long.class);
+        } else if (level == 4) {
+            achieved = dslContext.selectCount()
+                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
+                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
+                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
+                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL4)))
+                    .limit(1).fetchOneInto(Long.class);
+        }
+        return (long) ((achieved / total) * 100f);
+
     }
 
     private UserAchievementDto getActiveUserAchievement(Long userId) {
@@ -309,7 +360,8 @@ public class AchievementsService {
                 customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (UserAchievementDto userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
+                    getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement))));
         }
         for (AchievementWrapper aw : res) {
             Long id = aw.getUserAchievementDto().getId();
@@ -324,7 +376,8 @@ public class AchievementsService {
                 customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (UserAchievementDto userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement));
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
+                    getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement))));
         }
         for (AchievementWrapper aw : res) {
             Long id = aw.getUserAchievementDto().getId();

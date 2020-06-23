@@ -5,13 +5,16 @@ import java.util.Objects;
 public class AchievementWrapper {
     private AchievementDto achievementDto;
     private UserAchievementDto userAchievementDto;
+    private Long percentOfUsers;
 
     public AchievementWrapper() {
     }
 
-    public AchievementWrapper(AchievementDto achievementDto, UserAchievementDto userAchievementDto) {
+    public AchievementWrapper(AchievementDto achievementDto, UserAchievementDto userAchievementDto,
+            Long percentOfUsers) {
         this.achievementDto = achievementDto;
         this.userAchievementDto = userAchievementDto;
+        this.percentOfUsers = percentOfUsers;
     }
 
     public AchievementDto getAchievementDto() {
@@ -30,6 +33,14 @@ public class AchievementWrapper {
         this.userAchievementDto = userAchievementDto;
     }
 
+    public Long getPercentOfUsers() {
+        return this.percentOfUsers;
+    }
+
+    public void setPercentOfUsers(Long percentOfUsers) {
+        this.percentOfUsers = percentOfUsers;
+    }
+
     public AchievementWrapper achievementDto(AchievementDto achievementDto) {
         this.achievementDto = achievementDto;
         return this;
@@ -37,6 +48,11 @@ public class AchievementWrapper {
 
     public AchievementWrapper userAchievementDto(UserAchievementDto userAchievementDto) {
         this.userAchievementDto = userAchievementDto;
+        return this;
+    }
+
+    public AchievementWrapper percentOfUsers(Long percentOfUsers) {
+        this.percentOfUsers = percentOfUsers;
         return this;
     }
 
@@ -49,18 +65,19 @@ public class AchievementWrapper {
         }
         AchievementWrapper achievementWrapper = (AchievementWrapper) o;
         return Objects.equals(achievementDto, achievementWrapper.achievementDto)
-                && Objects.equals(userAchievementDto, achievementWrapper.userAchievementDto);
+                && Objects.equals(userAchievementDto, achievementWrapper.userAchievementDto)
+                && Objects.equals(percentOfUsers, achievementWrapper.percentOfUsers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(achievementDto, userAchievementDto);
+        return Objects.hash(achievementDto, userAchievementDto, percentOfUsers);
     }
 
     @Override
     public String toString() {
         return "{" + " achievementDto='" + getAchievementDto() + "'" + ", userAchievementDto='"
-                + getUserAchievementDto() + "'" + "}";
+                + getUserAchievementDto() + "'" + ", percentOfUsers='" + getPercentOfUsers() + "'" + "}";
     }
 
 }
