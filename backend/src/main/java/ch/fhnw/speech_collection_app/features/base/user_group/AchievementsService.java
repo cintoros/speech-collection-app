@@ -293,13 +293,13 @@ public class AchievementsService {
 
     public Long getLevel(UserAchievementDto userAchievement) {
         AchievementDto achiev = getAchievement(userAchievement.getAchievements_id());
-        if (achiev.getPoints_lvl4() >= userAchievement.getPoints())
+        if (achiev.getPoints_lvl4() <= userAchievement.getPoints())
             return 4L;
-        if (achiev.getPoints_lvl3() >= userAchievement.getPoints())
+        if (achiev.getPoints_lvl3() <= userAchievement.getPoints())
             return 3L;
-        if (achiev.getPoints_lvl2() >= userAchievement.getPoints())
+        if (achiev.getPoints_lvl2() <= userAchievement.getPoints())
             return 2L;
-        if (achiev.getPoints_lvl1() >= userAchievement.getPoints())
+        if (achiev.getPoints_lvl1() <= userAchievement.getPoints())
             return 1L;
         return 1L;
     }
@@ -337,7 +337,8 @@ public class AchievementsService {
                             .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL4)))
                     .limit(1).fetchOneInto(Long.class);
         }
-        return (long) ((achieved / total) * 100f);
+        long res = (long) ((achieved / total) * 100f);
+        return res;
 
     }
 
