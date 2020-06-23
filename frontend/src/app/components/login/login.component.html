@@ -1,4 +1,4 @@
-<div style="display: flex; align-items: center; justify-content: center; height: calc(100% - 70px);">
+<div style="display: flex; align-items: center; justify-content: center;  height: calc(100%);min-height: 85rem;">
     <mat-card *ngIf="isLogin" style="max-width: 500px;width: 90%;">
         <mat-toolbar style="background-color: #428bca; color: azure;">Login</mat-toolbar>
 
@@ -42,7 +42,6 @@
         </div>
     </mat-card>
     <mat-card *ngIf="!isLogin" style="max-width: 500px; width: 90%;">
-        <br>
         <mat-toolbar style="background-color: #428bca; color: azure;">Registrieren</mat-toolbar>
         <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true" [user]="newUser()"></app-profile-editor>
     </mat-card>
