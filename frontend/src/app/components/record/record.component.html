@@ -100,11 +100,13 @@
                 [otherElementType]="elementTypeTranslation" (uploaded)="resetAndNext($event)"></app-recording>
         </span>
 
-        <br><br>
+        <br>
+        <br>
+        <p class="skip">Überspringen</p>
 
         <button (click)="skip()" mat-raised-button title="Skip">
             <mat-icon>skip_next</mat-icon>
-            <span>&nbsp;Überspringen</span>
+            <span></span>
         </button>
     </mat-card>
 
