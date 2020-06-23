@@ -237,6 +237,9 @@ public class UserGroupService {
                         .from(DATA_TUPLE.join(CHECKED_DATA_TUPLE)
                                 .on(DATA_TUPLE.ID.eq(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)))
                         .where(CHECKED_DATA_TUPLE.USER_ID.eq(userId)))
+                .except(dslContext.select(DATA_TUPLE.asterisk())
+                        .from(DATA_TUPLE.join(DATA_ELEMENT).on(DATA_TUPLE.DATA_ELEMENT_ID_2.eq(DATA_ELEMENT.ID)))
+                        .where(DATA_ELEMENT.USER_ID.eq(userId)))
                 .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
 
         Date date = new Date();
