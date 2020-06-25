@@ -1,6 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
+import ch.fhnw.speech_collection_app.features.base.user_group.CantonClass.CantonEnum;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import net.sf.ehcache.search.aggregator.Count;
 
@@ -14,6 +15,8 @@ import java.util.*;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.ACHIEVEMENTS;
 import static ch.fhnw.speech_collection_app.jooq.Tables.USER_ACHIEVEMENTS;
+import static ch.fhnw.speech_collection_app.jooq.Tables.USER;
+import static ch.fhnw.speech_collection_app.jooq.Tables.DIALECT;
 
 @Service
 public class AchievementsService {
@@ -409,5 +412,21 @@ public class AchievementsService {
     private void markUserAchievementAsNotNew(Long id) {
         dslContext.update(USER_ACHIEVEMENTS).set(USER_ACHIEVEMENTS.IS_NEW, false).where(USER_ACHIEVEMENTS.ID.eq(id))
                 .execute();
+    }
+
+    public List<MapWrapper> getMapPercent() {
+        List<MapWrapper> result = new ArrayList<>();
+        for (CantonEnum canton : CantonEnum.values()) {
+            String county_id = CantonClass.enumToCountyId(canton);
+            List<Long> res = dslContext.select(USER_ACHIEVEMENTS.POINTS)
+                    .from(USER_ACHIEVEMENTS.join(USER).on(USER_ACHIEVEMENTS.USER_ID.eq(USER.ID)).join(DIALECT)
+                            .on(USER.DIALECT_ID.eq(DIALECT.ID)))
+                    .where(DIALECT.COUNTY_ID.eq(county_id)).fetchInto(Long.class);
+            Long sum = 0L;
+            for (Long value : res)
+                sum += value;
+            result.add(new MapWrapper(canton, sum));
+        }
+        return result;
     }
 }

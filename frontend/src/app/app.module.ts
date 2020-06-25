@@ -81,6 +81,7 @@ import { ProgressbarComponent } from './components/gamification/progressbar/prog
 import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
 import { NumNewAchievementsComponent } from './components/gamification/num-new-achievements/num-new-achievements.component';
 import { SmallMedalComponent } from './components/gamification/small-medal/small-medal.component';
+import { MapComponent } from './components/gamification/map/map.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +126,7 @@ import { SmallMedalComponent } from './components/gamification/small-medal/small
     DailyGoalComponent,
     NumNewAchievementsComponent,
     SmallMedalComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,

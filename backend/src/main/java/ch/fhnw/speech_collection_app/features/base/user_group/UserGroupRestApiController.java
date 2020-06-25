@@ -130,4 +130,9 @@ public class UserGroupRestApiController {
     public Long numberOfNewAchievements() {
         return achievementsService.numberOfNewAchievements();
     }
+
+    @GetMapping(value = "map")
+    public List<MapWrapper> getMapPercent() {
+        return achievementsService.getMapPercent();
+    }
 }
