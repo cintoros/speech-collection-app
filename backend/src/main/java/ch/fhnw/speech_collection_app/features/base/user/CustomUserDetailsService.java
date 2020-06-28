@@ -134,10 +134,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Boolean getGamification() {
-        Long withGamification = dslContext.selectCount().from(USER).where(USER.GAMIFICATION_ON.eq(true)).limit(1)
-                .fetchOneInto(Long.class);
-        Long withoutGamification = dslContext.selectCount().from(USER).where(USER.GAMIFICATION_ON.eq(false)).limit(1)
-                .fetchOneInto(Long.class);
+        Long withGamification = dslContext.selectCount()
+                .from(USER.join(USER_GROUP_ROLE).on(USER.ID.eq(USER_GROUP_ROLE.USER_ID)))
+                .where(USER.GAMIFICATION_ON.eq(true).and(USER_GROUP_ROLE.USER_GROUP_ID.eq(1L))
+                        .and(USER_GROUP_ROLE.ROLE.eq(UserGroupRoleRole.USER)))
+                .limit(1).fetchOneInto(Long.class);
+        Long withoutGamification = dslContext.selectCount()
+                .from(USER.join(USER_GROUP_ROLE).on(USER.ID.eq(USER_GROUP_ROLE.USER_ID)))
+                .where(USER.GAMIFICATION_ON.eq(false).and(USER_GROUP_ROLE.USER_GROUP_ID.eq(1L))
+                        .and(USER_GROUP_ROLE.ROLE.eq(UserGroupRoleRole.USER)))
+                .limit(1).fetchOneInto(Long.class);
         return withoutGamification > withGamification;
     }
 
