@@ -211,7 +211,7 @@ class ThreadedApiFetcher:
 
     def request_all(self):
         threads = list()
-        # TODO manually add batch ids 
+        # TODO manually add batch ids
         apis = [[GoogleApi(), 1], [MicrosoftApi(), 2], [AwsApi(), 3]]
         for api_fetcher, batch_id in apis:
             thread = threading.Thread(target=self.request_all_batch, args=[api_fetcher, batch_id])
@@ -235,7 +235,11 @@ class ThreadedApiFetcher:
         try:
             for i in range(current_text_id, end_text_id):
                 # for i in range(current_text_id, current_text_id + 2):
-                voice = api_fetcher.request_next(self.dataset.sentences[i], i + 1)
+                try:
+                    voice = api_fetcher.request_next(self.dataset.sentences[i], i + 1)
+                except:
+                    logger.info(str(api_fetcher.__class__.__name__) +": except caught")
+                    voice = api_fetcher.request_next(self.dataset.sentences[i], i + 1)
                 if voice is not None:
                     cursor.execute("INSERT INTO generated_audio_2(text_id,voice,batch_id) VALUE (%s,%s,%s)",
                                    [i + 1, voice, batch_id])
