@@ -14,6 +14,7 @@
 <div class="row form-group" *ngIf="this.user.gamificationOn">
     <div class="col-sm-4" style="padding: 15px;"
         *ngFor="let achievementWrapper of nonActiveAchievementsWrapper; index as i">
+        <p>{{achievementWrapper.percentOfUsers}}% der Benutzer haben diese Errungenschaft freigeschaltet.</p>
         <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
     </div>
 </div>
