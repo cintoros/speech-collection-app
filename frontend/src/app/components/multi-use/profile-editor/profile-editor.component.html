@@ -1,12 +1,5 @@
 <form (ngSubmit)="register()" [formGroup]="registerForm">
     <mat-form-field class="max-width">
-        <input autocomplete="given-name" disabled="true" formControlName="firstName" matInput placeholder="Vorname"
-            type="text">
-    </mat-form-field>
-    <mat-form-field class="max-width">
-        <input autocomplete="family-name" formControlName="lastName" matInput placeholder="Nachname" type="text">
-    </mat-form-field>
-    <mat-form-field class="max-width">
         <input autocomplete="username" formControlName="username" matInput placeholder="Benutzername*" type="text">
         <mat-error *ngIf="isUNError('required')">Bitte gib ein Benutzername ein</mat-error>
         <mat-error *ngIf="isUNError('pattern')">Keine Sonderzeichen im Benutzername!</mat-error>
