@@ -67,6 +67,24 @@
     </mat-card>
 
     <br>
+    <p>Mit dem klicken auf Speichern akzeptieren Sie unsere
+    <div class="container">
+        <div class="card border-danger mb-3">
+            <div class="card-header" id="headingOne">
+                <a class="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                    aria-controls="collapseOne">
+                    Nutzungsbedingungen
+                </a>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <mat-card>
+                    <app-terms></app-terms>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+    <br>
 
     <div *ngIf="!disabled">
         <button (click)="cancel()" class="btn btn-default" type="button">Abbrechen</button>

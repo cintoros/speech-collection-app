@@ -44,6 +44,7 @@
     <mat-card *ngIf="!isLogin" style="max-width: 500px; width: 90%;">
         <mat-toolbar style="background-color: #428bca; color: azure;">Registrieren</mat-toolbar>
         <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true" [user]="newUser()"></app-profile-editor>
+
     </mat-card>
 
 </div>
