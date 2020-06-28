@@ -30,7 +30,8 @@ public class UserGroupAdminService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public UserGroupAdminService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext, SpeechCollectionAppConfig speechCollectionAppConfig) {
+    public UserGroupAdminService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
+            SpeechCollectionAppConfig speechCollectionAppConfig) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
@@ -56,23 +57,28 @@ public class UserGroupAdminService {
 
     public List<OverviewOccurrence> getOverviewOccurrence(long groupId) {
         isAllowed(groupId);
-        //TODO implement pagination for increased performance
-        //TODO not sure how we want to handle the images for now we just filter based on the type.
-        return dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE, DATA_TUPLE.DATA_ELEMENT_ID_2)
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
-                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId).and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)
-                        .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO))))
-                )
+        // TODO implement pagination for increased performance
+        // TODO not sure how we want to handle the images for now we just filter based
+        // on the type.
+        return dslContext
+                .select(DATA_TUPLE.ID, DATA_TUPLE.CORRECT, DATA_TUPLE.WRONG, TEXT.TEXT_, DATA_TUPLE.TYPE,
+                        DATA_TUPLE.DATA_ELEMENT_ID_2)
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT)
+                        .onKey(TEXT.DATA_ELEMENT_ID))
+                .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
+                        .and(DATA_TUPLE.CORRECT.plus(DATA_TUPLE.WRONG).ge(0L)
+                                .and(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)
+                                        .or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO)))))
                 .fetchInto(OverviewOccurrence.class);
     }
 
     public List<UserGroupRoleDto> getUserGroupRole(UserGroupRoleRole mode, long groupId) {
         isAllowed(groupId);
-        var conditionStep = dslContext.select(USER_GROUP_ROLE.ID, USER.USERNAME, USER.EMAIL)
-                .from(USER_GROUP_ROLE.join(USER).onKey())
-                .where(USER_GROUP_ROLE.ROLE.eq(mode));
+        var conditionStep = dslContext.select(USER_GROUP_ROLE.ID, USER.USERNAME, USER.EMAIL, USER.GAMIFICATION_ON)
+                .from(USER_GROUP_ROLE.join(USER).onKey()).where(USER_GROUP_ROLE.ROLE.eq(mode));
         if (mode == UserGroupRoleRole.ADMIN) {
-            if (!customUserDetailsService.isAdmin()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            if (!customUserDetailsService.isAdmin())
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         } else {
             conditionStep = conditionStep.and(USER_GROUP_ROLE.USER_GROUP_ID.eq(groupId));
         }
@@ -82,17 +88,20 @@ public class UserGroupAdminService {
     public boolean postUserGroupRole(String email, UserGroupRoleRole mode, long groupId) {
         isAllowed(groupId);
         if (mode == UserGroupRoleRole.ADMIN) {
-            if (!customUserDetailsService.isAdmin()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            if (!customUserDetailsService.isAdmin())
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         var opt = dslContext.selectFrom(USER).where(USER.USERNAME.eq(email)).fetchOptional()
                 .or(() -> dslContext.selectFrom(USER).where(USER.EMAIL.eq(email)).fetchOptional());
-        opt.ifPresent(user -> dslContext.newRecord(USER_GROUP_ROLE, (new UserGroupRole(null, mode, user.getId(), groupId))).store());
+        opt.ifPresent(user -> dslContext
+                .newRecord(USER_GROUP_ROLE, (new UserGroupRole(null, mode, user.getId(), groupId))).store());
         return opt.isPresent();
     }
 
     public void deleteUserGroupRole(long id) {
-        var groupId = dslContext.selectFrom(USER_GROUP_ROLE).where(USER_GROUP_ROLE.ID.eq(id)).fetchOne(USER_GROUP_ROLE.USER_GROUP_ID);
+        var groupId = dslContext.selectFrom(USER_GROUP_ROLE).where(USER_GROUP_ROLE.ID.eq(id))
+                .fetchOne(USER_GROUP_ROLE.USER_GROUP_ID);
         isAllowed(groupId);
         dslContext.delete(USER_GROUP_ROLE).where(USER_GROUP_ROLE.ID.eq(id)).execute();
     }
@@ -104,14 +113,14 @@ public class UserGroupAdminService {
 
     public TextAudioDto getTextAudio(long groupId, long dataElementId) {
         isAllowed(groupId);
-        return dslContext.select(AUDIO.ID, AUDIO.AUDIO_START, AUDIO.AUDIO_END).from(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOneInto(TextAudioDto.class);
+        return dslContext.select(AUDIO.ID, AUDIO.AUDIO_START, AUDIO.AUDIO_END).from(AUDIO)
+                .where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOneInto(TextAudioDto.class);
     }
 
     public byte[] getTextAudioAudio(long groupId, Long audioId) throws IOException {
         isAllowed(groupId);
         var textAudio = dslContext.selectFrom(AUDIO.join(DATA_ELEMENT).onKey().join(SOURCE).onKey())
-                .where(AUDIO.ID.eq(audioId))
-                .fetchOne(SOURCE.PATH_TO_RAW_FILE);
+                .where(AUDIO.ID.eq(audioId)).fetchOne(SOURCE.PATH_TO_RAW_FILE);
         return Files.readAllBytes(speechCollectionAppConfig.getBasePath().resolve(textAudio));
     }
 
