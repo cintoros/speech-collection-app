@@ -4,6 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 import {CheckWrapper} from 'src/app/models/check-wrapper';
+import {CustomUserDetails} from 'src/app/models/spring-principal';
 import {TupleDto, TupleType} from 'src/app/models/tuple-dto';
 import {NumAchievementsService} from 'src/app/services/num-achievements.service';
 
@@ -37,6 +38,7 @@ export class CheckComponent implements OnInit {
   achievementWrapper: AchievementWrapper;
 
   message: string;
+  user: CustomUserDetails;
 
   constructor(
       private httpClient: HttpClient, private dialog: MatDialog,
@@ -45,6 +47,10 @@ export class CheckComponent implements OnInit {
       private snackBarService: SnackBarService,
       private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
+    authService.getUser().subscribe((user) => {
+      this.user = user.principal;
+      this.user.gamificationOn = user.principal.user.gamificationOn;
+    });
   }
 
   ngOnInit() {

@@ -38,11 +38,18 @@ export class RecordComponent implements OnInit {
 
   private groupId = 1;
 
+  user: CustomUserDetails;
+
   constructor(
-      private snackBarService: SnackBarService, private httpClient: HttpClient,
+      public authService: AuthService, private snackBarService: SnackBarService,
+      private httpClient: HttpClient,
       private userGroupService: UserGroupService,
       private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
+    authService.getUser().subscribe((user) => {
+      this.user = user.principal;
+      this.user.gamificationOn = user.principal.user.gamificationOn;
+    });
   }
 
   ngOnInit() {
@@ -156,3 +163,5 @@ import {ReturnWrapper} from 'src/app/models/return-wrapper';
 import {ElementType} from 'src/app/models/element-type';
 import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 import {NumAchievementsService} from 'src/app/services/num-achievements.service';
+import {CustomUserDetails} from 'src/app/models/spring-principal';
+import {AuthService} from 'src/app/services/auth.service';

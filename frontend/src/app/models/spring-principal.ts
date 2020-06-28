@@ -14,7 +14,9 @@ export interface Authority {
 }
 
 export enum UserGroupRoleRole {
-  ADMIN = 'ADMIN', GROUP_ADMIN = 'GROUP_ADMIN', USER = 'USER'
+  ADMIN = 'ADMIN',
+  GROUP_ADMIN = 'GROUP_ADMIN',
+  USER = 'USER'
 }
 
 export interface UserGroupRole {
@@ -30,4 +32,5 @@ export interface CustomUserDetails {
   id: number;
   user: User;
   userGroupRoles: UserGroupRole[];
+  gamificationOn: Boolean;
 }

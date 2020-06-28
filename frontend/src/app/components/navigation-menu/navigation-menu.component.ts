@@ -21,7 +21,10 @@ export class NavigationMenuComponent {
       public authService: AuthService, public router: Router,
       private userGroupService: UserGroupService,
       private numAchievementsService: NumAchievementsService) {
-    authService.getUser().subscribe(user => this.user = user.principal);
+    authService.getUser().subscribe((user) => {
+      this.user = user.principal;
+      this.user.gamificationOn = user.principal.user.gamificationOn;
+    });
   }
 
   ngOnInit(): void {

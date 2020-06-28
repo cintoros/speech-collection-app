@@ -1,6 +1,6 @@
-<h2 *ngIf="activeAchievementsWrapper.length > 0">Deine Aktiven Errungenschaften</h2>
+<h2 *ngIf="activeAchievementsWrapper.length > 0 && this.user.gamificationOn">Deine Aktiven Errungenschaften</h2>
 
-<div class="row form-group">
+<div class="row form-group" *ngIf="this.user.gamificationOn">
     <div class="col-sm-4" style="padding: 15px;"
         *ngFor="let achievementWrapper of activeAchievementsWrapper; index as i">
         <p>{{achievementWrapper.percentOfUsers}}% der Benutzer haben diese Errungenschaft freigeschaltet.</p>
@@ -8,9 +8,10 @@
     </div>
 </div>
 
-<h2 *ngIf="nonActiveAchievementsWrapper.length > 0">Deine Abgeschlossenen Errungenschaften</h2>
+<h2 *ngIf="nonActiveAchievementsWrapper.length > 0 && this.user.gamificationOn">Deine Abgeschlossenen Errungenschaften
+</h2>
 
-<div class="row form-group">
+<div class="row form-group" *ngIf="this.user.gamificationOn">
     <div class="col-sm-4" style="padding: 15px;"
         *ngFor="let achievementWrapper of nonActiveAchievementsWrapper; index as i">
         <app-batch [achievementWrapper]="achievementWrapper"></app-batch>

@@ -69,9 +69,7 @@
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
 
-        <br />
-        <br />
-        <br>
+
 
         <app-check-checker [tuple]="tuple" (completed)="afterCheck($event)"></app-check-checker>
     </mat-card>
@@ -80,7 +78,7 @@
 
     <br />
 
-    <app-daily-goal [achievementWrapper]="achievementWrapper"></app-daily-goal>
+    <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
 </div>
 
 <div *ngIf="!tuple">

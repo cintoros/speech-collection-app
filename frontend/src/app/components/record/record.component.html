@@ -105,7 +105,7 @@
 
     <br />
 
-    <app-daily-goal [achievementWrapper]="achievementWrapper"></app-daily-goal>
+    <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
 
 
     <br>

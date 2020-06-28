@@ -3,6 +3,9 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {environment} from 'src/environments/environment';
 
+import {CustomUserDetails} from '../models/spring-principal';
+
+import {AuthService} from './auth.service';
 import {SnackBarService} from './snack-bar.service';
 import {UserGroupService} from './user-group.service';
 
@@ -16,11 +19,17 @@ export class NumAchievementsService {
 
   groupId: number;
 
+  user: CustomUserDetails;
+
   constructor(
-      private httpClient: HttpClient,
+      public authService: AuthService, private httpClient: HttpClient,
       private userGroupService: UserGroupService,
       private snackBarService: SnackBarService) {
     this.groupId = this.userGroupService.userGroupId;
+    authService.getUser().subscribe((user) => {
+      this.user = user.principal;
+      this.user.gamificationOn = user.principal.user.gamificationOn;
+    });
   }
 
   changeMessage(message: string) {
@@ -39,7 +48,7 @@ export class NumAchievementsService {
             `${environment.url}user_group/${this.groupId}/numNewAchievements`)
         .subscribe((res) => {
           this.changeMessage(res.toString());
-          if (res > this.oldnumber)
+          if (res > this.oldnumber && this.user.gamificationOn)
             this.snackBarService.openMessage(
                 'Neue Errungenschaft freigeschaltet');
           ;
