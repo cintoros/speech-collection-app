@@ -132,4 +132,14 @@ public class UserGroupAdminService {
     public List<Domain> getDomain() {
         return dslContext.selectFrom(DOMAIN).fetchInto(Domain.class);
     }
+
+    public void changeGameMode(long groupId, String userName) {
+        isAllowed(groupId);
+        Boolean current = dslContext.select(USER.GAMIFICATION_ON).from(USER).where(USER.USERNAME.eq(userName)).limit(1)
+                .fetchOneInto(Boolean.class);
+        if (current == null)
+            current = false;
+        dslContext.update(USER).set(USER.GAMIFICATION_ON, !current).where(USER.USERNAME.eq(userName)).execute();
+
+    }
 }

@@ -21,7 +21,7 @@ interface UserGroupRoleDto {
 export class UserGroupRoleComponent implements OnInit {
   @Input() mode: UserGroupRoleRole;
   userGroupRoles: UserGroupRoleDto[] = [];
-  columns = ['avatar', 'username', 'email', 'game', 'remove'];
+  columns = ['avatar', 'username', 'email', 'game', 'change-game', 'remove'];
   userEmail: string;
   private baseUrl: string;
 
@@ -49,6 +49,18 @@ export class UserGroupRoleComponent implements OnInit {
           this.reload();
         });
   }
+
+  changeGame(userName: string) {
+    this.httpClient
+        .get(`${environment.url}user_group/${
+            this.userGroupService
+                .userGroupId}/admin/user_group_role/changeGame/${userName}`)
+        .subscribe(() => {
+          this.snackBarService.openMessage('successfully changed gamification');
+          this.reload();
+        });
+  }
+
 
   newUserGroupRole = () => this.userEmail = 'email/username';
   cancel = () => this.userEmail = undefined;
