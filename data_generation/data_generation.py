@@ -212,7 +212,7 @@ class ThreadedApiFetcher:
     def request_all(self):
         threads = list()
         # TODO manually add batch ids
-        apis = [[GoogleApi(), 1], [MicrosoftApi(), 2], [AwsApi(), 3]]
+        apis = [[GoogleApi(), 7], [MicrosoftApi(), 8], [AwsApi(), 9]]
         for api_fetcher, batch_id in apis:
             thread = threading.Thread(target=self.request_all_batch, args=[api_fetcher, batch_id])
             threads.append(thread)
@@ -270,9 +270,9 @@ class BatchPrepare:
         cursor.execute("SELECT IFNULL(MAX(end_text_id), 0) AS last_id FROM batch;")
         result = cursor.fetchone()
         last_id = result['last_id']
-        # apis = [["GOOGLE", 4000000], ["AZURE", 5000000], ["AWS", 5000000]]
+        apis = [["GOOGLE", 4000000], ["AZURE", 5000000], ["AWS", 5000000]]
         # use lower limits when testing
-        apis = [["GOOGLE", 4000000 - 10000], ["AZURE", 5000000 - 10000], ["AWS", 5000000 - 10000]]
+        # apis = [["GOOGLE", 4000000 - 10000], ["AZURE", 5000000 - 10000], ["AWS", 5000000 - 10000]]
         for api, limit in apis:
             start_id = last_id
             characters = 0
@@ -295,6 +295,6 @@ class BatchPrepare:
 
 if __name__ == '__main__':
     # TODO manually prepare batch
-    # BatchPrepare.batch_prepare()
+    #BatchPrepare.batch_prepare()
     fetcher = ThreadedApiFetcher()
     fetcher.request_all()
