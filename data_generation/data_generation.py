@@ -1,19 +1,20 @@
-import io
-import logging
-import os
-import threading
-import time
 from contextlib import closing
-from typing import Union
+from multiprocessing import Pool
 from xml.etree import ElementTree
 
+import io
+import logging
 import mysql.connector
+import os
 import pandas
 import requests
+import threading
+import time
 from boto3 import Session
 from google.cloud import texttospeech
 from google.oauth2 import service_account
 from pydub import AudioSegment
+from typing import Union
 
 from config import *
 
@@ -154,12 +155,12 @@ class GoogleApi:
 class AwsApi:
     """
     see https://docs.aws.amazon.com/polly/latest/
+    for voices see see https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
     """
 
     def __init__(self):
         self.base_path = os.path.join(BASE_DIR, "data_generation", "threaded")
         os.makedirs(name=self.base_path, exist_ok=True)
-        # see https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
         self.voices = ["Marlene", "Vicki", "Hans"]
         self.voice_index = 0
         # Instantiates a client
@@ -179,9 +180,6 @@ class AwsApi:
         return None
 
     def request_next(self, text: str, id: int) -> Union[None, str]:
-        # Set the text input to be synthesized
-        # NOTE: google api does not like some special characters.
-        synthesis_input = texttospeech.types.SynthesisInput(text=text.replace('"', ''))
         voice_name = self.get_next_voice(id)
         if voice_name is None:
             return None
@@ -234,11 +232,10 @@ class ThreadedApiFetcher:
         current_id = current_text_id
         try:
             for i in range(current_text_id, end_text_id):
-                # for i in range(current_text_id, current_text_id + 2):
                 try:
                     voice = api_fetcher.request_next(self.dataset.sentences[i], i + 1)
                 except:
-                    logger.info(str(api_fetcher.__class__.__name__) +": except caught")
+                    logger.info(str(api_fetcher.__class__.__name__) + ": except caught")
                     voice = api_fetcher.request_next(self.dataset.sentences[i], i + 1)
                 if voice is not None:
                     cursor.execute("INSERT INTO generated_audio_2(text_id,voice,batch_id) VALUE (%s,%s,%s)",
@@ -253,7 +250,7 @@ class ThreadedApiFetcher:
             logger.info(str(api_fetcher.__class__.__name__) + ": finished with  current_id(+1): " + str(current_id))
 
 
-class BatchPrepare:
+class DataGeneration:
     @staticmethod
     def batch_prepare() -> None:
         """
@@ -292,9 +289,44 @@ class BatchPrepare:
             logger.info("finished batch calculation for api: " + api)
         logger.info("finished batch calculation for all apis")
 
+    @staticmethod
+    def batch_run() -> None:
+        fetcher = ThreadedApiFetcher()
+        fetcher.request_all()
+
+    @staticmethod
+    def calc_stuff(file_data):
+        try:
+            audio = AudioSegment.from_file(
+                os.path.join(os.path.join(BASE_DIR, "data_generation", "threaded", file_data)))
+            return audio.duration_seconds
+        except:
+            return 0
+
+    @staticmethod
+    def batch_statistics() -> None:
+
+        seconds = 0
+        count = 0
+        errors = 0
+        files = os.listdir(os.path.join(BASE_DIR, "data_generation", "threaded"))
+        agents = 16
+        chunksize = 1000
+        with Pool(processes=agents) as pool:
+            result = pool.map(DataGeneration.calc_stuff, files, chunksize)
+            errors += result.count(0)
+            seconds += sum(result)
+            count += len(result)
+            print("sec: ", seconds, "h: ", seconds / 60 / 60, "count: ", count, "errors: ", errors)
+        print("sec: ", seconds, "h: ", seconds / 60 / 60, "count: ", count, "errors: ", errors)
+
+
+def batch_prepare():
+    DataGeneration.batch_prepare()
+
 
 if __name__ == '__main__':
-    # TODO manually prepare batch
-    #BatchPrepare.batch_prepare()
-    fetcher = ThreadedApiFetcher()
-    fetcher.request_all()
+    # TODO manually switch between modes
+    # DataGeneration.batch_prepare()
+    # DataGeneration.batch_run()
+    DataGeneration.batch_statistics()
