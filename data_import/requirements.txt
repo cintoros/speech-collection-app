@@ -1,0 +1,4 @@
+pydub
+mysql-connector-python
+spacy
+beautifulsoup4
