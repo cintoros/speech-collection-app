@@ -23,6 +23,7 @@ import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DataTuple extends TableImpl<DataTupleRecord> {
 
-    private static final long serialVersionUID = 1771598262;
+    private static final long serialVersionUID = 1596686072;
 
     public static final DataTuple DATA_TUPLE = new DataTuple();
 
@@ -73,7 +74,7 @@ public class DataTuple extends TableImpl<DataTupleRecord> {
     }
 
     private DataTuple(Name alias, Table<DataTupleRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the audio,text, images data_tuples.\nthe type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2).\nthe finished can be used to flag an data_element should not be checked at all."));
+        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the audio,text, images data_tuples.\nthe type describes which foreign keys are set i.e TEXT_AUDIO(text_1,audio_2),IMAGE_AUDIO(image_1,audio_2).\nthe finished can be used to flag an data_element should not be checked at all."), TableOptions.table());
     }
 
     public <O extends Record> DataTuple(Table<O> child, ForeignKey<O, DataTupleRecord> key) {
@@ -87,7 +88,7 @@ public class DataTuple extends TableImpl<DataTupleRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DATA_TUPLE_DATA_ELEMENT_ID_1, Indexes.DATA_TUPLE_DATA_ELEMENT_ID_2, Indexes.DATA_TUPLE_PRIMARY);
+        return Arrays.<Index>asList(Indexes.DATA_TUPLE_DATA_ELEMENT_ID_1, Indexes.DATA_TUPLE_DATA_ELEMENT_ID_2);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -30,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserAchievements extends TableImpl<UserAchievementsRecord> {
 
-    private static final long serialVersionUID = 866509626;
+    private static final long serialVersionUID = -906878661;
 
     public static final UserAchievements USER_ACHIEVEMENTS = new UserAchievements();
 
@@ -66,7 +67,7 @@ public class UserAchievements extends TableImpl<UserAchievementsRecord> {
     }
 
     private UserAchievements(Name alias, Table<UserAchievementsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> UserAchievements(Table<O> child, ForeignKey<O, UserAchievementsRecord> key) {
@@ -80,7 +81,7 @@ public class UserAchievements extends TableImpl<UserAchievementsRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_ACHIEVEMENTS_ACHIEVEMENTS_ID, Indexes.USER_ACHIEVEMENTS_PRIMARY, Indexes.USER_ACHIEVEMENTS_USER_ID);
+        return Arrays.<Index>asList(Indexes.USER_ACHIEVEMENTS_ACHIEVEMENTS_ID, Indexes.USER_ACHIEVEMENTS_USER_ID);
     }
 
     @Override

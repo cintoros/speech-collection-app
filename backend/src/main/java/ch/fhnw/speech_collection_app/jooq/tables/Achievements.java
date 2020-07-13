@@ -24,6 +24,7 @@ import org.jooq.Row17;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Achievements extends TableImpl<AchievementsRecord> {
 
-    private static final long serialVersionUID = 1161610024;
+    private static final long serialVersionUID = -299691367;
 
     public static final Achievements ACHIEVEMENTS = new Achievements();
 
@@ -92,7 +93,7 @@ public class Achievements extends TableImpl<AchievementsRecord> {
     }
 
     private Achievements(Name alias, Table<AchievementsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> Achievements(Table<O> child, ForeignKey<O, AchievementsRecord> key) {
@@ -106,7 +107,7 @@ public class Achievements extends TableImpl<AchievementsRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.ACHIEVEMENTS_DOMAIN_ID, Indexes.ACHIEVEMENTS_PRIMARY);
+        return Arrays.<Index>asList(Indexes.ACHIEVEMENTS_DOMAIN_ID);
     }
 
     @Override

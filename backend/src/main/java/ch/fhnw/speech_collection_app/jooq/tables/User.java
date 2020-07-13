@@ -26,6 +26,7 @@ import org.jooq.Row15;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -2109346749;
+    private static final long serialVersionUID = -1161456631;
 
     public static final User USER = new User();
 
@@ -90,7 +91,7 @@ public class User extends TableImpl<UserRecord> {
     }
 
     private User(Name alias, Table<UserRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> User(Table<O> child, ForeignKey<O, UserRecord> key) {
@@ -104,7 +105,7 @@ public class User extends TableImpl<UserRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USER_DIALECT_ID, Indexes.USER_EMAIL, Indexes.USER_PRIMARY, Indexes.USER_USERNAME);
+        return Arrays.<Index>asList(Indexes.USER_DIALECT_ID);
     }
 
     @Override

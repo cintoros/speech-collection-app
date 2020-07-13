@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DomainRecord extends UpdatableRecordImpl<DomainRecord> implements Record2<Long, String> {
 
-    private static final long serialVersionUID = -2120133574;
+    private static final long serialVersionUID = 1659187386;
 
     public void setId(Long value) {
         set(0, value);
@@ -34,7 +34,7 @@ public class DomainRecord extends UpdatableRecordImpl<DomainRecord> implements R
     }
 
     @NotNull
-    @Size(max = 16777215)
+    @Size(max = 65535)
     public String getName() {
         return (String) get(1);
     }
