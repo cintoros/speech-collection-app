@@ -1,20 +1,14 @@
 <!--source: https://getbootstrap.com/docs/4.4/examples/cover/ -->
-
-
 <header class="masthead mb-auto">
     <div class="inner">
-        <h3 class="masthead-brand" (click)="redirectToPage('/home')">Voice Collection App</h3>
+        <h3 (click)="redirectToPage('/home')" class="masthead-brand">Voice Collection App</h3>
         <nav class="nav nav-masthead justify-content-center">
             <ng-container *ngIf="authService.checkAuthenticated()">
-                <a class="nav-link" (click)="redirectToPage('/record')">Erstellen</a>
-                <a class="nav-link" (click)="redirectToPage('/check')">Prüfen</a>
-                <a class="nav-link" (click)="redirectToPage('/profile')">
-                    {{this.user.username}}
-                </a>
-                <a *ngIf="this.user.gamificationOn" class="nav-link" (click)="redirectToPage('/gamification')">
-                    Errungenschaften &nbsp;
-                    <app-small-medal *ngIf="message > 0" [withRibons]="false" [message]="message" [level]="5">
-                    </app-small-medal>
+                <a (click)="redirectToPage('/record')" class="nav-link">Erstellen</a>
+                <a (click)="redirectToPage('/check')" class="nav-link">Prüfen</a>
+                <a (click)="redirectToPage('/profile')" class="nav-link">{{this.user.username}}</a>
+                <a (click)="redirectToPage('/gamification')" *ngIf="this.user.gamificationOn" class="nav-link">
+                    Errungenschaften &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="false"></app-small-medal>
                 </a>
             </ng-container>
         </nav>
@@ -28,15 +22,18 @@
 </div>
 <footer class="mastfoot mt-auto">
     <p>ETH Zürich, Media Technology Center, Stampfenbachstrasse 48, CH-8092 Zürich</p>
-    <p>Verantwortlich für den Inhalt dieser Seiten <a href="mailto:mtc@ethz.ch">MTC, mtc@ethz.ch</a>.
+    <p>Verantwortlich für den Inhalt dieser Seiten<a href="mailto:mtc@ethz.ch">MTC, mtc@ethz.ch</a>.
     </p>
-    <p><a (click)="redirectToPage('/terms')">Nutzungsbedingungen</a></p>
-    <p>Diese Plattform war Teil der Bachelorarbeit von Viturin Züst. Basierend auf der Plattform der <a
-            href="https://www.cs.technik.fhnw.ch/speech-to-text-labeling-tool/about">FHNW</a>.</p>
-    <a class="admin-links" (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">Prüfen Übersicht</a>
-    <a class="admin-links" (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">Dokument
-        Übersicht</a>
-    <a class="admin-links" (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">Benutzergruppen</a>
-    <a class="admin-links" (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()">Adminbereich</a>
-
+    <p>
+        <a (click)="redirectToPage('/terms')">Nutzungsbedingungen</a>
+    </p>
+    <p>Diese Plattform war Teil der Bachelorarbeit von Viturin Züst. Basierend auf der Plattform der<a
+            href="https://www.cs.technik.fhnw.ch/speech-to-text-labeling-tool/about">FHNW</a>.
+    </p>
+    <a (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()" class="admin-links">Prüfen Übersicht</a>
+    <a (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()" class="admin-links">Dokument
+        Übersicht
+    </a>
+    <a (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()" class="admin-links">Benutzergruppen</a>
+    <a (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()" class="admin-links">Adminbereich</a>
 </footer>
