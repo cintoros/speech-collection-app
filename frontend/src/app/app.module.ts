@@ -1,12 +1,23 @@
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgModule, SecurityContext} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AuthGuardService} from './guards/auth-guard.service';
+import {ProfileComponent} from './components/profile/profile.component';
+import {AvatarComponent} from './components/multi-use/avatar/avatar.component';
+import {OverviewComponent} from './components/admin/overview/overview.component';
+import {CheckComponent} from './components/check/check/check.component';
+import {LoginComponent} from './components/login/login.component';
+import {RecordComponent} from './components/record/record.component';
+import {AuthHeaderInterceptorService} from './services/auth-header-interceptor.service';
+import {ErrorInterceptorService} from './services/error-interceptor.service';
+import {ProfileEditorComponent} from './components/multi-use/profile-editor/profile-editor.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatOptionModule} from '@angular/material/core';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
@@ -70,6 +81,16 @@ import {VerificationTokenComponent} from './components/verification-token/verifi
 import {AdminGuardService} from './guards/admin-guard.service';
 import {AuthGuardService} from './guards/auth-guard.service';
 import {GroupAdminGuardService} from './guards/group-admin-guard.service';
+import {MarkdownModule, MarkdownService} from 'ngx-markdown';
+import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
+import {StatisticsComponent} from './components/admin/statistics/statistics.component';
+import {BarChartModule, LineChartModule} from '@swimlane/ngx-charts';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {AboutComponent} from './components/about/about.component';
+
 import {AuthHeaderInterceptorService} from './services/auth-header-interceptor.service';
 import {ErrorInterceptorService} from './services/error-interceptor.service';
 import {LoadingInterceptorService} from './services/loading-interceptor.service';
@@ -94,7 +115,6 @@ import { TermsComponent } from './components/terms/terms.component';
     LoginComponent,
     ProfileComponent,
     AvatarComponent,
-    CheckMoreComponent,
     RecordComponent,
     ProfileEditorComponent,
     AdminComponent,
@@ -103,6 +123,9 @@ import { TermsComponent } from './components/terms/terms.component';
     UserGroupRoleComponent,
     EditTextAudioComponent,
     DocumentOverviewComponent,
+    VerificationTokenComponent,
+    StatisticsComponent,
+    AboutComponent,
     VerificationTokenComponent,
     ExcerptComponent,
     CheckTextComponent,
@@ -165,6 +188,10 @@ import { TermsComponent } from './components/terms/terms.component';
     }),
     MatTabsModule,
     MatCheckboxModule,
+    LineChartModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    BarChartModule,
     FontAwesomeModule,
   ],
   providers: [

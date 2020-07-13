@@ -4,7 +4,6 @@
 package ch.fhnw.speech_collection_app.jooq.tables;
 
 
-import ch.fhnw.speech_collection_app.jooq.Indexes;
 import ch.fhnw.speech_collection_app.jooq.Keys;
 import ch.fhnw.speech_collection_app.jooq.SpeechCollectionApp;
 import ch.fhnw.speech_collection_app.jooq.tables.records.LanguageRecord;
@@ -15,13 +14,13 @@ import java.util.List;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -30,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Language extends TableImpl<LanguageRecord> {
 
-    private static final long serialVersionUID = 172784031;
+    private static final long serialVersionUID = -21170569;
 
     public static final Language LANGUAGE = new Language();
 
@@ -62,7 +61,7 @@ public class Language extends TableImpl<LanguageRecord> {
     }
 
     private Language(Name alias, Table<LanguageRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     public <O extends Record> Language(Table<O> child, ForeignKey<O, LanguageRecord> key) {
@@ -72,11 +71,6 @@ public class Language extends TableImpl<LanguageRecord> {
     @Override
     public Schema getSchema() {
         return SpeechCollectionApp.SPEECH_COLLECTION_APP;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.LANGUAGE_PRIMARY);
     }
 
     @Override

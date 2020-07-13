@@ -8,6 +8,9 @@ spring:
     banner-mode: off
 server:
   port: 8084
+  error:
+    include-message: always
+    include-binding-errors: always
 speech-collection-app:
   base-path: /home/vzuest/Dokumente/speech-collection-app/data/
   conda-exec: "/home/vzuest/Dokumente/miniconda3/condabin/conda run -n speech_collection_app python /home/vzuest/Dokumente/speech-collection-app/data_import/sentences.py"
@@ -15,3 +18,4 @@ speech-collection-app:
   features:
     email-integration: false
   min-num-checks: 3
+  num-random-select: 40

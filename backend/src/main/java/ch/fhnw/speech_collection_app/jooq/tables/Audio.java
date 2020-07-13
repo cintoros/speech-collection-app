@@ -20,10 +20,11 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Audio extends TableImpl<AudioRecord> {
 
-    private static final long serialVersionUID = 967711132;
+    private static final long serialVersionUID = -64147110;
 
     public static final Audio AUDIO = new Audio();
 
@@ -59,6 +60,8 @@ public class Audio extends TableImpl<AudioRecord> {
 
     public final TableField<AudioRecord, Double> AUDIO_END = createField(DSL.name("audio_end"), org.jooq.impl.SQLDataType.FLOAT.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.FLOAT)), this, "");
 
+    public final TableField<AudioRecord, Double> DURATION = createField(DSL.name("duration"), org.jooq.impl.SQLDataType.FLOAT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.FLOAT)), this, "audio duration in seconds");
+
     public Audio() {
         this(DSL.name("audio"), null);
     }
@@ -76,7 +79,7 @@ public class Audio extends TableImpl<AudioRecord> {
     }
 
     private Audio(Name alias, Table<AudioRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("the audio can be an recording or a extract from a transcipt/audiofile .\ndepending on this we have different meta data"));
+        super(alias, null, aliased, parameters, DSL.comment("the audio can be an recording or a extract from a transcipt/audiofile .\ndepending on this we have different meta data"), TableOptions.table());
     }
 
     public <O extends Record> Audio(Table<O> child, ForeignKey<O, AudioRecord> key) {
@@ -90,7 +93,7 @@ public class Audio extends TableImpl<AudioRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.AUDIO_DATA_ELEMENT_ID, Indexes.AUDIO_DIALECT_ID, Indexes.AUDIO_PRIMARY);
+        return Arrays.<Index>asList(Indexes.AUDIO_DATA_ELEMENT_ID, Indexes.AUDIO_DIALECT_ID);
     }
 
     @Override
@@ -142,11 +145,11 @@ public class Audio extends TableImpl<AudioRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<Long, Long, Long, String, AudioQuality, AudioNoiseLevel, String, Double, Double, Double> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

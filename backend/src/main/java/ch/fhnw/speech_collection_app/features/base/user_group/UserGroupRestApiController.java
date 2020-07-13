@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user_group/{groupId}/")
@@ -85,8 +85,8 @@ public class UserGroupRestApiController {
     }
 
     @GetMapping("occurrence/next")
-    public List<Occurrence> getNextOccurrences(@PathVariable long groupId) {
-        return userGroupService.getNextOccurrences(groupId);
+    public Optional<Occurrence> getNextOccurrences(@PathVariable long groupId) {
+        return userGroupService.getNextOccurrence(groupId);
     }
 
     @PostMapping("check-next")

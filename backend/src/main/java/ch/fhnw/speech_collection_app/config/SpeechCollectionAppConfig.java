@@ -19,6 +19,11 @@ public class SpeechCollectionAppConfig {
     private Long publicGroupId;
     @NotNull
     private Long minNumChecks;
+    /**
+     * number of items fetched for random selection when checking/recording.
+     */
+    @NotNull
+    private Long numRandomSelect;
     @NotNull
     private Features features;
     @NotNull
@@ -79,6 +84,14 @@ public class SpeechCollectionAppConfig {
 
     public void setMinNumChecks(Long minNumChecks) {
         this.minNumChecks = minNumChecks;
+    }
+
+    public Long getNumRandomSelect() {
+        return numRandomSelect;
+    }
+
+    public void setNumRandomSelect(Long numRandomSelect) {
+        this.numRandomSelect = numRandomSelect;
     }
 
     public static class Features {

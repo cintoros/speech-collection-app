@@ -24,6 +24,7 @@ import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CheckedDataElement extends TableImpl<CheckedDataElementRecord> {
 
-    private static final long serialVersionUID = -756371125;
+    private static final long serialVersionUID = -1562789279;
 
     public static final CheckedDataElement CHECKED_DATA_ELEMENT = new CheckedDataElement();
 
@@ -68,7 +69,7 @@ public class CheckedDataElement extends TableImpl<CheckedDataElementRecord> {
     }
 
     private CheckedDataElement(Name alias, Table<CheckedDataElementRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the label of a data_element by a user so we can revert it in case a user produces nonsense"));
+        super(alias, null, aliased, parameters, DSL.comment("this table is used to save the label of a data_element by a user so we can revert it in case a user produces nonsense"), TableOptions.table());
     }
 
     public <O extends Record> CheckedDataElement(Table<O> child, ForeignKey<O, CheckedDataElementRecord> key) {
@@ -82,7 +83,7 @@ public class CheckedDataElement extends TableImpl<CheckedDataElementRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID, Indexes.CHECKED_DATA_ELEMENT_PRIMARY, Indexes.CHECKED_DATA_ELEMENT_USER_ID);
+        return Arrays.<Index>asList(Indexes.CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID, Indexes.CHECKED_DATA_ELEMENT_USER_ID);
     }
 
     @Override

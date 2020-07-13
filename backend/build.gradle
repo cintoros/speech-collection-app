@@ -6,14 +6,16 @@ apply plugin: 'org.springframework.boot'
 description 'module containing the whole spring framework logic'
 
 dependencies {
-    compile 'org.apache.tika:tika-parsers'
-    compile 'org.flywaydb:flyway-core'
-    compile 'org.mariadb.jdbc:mariadb-java-client'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-jooq'
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-mail'
-    compile 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.apache.tika:tika-parsers'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
@@ -54,6 +56,8 @@ jooq {
                 validationAnnotations = true
                 springAnnotations = true
                 records = true
+                //disable java localdate etc.
+                javaTimeTypes = false
             }
             target {
                 packageName = 'ch.fhnw.speech_collection_app.jooq'

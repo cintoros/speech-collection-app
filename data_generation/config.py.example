@@ -1,0 +1,8 @@
+BASE_DIR = "/home/cintoros/Documents/git_repos/speech-collection-app/data/"
+GOOGLE_APPLICATION_CREDENTIALS = "/home/cintoros/Documents/GOOGLE_APPLICATION_CREDENTIALS/file.json"
+AZURE_APPLICATION_KEY = "KEY-1"
+AZURE_APPLICATION_REGION = "westeurope"
+HOST = "localhost"
+DATABASE = "speech_collection_app_data_generation"
+USER = "speech_collection_app_data_generation"
+PASSWORD = "speech_collection_app_data_generation"

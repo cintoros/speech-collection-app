@@ -1,0 +1,7 @@
+jupyter
+pandas
+google-cloud-texttospeech
+pydub
+boto3
+requests
+mysql-connector-python
