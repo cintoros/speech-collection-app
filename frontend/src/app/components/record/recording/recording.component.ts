@@ -1,13 +1,12 @@
-import {HttpClient} from '@angular/common/http';
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {Observable, Subscription, timer} from 'rxjs';
-import {CheckedDataElementType} from 'src/app/models/checked-data-element-type';
-import {DataElementDto} from 'src/app/models/data-element-dto';
-import {ElementType} from 'src/app/models/element-type';
-import {RecordingDto, RecordingNoiseLevel, RecordingQuality} from 'src/app/models/recording-dto';
-import {UserGroupService} from 'src/app/services/user-group.service';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Observable, Subscription, timer } from 'rxjs';
+import { DataElementDto } from 'src/app/models/data-element-dto';
+import { ElementType } from 'src/app/models/element-type';
+import { RecordingDto, RecordingNoiseLevel, RecordingQuality } from 'src/app/models/recording-dto';
+import { UserGroupService } from 'src/app/services/user-group.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-recording',

@@ -1,39 +1,42 @@
+<!--FIXME why bootstrap 4.4 when we are using 3.4-->
 <!--source: https://getbootstrap.com/docs/4.4/examples/cover/ -->
 <header class="masthead mb-auto">
-    <div class="inner">
-        <h3 (click)="redirectToPage('/home')" class="masthead-brand">Voice Collection App</h3>
-        <nav class="nav nav-masthead justify-content-center">
-            <ng-container *ngIf="authService.checkAuthenticated()">
-                <a (click)="redirectToPage('/record')" class="nav-link">Erstellen</a>
-                <a (click)="redirectToPage('/check')" class="nav-link">Prüfen</a>
-                <a (click)="redirectToPage('/profile')" class="nav-link">{{this.user.username}}</a>
-                <a (click)="redirectToPage('/gamification')" *ngIf="this.user.gamificationOn" class="nav-link">
-                    Errungenschaften &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="false"></app-small-medal>
-                </a>
-            </ng-container>
-        </nav>
-    </div>
+  <div class="inner">
+    <h3 (click)="redirectToPage('/home')" class="masthead-brand">Speech Collection App</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      <ng-container *ngIf="authService.checkAuthenticated()">
+        <a (click)="redirectToPage('/record')" class="nav-link">Record</a>
+        <a (click)="redirectToPage('/check')" class="nav-link">Check</a>
+        <a (click)="redirectToPage('/profile')" class="nav-link">{{this.user?.username}}</a>
+        <!--TODO change it so the gamification is on by default.-->
+        <a (click)="redirectToPage('/gamification')" *ngIf="this.user?.gamificationOn" class="nav-link">
+          Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="true"></app-small-medal>
+        </a>
+      </ng-container>
+    </nav>
+  </div>
 </header>
 <div class="container"></div>
 <div class="main">
-    <div class="container">
-        <router-outlet></router-outlet>
-    </div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <footer class="mastfoot mt-auto">
-    <p>ETH Zürich, Media Technology Center, Stampfenbachstrasse 48, CH-8092 Zürich</p>
-    <p>Verantwortlich für den Inhalt dieser Seiten<a href="mailto:mtc@ethz.ch">MTC, mtc@ethz.ch</a>.
-    </p>
-    <p>
-        <a (click)="redirectToPage('/terms')">Nutzungsbedingungen</a>
-    </p>
-    <p>Diese Plattform war Teil der Bachelorarbeit von Viturin Züst. Basierend auf der Plattform der<a
-            href="https://www.cs.technik.fhnw.ch/speech-to-text-labeling-tool/about">FHNW</a>.
-    </p>
-    <a (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()" class="admin-links">Prüfen Übersicht</a>
-    <a (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()" class="admin-links">Dokument
-        Übersicht
-    </a>
-    <a (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()" class="admin-links">Benutzergruppen</a>
-    <a (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()" class="admin-links">Adminbereich</a>
+  <!--TODO probaby redirect to about page instead-->
+  <p>
+    <a (click)="redirectToPage('/terms')">Nutzungsbedingungen</a>
+  </p>
+  <p>
+    <a (click)="redirectToPage('/about')">About</a>
+  </p>
+  <ng-container *ngIf="isGroupAdmin()">
+    <a (click)="redirectToPage('/admin/overview')" class="admin-links">Check Overview</a>
+    <a (click)="redirectToPage('/admin/document_overview')" class="admin-links">Document Overview</a>
+    <a (click)="redirectToPage('/admin/user_group')" class="admin-links">User Group</a>
+  </ng-container>
+  <ng-container *ngIf="isAdmin()">
+    <a (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()" class="admin-links">Admin</a>
+    <a (click)="redirectToPage('/admin/statistics')" *ngIf="isAdmin()" class="admin-links">Statistics</a>
+  </ng-container>
 </footer>

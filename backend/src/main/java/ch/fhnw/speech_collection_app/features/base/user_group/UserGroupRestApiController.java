@@ -1,8 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
-import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +22,7 @@ public class UserGroupRestApiController {
 
     @Autowired
     public UserGroupRestApiController(UserGroupService userGroupService, ObjectMapper objectMapper,
-            AchievementsService achievementsService) {
+                                      AchievementsService achievementsService) {
         this.userGroupService = userGroupService;
         this.objectMapper = objectMapper;
         this.achievementsService = achievementsService;
@@ -32,8 +30,8 @@ public class UserGroupRestApiController {
 
     @PostMapping("recording")
     public void postRecording(@PathVariable long groupId, @RequestParam String recording,
-            @RequestParam MultipartFile file, @RequestParam String otherDataElement,
-            @RequestParam String otherElementType) throws IOException {
+                              @RequestParam MultipartFile file, @RequestParam String otherDataElement,
+                              @RequestParam String otherElementType) throws IOException {
         userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file,
                 objectMapper.readValue(otherDataElement, DataElementDto.class),
                 ReturnWrapper.stringToElementType(otherElementType));
@@ -41,13 +39,13 @@ public class UserGroupRestApiController {
 
     @PostMapping("element/{dataElementId}/checked")
     public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId,
-            @RequestParam CheckedDataElementType type) {
+                                       @RequestParam CheckedDataElementType type) {
         userGroupService.postCheckedDataElement(groupId, dataElementId, type);
     }
 
     @PostMapping("excerpt")
     public ReturnWrapper postExcerpt(@PathVariable long groupId, @RequestParam String text,
-            @RequestParam String otherDataElement, @RequestParam String otherElementType) throws IOException {
+                                     @RequestParam String otherDataElement, @RequestParam String otherElementType) throws IOException {
         return userGroupService.postExcerpt(groupId, objectMapper.readValue(text, TextDto.class),
                 objectMapper.readValue(otherDataElement, DataElementDto.class),
                 ReturnWrapper.stringToElementType(otherElementType));
@@ -60,7 +58,7 @@ public class UserGroupRestApiController {
 
     @PostMapping("checked-data-tuple")
     public void postCheckedDataTuple(@PathVariable long groupId, @RequestParam String tuple,
-            @RequestParam String checkedDataTuple) throws JsonMappingException, JsonProcessingException {
+                                     @RequestParam String checkedDataTuple) throws JsonMappingException, JsonProcessingException {
         userGroupService.postCheckedDataTuple(groupId, objectMapper.readValue(tuple, TupleDto.class),
                 objectMapper.readValue(checkedDataTuple, CheckedDataTuple.class));
     }

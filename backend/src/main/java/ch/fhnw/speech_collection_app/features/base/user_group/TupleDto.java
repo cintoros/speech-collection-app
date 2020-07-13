@@ -1,8 +1,8 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.util.Objects;
-
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+
+import java.util.Objects;
 
 public class TupleDto {
     private Long id;
@@ -18,7 +18,7 @@ public class TupleDto {
     }
 
     public TupleDto(Long id, Long data_element_id_1, Long data_element_id_2, DataTupleType type, Boolean finished,
-            Long correct, Long wrong, Long skipped) {
+                    Long correct, Long wrong, Long skipped) {
         this.id = id;
         this.data_element_id_1 = data_element_id_1;
         this.data_element_id_2 = data_element_id_2;
@@ -27,6 +27,22 @@ public class TupleDto {
         this.correct = correct;
         this.wrong = wrong;
         this.skipped = skipped;
+    }
+
+    public static DataTupleType stringToDataTupleType(final String type) {
+        if (type.equals("\"AUDIO_AUDIO\""))
+            return DataTupleType.AUDIO_AUDIO;
+        if (type.equals("\"AUDIO_TEXT\""))
+            return DataTupleType.AUDIO_TEXT;
+        if (type.equals("\"IMAGE_AUDIO\""))
+            return DataTupleType.IMAGE_AUDIO;
+        if (type.equals("\"IMAGE_TEXT\""))
+            return DataTupleType.IMAGE_TEXT;
+        if (type.equals("\"TEXT_AUDIO\""))
+            return DataTupleType.TEXT_AUDIO;
+        if (type.equals("\"TEXT_TEXT\""))
+            return DataTupleType.TEXT_TEXT;
+        return null;
     }
 
     public Long getId() {
@@ -162,21 +178,5 @@ public class TupleDto {
                 + ", data_element_id_2='" + getData_element_id_2() + "'" + ", type='" + getType() + "'" + ", finished='"
                 + isFinished() + "'" + ", correct='" + getCorrect() + "'" + ", wrong='" + getWrong() + "'"
                 + ", skipped='" + getSkipped() + "'" + "}";
-    }
-
-    public static DataTupleType stringToDataTupleType(final String type) {
-        if (type.equals("\"AUDIO_AUDIO\""))
-            return DataTupleType.AUDIO_AUDIO;
-        if (type.equals("\"AUDIO_TEXT\""))
-            return DataTupleType.AUDIO_TEXT;
-        if (type.equals("\"IMAGE_AUDIO\""))
-            return DataTupleType.IMAGE_AUDIO;
-        if (type.equals("\"IMAGE_TEXT\""))
-            return DataTupleType.IMAGE_TEXT;
-        if (type.equals("\"TEXT_AUDIO\""))
-            return DataTupleType.TEXT_AUDIO;
-        if (type.equals("\"TEXT_TEXT\""))
-            return DataTupleType.TEXT_TEXT;
-        return null;
     }
 }

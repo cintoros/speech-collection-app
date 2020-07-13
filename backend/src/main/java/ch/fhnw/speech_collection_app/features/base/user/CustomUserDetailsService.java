@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     public CustomUserDetailsService(PasswordEncoder passwordEncoder, EmailSenderService emailSenderService,
-            DSLContext dslContext) throws IOException {
+                                    DSLContext dslContext) throws IOException {
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
         this.dslContext = dslContext;

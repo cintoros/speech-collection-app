@@ -1,20 +1,18 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
-import {CheckWrapper} from 'src/app/models/check-wrapper';
-import {CustomUserDetails} from 'src/app/models/spring-principal';
-import {TupleDto, TupleType} from 'src/app/models/tuple-dto';
-import {NumAchievementsService} from 'src/app/services/num-achievements.service';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
+import { CheckWrapper } from 'src/app/models/check-wrapper';
+import { CustomUserDetails } from 'src/app/models/spring-principal';
+import { TupleDto, TupleType } from 'src/app/models/tuple-dto';
+import { NumAchievementsService } from 'src/app/services/num-achievements.service';
 
-import {environment} from '../../../../environments/environment';
-import {AuthService} from '../../../services/auth.service';
-import {SnackBarService} from '../../../services/snack-bar.service';
-import {UserGroupService} from '../../../services/user-group.service';
-import {ShortcutComponent} from '../shortcut/shortcut.component';
-
-import {CheckedOccurrenceLabel} from './checked-occurrence';
+import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../services/auth.service';
+import { SnackBarService } from '../../../services/snack-bar.service';
+import { UserGroupService } from '../../../services/user-group.service';
+import { ShortcutComponent } from '../shortcut/shortcut.component';
 
 export enum OccurrenceMode {
   RECORDING = 'RECORDING',
@@ -28,17 +26,15 @@ export enum OccurrenceMode {
 })
 export class CheckComponent implements OnInit {
   selectedTupleType = TupleType.TEXT_TEXT;
+  tuple: TupleDto;
+  isDebug = false;
+  achievementWrapper: AchievementWrapper;
+  message: string;
+  user: CustomUserDetails;
   private audioPlayer = new Audio();
   private isReady = false;
   private userId: number;
   private groupId = 1;
-  tuple: TupleDto;
-
-  isDebug = false;
-  achievementWrapper: AchievementWrapper;
-
-  message: string;
-  user: CustomUserDetails;
 
   constructor(
       private httpClient: HttpClient, private dialog: MatDialog,

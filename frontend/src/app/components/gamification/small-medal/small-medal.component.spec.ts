@@ -8,9 +8,9 @@ describe('SmallMedalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SmallMedalComponent ]
+      declarations: [SmallMedalComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

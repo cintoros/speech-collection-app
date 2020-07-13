@@ -1,8 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import {NumAchievementsService} from 'src/app/services/num-achievements.service';
-import {UserGroupService} from 'src/app/services/user-group.service';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { NumAchievementsService } from 'src/app/services/num-achievements.service';
+import { UserGroupService } from 'src/app/services/user-group.service';
 
 @Component({
   selector: 'app-num-new-achievements',

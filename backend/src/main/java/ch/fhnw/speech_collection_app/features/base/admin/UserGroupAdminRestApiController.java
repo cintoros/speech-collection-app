@@ -53,7 +53,7 @@ public class UserGroupAdminRestApiController {
 
     @PostMapping("user_group_role")
     public boolean postUserGroupRole(@PathVariable long groupId, @RequestParam String email,
-            @RequestParam UserGroupRoleRole mode) {
+                                     @RequestParam UserGroupRoleRole mode) {
         return userGroupAdminService.postUserGroupRole(email, mode, groupId);
     }
 

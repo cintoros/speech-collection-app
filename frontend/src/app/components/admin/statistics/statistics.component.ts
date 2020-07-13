@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {SeriesValueDto} from './seriesValueDto';
-import {SeriesDto} from './seriesDto';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { environment } from '../../../../environments/environment';
+import { SeriesDto } from './seriesDto';
+import { SeriesValueDto } from './seriesValueDto';
 
 @Component({
   selector: 'app-statistics',
@@ -37,15 +37,15 @@ export class StatisticsComponent implements OnInit {
 
   private reload(date: Date) {
     this.getSeriesDto('basic', date)
-      .subscribe(array => {
-        // we need to convert the json date-string into a javascript string
-        array.forEach(v => v.series.forEach(v1 => v1.name = new Date(v1.name)));
-        this.multi = array;
-      });
+        .subscribe(array => {
+          // we need to convert the json date-string into a javascript string
+          array.forEach(v => v.series.forEach(v1 => v1.name = new Date(v1.name)));
+          this.multi = array;
+        });
     this.getSeriesDto('audio_duration_statistics', date)
-      .subscribe(array => {
-        this.multi2 = [array[0]];
-        this.single1 = array[1].series;
-      });
+        .subscribe(array => {
+          this.multi2 = [array[0]];
+          this.single1 = array[1].series;
+        });
   }
 }

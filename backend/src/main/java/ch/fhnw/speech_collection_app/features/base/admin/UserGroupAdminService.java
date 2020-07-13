@@ -31,7 +31,7 @@ public class UserGroupAdminService {
 
     @Autowired
     public UserGroupAdminService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
-            SpeechCollectionAppConfig speechCollectionAppConfig) {
+                                 SpeechCollectionAppConfig speechCollectionAppConfig) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;

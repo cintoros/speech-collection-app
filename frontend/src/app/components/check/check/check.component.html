@@ -1,92 +1,90 @@
-<app-tuple-selector *ngIf="isDebug" [elementType]="selectedTupleType" (elementTypeClicked)="onSelectorChange($event)">
+<app-tuple-selector (elementTypeClicked)="onSelectorChange($event)" *ngIf="isDebug" [elementType]="selectedTupleType">
 </app-tuple-selector>
 
 <div *ngIf="tuple">
-    <!-- instructions -->
-    <p class="card">
-        <!-- Case: TEXT_TEXT -->
-        <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
-        <!-- Case: AUDIO_AUDIO -->
-        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
-        <!-- Case: TEXT_AUDIO -->
-        <span *ngIf="tuple.type === 'TEXT_AUDIO'">Passt der Satz und die Aufnahme zusammen?</span>
-        <!-- Case: AUDIO_TEXT -->
-        <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
-        <!-- Case: IMAGE_AUDIO -->
-        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
-        <!-- Case: IMAGE_TEXT -->
-        <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
+  <!-- instructions -->
+  <p class="card">
+    <!-- Case: TEXT_TEXT -->
+    <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
+    <!-- Case: AUDIO_AUDIO -->
+    <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
+    <!-- Case: TEXT_AUDIO -->
+    <span *ngIf="tuple.type === 'TEXT_AUDIO'">Passt der Satz und die Aufnahme zusammen?</span>
+    <!-- Case: AUDIO_TEXT -->
+    <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
+    <!-- Case: IMAGE_AUDIO -->
+    <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
+    <!-- Case: IMAGE_TEXT -->
+    <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
 
-        <!-- Universal case -->
-        Dann klicke auf das
-        <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br />
-        sonst auf das
-        <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
-    </p>
+    <!-- Universal case -->
+    Dann klicke auf das
+    <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br/>
+    sonst auf das
+    <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
+  </p>
 
-    <!-- The card component -->
-    <mat-card class="center">
-        <!-- Case: TEXT_TEXT -->
-        <span *ngIf="tuple.type === 'TEXT_TEXT'">
+  <!-- The card component -->
+  <mat-card class="center">
+    <!-- Case: TEXT_TEXT -->
+    <span *ngIf="tuple.type === 'TEXT_TEXT'">
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
-        <!-- Case: AUDIO_AUDIO -->
-        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">
+    <!-- Case: AUDIO_AUDIO -->
+    <span *ngIf="tuple.type === 'AUDIO_AUDIO'">
             <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
         </span>
-        <!-- Case: TEXT_AUDIO -->
-        <span *ngIf="tuple.type === 'TEXT_AUDIO'">
+    <!-- Case: TEXT_AUDIO -->
+    <span *ngIf="tuple.type === 'TEXT_AUDIO'">
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
         </span>
-        <!-- Case: AUDIO_TEXT -->
-        <span *ngIf="tuple.type === 'AUDIO_TEXT'">
+    <!-- Case: AUDIO_TEXT -->
+    <span *ngIf="tuple.type === 'AUDIO_TEXT'">
             <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
-        <!-- Case: IMAGE_AUDIO -->
-        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">
+    <!-- Case: IMAGE_AUDIO -->
+    <span *ngIf="tuple.type === 'IMAGE_AUDIO'">
             <app-image [dataElementId]="tuple.data_element_id_1"></app-image>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
         </span>
-        <!-- Case: IMAGE_TEXT -->
-        <span *ngIf="tuple.type === 'IMAGE_TEXT'">
+    <!-- Case: IMAGE_TEXT -->
+    <span *ngIf="tuple.type === 'IMAGE_TEXT'">
             <app-image [dataElementId]="tuple.data_element_id_1"></app-image>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
 
 
-
-        <app-check-checker [tuple]="tuple" (completed)="afterCheck($event)"></app-check-checker>
-    </mat-card>
-
+    <app-check-checker (completed)="afterCheck($event)" [tuple]="tuple"></app-check-checker>
+  </mat-card>
 
 
-    <br />
+  <br/>
 
-    <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
+  <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
 </div>
 
 <div *ngIf="!tuple">
-    <div style="height: calc(100% - 90px);">
-        <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
-            <div style="font-weight: bold; font-size: 36px;">
-                Wir sind für heute fertig.
-            </div>
-        </mat-card>
-    </div>
+  <div style="height: calc(100% - 90px);">
+    <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
+      <div style="font-weight: bold; font-size: 36px;">
+        Wir sind für heute fertig.
+      </div>
+    </mat-card>
+  </div>
 </div>

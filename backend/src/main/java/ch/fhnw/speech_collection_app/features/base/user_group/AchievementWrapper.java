@@ -11,7 +11,7 @@ public class AchievementWrapper {
     }
 
     public AchievementWrapper(AchievementDto achievementDto, UserAchievementDto userAchievementDto,
-            Long percentOfUsers) {
+                              Long percentOfUsers) {
         this.achievementDto = achievementDto;
         this.userAchievementDto = userAchievementDto;
         this.percentOfUsers = percentOfUsers;

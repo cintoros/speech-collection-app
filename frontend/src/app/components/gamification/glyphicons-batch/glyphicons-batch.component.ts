@@ -1,5 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {faCoffee} from '@fortawesome/free-solid-svg-icons';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-glyphicons-batch',
@@ -16,7 +15,8 @@ export class GlyphiconsBatchComponent implements OnInit {
   color3: string;
 
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.getColor();

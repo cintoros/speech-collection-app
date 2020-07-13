@@ -1,25 +1,22 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-import {CustomUserDetails} from '../models/spring-principal';
+import { CustomUserDetails } from '../models/spring-principal';
 
-import {AuthService} from './auth.service';
-import {SnackBarService} from './snack-bar.service';
-import {UserGroupService} from './user-group.service';
+import { AuthService } from './auth.service';
+import { SnackBarService } from './snack-bar.service';
+import { UserGroupService } from './user-group.service';
 
 @Injectable({providedIn: 'root'})
 export class NumAchievementsService {
-  private messageSource = new BehaviorSubject('0');
-  currentMessage = this.messageSource.asObservable();
-
   oldnumber: number;
   hasIncreased: Boolean;
-
   groupId: number;
-
   user: CustomUserDetails;
+  private messageSource = new BehaviorSubject('0');
+  currentMessage = this.messageSource.asObservable();
 
   constructor(
       public authService: AuthService, private httpClient: HttpClient,
@@ -33,7 +30,7 @@ export class NumAchievementsService {
   }
 
   changeMessage(message: string) {
-    this.messageSource.next(message)
+    this.messageSource.next(message);
   }
 
   getHasIncreased() {
@@ -48,9 +45,10 @@ export class NumAchievementsService {
             `${environment.url}user_group/${this.groupId}/numNewAchievements`)
         .subscribe((res) => {
           this.changeMessage(res.toString());
-          if (res > this.oldnumber && this.user.gamificationOn)
+          if (res > this.oldnumber && this.user.gamificationOn) {
             this.snackBarService.openMessage(
                 'Neue Errungenschaft freigeschaltet');
+          }
           ;
           this.oldnumber = res;
         });

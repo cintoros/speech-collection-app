@@ -8,9 +8,9 @@ describe('GlyphiconsBatchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GlyphiconsBatchComponent ]
+      declarations: [GlyphiconsBatchComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

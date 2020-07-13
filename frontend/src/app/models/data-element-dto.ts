@@ -9,14 +9,14 @@ export class DataElementDto {
   skipped: number;
 
   constructor(
-    $id: number,
-    $sourceId: number,
-    $userId: number,
-    $userGroupId: number,
-    $createdTime: Date,
-    $finished: boolean,
-    $isPrivate: boolean,
-    $skipped: number
+      $id: number,
+      $sourceId: number,
+      $userId: number,
+      $userGroupId: number,
+      $createdTime: Date,
+      $finished: boolean,
+      $isPrivate: boolean,
+      $skipped: number
   ) {
     this.id = $id;
     this.sourceId = $sourceId;

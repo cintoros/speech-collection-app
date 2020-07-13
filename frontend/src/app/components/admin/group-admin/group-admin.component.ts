@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {UserGroupService} from '../../../services/user-group.service';
-import {UserGroupRoleRole} from '../../../models/spring-principal';
-import {Domain} from '../../../models/domain';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { Domain } from '../../../models/domain';
+import { UserGroupRoleRole } from '../../../models/spring-principal';
+import { UserGroupService } from '../../../services/user-group.service';
 
 @Component({
   selector: 'app-group-admin',
@@ -21,7 +21,7 @@ export class GroupAdminComponent implements OnInit {
 
   constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
     this.userGroupService.getUserGroups()
-      .subscribe(v => this.groupDescription = v.find(value => value.id === this.userGroupService.userGroupId).description);
+        .subscribe(v => this.groupDescription = v.find(value => value.id === this.userGroupService.userGroupId).description);
   }
 
   ngOnInit() {

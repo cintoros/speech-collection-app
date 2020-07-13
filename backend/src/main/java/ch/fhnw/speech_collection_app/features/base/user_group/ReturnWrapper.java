@@ -1,6 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.util.*;
+import java.util.Objects;
 
 public class ReturnWrapper {
     private DataElementDto dataElementDto;
@@ -14,13 +14,25 @@ public class ReturnWrapper {
     }
 
     public ReturnWrapper(DataElementDto dataElementDto, TextDto textDto, AudioDto audioDto, ImageDto imageDto,
-            ElementType elementType, AchievementWrapper achievementWrapper) {
+                         ElementType elementType, AchievementWrapper achievementWrapper) {
         this.dataElementDto = dataElementDto;
         this.textDto = textDto;
         this.audioDto = audioDto;
         this.imageDto = imageDto;
         this.elementType = elementType;
         this.achievementWrapper = achievementWrapper;
+    }
+
+    public static ElementType stringToElementType(final String type) {
+        if (type.equals("\"TEXT\""))
+            return ElementType.TEXT;
+        if (type.equals("\"AUDIO\""))
+            return ElementType.AUDIO;
+        if (type.equals("\"IMAGE\""))
+            return ElementType.IMAGE;
+        if (type.equals("\"TEXT_OR_IMAGE\""))
+            return ElementType.TEXT_OR_IMAGE;
+        return null;
     }
 
     public DataElementDto getDataElementDto() {
@@ -126,18 +138,6 @@ public class ReturnWrapper {
         return "{" + " dataElementDto='" + getDataElementDto() + "'" + ", textDto='" + getTextDto() + "'"
                 + ", audioDto='" + getAudioDto() + "'" + ", imageDto='" + getImageDto() + "'" + ", elementType='"
                 + getElementType() + "'" + ", achievementWrapper='" + getAchievementWrapper() + "'" + "}";
-    }
-
-    public static ElementType stringToElementType(final String type) {
-        if (type.equals("\"TEXT\""))
-            return ElementType.TEXT;
-        if (type.equals("\"AUDIO\""))
-            return ElementType.AUDIO;
-        if (type.equals("\"IMAGE\""))
-            return ElementType.IMAGE;
-        if (type.equals("\"TEXT_OR_IMAGE\""))
-            return ElementType.TEXT_OR_IMAGE;
-        return null;
     }
 
     public enum ElementType {

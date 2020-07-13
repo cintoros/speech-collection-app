@@ -2,11 +2,6 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 public class CantonClass {
 
-    public enum CantonEnum {
-        CH_AG, CH_AI, CH_AR, CH_BL, CH_BE, CH_BS, CH_FR, CH_GE, CH_GL, CH_GR, CH_JU, CH_LU, CH_NE, CH_NW, CH_OW, CH_SG,
-        CH_SH, CH_SO, CH_SZ, CH_TG, CH_TI, CH_UR, CH_VD, CH_VS, CH_ZG, CH_ZH,
-    }
-
     public static String enumToCountyId(CantonEnum canton) {
         switch (canton) {
             case CH_AG:
@@ -64,5 +59,10 @@ public class CantonClass {
             default:
                 return "";
         }
+    }
+
+    public enum CantonEnum {
+        CH_AG, CH_AI, CH_AR, CH_BL, CH_BE, CH_BS, CH_FR, CH_GE, CH_GL, CH_GR, CH_JU, CH_LU, CH_NE, CH_NW, CH_OW, CH_SG,
+        CH_SH, CH_SO, CH_SZ, CH_TG, CH_TI, CH_UR, CH_VD, CH_VS, CH_ZG, CH_ZH,
     }
 }

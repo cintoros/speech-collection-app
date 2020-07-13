@@ -1,5 +1,3 @@
-import {ElementType} from './element-type';
-
 export class TupleDto {
   id: number;
   data_element_id_1: number;

@@ -1,9 +1,9 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
+import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
+
 import java.sql.Timestamp;
 import java.util.Objects;
-
-import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 
 public class AchievementDto {
     private Long id;
@@ -27,9 +27,9 @@ public class AchievementDto {
     }
 
     public AchievementDto(Long id, Long domain_id, String name, String batch_name, String title, Timestamp start_time,
-            Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
-            String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+                          Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
+                          String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
+                          AchievementsDependsOn depends_on) {
         this.id = id;
         this.domain_id = domain_id;
         this.name = name;

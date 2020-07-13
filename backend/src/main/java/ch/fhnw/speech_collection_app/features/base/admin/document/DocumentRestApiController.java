@@ -41,7 +41,7 @@ public class DocumentRestApiController {
             @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam long lastId,
             @RequestParam long pageSize, @RequestParam boolean before
     ) {
-        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize,before);
+        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize, before);
     }
 
     @DeleteMapping("{sourceId}/element/{dataElementId}")

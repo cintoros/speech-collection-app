@@ -1,14 +1,14 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {environment} from '../../../../environments/environment';
-import {Dialect} from '../../../models/dialect';
-import {EmailPassword} from '../../../models/email-password';
-import {User} from '../../../models/user';
-import {AuthService} from '../../../services/auth.service';
-import {DialectService} from '../../../services/dialect.service';
-import {SnackBarService} from '../../../services/snack-bar.service';
+import { environment } from '../../../../environments/environment';
+import { Dialect } from '../../../models/dialect';
+import { EmailPassword } from '../../../models/email-password';
+import { User } from '../../../models/user';
+import { AuthService } from '../../../services/auth.service';
+import { DialectService } from '../../../services/dialect.service';
+import { SnackBarService } from '../../../services/snack-bar.service';
 
 @Component({
   selector: 'app-profile-editor',
@@ -33,7 +33,8 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
       private formBuilder: FormBuilder,
       private snackBarService: SnackBarService, private httpClient: HttpClient,
       private authService: AuthService,
-      private dialectService: DialectService) {}
+      private dialectService: DialectService) {
+  }
 
   ngOnInit() {
     this.dialectService.getDialects().subscribe(v => this.dialects = v);

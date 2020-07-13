@@ -1,56 +1,56 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-6">
-            <a href="/record">
-                <app-record-animation></app-record-animation>
-                <button type="button" class="btn btn-primary btn-lg btn-block">
-                    Jetzt aufnehmen
-                </button>
-            </a>
-        </div>
-        <div class="col-sm-6">
-            <a href="/check">
-                <app-check-animation></app-check-animation>
-                <button type="button" class="btn btn-primary btn-lg btn-block">
-                    Jetzt prüfen
-                </button>
-            </a>
-        </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <a href="/record">
+        <app-record-animation></app-record-animation>
+        <button class="btn btn-primary btn-lg btn-block" type="button">
+          Jetzt aufnehmen
+        </button>
+      </a>
+    </div>
+    <div class="col-sm-6">
+      <a href="/check">
+        <app-check-animation></app-check-animation>
+        <button class="btn btn-primary btn-lg btn-block" type="button">
+          Jetzt prüfen
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <img alt="image loading failed :(" class="img-responsive" src="assets/img/sva.png"/>
+    </div>
+    <div class="col-sm-6">
+      <h3>Unser Anliegen</h3>
+      <p>
+        Sprache ist natürlich, Sprache ist menschlich. Deshalb haben wir grosses
+        Interesse daran, brauchbare Technologien zur Spracherkennung für unsere
+        Geräte zu erschaffen. Allerdings wird zur Entwicklung sprachbasierter
+        Systeme eine sehr grosse Menge an Aufnahmen von gesprochener Sprache
+        benötigt.
+      </p>
+      <p>
+        Nun ist es an Dir! Hilf uns, indem du Deine Stimme spendest, eine
+        gemeinfreie schweizerdeutsche Sprachdatenbank aufzubauen, mit der jeder
+        von nun an innovative Geräte- oder Webanwendungen erschaffen kann.
+      </p>
     </div>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <img src="assets/img/sva.png" class="img-responsive" alt="image loading failed :(" />
-        </div>
-        <div class="col-sm-6">
-            <h3>Unser Anliegen</h3>
-            <p>
-                Sprache ist natürlich, Sprache ist menschlich. Deshalb haben wir grosses
-                Interesse daran, brauchbare Technologien zur Spracherkennung für unsere
-                Geräte zu erschaffen. Allerdings wird zur Entwicklung sprachbasierter
-                Systeme eine sehr grosse Menge an Aufnahmen von gesprochener Sprache
-                benötigt.
-            </p>
-            <p>
-                Nun ist es an Dir! Hilf uns, indem du Deine Stimme spendest, eine
-                gemeinfreie schweizerdeutsche Sprachdatenbank aufzubauen, mit der jeder
-                von nun an innovative Geräte- oder Webanwendungen erschaffen kann.
-            </p>
-        </div>
-
-        <div *ngIf="this.user.gamificationOn" class="col-sm-4">
-            <h3>Nächste Errungenschaft</h3>
-            <p>Du findest weitere Erfolge im Errungenschaften-Abschnitt.</p>
-            <app-batch [achievementWrapper]="activeAchievementWrapper"></app-batch>
-        </div>
-        <div *ngIf="this.user.gamificationOn" class="col-sm-8">
-            <h3>Kampf der Kantone</h3>
-            <p>
-                Die Grafik zeigt die Kantone mit den meisten Punkten pro Einwohner. Hilf
-                Deinem Kanton indem du fleissig aufnimmst, Übersetzungen generierst und
-                Aufnahmen prüfst.
-            </p>
-            <app-map></app-map>
-        </div>
+    <div *ngIf="this.user.gamificationOn" class="col-sm-4">
+      <h3>Nächste Errungenschaft</h3>
+      <p>Du findest weitere Erfolge im Errungenschaften-Abschnitt.</p>
+      <app-batch [achievementWrapper]="activeAchievementWrapper"></app-batch>
     </div>
+    <div *ngIf="this.user.gamificationOn" class="col-sm-8">
+      <h3>Kampf der Kantone</h3>
+      <p>
+        Die Grafik zeigt die Kantone mit den meisten Punkten pro Einwohner. Hilf
+        Deinem Kanton indem du fleissig aufnimmst, Übersetzungen generierst und
+        Aufnahmen prüfst.
+      </p>
+      <app-map></app-map>
+    </div>
+  </div>
 </div>

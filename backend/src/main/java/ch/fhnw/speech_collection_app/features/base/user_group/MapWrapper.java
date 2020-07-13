@@ -1,8 +1,8 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.util.Objects;
-
 import ch.fhnw.speech_collection_app.features.base.user_group.CantonClass.CantonEnum;
+
+import java.util.Objects;
 
 public class MapWrapper {
     CantonEnum canton;

@@ -30,7 +30,7 @@
   </button>
   <br>
   <mat-label (click)="imageUpload.click()" class="click-me">select images for uploading</mat-label>
-  <input #imageUpload (change)="handleImageUpload($event.target.files)" hidden multiple type="file" accept="image/*">
+  <input #imageUpload (change)="handleImageUpload($event.target.files)" accept="image/*" hidden multiple type="file">
   <button (click)="imageUpload.click()" mat-icon-button title="Upload File">
     <mat-icon>cloud_upload</mat-icon>
   </button>

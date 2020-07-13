@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import { Component, Input, OnInit } from '@angular/core';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
   selector: 'app-daily-goal',
@@ -9,9 +9,11 @@ import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 export class DailyGoalComponent implements OnInit {
   @Input() achievementWrapper: AchievementWrapper;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
     var points = achievementWrapper.userAchievementDto.points;
@@ -20,10 +22,18 @@ export class DailyGoalComponent implements OnInit {
     var lvl3 = achievementWrapper.achievementDto.points_lvl3;
     var lvl4 = achievementWrapper.achievementDto.points_lvl4;
 
-    if (points - lvl4 >= 0) return 4;
-    if (points - lvl3 >= 0) return 3;
-    if (points - lvl2 >= 0) return 2;
-    if (points - lvl1 >= 0) return 1;
+    if (points - lvl4 >= 0) {
+      return 4;
+    }
+    if (points - lvl3 >= 0) {
+      return 3;
+    }
+    if (points - lvl2 >= 0) {
+      return 2;
+    }
+    if (points - lvl1 >= 0) {
+      return 1;
+    }
     return 0;
   }
 

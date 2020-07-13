@@ -1,5 +1,5 @@
-import {AchievementWrapper} from './achievement-wrapper';
-import {TupleDto} from './tuple-dto';
+import { AchievementWrapper } from './achievement-wrapper';
+import { TupleDto } from './tuple-dto';
 
 export class CheckWrapper {
   tupleDto: TupleDto;

@@ -1,23 +1,23 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DocumentOverviewComponent} from './components/admin/document-overview/document-overview.component';
-import {GroupAdminComponent} from './components/admin/group-admin/group-admin.component';
-import {AdminComponent} from './components/admin/groups-admin/admin.component';
-import {OverviewComponent} from './components/admin/overview/overview.component';
-import {CheckComponent} from './components/check/check/check.component';
-import {GamificationComponent} from './components/gamification/gamification.component';
-import {HomeComponent} from './components/home/home.component';
-import {LoginComponent} from './components/login/login.component';
-import {NavigationMenuComponent} from './components/navigation-menu/navigation-menu.component';
-import {ProfileComponent} from './components/profile/profile.component';
-import {RecordRandomComponent} from './components/record/record-random/record-random.component';
-import {TermsComponent} from './components/terms/terms.component';
-import {VerificationTokenComponent} from './components/verification-token/verification-token.component';
-import {AdminGuardService} from './guards/admin-guard.service';
-import {AuthGuardService} from './guards/auth-guard.service';
-import {GroupAdminGuardService} from './guards/group-admin-guard.service';
-import {StatisticsComponent} from './components/admin/statistics/statistics.component';
-import {AboutComponent} from './components/about/about.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AboutComponent } from './components/about/about.component';
+import { DocumentOverviewComponent } from './components/admin/document-overview/document-overview.component';
+import { GroupAdminComponent } from './components/admin/group-admin/group-admin.component';
+import { AdminComponent } from './components/admin/groups-admin/admin.component';
+import { OverviewComponent } from './components/admin/overview/overview.component';
+import { StatisticsComponent } from './components/admin/statistics/statistics.component';
+import { CheckComponent } from './components/check/check/check.component';
+import { GamificationComponent } from './components/gamification/gamification.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { RecordRandomComponent } from './components/record/record-random/record-random.component';
+import { TermsComponent } from './components/terms/terms.component';
+import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
+import { AdminGuardService } from './guards/admin-guard.service';
+import { AuthGuardService } from './guards/auth-guard.service';
+import { GroupAdminGuardService } from './guards/group-admin-guard.service';
 
 const routes: Routes = [
   {
@@ -48,7 +48,7 @@ const routes: Routes = [
   },
   {path: 'login', component: LoginComponent},
   {path: 'token', component: VerificationTokenComponent},
-  {path: '**', redirectTo: '/home'}
+  {path: '**', redirectTo: '/home'},
 ];
 
 @NgModule({imports: [RouterModule.forRoot(routes)], exports: [RouterModule]})

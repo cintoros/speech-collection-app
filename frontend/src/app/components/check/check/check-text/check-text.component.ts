@@ -1,14 +1,16 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: "app-check-text",
-  templateUrl: "./check-text.component.html",
-  styleUrls: ["./check-text.component.scss"],
+  selector: 'app-check-text',
+  templateUrl: './check-text.component.html',
+  styleUrls: ['./check-text.component.scss'],
 })
 export class CheckTextComponent implements OnInit {
-  constructor() {}
-
   @Input() excerpt_text: string;
 
-  ngOnInit(): void {}
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
 }

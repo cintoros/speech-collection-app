@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import {EmailPassword} from '../../models/email-password';
-import {User} from '../../models/user';
-import {AuthService} from '../../services/auth.service';
-import {FeaturesService} from '../../services/features.service';
+import { EmailPassword } from '../../models/email-password';
+import { User } from '../../models/user';
+import { AuthService } from '../../services/auth.service';
+import { FeaturesService } from '../../services/features.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
       private fb: FormBuilder, private authService: AuthService,
-      private router: Router, private featuresService: FeaturesService) {}
+      private router: Router, private featuresService: FeaturesService) {
+  }
 
   ngOnInit() {
     this.featuresService.getFeatureFlags().subscribe(

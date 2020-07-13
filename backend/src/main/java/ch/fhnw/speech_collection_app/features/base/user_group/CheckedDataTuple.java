@@ -1,8 +1,8 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
-import java.util.Objects;
-
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
+
+import java.util.Objects;
 
 public class CheckedDataTuple {
     private Long id;

@@ -1,20 +1,18 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { UserGroupService } from "src/app/services/user-group.service";
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { UserGroupService } from 'src/app/services/user-group.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-image",
-  templateUrl: "./image.component.html",
-  styleUrls: ["./image.component.scss"],
+  selector: 'app-image',
+  templateUrl: './image.component.html',
+  styleUrls: ['./image.component.scss'],
 })
 export class ImageComponent implements OnInit {
   temp: SafeUrl;
-
-  private groupId = 1;
-
   @Input() dataElementId: number;
+  private groupId = 1;
 
   constructor(private httpClient: HttpClient, private domSanitizer: DomSanitizer, private userGroupService: UserGroupService) {
     this.groupId = this.userGroupService.userGroupId;
@@ -26,9 +24,9 @@ export class ImageComponent implements OnInit {
 
   private getImage() {
     this.httpClient
-      .get(`${environment.url}user_group/${this.groupId}/image/${this.dataElementId}`, { responseType: "blob" })
-      .subscribe((resp) => {
-        this.temp = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(resp));
-      });
+        .get(`${environment.url}user_group/${this.groupId}/image/${this.dataElementId}`, {responseType: 'blob'})
+        .subscribe((resp) => {
+          this.temp = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(resp));
+        });
   }
 }

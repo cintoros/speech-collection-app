@@ -3,8 +3,6 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.features.base.user_group.CantonClass.CantonEnum;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
-import net.sf.ehcache.search.aggregator.Count;
-
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +11,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static ch.fhnw.speech_collection_app.jooq.Tables.ACHIEVEMENTS;
-import static ch.fhnw.speech_collection_app.jooq.Tables.USER_ACHIEVEMENTS;
-import static ch.fhnw.speech_collection_app.jooq.Tables.USER;
-import static ch.fhnw.speech_collection_app.jooq.Tables.DIALECT;
+import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
 public class AchievementsService {
@@ -36,9 +31,9 @@ public class AchievementsService {
     }
 
     public Long createAchievement(String name, String batch_name, String title, Long domain_id, Timestamp start_time,
-            Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
-            String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on, Boolean isVisible) {
+                                  Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
+                                  String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
+                                  AchievementsDependsOn depends_on, Boolean isVisible) {
 
         AchievementDto batch = dslContext.select().from(ACHIEVEMENTS)
                 .where(ACHIEVEMENTS.NAME.eq(name).and(ACHIEVEMENTS.BATCH_NAME.eq(batch_name))
@@ -77,8 +72,8 @@ public class AchievementsService {
     }
 
     public Long createMonthAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
-            String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+                                       String description_lvl2, String description_lvl3, String description_lvl4,
+                                       AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
@@ -100,8 +95,8 @@ public class AchievementsService {
     }
 
     public Long createDayAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
-            String description_lvl2, String description_lvl3, String description_lvl4,
-            AchievementsDependsOn depends_on) {
+                                     String description_lvl2, String description_lvl3, String description_lvl4,
+                                     AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);

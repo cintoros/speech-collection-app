@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ElementType } from 'src/app/models/element-type';
 
 @Component({
   selector: 'app-record-random',
@@ -6,10 +7,12 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./record-random.component.scss']
 })
 export class RecordRandomComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-
   selection = ElementType.TEXT_OR_IMAGE;
+
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
 }
-import {ElementType} from 'src/app/models/element-type';
+

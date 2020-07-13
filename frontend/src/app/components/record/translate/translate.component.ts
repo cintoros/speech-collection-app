@@ -1,12 +1,12 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DataElementDto} from 'src/app/models/data-element-dto';
-import {ElementType} from 'src/app/models/element-type';
-import {ReturnWrapper} from 'src/app/models/return-wrapper';
-import {TextDto} from 'src/app/models/text-dto';
-import {NumAchievementsService} from 'src/app/services/num-achievements.service';
-import {UserGroupService} from 'src/app/services/user-group.service';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DataElementDto } from 'src/app/models/data-element-dto';
+import { ElementType } from 'src/app/models/element-type';
+import { ReturnWrapper } from 'src/app/models/return-wrapper';
+import { TextDto } from 'src/app/models/text-dto';
+import { NumAchievementsService } from 'src/app/services/num-achievements.service';
+import { UserGroupService } from 'src/app/services/user-group.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-translate',
@@ -32,11 +32,16 @@ export class TranslateComponent implements OnInit {
     this.groupId = this.userGroupService.userGroupId;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   submit_text(): void {
-    if (this.translatedText.length < 3) return;
-    if (this.isTranslated) return;
+    if (this.translatedText.length < 3) {
+      return;
+    }
+    if (this.isTranslated) {
+      return;
+    }
     const text = new TextDto(-1, -1, -1, false, this.translatedText);
     const formData = new FormData();
     formData.append(`text`, JSON.stringify(text));

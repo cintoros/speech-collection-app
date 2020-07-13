@@ -8,9 +8,9 @@ describe('CheckAnimationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CheckAnimationComponent ]
+      declarations: [CheckAnimationComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,10 +1,10 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, Input, OnInit} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {environment} from '../../../../environments/environment';
-import {UserGroupRoleRole} from '../../../models/spring-principal';
-import {SnackBarService} from '../../../services/snack-bar.service';
-import {UserGroupService} from '../../../services/user-group.service';
+import { environment } from '../../../../environments/environment';
+import { UserGroupRoleRole } from '../../../models/spring-principal';
+import { SnackBarService } from '../../../services/snack-bar.service';
+import { UserGroupService } from '../../../services/user-group.service';
 
 interface UserGroupRoleDto {
   username: string;
@@ -28,7 +28,8 @@ export class UserGroupRoleComponent implements OnInit {
   constructor(
       private httpClient: HttpClient,
       private userGroupService: UserGroupService,
-      private snackBarService: SnackBarService) {}
+      private snackBarService: SnackBarService) {
+  }
 
   ngOnInit(): void {
     this.baseUrl = `${environment.url}user_group/${

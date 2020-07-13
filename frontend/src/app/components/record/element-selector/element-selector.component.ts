@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ElementType} from 'src/app/models/element-type';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ElementType } from 'src/app/models/element-type';
 
 @Component({
   selector: 'app-element-selector',
@@ -14,7 +14,9 @@ export class ElementSelectorComponent implements OnInit {
   text = ElementType.TEXT;
   audio = ElementType.AUDIO;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

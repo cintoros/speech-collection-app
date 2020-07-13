@@ -1,17 +1,17 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { environment } from "../../../../environments/environment";
-import { HttpClient } from "@angular/common/http";
-import { UserGroupService } from "src/app/services/user-group.service";
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserGroupService } from 'src/app/services/user-group.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: "app-audio",
-  templateUrl: "./audio.component.html",
-  styleUrls: ["./audio.component.scss"],
+  selector: 'app-audio',
+  templateUrl: './audio.component.html',
+  styleUrls: ['./audio.component.scss'],
 })
 export class AudioComponent implements OnInit {
   isPlaying = false;
   audioProgress = 0;
-
+  @Input() dataElementId: number;
   private audioPlayer = new Audio();
   private isReady = false;
   private groupId = 1;
@@ -20,11 +20,10 @@ export class AudioComponent implements OnInit {
     this.groupId = this.userGroupService.userGroupId;
   }
 
-  @Input() dataElementId: number;
-
   ngOnInit(): void {
     this.loadAudioBlob();
   }
+
   togglePlay() {
     this.isReady = true;
     if (this.isPlaying) {
@@ -48,11 +47,11 @@ export class AudioComponent implements OnInit {
 
   private loadAudioBlob(): void {
     this.httpClient
-      .get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${this.dataElementId}`, { responseType: "blob" })
-      .subscribe((resp) => {
-        this.audioPlayer = new Audio(URL.createObjectURL(resp));
-        this.audioPlayer.onended = () => (this.isPlaying = false);
-        this.audioPlayer.ontimeupdate = () => (this.audioProgress = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100);
-      });
+        .get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${this.dataElementId}`, {responseType: 'blob'})
+        .subscribe((resp) => {
+          this.audioPlayer = new Audio(URL.createObjectURL(resp));
+          this.audioPlayer.onended = () => (this.isPlaying = false);
+          this.audioPlayer.ontimeupdate = () => (this.audioProgress = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100);
+        });
   }
 }

@@ -1,9 +1,9 @@
-import {AchievementWrapper} from './achievement-wrapper';
-import {DataElementDto} from './data-element-dto';
-import {ElementType} from './element-type';
-import {ImageDto} from './image-dto';
-import {RecordingDto} from './recording-dto';
-import {TextDto} from './text-dto';
+import { AchievementWrapper } from './achievement-wrapper';
+import { DataElementDto } from './data-element-dto';
+import { ElementType } from './element-type';
+import { ImageDto } from './image-dto';
+import { RecordingDto } from './recording-dto';
+import { TextDto } from './text-dto';
 
 export class ReturnWrapper {
   dataElementDto: DataElementDto;

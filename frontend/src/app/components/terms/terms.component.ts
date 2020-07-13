@@ -5,9 +5,11 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './terms.component.html',
   styleUrls: ['./terms.component.scss']
 })
+// TODO combine with about page?
 export class TermsComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

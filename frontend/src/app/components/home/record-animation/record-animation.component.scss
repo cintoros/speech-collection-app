@@ -1,16 +1,17 @@
 html, body {
-	height: 100%;
+  height: 100%;
 }
 
 
 .loader {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   height: 500px;
 }
-img{
+
+img {
   height: 400px;
   max-width: 80%;
   width: auto;
@@ -21,7 +22,8 @@ img{
   color: black;
   position: absolute;
   z-index: 5;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   font-size: larger;
   background-color: rgba($color: white, $alpha: 0.9);
   margin: 5%;
@@ -30,38 +32,38 @@ img{
 #wave {
   fill: #000;
   max-width: 80%;
-	-webkit-animation-play-state: paused; 
-   animation-play-state: paused; 
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
 }
 
 #wave:hover {
-	-webkit-animation-play-state: running; 
-   animation-play-state: running; 
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
 }
 
-@for $i from 1 through 9{
-	#Line_#{$i} {
-		animation: pulse 3s infinite;
-		animation-delay: $i * .15s;
-		-webkit-animation-play-state: inherit; 
-    	animation-play-state: inherit; 
-	}
+@for $i from 1 through 9 {
+  #Line_#{$i} {
+    animation: pulse 3s infinite;
+    animation-delay: $i * .15s;
+    -webkit-animation-play-state: inherit;
+    animation-play-state: inherit;
+  }
 }
 
 @keyframes pulse {
-	0% {
-		transform: scaleY(1);
-		transform-origin: 50% 50%;
-	}
-	
-	50% {
-		transform: scaleY(.3);
-		transform-origin: 50% 50%;
-		fill: #428bca;
-	}
-	
-	100% {
-		transform: scaleY(1);
-		transform-origin: 50% 50%;
-	}
+  0% {
+    transform: scaleY(1);
+    transform-origin: 50% 50%;
+  }
+
+  50% {
+    transform: scaleY(.3);
+    transform-origin: 50% 50%;
+    fill: #428bca;
+  }
+
+  100% {
+    transform: scaleY(1);
+    transform-origin: 50% 50%;
+  }
 }

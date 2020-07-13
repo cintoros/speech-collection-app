@@ -8,9 +8,9 @@ describe('RecordAnimationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordAnimationComponent ]
+      declarations: [RecordAnimationComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

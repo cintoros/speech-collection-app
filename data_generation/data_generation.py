@@ -1,20 +1,20 @@
-from contextlib import closing
-from multiprocessing import Pool
-from xml.etree import ElementTree
-
 import io
 import logging
-import mysql.connector
 import os
-import pandas
-import requests
 import threading
 import time
+from contextlib import closing
+from multiprocessing import Pool
+from typing import Union
+from xml.etree import ElementTree
+
+import mysql.connector
+import pandas
+import requests
 from boto3 import Session
 from google.cloud import texttospeech
 from google.oauth2 import service_account
 from pydub import AudioSegment
-from typing import Union
 
 from config import *
 

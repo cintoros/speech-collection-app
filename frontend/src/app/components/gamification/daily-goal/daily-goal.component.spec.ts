@@ -8,9 +8,9 @@ describe('DailyGoalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DailyGoalComponent ]
+      declarations: [DailyGoalComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

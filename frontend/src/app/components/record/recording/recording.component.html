@@ -1,15 +1,15 @@
 <audio [src]="blobUrl" controls></audio>
-<br />
-<br />
-<button (click)="startRecord()" *ngIf="!this.isRecording" title="Start recording" class="btn btn-danger button">
-    <app-mic-symbol class="symbol"></app-mic-symbol>
+<br/>
+<br/>
+<button (click)="startRecord()" *ngIf="!this.isRecording" class="btn btn-danger button" title="Start recording">
+  <app-mic-symbol class="symbol"></app-mic-symbol>
 </button>
 <button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
-    <mat-icon>stop</mat-icon>
-    <span>&nbsp;Stop</span>
+  <mat-icon>stop</mat-icon>
+  <span>&nbsp;Stop</span>
 </button>
-<button (click)="submit_recording()" *ngIf="this.submitable" color="primary" title="Submit your recording"
-    class="btn btn-primary">
-    Submit
+<button (click)="submit_recording()" *ngIf="this.submitable" class="btn btn-primary" color="primary"
+        title="Submit your recording">
+  Submit
 </button>
 <span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>

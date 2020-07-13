@@ -18,11 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
@@ -35,7 +35,7 @@ public class UserGroupService {
 
     @Autowired
     public UserGroupService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
-            SpeechCollectionAppConfig speechCollectionAppConfig, AchievementsService achievementsService) {
+                            SpeechCollectionAppConfig speechCollectionAppConfig, AchievementsService achievementsService) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
         this.speechCollectionAppConfig = speechCollectionAppConfig;
@@ -43,7 +43,7 @@ public class UserGroupService {
     }
 
     public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElementDto otherDataElement,
-            ElementType otherElementType) throws IOException {
+                              ElementType otherElementType) throws IOException {
         checkAllowed(groupId);
 
         // creation of the Recording component
@@ -107,7 +107,7 @@ public class UserGroupService {
     }
 
     public ReturnWrapper postExcerpt(long groupId, TextDto textDto, DataElementDto otherDataElement,
-            ElementType otherElementType) {
+                                     ElementType otherElementType) {
         checkAllowed(groupId);
 
         // creation of the Text component
@@ -295,6 +295,7 @@ public class UserGroupService {
                 .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(TextDto.class);
         return res.get(ThreadLocalRandom.current().nextInt(res.size()));
     }
+
     public TextDto getExcerpt2(Long groupId) {
         checkAllowed(groupId);
         return dslContext.select(TEXT.ID, TEXT.DIALECT_ID, TEXT.DATA_ELEMENT_ID, TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
@@ -362,6 +363,7 @@ public class UserGroupService {
         return dslContext.select().from(TEXT.innerJoin(DATA_ELEMENT).onKey()).where(DATA_ELEMENT.ID.eq(dataElementID))
                 .fetchOneInto(TextDto.class);
     }
+
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {
         checkAllowed(groupId);
         var type = CheckedDataTupleType.valueOf(checkedOccurrence.label.toString());
@@ -395,6 +397,7 @@ public class UserGroupService {
         if (res.isEmpty()) return Optional.empty();
         return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
     }
+
     public List<Occurrence> getNextOccurrences2(long groupId) {
         checkAllowed(groupId);
         var image_element = DATA_TUPLE.as("image_element");
@@ -416,6 +419,7 @@ public class UserGroupService {
                                         CHECKED_DATA_TUPLE.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))
                 .orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
     }
+
     public byte[] getAudio(long groupId, long dataElementId) throws IOException {
         checkDataElement(groupId, dataElementId);
         var path = dslContext.selectFrom(AUDIO).where(AUDIO.DATA_ELEMENT_ID.eq(dataElementId)).fetchOne(AUDIO.PATH);

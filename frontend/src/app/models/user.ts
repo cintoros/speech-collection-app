@@ -35,7 +35,7 @@ export class User {
   zipCode: string;
   notCh: boolean;
   lastOnline: Date;
-  gamificationOn: Boolean
+  gamificationOn: Boolean;
 
 
   constructor(

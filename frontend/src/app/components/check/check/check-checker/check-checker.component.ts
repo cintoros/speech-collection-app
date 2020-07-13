@@ -1,10 +1,10 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CheckedDataTuple, CheckedDataTupleType} from 'src/app/models/checked-data-tuple';
-import {CheckedTupleWrapper} from 'src/app/models/checked-tuple-wrapper';
-import {TupleDto, TupleType} from 'src/app/models/tuple-dto';
-import {UserGroupService} from 'src/app/services/user-group.service';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CheckedDataTuple, CheckedDataTupleType } from 'src/app/models/checked-data-tuple';
+import { CheckedTupleWrapper } from 'src/app/models/checked-tuple-wrapper';
+import { TupleDto } from 'src/app/models/tuple-dto';
+import { UserGroupService } from 'src/app/services/user-group.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-check-checker',
@@ -27,7 +27,8 @@ export class CheckCheckerComponent implements OnInit {
     this.groupId = this.userGroupService.userGroupId;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   buttonClicked(button: CheckedDataTupleType) {
     var checkedDataTuple: CheckedDataTuple =

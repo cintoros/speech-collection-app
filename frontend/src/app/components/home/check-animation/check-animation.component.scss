@@ -1,28 +1,29 @@
 html, body {
-	height: 100%;
+  height: 100%;
 }
 
 
 .loader {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 500px;
-	
+
 }
-img{
+
+img {
   height: 400px;
   max-width: 80%;
   width: auto;
   margin: auto;
 }
 
-#tick{
+#tick {
   max-width: 80%;
   width: auto;
 }
 
-.element{
+.element {
   margin: auto;
 }
 
@@ -31,7 +32,8 @@ img{
   color: black;
   position: absolute;
   z-index: 5;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   font-size: larger;
   background-color: rgba($color: white, $alpha: 0.9);
   margin: 5%;

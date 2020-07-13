@@ -1,5 +1,5 @@
-import {CheckedDataTuple} from './checked-data-tuple';
-import {TupleDto} from './tuple-dto';
+import { CheckedDataTuple } from './checked-data-tuple';
+import { TupleDto } from './tuple-dto';
 
 export class CheckedTupleWrapper {
   tuple: TupleDto;

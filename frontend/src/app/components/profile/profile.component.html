@@ -1,51 +1,51 @@
 <div *ngIf="user" style="height: 40%; margin-top: -12px;  display: flex; justify-content: center;">
-    <mat-card class="card" *ngIf="user" id="header-card">
+  <mat-card *ngIf="user" class="card" id="header-card">
+    <br>
+    <div>
+      <app-profile-editor (output)="toggleProfileEdit()" *ngIf="!isPasswordEdit" [disabled]="!isProfileEdit"
+                          [isNewUser]="false" [user]="copyUser()"></app-profile-editor>
+      <ng-container *ngIf="!isProfileEdit&&!isPasswordEdit">
         <br>
-        <div>
-            <app-profile-editor (output)="toggleProfileEdit()" *ngIf="!isPasswordEdit" [disabled]="!isProfileEdit"
-                [isNewUser]="false" [user]="copyUser()"></app-profile-editor>
-            <ng-container *ngIf="!isProfileEdit&&!isPasswordEdit">
-                <br>
-                <button (click)="toggleProfileEdit()" class="btn btn-default">Profil ändern</button>
-                <button (click)="togglePasswordEdit()" class="btn btn-default">Passwort ändern
-                </button>
-                <button (click)="authService.logout(true)" class="btn btn-primary">Abmelden</button>
-            </ng-container>
-            <ng-container *ngIf="isPasswordEdit">
-                <form (ngSubmit)="changePassword()" [formGroup]="changePasswordForm">
-                    <div>
-                        <div>
-                            <mat-form-field style="width: 100%;">
-                                <input autocomplete="current-password" formControlName="password" matInput
-                                    placeholder="Old Password" type="password">
-                                <mat-error *ngIf="isOldPwError('required')">Bitte gib dein altes Passwort ein
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div>
-                            <mat-form-field style="width: 100%;">
-                                <input autocomplete="new-password" formControlName="newPassword" matInput
-                                    placeholder="New Password" type="password">
-                                <mat-error *ngIf="isNewPwError('required')">Bitte gib dein neues Passwort ein
-                                </mat-error>
-                                <mat-error *ngIf="isNewPwError('minlength')">zu kurz!</mat-error>
-                                <mat-error *ngIf="isNewPwError('maxlength')">zu lang!</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div>
-                            <button mat-button
-                                style="border: lightgray 1px solid; padding: 0 12px; line-height: 48px; bottom: 0;"
-                                type="submit">Speichern
-                            </button>
-                            <button (click)="togglePasswordEdit()" mat-button
-                                style="border: lightgray 1px solid; padding: 0 12px; line-height: 48px; bottom: 0;"
-                                type="button">
-                                Abbrechen
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </ng-container>
-        </div>
-    </mat-card>
+        <button (click)="toggleProfileEdit()" class="btn btn-default">Profil ändern</button>
+        <button (click)="togglePasswordEdit()" class="btn btn-default">Passwort ändern
+        </button>
+        <button (click)="authService.logout(true)" class="btn btn-primary">Abmelden</button>
+      </ng-container>
+      <ng-container *ngIf="isPasswordEdit">
+        <form (ngSubmit)="changePassword()" [formGroup]="changePasswordForm">
+          <div>
+            <div>
+              <mat-form-field style="width: 100%;">
+                <input autocomplete="current-password" formControlName="password" matInput
+                       placeholder="Old Password" type="password">
+                <mat-error *ngIf="isOldPwError('required')">Bitte gib dein altes Passwort ein
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field style="width: 100%;">
+                <input autocomplete="new-password" formControlName="newPassword" matInput
+                       placeholder="New Password" type="password">
+                <mat-error *ngIf="isNewPwError('required')">Bitte gib dein neues Passwort ein
+                </mat-error>
+                <mat-error *ngIf="isNewPwError('minlength')">zu kurz!</mat-error>
+                <mat-error *ngIf="isNewPwError('maxlength')">zu lang!</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <button mat-button
+                      style="border: lightgray 1px solid; padding: 0 12px; line-height: 48px; bottom: 0;"
+                      type="submit">Speichern
+              </button>
+              <button (click)="togglePasswordEdit()" mat-button
+                      style="border: lightgray 1px solid; padding: 0 12px; line-height: 48px; bottom: 0;"
+                      type="button">
+                Abbrechen
+              </button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </mat-card>
 </div>

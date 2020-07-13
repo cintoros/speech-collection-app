@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-triplet-selector',
@@ -9,7 +9,9 @@ export class TripletSelectorComponent implements OnInit {
   @Input() isThreeTuple: boolean;
   @Output() threeTupleClicked = new EventEmitter<boolean>();
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

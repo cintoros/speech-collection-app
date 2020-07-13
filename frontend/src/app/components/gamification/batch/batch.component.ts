@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import { Component, Input, OnInit } from '@angular/core';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
   selector: 'app-batch',
@@ -9,9 +9,11 @@ import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 export class BatchComponent implements OnInit {
   @Input() achievementWrapper: AchievementWrapper;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
     var points = achievementWrapper.userAchievementDto.points;
@@ -20,13 +22,20 @@ export class BatchComponent implements OnInit {
     var lvl3 = achievementWrapper.achievementDto.points_lvl3;
     var lvl4 = achievementWrapper.achievementDto.points_lvl4;
 
-    if (points - lvl4 >= 0) return 4;
-    if (points - lvl3 >= 0) return 3;
-    if (points - lvl2 >= 0) return 2;
-    if (points - lvl1 >= 0) return 1;
+    if (points - lvl4 >= 0) {
+      return 4;
+    }
+    if (points - lvl3 >= 0) {
+      return 3;
+    }
+    if (points - lvl2 >= 0) {
+      return 2;
+    }
+    if (points - lvl1 >= 0) {
+      return 1;
+    }
     return 0;
   }
-
 
 
   getDescription(achievementWrapper: AchievementWrapper): Text {
@@ -50,19 +59,23 @@ export class BatchComponent implements OnInit {
   }
 
 
-
   getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
     var lvl = this.getLevel(achievementWrapper);
-    if (lvl == 4)
+    if (lvl == 4) {
       return achievementWrapper.achievementDto.points_lvl4.toString();
-    if (lvl == 3)
+    }
+    if (lvl == 3) {
       return achievementWrapper.achievementDto.points_lvl4.toString();
-    if (lvl == 2)
+    }
+    if (lvl == 2) {
       return achievementWrapper.achievementDto.points_lvl3.toString();
-    if (lvl == 1)
+    }
+    if (lvl == 1) {
       return achievementWrapper.achievementDto.points_lvl2.toString();
-    if (lvl == 0)
+    }
+    if (lvl == 0) {
       return achievementWrapper.achievementDto.points_lvl1.toString();
+    }
     return '0';
   }
 

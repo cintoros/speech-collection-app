@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
+import { Component, Input, OnInit } from '@angular/core';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
   selector: 'app-progressbar',
@@ -9,9 +9,11 @@ import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
 export class ProgressbarComponent implements OnInit {
   @Input() achievementWrapper: AchievementWrapper;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   getProgressColor(achievementWrapper: AchievementWrapper): String {
     var lvl = this.getLevel(achievementWrapper);
@@ -35,45 +37,65 @@ export class ProgressbarComponent implements OnInit {
     var lvl3 = achievementWrapper.achievementDto.points_lvl3;
     var lvl4 = achievementWrapper.achievementDto.points_lvl4;
 
-    if (points - lvl4 >= 0) return 4;
-    if (points - lvl3 >= 0) return 3;
-    if (points - lvl2 >= 0) return 2;
-    if (points - lvl1 >= 0) return 1;
+    if (points - lvl4 >= 0) {
+      return 4;
+    }
+    if (points - lvl3 >= 0) {
+      return 3;
+    }
+    if (points - lvl2 >= 0) {
+      return 2;
+    }
+    if (points - lvl1 >= 0) {
+      return 1;
+    }
     return 0;
   }
 
   getProgressPercent(achievementWrapper: AchievementWrapper): number {
     var lvl = this.getLevel(achievementWrapper);
-    if (lvl == 4) return 100;
+    if (lvl == 4) {
+      return 100;
+    }
     var points = achievementWrapper.userAchievementDto.points;
-    if (lvl == 3)
+    if (lvl == 3) {
       return (points / achievementWrapper.achievementDto.points_lvl4) * 100;
-    if (lvl == 2)
+    }
+    if (lvl == 2) {
       return (points / achievementWrapper.achievementDto.points_lvl3) * 100;
-    if (lvl == 1)
+    }
+    if (lvl == 1) {
       return (points / achievementWrapper.achievementDto.points_lvl2) * 100;
-    if (lvl == 0)
+    }
+    if (lvl == 0) {
       return (points / achievementWrapper.achievementDto.points_lvl1) * 100;
+    }
     return 0;
   }
 
   getRemainingPoints(achievementWrapper: AchievementWrapper): String {
     var lvl = this.getLevel(achievementWrapper);
     var points = achievementWrapper.userAchievementDto.points.toString();
-    if (lvl == 4) return points;
+    if (lvl == 4) {
+      return points;
+    }
 
-    if (lvl == 3)
+    if (lvl == 3) {
       return points + '/' +
           achievementWrapper.achievementDto.points_lvl4.toString();
-    if (lvl == 2)
+    }
+    if (lvl == 2) {
       return points + '/' +
           achievementWrapper.achievementDto.points_lvl3.toString();
-    if (lvl == 1)
+    }
+    if (lvl == 1) {
       return points + '/' +
           achievementWrapper.achievementDto.points_lvl2.toString();
-    if (lvl == 0)
+    }
+    if (lvl == 0) {
       return points + '/' +
           achievementWrapper.achievementDto.points_lvl1.toString();
+    }
     return '0';
   }
 }

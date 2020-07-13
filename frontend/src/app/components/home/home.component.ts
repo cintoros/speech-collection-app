@@ -1,23 +1,21 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import {AchievementWrapper} from 'src/app/models/achievement-wrapper';
-import {CustomUserDetails} from 'src/app/models/spring-principal';
-import {AuthService} from 'src/app/services/auth.service';
-import {environment} from 'src/environments/environment';
-
-import {UserGroup} from '../../models/user-group';
-import {UserGroupService} from '../../services/user-group.service';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
+import { CustomUserDetails } from 'src/app/models/spring-principal';
+import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
+import { UserGroupService } from '../../services/user-group.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+// TODO fix undefined errors etc.
 export class HomeComponent implements OnInit {
-  private groupId = 1;
   user: CustomUserDetails;
-
   activeAchievementWrapper: AchievementWrapper;
+  private groupId = 1;
 
   constructor(
       public authService: AuthService, private httpClient: HttpClient,

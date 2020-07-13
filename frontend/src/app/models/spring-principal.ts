@@ -2,7 +2,7 @@
  * principal returned by spring.
  * NOTE: not all fields are defined.
  */
-import {User} from './user';
+import { User } from './user';
 
 export interface SpringPrincipal {
   authorities: Array<Authority>;
