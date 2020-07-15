@@ -13,7 +13,7 @@ import { SeriesValueDto } from './seriesValueDto';
 export class StatisticsComponent implements OnInit {
   myDate: Date;
   multi: SeriesDto[] = [];
-  multi2: SeriesDto[];
+  multi2: SeriesDto[] = [];
   single1: SeriesValueDto[] = [];
 
   constructor(private httpClient: HttpClient) {

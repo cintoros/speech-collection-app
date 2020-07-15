@@ -23,6 +23,7 @@ import { UserGroupService } from '../../services/user-group.service';
 // TODO maybe combine with recording component?
 // TODO maybe simplify logic with backend?
 // TODO test all modi ald & new
+// FIXME recording logic does not work e.g. we first need to stop the recroding and only then can we submit it.
 export class RecordComponent implements OnInit {
   selectedElement = ElementType.TEXT_OR_IMAGE;
 

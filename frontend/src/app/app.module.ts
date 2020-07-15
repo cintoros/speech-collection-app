@@ -81,6 +81,8 @@ import { GroupAdminGuardService } from './guards/group-admin-guard.service';
 import { AuthHeaderInterceptorService } from './services/auth-header-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { LoadingInterceptorService } from './services/loading-interceptor.service';
+import { LineChartComponent } from './components/multi-use/line-chart/line-chart.component';
+import { BarChartComponent } from './components/multi-use/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +127,8 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     NumNewAchievementsComponent,
     SmallMedalComponent,
     MapComponent,
+    LineChartComponent,
+    BarChartComponent,
   ],
   imports: [
     BrowserModule,
