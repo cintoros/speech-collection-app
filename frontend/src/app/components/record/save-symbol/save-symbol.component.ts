@@ -1,16 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-save-symbol',
   templateUrl: './save-symbol.component.html',
   styleUrls: ['./save-symbol.component.scss']
 })
-export class SaveSymbolComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+// FIXME why is this a component and not just a asset?
+export class SaveSymbolComponent {
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 import { DataElementDto } from 'src/app/models/data-element-dto';
 import { ElementType } from 'src/app/models/element-type';
@@ -12,7 +12,6 @@ import { environment } from '../../../environments/environment';
 import { CheckedDataElementType } from '../../models/checked-data-element-type';
 import { RecordingDto } from '../../models/recording-dto';
 import { TextDto } from '../../models/text-dto';
-
 import { SnackBarService } from '../../services/snack-bar.service';
 import { UserGroupService } from '../../services/user-group.service';
 
@@ -21,8 +20,11 @@ import { UserGroupService } from '../../services/user-group.service';
   templateUrl: './record.component.html',
   styleUrls: ['./record.component.scss'],
 })
+// TODO maybe combine with recording component?
+// TODO maybe simplify logic with backend?
+// TODO test all modi ald & new
 export class RecordComponent implements OnInit {
-  @Input() selectedElement: ElementType;
+  selectedElement = ElementType.TEXT_OR_IMAGE;
 
   dataElement1: DataElementDto = null;
   dataElement2: DataElementDto = null;
@@ -102,21 +104,21 @@ export class RecordComponent implements OnInit {
     this.getNext();
   }
 
-  private check = (type: CheckedDataElementType) => this.httpClient.post<void>(
-      `${environment.url}user_group/${this.groupId}/element/${
-          this.dataElement1.id}/checked?type=${type}`,
-      {})
-
-  private resetAndNext(elem: ReturnWrapper) {
+  resetAndNext(elem: ReturnWrapper) {
     this.resetFields();
     this.getNext();
   }
 
-  private triggerRecord(elem: ReturnWrapper) {
+  triggerRecord(elem: ReturnWrapper) {
     this.dataElementTranslation = elem.dataElementDto;
     this.textDtoTranslation = elem.textDto;
     this.elementTypeTranslation = elem.elementType;
     this.isTranslated = true;
+  }
+
+  private check(type: CheckedDataElementType) {
+    const url = `${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${type}`;
+    return this.httpClient.post<void>(url, {});
   }
 
   private resetFields() {
@@ -149,16 +151,16 @@ export class RecordComponent implements OnInit {
           this.recordingDto1 = value.recordingDto;
           this.imageDto1 = value.imageDto;
           this.elementType1 = value.elementType;
-          if (this.elementType1 == ElementType.TEXT) {
+          if (this.elementType1 === ElementType.TEXT) {
             this.elementType2 = ElementType.AUDIO;
           }
-          if (this.elementType1 == ElementType.IMAGE) {
+          if (this.elementType1 === ElementType.IMAGE) {
             this.elementType2 = ElementType.AUDIO;
           }
-          if (this.elementType1 == ElementType.AUDIO) {
+          if (this.elementType1 === ElementType.AUDIO) {
             this.elementType2 = ElementType.TEXT;
           }
-          if (this.elementType2 == ElementType.TEXT) {
+          if (this.elementType2 === ElementType.TEXT) {
             this.withTranslation = false;
           }
           this.achievementWrapper = value.achievementWrapper;

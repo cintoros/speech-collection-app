@@ -1,13 +1,9 @@
 <textarea (input)="translatedText = $event.target.value" *ngIf="!isTranslated" class="excerpt_text"
           placeholder="{{ excerpt_text }}"></textarea>
-
-<app-excerpt *ngIf="isTranslated" [excerpt_text]="translatedText" [is_Deactivated]="false"></app-excerpt>
-
+<app-excerpt *ngIf="isTranslated" [excerptText]="translatedText" [isDeactivated]="false"></app-excerpt>
 <br/>
 <br/>
-
 <button (click)="submit_text()" *ngIf="!isTranslated" [class]="isTranslated ? 'btn-success' : 'btn-primary'" class="btn"
         type="button">
-    <span [class]="isTranslated ? 'glyphicon-floppy-saved' : 'glyphicon glyphicon-floppy-disk'"
-          class="glyphicon"></span>
+  <span [class]="isTranslated ? 'glyphicon-floppy-saved' : 'glyphicon glyphicon-floppy-disk'" class="glyphicon"></span>
 </button>

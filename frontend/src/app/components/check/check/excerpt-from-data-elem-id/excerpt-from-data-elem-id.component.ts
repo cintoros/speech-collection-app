@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { TextDto } from 'src/app/models/text-dto';
 import { UserGroupService } from 'src/app/services/user-group.service';
 import { environment } from 'src/environments/environment';
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './excerpt-from-data-elem-id.component.html',
   styleUrls: ['./excerpt-from-data-elem-id.component.scss']
 })
-export class ExcerptFromDataElemIdComponent implements OnInit {
+export class ExcerptFromDataElemIdComponent implements OnInit, OnChanges {
   @Input() dataElementId: number;
   groupId: number;
   textDto: TextDto;

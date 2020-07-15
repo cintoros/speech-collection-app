@@ -7,12 +7,10 @@ import { CheckWrapper } from 'src/app/models/check-wrapper';
 import { CustomUserDetails } from 'src/app/models/spring-principal';
 import { TupleDto, TupleType } from 'src/app/models/tuple-dto';
 import { NumAchievementsService } from 'src/app/services/num-achievements.service';
-
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../services/auth.service';
 import { SnackBarService } from '../../../services/snack-bar.service';
 import { UserGroupService } from '../../../services/user-group.service';
-import { ShortcutComponent } from '../shortcut/shortcut.component';
 
 export enum OccurrenceMode {
   RECORDING = 'RECORDING',
@@ -31,8 +29,6 @@ export class CheckComponent implements OnInit {
   achievementWrapper: AchievementWrapper;
   message: string;
   user: CustomUserDetails;
-  private audioPlayer = new Audio();
-  private isReady = false;
   private userId: number;
   private groupId = 1;
 
@@ -69,21 +65,15 @@ export class CheckComponent implements OnInit {
         });
   }
 
-  openShortcutDialog = () => this.dialog.open(ShortcutComponent, {
-    width: '500px',
-    disableClose: false,
-  })
-
   onSelectorChange($event) {
     this.selectedTupleType = $event;
     this.isDebug ? this.getTupleWithSelection() : this.getTuple();
   }
 
-  afterCheck($event) {
+  afterCheck() {
     this.tuple = null;
     this.isDebug ? this.getTupleWithSelection() : this.getTuple();
   }
-
 
   private getTupleWithSelection() {
     const formData = new FormData();

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataElementDto } from 'src/app/models/data-element-dto';
 import { ElementType } from 'src/app/models/element-type';
 import { ReturnWrapper } from 'src/app/models/return-wrapper';
@@ -13,12 +13,10 @@ import { environment } from 'src/environments/environment';
   templateUrl: './translate.component.html',
   styleUrls: ['./translate.component.scss'],
 })
-export class TranslateComponent implements OnInit {
+export class TranslateComponent {
   @Input() otherDataElement: DataElementDto;
   @Input() otherElementType: ElementType;
   @Output() uploaded = new EventEmitter<ReturnWrapper>();
-
-  recording_sentence = 'Satz auf Schweizerdeutsch';
   isTranslated = false;
   translatedText = '';
   groupId: number;
@@ -30,9 +28,6 @@ export class TranslateComponent implements OnInit {
       private userGroupService: UserGroupService,
       private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
-  }
-
-  ngOnInit(): void {
   }
 
   submit_text(): void {

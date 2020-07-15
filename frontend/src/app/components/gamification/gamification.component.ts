@@ -15,7 +15,6 @@ import { environment } from 'src/environments/environment';
 export class GamificationComponent implements OnInit {
   activeAchievementsWrapper: AchievementWrapper[];
   nonActiveAchievementsWrapper: AchievementWrapper[];
-  levels: number[];
   user: CustomUserDetails;
   private groupId = 1;
 
@@ -33,7 +32,6 @@ export class GamificationComponent implements OnInit {
   ngOnInit(): void {
     this.getActiveAchievements();
     this.getNonActiveAchievements();
-    this.activeAchievementsWrapper.length;
   }
 
 

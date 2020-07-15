@@ -17,12 +17,9 @@ export class RecordingComponent implements OnInit {
   blobUrl: SafeUrl;
   isRecording = false;  // is true when there is an active recording
   submitable = false;
-
-
   @Input() otherDataElement: DataElementDto;
   @Input() otherElementType: ElementType;
   @Output() uploaded = new EventEmitter<string>();
-
   private audioChunks = [];
   // @ts-ignore
   private mediaRecorder: MediaRecorder;

@@ -32,5 +32,5 @@ export interface CustomUserDetails {
   id: number;
   user: User;
   userGroupRoles: UserGroupRole[];
-  gamificationOn: Boolean;
+  gamificationOn: boolean;
 }

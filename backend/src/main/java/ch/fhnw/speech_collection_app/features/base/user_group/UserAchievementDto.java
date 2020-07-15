@@ -2,6 +2,7 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import java.util.Objects;
 
+//TODO refactor variable names
 public class UserAchievementDto {
     private Long id;
     private Long user_id;

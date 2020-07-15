@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
@@ -6,14 +6,8 @@ import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
   templateUrl: './batch.component.html',
   styleUrls: ['./batch.component.scss']
 })
-export class BatchComponent implements OnInit {
+export class BatchComponent {
   @Input() achievementWrapper: AchievementWrapper;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
     const points = achievementWrapper.userAchievementDto.points;
@@ -54,26 +48,26 @@ export class BatchComponent implements OnInit {
     }
   }
 
-  getPoints(achievementWrapper: AchievementWrapper): String {
+  getPoints(achievementWrapper: AchievementWrapper): string {
     return achievementWrapper.userAchievementDto.points.toString();
   }
 
 
-  getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
+  getNextLevelPoints(achievementWrapper: AchievementWrapper): string {
     const lvl = this.getLevel(achievementWrapper);
-    if (lvl == 4) {
+    if (lvl === 4) {
       return achievementWrapper.achievementDto.points_lvl4.toString();
     }
-    if (lvl == 3) {
+    if (lvl === 3) {
       return achievementWrapper.achievementDto.points_lvl4.toString();
     }
-    if (lvl == 2) {
+    if (lvl === 2) {
       return achievementWrapper.achievementDto.points_lvl3.toString();
     }
-    if (lvl == 1) {
+    if (lvl === 1) {
       return achievementWrapper.achievementDto.points_lvl2.toString();
     }
-    if (lvl == 0) {
+    if (lvl === 0) {
       return achievementWrapper.achievementDto.points_lvl1.toString();
     }
     return '0';

@@ -44,7 +44,6 @@ import { EditTextAudioComponent } from './components/admin/overview/edit-text-au
 import { OverviewComponent } from './components/admin/overview/overview.component';
 import { StatisticsComponent } from './components/admin/statistics/statistics.component';
 import { CheckCheckerComponent } from './components/check/check/check-checker/check-checker.component';
-import { CheckTextComponent } from './components/check/check/check-text/check-text.component';
 import { CheckComponent } from './components/check/check/check.component';
 import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
 import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
@@ -70,7 +69,6 @@ import { ElementSelectorComponent } from './components/record/element-selector/e
 import { ExcerptComponent } from './components/record/excerpt/excerpt.component';
 import { ImageComponent } from './components/record/image/image.component';
 import { MicSymbolComponent } from './components/record/mic-symbol/mic-symbol.component';
-import { RecordRandomComponent } from './components/record/record-random/record-random.component';
 import { RecordComponent } from './components/record/record.component';
 import { RecordingComponent } from './components/record/recording/recording.component';
 import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol.component';
@@ -106,7 +104,6 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     AboutComponent,
     VerificationTokenComponent,
     ExcerptComponent,
-    CheckTextComponent,
     SaveSymbolComponent,
     MicSymbolComponent,
     AudioComponent,
@@ -121,7 +118,6 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     GamificationComponent,
     GlyphiconsBatchComponent,
     BatchComponent,
-    RecordRandomComponent,
     RecordAnimationComponent,
     CheckAnimationComponent,
     ProgressbarComponent,

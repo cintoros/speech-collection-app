@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TupleType } from 'src/app/models/tuple-dto';
 
 @Component({
@@ -6,20 +6,13 @@ import { TupleType } from 'src/app/models/tuple-dto';
   templateUrl: './tuple-selector.component.html',
   styleUrls: ['./tuple-selector.component.scss']
 })
-export class TupleSelectorComponent implements OnInit {
+export class TupleSelectorComponent {
   @Input() elementType: TupleType;
   @Output() elementTypeClicked = new EventEmitter<TupleType>();
-
-  text_text = TupleType.TEXT_TEXT;
-  audio_audio = TupleType.AUDIO_AUDIO;
-  text_audio = TupleType.TEXT_AUDIO;
-  audio_text = TupleType.AUDIO_TEXT;
-  image_audio = TupleType.IMAGE_AUDIO;
-  image_text = TupleType.IMAGE_TEXT;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
+  textText = TupleType.TEXT_TEXT;
+  audioAudio = TupleType.AUDIO_AUDIO;
+  textAudio = TupleType.TEXT_AUDIO;
+  audioText = TupleType.AUDIO_TEXT;
+  imageAudio = TupleType.IMAGE_AUDIO;
+  imageText = TupleType.IMAGE_TEXT;
 }

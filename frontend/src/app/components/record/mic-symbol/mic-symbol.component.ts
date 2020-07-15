@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-mic-symbol',
   templateUrl: './mic-symbol.component.html',
   styleUrls: ['./mic-symbol.component.scss']
 })
-export class MicSymbolComponent implements OnInit {
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
+// FIXME why is this a component and not just a asset?
+export class MicSymbolComponent {
 }

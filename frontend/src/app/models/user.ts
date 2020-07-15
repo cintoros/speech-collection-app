@@ -35,14 +35,13 @@ export class User {
   zipCode: string;
   notCh: boolean;
   lastOnline: Date;
-  gamificationOn: Boolean;
+  gamificationOn: boolean;
 
 
   constructor(
-      id: number, firstName: string, lastName: string, email: string,
-      username: string, password: string, dialectId: number, sex: Sex,
-      licence: Licence, age: UserAge, zipCode: string, notCh: boolean,
-      lastOnline: Date, gamificationOn: Boolean) {
+      id: number, firstName: string, lastName: string, email: string, username: string, password: string,
+      dialectId: number, sex: Sex, licence: Licence, age: UserAge, zipCode: string, notCh: boolean, lastOnline: Date,
+      gamificationOn: boolean) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;

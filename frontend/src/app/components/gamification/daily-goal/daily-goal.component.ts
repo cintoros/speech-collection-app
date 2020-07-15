@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
@@ -6,14 +6,8 @@ import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
   templateUrl: './daily-goal.component.html',
   styleUrls: ['./daily-goal.component.scss']
 })
-export class DailyGoalComponent implements OnInit {
+export class DailyGoalComponent {
   @Input() achievementWrapper: AchievementWrapper;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
     const points = achievementWrapper.userAchievementDto.points;
@@ -37,7 +31,7 @@ export class DailyGoalComponent implements OnInit {
     return 0;
   }
 
-  getColorofNextLevel(achievementWrapper: AchievementWrapper): String {
+  getColorofNextLevel(achievementWrapper: AchievementWrapper): string {
     const lvl = this.getLevel(achievementWrapper);
     switch (lvl) {
       case 0:

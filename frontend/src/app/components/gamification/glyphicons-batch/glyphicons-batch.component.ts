@@ -1,22 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-glyphicons-batch',
   templateUrl: './glyphicons-batch.component.html',
   styleUrls: ['./glyphicons-batch.component.scss']
 })
-export class GlyphiconsBatchComponent implements OnInit {
+export class GlyphiconsBatchComponent implements OnInit, OnChanges {
   @Input() glyph: string;
   @Input() level: number;
   @Input() text: string;
-
   color: string;
   color2: string;
   color3: string;
-
-
-  constructor() {
-  }
 
   ngOnInit(): void {
     this.getColor();
@@ -32,7 +27,7 @@ export class GlyphiconsBatchComponent implements OnInit {
         this.color = 'bronze';
         this.color2 = 'bronzeB';
         this.color3 = 'bronzeD';
-
+        break;
       case 1:
         this.color = 'bronze';
         this.color2 = 'bronzeB';

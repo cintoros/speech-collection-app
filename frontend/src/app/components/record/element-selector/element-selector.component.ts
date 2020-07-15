@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ElementType } from 'src/app/models/element-type';
 
 @Component({
@@ -6,17 +6,10 @@ import { ElementType } from 'src/app/models/element-type';
   templateUrl: './element-selector.component.html',
   styleUrls: ['./element-selector.component.scss']
 })
-export class ElementSelectorComponent implements OnInit {
+export class ElementSelectorComponent {
   @Input() elementType: ElementType;
   @Output() elementTypeClicked = new EventEmitter<ElementType>();
-
   image = ElementType.IMAGE;
   text = ElementType.TEXT;
   audio = ElementType.AUDIO;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 }

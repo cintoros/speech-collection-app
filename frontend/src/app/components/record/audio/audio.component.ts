@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './audio.component.html',
   styleUrls: ['./audio.component.scss'],
 })
+// TODO semi-replace with a normal audio player?
 export class AudioComponent implements OnInit {
   isPlaying = false;
   audioProgress = 0;
