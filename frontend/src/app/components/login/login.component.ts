@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { EmailPassword } from '../../models/email-password';
 import { User } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
@@ -41,9 +40,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (this.loginForm.valid) {
       this.authService.login(
-          new EmailPassword(
-              this.loginForm.controls.email.value,
-              this.loginForm.controls.password.value),
+          new EmailPassword(this.loginForm.controls.email.value, this.loginForm.controls.password.value),
           () => null);
     }
   }

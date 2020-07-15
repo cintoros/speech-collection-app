@@ -77,7 +77,6 @@ import { RecordingComponent } from './components/record/recording/recording.comp
 import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol.component';
 import { TranslateComponent } from './components/record/translate/translate.component';
 import { TripletSelectorComponent } from './components/record/triplet-selector/triplet-selector.component';
-import { TermsComponent } from './components/terms/terms.component';
 import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
 import { AdminGuardService } from './guards/admin-guard.service';
 import { AuthGuardService } from './guards/auth-guard.service';
@@ -132,7 +131,6 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     NumNewAchievementsComponent,
     SmallMedalComponent,
     MapComponent,
-    TermsComponent,
   ],
   imports: [
     BrowserModule,

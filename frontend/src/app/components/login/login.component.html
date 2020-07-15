@@ -1,19 +1,16 @@
 <div style="display: flex; align-items: center; justify-content: center;  height: calc(100%);min-height: 85rem;">
   <mat-card *ngIf="isLogin" style="max-width: 500px;width: 90%;">
     <mat-toolbar style="background-color: #428bca; color: azure;">Login</mat-toolbar>
-
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <div>
         <mat-form-field style="width: 100%;">
-          <input autocomplete="username" formControlName="email" matInput placeholder="Benutzername"
-                 type="text">
+          <input autocomplete="username" formControlName="email" matInput placeholder="Benutzername" type="text">
           <mat-error *ngIf="loginForm.invalid">{{getEmailErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field style="width: 100%;">
-          <input autocomplete="password" formControlName="password" matInput placeholder="Passwort"
-                 type="password">
+          <input autocomplete="password" formControlName="password" matInput placeholder="Passwort" type="password">
           <mat-error *ngIf="loginForm.invalid">{{getPasswordErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
@@ -22,7 +19,6 @@
         </button>
       </div>
     </form>
-
     <p>
       <span>Noch kein Konto? Registriere dich </span>
       <a (click)="toggleIsLogin()" href="#">Hier</a>
@@ -44,7 +40,5 @@
   <mat-card *ngIf="!isLogin" style="max-width: 500px; width: 90%;">
     <mat-toolbar style="background-color: #428bca; color: azure;">Registrieren</mat-toolbar>
     <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true" [user]="newUser()"></app-profile-editor>
-
   </mat-card>
-
 </div>
