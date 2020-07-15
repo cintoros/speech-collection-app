@@ -154,14 +154,14 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   }
 
   isCanctonError = (errorCode: string) =>
-      this.registerForm.controls.canton.hasError(errorCode);
+      this.registerForm.controls.canton.hasError(errorCode)
   cancel = () => this.output.emit('cancel');
   isEmailError = (errorCode: string) =>
-      this.registerForm.controls.email.hasError(errorCode);
+      this.registerForm.controls.email.hasError(errorCode)
   isUNError = (errorCode: string) =>
-      this.registerForm.controls.username.hasError(errorCode);
+      this.registerForm.controls.username.hasError(errorCode)
   isPwError = (errorCode: string) =>
-      this.registerForm.controls.password.hasError(errorCode);
+      this.registerForm.controls.password.hasError(errorCode)
   isZipError = (errorCode: string) => !this.registerForm.controls.zipCode.valid;
 
   private checkDisabled() {

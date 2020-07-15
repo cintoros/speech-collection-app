@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./shortcut.component.scss']
 })
 export class ShortcutComponent {
-  constructor(public dialogRef: MatDialogRef<ShortcutComponent>,) {
+  constructor(public dialogRef: MatDialogRef<ShortcutComponent>, ) {
   }
 
   close = () => this.dialogRef.close();

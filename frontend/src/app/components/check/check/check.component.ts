@@ -62,7 +62,7 @@ export class CheckComponent implements OnInit {
         .get<CheckWrapper>(
             `${environment.url}user_group/${this.groupId}/check-next`)
         .subscribe((value: CheckWrapper) => {
-          var res: CheckWrapper = value;
+          const res: CheckWrapper = value;
           this.tuple = value.tupleDto;
           this.achievementWrapper = value.achievementWrapper;
           this.numAchievementsService.getNumber();
@@ -72,7 +72,7 @@ export class CheckComponent implements OnInit {
   openShortcutDialog = () => this.dialog.open(ShortcutComponent, {
     width: '500px',
     disableClose: false,
-  });
+  })
 
   onSelectorChange($event) {
     this.selectedTupleType = $event;

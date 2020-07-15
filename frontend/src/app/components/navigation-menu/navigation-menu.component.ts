@@ -47,5 +47,5 @@ export class NavigationMenuComponent implements OnInit {
 
   toggleSidenav = () => this.sidenav.toggle();
   isAdmin = () => this.user &&
-      this.user.userGroupRoles.find(a => a.role === UserGroupRoleRole.ADMIN);
+      this.user.userGroupRoles.find(a => a.role === UserGroupRoleRole.ADMIN)
 }

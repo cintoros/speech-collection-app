@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SmallMedalComponent implements OnInit {
   @Input() withRibons: Boolean = false;
   @Input() message: String = '';
-  @Input() level: number = 0;
+  @Input() level = 0;
 
   constructor() {
   }

@@ -105,7 +105,7 @@ export class RecordComponent implements OnInit {
   private check = (type: CheckedDataElementType) => this.httpClient.post<void>(
       `${environment.url}user_group/${this.groupId}/element/${
           this.dataElement1.id}/checked?type=${type}`,
-      {});
+      {})
 
   private resetAndNext(elem: ReturnWrapper) {
     this.resetFields();

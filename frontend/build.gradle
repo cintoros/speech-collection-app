@@ -1,7 +1,7 @@
 apply plugin: 'com.moowork.node'
 
 node {
-  version = '12.13.0'
+  version = '14.5.0'
 }
 
 task npmBuild(type: NpmTask) {

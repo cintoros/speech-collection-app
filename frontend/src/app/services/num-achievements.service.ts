@@ -34,7 +34,7 @@ export class NumAchievementsService {
   }
 
   getHasIncreased() {
-    var res = this.hasIncreased;
+    const res = this.hasIncreased;
     this.hasIncreased = false;
     return res;
   }
@@ -49,7 +49,7 @@ export class NumAchievementsService {
             this.snackBarService.openMessage(
                 'Neue Errungenschaft freigeschaltet');
           }
-          ;
+
           this.oldnumber = res;
         });
   }

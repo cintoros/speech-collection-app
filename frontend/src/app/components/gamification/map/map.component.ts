@@ -42,7 +42,7 @@ export class MapComponent implements OnInit {
   CH_VS = 'cantonColor_' + this.score0percent;
   CH_ZG = 'cantonColor_' + this.score0percent;
   CH_ZH = 'cantonColor_' + this.score0percent;
-  groupId: number = 1;
+  groupId = 1;
 
   constructor(
       private httpClient: HttpClient,
@@ -56,7 +56,7 @@ export class MapComponent implements OnInit {
   }
 
   setScores() {
-    for (let mapWrapper of this.cantonScore) {
+    for (const mapWrapper of this.cantonScore) {
       switch (mapWrapper.canton.toString()) {
         case 'CH_AG':
           this.CH_AG =
@@ -279,8 +279,8 @@ export class MapComponent implements OnInit {
   }
 
   getMaxScore() {
-    var max = 0;
-    for (let mapWrapper of this.cantonScore) {
+    let max = 0;
+    for (const mapWrapper of this.cantonScore) {
       if (max < mapWrapper.points * this.getCountyWeight(mapWrapper.canton)) {
         max = mapWrapper.points * this.getCountyWeight(mapWrapper.canton);
       }
@@ -289,7 +289,7 @@ export class MapComponent implements OnInit {
   }
 
   getScore(points: number, weight: number): number {
-    var pts = points * weight;
+    const pts = points * weight;
     return Math.floor(
         this.score0percent -
         (pts / this.maxScore) * (this.score0percent - this.score100percent)

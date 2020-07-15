@@ -31,9 +31,9 @@ export class CheckCheckerComponent implements OnInit {
   }
 
   buttonClicked(button: CheckedDataTupleType) {
-    var checkedDataTuple: CheckedDataTuple =
+    const checkedDataTuple: CheckedDataTuple =
         new CheckedDataTuple(-1, -1, this.tuple.id, button);
-    var checkedTupleWrapper: CheckedTupleWrapper =
+    const checkedTupleWrapper: CheckedTupleWrapper =
         new CheckedTupleWrapper(this.tuple, checkedDataTuple);
 
     const formData = new FormData();

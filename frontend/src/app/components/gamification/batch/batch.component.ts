@@ -16,11 +16,11 @@ export class BatchComponent implements OnInit {
   }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
-    var points = achievementWrapper.userAchievementDto.points;
-    var lvl1 = achievementWrapper.achievementDto.points_lvl1;
-    var lvl2 = achievementWrapper.achievementDto.points_lvl2;
-    var lvl3 = achievementWrapper.achievementDto.points_lvl3;
-    var lvl4 = achievementWrapper.achievementDto.points_lvl4;
+    const points = achievementWrapper.userAchievementDto.points;
+    const lvl1 = achievementWrapper.achievementDto.points_lvl1;
+    const lvl2 = achievementWrapper.achievementDto.points_lvl2;
+    const lvl3 = achievementWrapper.achievementDto.points_lvl3;
+    const lvl4 = achievementWrapper.achievementDto.points_lvl4;
 
     if (points - lvl4 >= 0) {
       return 4;
@@ -39,7 +39,7 @@ export class BatchComponent implements OnInit {
 
 
   getDescription(achievementWrapper: AchievementWrapper): Text {
-    var lvl = this.getLevel(achievementWrapper);
+    const lvl = this.getLevel(achievementWrapper);
     switch (lvl) {
       case 0:
       case 1:
@@ -60,7 +60,7 @@ export class BatchComponent implements OnInit {
 
 
   getNextLevelPoints(achievementWrapper: AchievementWrapper): String {
-    var lvl = this.getLevel(achievementWrapper);
+    const lvl = this.getLevel(achievementWrapper);
     if (lvl == 4) {
       return achievementWrapper.achievementDto.points_lvl4.toString();
     }
@@ -81,7 +81,7 @@ export class BatchComponent implements OnInit {
 
 
   getRemainingDays(achievementWrapper: AchievementWrapper): number {
-    var s = new Date(achievementWrapper.achievementDto.end_time);
+    const s = new Date(achievementWrapper.achievementDto.end_time);
     return this.millisecondsToDays(s.valueOf() - Date.now().valueOf());
   }
 

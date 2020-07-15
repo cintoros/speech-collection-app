@@ -16,11 +16,11 @@ export class DailyGoalComponent implements OnInit {
   }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
-    var points = achievementWrapper.userAchievementDto.points;
-    var lvl1 = achievementWrapper.achievementDto.points_lvl1;
-    var lvl2 = achievementWrapper.achievementDto.points_lvl2;
-    var lvl3 = achievementWrapper.achievementDto.points_lvl3;
-    var lvl4 = achievementWrapper.achievementDto.points_lvl4;
+    const points = achievementWrapper.userAchievementDto.points;
+    const lvl1 = achievementWrapper.achievementDto.points_lvl1;
+    const lvl2 = achievementWrapper.achievementDto.points_lvl2;
+    const lvl3 = achievementWrapper.achievementDto.points_lvl3;
+    const lvl4 = achievementWrapper.achievementDto.points_lvl4;
 
     if (points - lvl4 >= 0) {
       return 4;
@@ -38,7 +38,7 @@ export class DailyGoalComponent implements OnInit {
   }
 
   getColorofNextLevel(achievementWrapper: AchievementWrapper): String {
-    var lvl = this.getLevel(achievementWrapper);
+    const lvl = this.getLevel(achievementWrapper);
     switch (lvl) {
       case 0:
         return 'Bronze';
