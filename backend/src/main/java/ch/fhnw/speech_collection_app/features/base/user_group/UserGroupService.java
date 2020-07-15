@@ -276,7 +276,8 @@ public class UserGroupService {
      */
     public TextDto getExcerpt(Long groupId) {
         checkAllowed(groupId);
-        var res = dslContext.select(TEXT.DATA_ELEMENT_ID, DATA_ELEMENT.IS_PRIVATE, TEXT.TEXT_)
+        //TODO is is sentence error etc. even used anymore
+        var res = dslContext.select(TEXT.ID, TEXT.DIALECT_ID, TEXT.DATA_ELEMENT_ID, TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
                         //only show the ones that are good.
@@ -294,31 +295,6 @@ public class UserGroupService {
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
                 .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(TextDto.class);
         return res.get(ThreadLocalRandom.current().nextInt(res.size()));
-    }
-
-    public TextDto getExcerpt2(Long groupId) {
-        checkAllowed(groupId);
-        return dslContext.select(TEXT.ID, TEXT.DIALECT_ID, TEXT.DATA_ELEMENT_ID, TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
-                .from(TEXT.innerJoin(DATA_ELEMENT).onKey()).where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)
-                        // only show the ones that are good.
-                        .and(DATA_ELEMENT.SKIPPED.lessOrEqual(3L)).and(TEXT.IS_SENTENCE_ERROR.isFalse())
-                        .and(DATA_ELEMENT.FINISHED.isFalse())
-                        .and(DATA_ELEMENT.ID
-                                .notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
-                                        .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2)
-                                                .innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
-                                        // only show the ones that need an additional
-                                        // dialect
-                                        .where(DATA_TUPLE.TYPE.eq(DataTupleType.RECORDING)
-                                                .and(AUDIO.DIALECT_ID
-                                                        .eq(customUserDetailsService.getLoggedInUserDialectId()))))
-                                // only show the ones that are not already skipped.
-                                .and(DATA_ELEMENT.ID.notIn(dslContext.select(CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID)
-                                        .from(CHECKED_DATA_ELEMENT)
-                                        .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
-                                                .and(CHECKED_DATA_ELEMENT.USER_ID
-                                                        .eq(customUserDetailsService.getLoggedInUserId())))))))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(TextDto.class);
     }
 
     /**
@@ -378,6 +354,7 @@ public class UserGroupService {
      * returns the next occurrence to check based on the groupId and available data.<br>
      * occurrences are labeled until it is clear that they clearly wrong|correct.<br>
      */
+    //TODO this is probably no longer used? see check-next method?
     public Optional<Occurrence> getNextOccurrence(long groupId) {
         checkAllowed(groupId);
         var loggedInUserId = customUserDetailsService.getLoggedInUserId();
@@ -398,6 +375,7 @@ public class UserGroupService {
         return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
     }
 
+    //TODO check if the ceck-component still works -> probalby not.
     public List<Occurrence> getNextOccurrences2(long groupId) {
         checkAllowed(groupId);
         var image_element = DATA_TUPLE.as("image_element");

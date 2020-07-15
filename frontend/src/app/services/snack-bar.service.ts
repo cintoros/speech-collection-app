@@ -7,8 +7,7 @@ export class SnackBarService {
   }
 
   openError(error: string): void {
-    // see
-    // https://github.com/angular/components/issues/9875#issuecomment-444218890
+    // see https://github.com/angular/components/issues/9875#issuecomment-444218890
     this.ngZone.run(() => {
       setTimeout(() => {
         this.matSnackBar.open(error, 'schliessen', {
@@ -23,8 +22,7 @@ export class SnackBarService {
   }
 
   openMessage(message: string): void {
-    // see
-    // https://github.com/angular/components/issues/9875#issuecomment-444218890
+    // see https://github.com/angular/components/issues/9875#issuecomment-444218890
     this.ngZone.run(() => {
       setTimeout(() => {
         this.matSnackBar.open(message, 'schliessen', {
