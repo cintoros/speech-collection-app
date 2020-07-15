@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { environment } from '../../../../environments/environment';
 import { Dialect } from '../../../models/dialect';
 import { EmailPassword } from '../../../models/email-password';
 import { User } from '../../../models/user';
 import { AuthService } from '../../../services/auth.service';
 import { DialectService } from '../../../services/dialect.service';
+import { FeaturesService } from '../../../services/features.service';
 import { SnackBarService } from '../../../services/snack-bar.service';
 
 @Component({
@@ -22,6 +22,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   @Input() disabled: boolean;
   registerForm: FormGroup;
   dialects: Dialect[] = [];
+  additionalData: boolean;
   private userCopy: User;
   private zV = [
     Validators.required, Validators.pattern('[0-9]{4}'),
@@ -30,13 +31,14 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   private oldDialectId: number;
 
   constructor(
-      private formBuilder: FormBuilder,
-      private snackBarService: SnackBarService, private httpClient: HttpClient,
-      private authService: AuthService,
-      private dialectService: DialectService) {
+      private formBuilder: FormBuilder, private snackBarService: SnackBarService, private httpClient: HttpClient,
+      private authService: AuthService, private dialectService: DialectService, private featuresService: FeaturesService,
+  ) {
   }
 
   ngOnInit() {
+    this.featuresService.getFeatureFlags().subscribe(
+        v => this.additionalData = v.additionalData);
     this.dialectService.getDialects().subscribe(v => this.dialects = v);
     const cc = {
       firstName: [this.user.firstName, []],
@@ -47,10 +49,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
           Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
         ])
       ],
-      username: [
-        this.user.username,
-        [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]
-      ],
+      username: [this.user.username, [Validators.required, Validators.pattern('^[a-zA-Z0-9-.]+$')]],
       canton: [this.user.dialectId, []],
       zipCode: [this.user.zipCode, this.zV],
       password: undefined,
@@ -100,8 +99,7 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
   }
 
   register(): void {
-    // we need to deep copy the object to prevent updating the object inside the
-    // observables
+    // we need to deep copy the object to prevent updating the object inside the observables
     const firstName = this.registerForm.controls.firstName.value;
     const lastName = this.registerForm.controls.lastName.value;
     const email = this.registerForm.controls.email.value;
@@ -114,54 +112,38 @@ export class ProfileEditorComponent implements OnInit, OnChanges {
     const age = this.registerForm.controls.age.value;
     const notCh = this.registerForm.controls.notCH.value;
     const gamificationOn = this.user.gamificationOn;
+    const lastOnline = this.user.lastOnline;
     const user: User = new User(
         this.user.id, firstName, lastName, email, username, password, dialectId,
-        sex, licence, age, zipCode, notCh, undefined, gamificationOn);
+        sex, licence, age, zipCode, notCh, lastOnline, gamificationOn);
 
     if (this.registerForm.valid) {
       if (this.isNewUser) {
-        this.httpClient.post(environment.url + 'public/register', user)
-            .subscribe(
-                () => {
-                  this.authService.login(
-                      new EmailPassword(user.username, user.password),
-                      () => this.cancel());
-                },
-                () => {
-                  this.snackBarService.openError(
-                      'failed to create user: username/email already taken');
-                });
+        this.httpClient.post(environment.url + 'public/register', user).subscribe(
+            () => this.authService.login(new EmailPassword(user.username, user.password), () => this.cancel()),
+            () => this.snackBarService.openError('failed to create user: username/email already taken'));
       } else {
-        this.httpClient.put(environment.url + 'user', user)
-            .subscribe(
-                () => {
-                  if (this.userCopy.username !== user.username) {
-                    this.snackBarService.openMessage(
-                        'logout caused by username change');
-                    this.authService.logout(false);
-                  } else {
-                    this.authService.reloadUser();
-                    this.cancel();
-                    this.snackBarService.openMessage(
-                        'successfully updated user');
-                  }
-                },
-                error => {
-                  this.snackBarService.openError('failed to update user');
-                });
+        this.httpClient.put(environment.url + 'user', user).subscribe(
+            () => {
+              if (this.userCopy.username !== user.username) {
+                this.snackBarService.openMessage('logout caused by username change');
+                this.authService.logout(false);
+              } else {
+                this.authService.reloadUser();
+                this.cancel();
+                this.snackBarService.openMessage('successfully updated user');
+              }
+            },
+            () => this.snackBarService.openError('failed to update user'));
       }
     }
   }
 
-  isCanctonError = (errorCode: string) =>
-      this.registerForm.controls.canton.hasError(errorCode);
+  isCanctonError = (errorCode: string) => this.registerForm.controls.canton.hasError(errorCode);
   cancel = () => this.output.emit('cancel');
-  isEmailError = (errorCode: string) =>
-      this.registerForm.controls.email.hasError(errorCode);
-  isUNError = (errorCode: string) =>
-      this.registerForm.controls.username.hasError(errorCode);
-  isPwError = (errorCode: string) =>
-      this.registerForm.controls.password.hasError(errorCode);
+  isEmailError = (errorCode: string) => this.registerForm.controls.email.hasError(errorCode);
+  isUNError = (errorCode: string) => this.registerForm.controls.username.hasError(errorCode);
+  isPwError = (errorCode: string) => this.registerForm.controls.password.hasError(errorCode);
   isZipError = (errorCode: string) => !this.registerForm.controls.zipCode.valid;
 
   private checkDisabled() {
