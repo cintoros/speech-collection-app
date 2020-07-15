@@ -96,6 +96,8 @@ public class SpeechCollectionAppConfig {
 
     public static class Features {
         private boolean emailIntegration;
+        private boolean swissGermanText;
+        private boolean additionalData;
 
         public boolean isEmailIntegration() {
             return emailIntegration;
@@ -103,6 +105,22 @@ public class SpeechCollectionAppConfig {
 
         public void setEmailIntegration(boolean emailIntegration) {
             this.emailIntegration = emailIntegration;
+        }
+
+        public boolean isSwissGermanText() {
+            return swissGermanText;
+        }
+
+        public void setSwissGermanText(boolean swissGermanText) {
+            this.swissGermanText = swissGermanText;
+        }
+
+        public boolean isAdditionalData() {
+            return additionalData;
+        }
+
+        public void setAdditionalData(boolean additionalData) {
+            this.additionalData = additionalData;
         }
     }
 }

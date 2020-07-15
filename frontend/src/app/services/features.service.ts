@@ -5,6 +5,8 @@ import { environment } from '../../environments/environment';
 
 interface Features {
   emailIntegration: boolean;
+  swissGermanText: boolean;
+  additionalData: boolean;
 }
 
 @Injectable({
