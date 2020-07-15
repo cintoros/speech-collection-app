@@ -1,6 +1,7 @@
 import logging
-import mysql.connector
 import os
+
+import mysql.connector
 
 from config import *
 

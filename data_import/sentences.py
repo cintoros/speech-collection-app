@@ -1,10 +1,10 @@
+import os
+import re
+import sys
 import wave
 
 import mysql.connector
-import os
-import re
 import spacy
-import sys
 from pydub import AudioSegment
 
 from config import *
