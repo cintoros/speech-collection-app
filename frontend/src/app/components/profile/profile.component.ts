@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { ChangePassword } from '../../models/change-password';
-import { Dialect } from '../../models/dialect';
 import { User } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
 import { DialectService } from '../../services/dialect.service';
@@ -20,10 +19,9 @@ export class ProfileComponent implements OnInit {
   isPasswordEdit = false;
   changePasswordForm: FormGroup;
   user: User;
-  private dialects: Dialect[] = [];
 
   constructor(
-      private authService: AuthService, private httpClient: HttpClient, private formBuilder: FormBuilder,
+      public authService: AuthService, private httpClient: HttpClient, private formBuilder: FormBuilder,
       private snackBarService: SnackBarService, private dialectService: DialectService
   ) {
   }
@@ -38,7 +36,6 @@ export class ProfileComponent implements OnInit {
         Validators.maxLength(50)
       ])]
     });
-    this.dialectService.getDialects().subscribe(v => this.dialects = v);
   }
 
   copyUser = () => JSON.parse(JSON.stringify(this.user));
@@ -46,7 +43,6 @@ export class ProfileComponent implements OnInit {
   togglePasswordEdit = () => this.isPasswordEdit = !this.isPasswordEdit;
   isOldPwError = (errorCode: string) => this.changePasswordForm.controls.password.hasError(errorCode);
   isNewPwError = (errorCode: string) => this.changePasswordForm.controls.newPassword.hasError(errorCode);
-  getCanton = () => this.dialects.find(value => value.id === this.user.id).countyName;
 
   changePassword() {
     this.httpClient.put(environment.url + 'user/password',
@@ -59,6 +55,4 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-
-
 }
