@@ -61,7 +61,6 @@ import { CheckAnimationComponent } from './components/home/check-animation/check
 import { HomeComponent } from './components/home/home.component';
 import { RecordAnimationComponent } from './components/home/record-animation/record-animation.component';
 import { LoginComponent } from './components/login/login.component';
-import { AvatarComponent } from './components/multi-use/avatar/avatar.component';
 import { ProfileEditorComponent } from './components/multi-use/profile-editor/profile-editor.component';
 import { UserGroupRoleComponent } from './components/multi-use/user-group-role/user-group-role.component';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
@@ -94,7 +93,6 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     CheckComponent,
     LoginComponent,
     ProfileComponent,
-    AvatarComponent,
     RecordComponent,
     ProfileEditorComponent,
     AdminComponent,

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-
 import { environment } from '../../../../environments/environment';
 import { UserGroupRoleRole } from '../../../models/spring-principal';
 import { SnackBarService } from '../../../services/snack-bar.service';
@@ -10,7 +9,7 @@ interface UserGroupRoleDto {
   username: string;
   email: string;
   id: number;
-  gamificationOn: Boolean;
+  gamificationOn: boolean;
 }
 
 @Component({
@@ -21,7 +20,7 @@ interface UserGroupRoleDto {
 export class UserGroupRoleComponent implements OnInit {
   @Input() mode: UserGroupRoleRole;
   userGroupRoles: UserGroupRoleDto[] = [];
-  columns = ['avatar', 'username', 'email', 'game', 'change-game', 'remove'];
+  columns = ['username', 'email', 'game', 'change-game', 'remove'];
   userEmail: string;
   private baseUrl: string;
 
