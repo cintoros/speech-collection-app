@@ -9,10 +9,10 @@ from pydub import AudioSegment
 from config import *
 
 connection = mysql.connector.connect(
-    host=host,
-    database=database,
-    user=user,
-    password=password,
+    host=HOST,
+    database=DATABASE,
+    user=USER,
+    password=PASSWORD,
 )
 connection.autocommit = False
 cursor = connection.cursor(dictionary=True)
@@ -39,16 +39,16 @@ def replace_extension(file, new_extension):
 def search_directories():
     try:
         # init directories
-        os.makedirs(os.path.join(base_dir, "text_audio"))
-        os.makedirs(os.path.join(base_dir, "original_text"))
-        os.makedirs(os.path.join(base_dir, "recording"))
+        os.makedirs(os.path.join(BASE_DIR, "text_audio"))
+        os.makedirs(os.path.join(BASE_DIR, "original_text"))
+        os.makedirs(os.path.join(BASE_DIR, "recording"))
     except FileExistsError:
         # directory already exists
         pass
     logging.info('Loading...')
-    entries = os.scandir(os.path.join(base_dir, source_dir))
+    entries = os.scandir(os.path.join(BASE_DIR, SOURCE_DIR))
     for entry in entries:
-        for fileData in os.listdir(os.path.join(base_dir, source_dir, entry.name)):
+        for fileData in os.listdir(os.path.join(BASE_DIR, SOURCE_DIR, entry.name)):
             if fileData.endswith(".xml"):
                 extract_data_to_db(entry.name)
     logging.info('Done!')
@@ -57,16 +57,16 @@ def search_directories():
 def extract_data_to_db(folderNumber: str):
     try:
         logging.info('Loading ' + folderNumber)
-        text_path = os.path.join(source_dir, folderNumber, 'indexes.xml')
-        audio_path = os.path.join(source_dir, folderNumber, 'audio.wav')
+        text_path = os.path.join(SOURCE_DIR, folderNumber, 'indexes.xml')
+        audio_path = os.path.join(SOURCE_DIR, folderNumber, 'audio.wav')
         cursor.execute('insert into source(user_id,user_group_id,path_to_raw_file,name,licence) VALUE(%s,%s,%s,%s,%s)',
-                       [1, 1, audio_path, source_name, source_licence])
+                       [1, 1, audio_path, SOURCE_NAME, SOURCE_LICENCE])
         audio_source_id = get_last_insert_id(cursor)
         cursor.execute('insert into source(user_id,user_group_id,path_to_raw_file,name,licence) VALUE(%s,%s,%s,%s,%s)',
-                       [1, 1, text_path, source_name, source_licence])
+                       [1, 1, text_path, SOURCE_NAME, SOURCE_LICENCE])
         text_source_id = get_last_insert_id(cursor)
-        text_path = os.path.join(base_dir, text_path)
-        audio_path = os.path.join(base_dir, audio_path)
+        text_path = os.path.join(BASE_DIR, text_path)
+        audio_path = os.path.join(BASE_DIR, audio_path)
 
         with open(text_path, encoding='utf-8') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
@@ -116,7 +116,7 @@ def extract_data_to_db(folderNumber: str):
                             channels=f_wave.getnchannels(),
                         )
                         audio_segment = audio_segment.set_channels(1)
-                        audio_segment.export(os.path.join(base_dir, audio_path_to_file),
+                        audio_segment.export(os.path.join(BASE_DIR, audio_path_to_file),
                                              format='flac')
                     else:
                         logging.warning(

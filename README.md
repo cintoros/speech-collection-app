@@ -73,6 +73,12 @@ In case the data_import has changed run:
                 proxy_set_header X-Forwarded-Proto $scheme;
                 proxy_set_header X-Forwarded-Port $server_port;
             }
+            location /dev/ {
+                proxy_pass http://localhost:8085/;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Forwarded-Port $server_port;
+            }
         }
     }
     
@@ -92,7 +98,25 @@ In case the data_import has changed run:
     [Install]
     WantedBy=multi-user.target
     ```
-1. `systemctl enable speech-collection-app.service`
+   `nano /lib/systemd/system/speech-collection-app-dev.service`
+   ```
+   [Unit]
+   Description=Speech Collection App
+   After=network.target
+   [Service]
+   Environment=SPRING_CONFIG_LOCATION=classpath:/,classpath:/config/,file:/home/stt/speech-collection-app-dev/application.yml
+   Type=simple
+   Restart=always
+   RestartSec=1
+   User=stt
+   ExecStart=/usr/bin/java -jar /home/stt/speech-collection-app-dev/backend-1.0.0-SNAPSHOT.jar
+   [Install]
+   WantedBy=multi-user.target
+   ```
+1. `systemctl enable speech-collection-app.service` && `systemctl enable speech-collection-app-dev.service`
 
 ### Configuration
-for password etc. configuration you can add a `application.yml` see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files
+for passwords etc. configuration you can add a `application.yml` see 
+https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files  
+Create a single schema/user for deployments like 
+`create schema <schema>; CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password'; GRANT ALL PRIVILEGES ON <schema> . * TO 'newuser'@'localhost';`

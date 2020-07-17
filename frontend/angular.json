@@ -74,6 +74,14 @@
                   "with": "src/environments/environment.prod2.ts"
                 }
               ]
+            },
+            "prod3": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod3.ts"
+                }
+              ]
             }
           }
         },

@@ -6,10 +6,10 @@ import mysql.connector
 from config import *
 
 connection = mysql.connector.connect(
-    host=host,
-    database=database,
-    user=user,
-    password=password,
+    host=HOST,
+    database=DATABASE,
+    user=USER,
+    password=PASSWORD,
 )
 connection.autocommit = False
 cursor = connection.cursor(dictionary=True)
@@ -28,14 +28,14 @@ def get_last_insert_id(dict_cursor):
 def data_import_2():
     logging.info('Loading...')
     # init directories
-    os.makedirs(os.path.join(base_dir, "text_audio"), exist_ok=True)
-    os.makedirs(os.path.join(base_dir, "original_text"), exist_ok=True)
-    os.makedirs(os.path.join(base_dir, "recording"), exist_ok=True)
+    os.makedirs(os.path.join(BASE_DIR, "text_audio"), exist_ok=True)
+    os.makedirs(os.path.join(BASE_DIR, "original_text"), exist_ok=True)
+    os.makedirs(os.path.join(BASE_DIR, "recording"), exist_ok=True)
     sp = os.path.join("common_voice", "data_de", "sentences.txt")
     cursor.execute('insert into source(user_id,user_group_id,path_to_raw_file,name,licence) VALUE(%s,%s,%s,%s,%s)',
                    [1, 1, sp, "CommonVoice", "CC-0"])
     source_id = get_last_insert_id(cursor)
-    file1 = open(os.path.join(base_dir, sp), "r")
+    file1 = open(os.path.join(BASE_DIR, sp), "r")
     lines = file1.readlines()
     # NOTE mysql/mariadb do not support tablesample so we need to shuffle the data before inserting.
     import random

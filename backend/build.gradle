@@ -74,7 +74,10 @@ task buildProd2 {
   dependsOn ':frontend:npmBuildProd2'
   finalizedBy 'build'
 }
-
+task buildProd3 {
+  dependsOn ':frontend:npmBuildProd3'
+  finalizedBy 'build'
+}
 //angular resources
 processResources {
   from('../frontend/dist/speech_collection_app') { into 'public' }

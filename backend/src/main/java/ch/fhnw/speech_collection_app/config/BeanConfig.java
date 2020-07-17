@@ -1,5 +1,6 @@
 package ch.fhnw.speech_collection_app.config;
 
+import org.jooq.conf.Settings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -35,5 +36,15 @@ public class BeanConfig {
                         .allowedOrigins("*");
             }
         };
+    }
+
+    /**
+     * Disable the schema mapping so it is possible to just change the datasource in the spring configuration
+     * without breaking anything. It is also possible to use override it  in case of multiple schemas.
+     * see https://www.jooq.org/doc/3.13/manual/sql-building/dsl-context/custom-settings/settings-render-mapping/
+     */
+    @Bean
+    public Settings settings() {
+        return new Settings().withRenderSchema(false);
     }
 }
