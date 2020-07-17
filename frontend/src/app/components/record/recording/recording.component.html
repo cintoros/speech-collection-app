@@ -13,18 +13,12 @@
     <mat-option [value]="recordingQuality.DEDICATED">Dedicated</mat-option>
   </mat-select>
 </mat-form-field>
+<br/>
 <audio [src]="blobUrl" controls></audio>
 <br/>
 <br/>
-<button (click)="startRecord()" *ngIf="!this.isRecording" class="btn btn-danger button" title="Start recording">
-  <app-mic-symbol class="symbol"></app-mic-symbol>
-</button>
-<button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
-  <mat-icon>stop</mat-icon>
-  <span>&nbsp;Stop</span>
-</button>
 <button (click)="startRecord()" *ngIf="!this.isRecording" mat-raised-button title="Start recording">
-  <mat-icon>fiber_manual_record</mat-icon>
+  <app-mic-symbol class="symbol"></app-mic-symbol>
   <span>&nbsp;Start</span>
 </button>
 <button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
@@ -39,14 +33,9 @@
 <button (click)="sentenceError()" mat-raised-button title="Mark as 'Not a Single Standard German Sentence'">
   <span>&nbsp;Not a Single Standard German Sentence</span>
 </button>
-<!--<button (click)="private()" [disabled]="textDto.isPrivate" mat-raised-button title="Mark as private">-->
-<!--  <span>&nbsp;Sensitive Data</span>-->
-<!--</button>-->
-<button (click)="submit()" *ngIf="isReady()" color="primary" mat-raised-button
-        title="Submit your recording">Submit
+<button (click)="private()" [disabled]="isPrivate" mat-raised-button title="Mark as private">
+  <span>&nbsp;Sensitive Data</span>
 </button>
-<button (click)="submit_recording()" *ngIf="this.submitable" class="btn btn-primary" color="primary"
-        title="Submit your recording">
-  Submit
+<button (click)="submit()" *ngIf="isReady()" color="primary" mat-raised-button title="Submit your recording">Submit
 </button>
 <span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>

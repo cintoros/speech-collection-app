@@ -7,7 +7,8 @@
   <div class="center">
     <ng-container *ngIf="this.elementType1 === 'TEXT'">
       <ng-container *ngIf="this.elementType2 === 'AUDIO'">
-        <div *ngIf="!withTranslation" style="color: grey;font-size: 1em">
+        <div *ngIf="!withTranslation" style="color: grey;font-size: 1em;text-align: left">
+          <!--TODO maybe make help text collapsable-->
           Record Swiss German speech for a Standard German sentence. Please think about the Swiss German translation of
           the
           sentence first before starting to record.<br>

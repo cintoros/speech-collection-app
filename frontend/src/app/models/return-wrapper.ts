@@ -5,6 +5,7 @@ import { ImageDto } from './image-dto';
 import { RecordingDto } from './recording-dto';
 import { TextDto } from './text-dto';
 
+// FIXME wtf does this do? see java wrapper
 export class ReturnWrapper {
   dataElementDto: DataElementDto;
   textDto: TextDto;

@@ -55,9 +55,9 @@ public class UserGroupService {
         element.setSourceId(otherDataElement.getSourceId());
         element.store();
         var audio = dslContext.newRecord(AUDIO);
-        audio.setNoiseLevel(recording.getAudioNoiseLevel());
-        audio.setBrowserVersion(recording.getBrowserVersion());
-        audio.setQuality(recording.getAudioQuality());
+        audio.setNoiseLevel(recording.audioNoiseLevel);
+        audio.setBrowserVersion(recording.browserVersion);
+        audio.setQuality(recording.audioQuality);
         audio.setDialectId(customUserDetailsService.getLoggedInUserDialectId());
         audio.setPath("default");
         audio.setDataElementId(element.getId());

@@ -21,10 +21,8 @@ import { UserGroupService } from '../../services/user-group.service';
   templateUrl: './record.component.html',
   styleUrls: ['./record.component.scss'],
 })
-// TODO maybe combine with recording component?
-// TODO maybe simplify logic with backend?
-// TODO test all modi ald & new
-// FIXME recording logic does not work e.g. we first need to stop the recroding and only then can we submit it.
+// TODO simplify logic with backend?
+// TODO test all modi ald & new?
 export class RecordComponent implements OnInit {
   selectedElement = ElementType.TEXT_OR_IMAGE;
 
@@ -75,25 +73,10 @@ export class RecordComponent implements OnInit {
     this.getNext();
   }
 
-  // TODO not sure if we should just add this to the excerpt sub component?
-  private() {
-    this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
-      this.snackBarService.openMessage('marked as private');
-      this.isPrivate = true;
-    });
-  }
-
   skip() {
-    this.check(CheckedDataElementType.SKIPPED).subscribe(() => {
+    const url = `${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${CheckedDataElementType.SKIPPED}`;
+    this.httpClient.post<void>(url, {}).subscribe(() => {
       this.snackBarService.openMessage('marked as skipped');
-      this.getNext();
-    });
-  }
-
-  // TODO not sure if we should just add this to the excerpt sub component?
-  sentenceError() {
-    this.check(CheckedDataElementType.SENTENCE_ERROR).subscribe(() => {
-      this.snackBarService.openMessage('marked as "Not a sentence"');
       this.getNext();
     });
   }
@@ -120,11 +103,6 @@ export class RecordComponent implements OnInit {
     this.textDtoTranslation = elem.textDto;
     this.elementTypeTranslation = elem.elementType;
     this.isTranslated = true;
-  }
-
-  private check(type: CheckedDataElementType) {
-    const url = `${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${type}`;
-    return this.httpClient.post<void>(url, {});
   }
 
   private resetFields() {
