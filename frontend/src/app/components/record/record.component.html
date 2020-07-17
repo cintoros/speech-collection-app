@@ -5,50 +5,101 @@
 <div *ngIf="dataElement1">
   <!-- Instructions-->
   <div class="center">
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'TEXT'">Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speichersymbol<app-save-symbol></app-save-symbol>.</span>
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && !withTranslation">Überlege dir einen schweizerdeutschen Satz und Spreche ihn wenn du bereit bist ein, indem du das MikrofonSymbol <app-mic-symbol></app-mic-symbol> drückst.</span>
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && withTranslation">Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speichersymbol <app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofonsymbol <app-mic-symbol></app-mic-symbol> und lies den übersetzten Satz laut vor.</span>
-    <span *ngIf="this.elementType1 === 'AUDIO' && this.elementType2 === 'TEXT'">Höre dir die Aufnahme an, indem du die auf Play klickst, und transkribiere nachher die Aufnahme.</span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && !withTranslation">Überlege dir einen zum Bild passenden schweizerdeutschen Satz. Spreche ihn, sobald du bereit bist ein, indem du auf das Mikrofon Symbol <app-mic-symbol></app-mic-symbol> klickst.</span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'TEXT'">Schreibe einen passenden schweizerdeutschen Satz und klicke auf das Speicher Symbol<app-save-symbol></app-save-symbol>.</span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && withTranslation">Schreibe einen passenden schweizerdeutschen Satz und klicke auf das Speicher Symbol<app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofonsymbol<app-mic-symbol></app-mic-symbol> und lies den Satz laut vor.</span>
+    <ng-container *ngIf="this.elementType1 === 'TEXT'">
+      <ng-container *ngIf="this.elementType2 === 'AUDIO'">
+        <div *ngIf="!withTranslation" style="color: grey;font-size: 1em">
+          Record Swiss German speech for a Standard German sentence. Please think about the Swiss German translation of
+          the
+          sentence first before starting to record.<br>
+          When you have spoken a sentence, you can play it back (simply with the play symbol).<br>
+          If you are not satisfied, you can simply repeat the recording (press the start button again).<br>
+          If you are satisfied, press the blue submit button.<br>
+          <ul>
+            <li>Start: Start recording speech</li>
+            <li>Skip: I don't want to read this sentence aloud, give me another one.</li>
+            <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or
+              phrase. In a pre-processing
+              step, longer texts are automatically split to sentences, so use this button also if you suspect that the
+              sentence
+              splitting went wrong.
+            </li>
+            <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
+          </ul>
+        </div>
+        <span *ngIf="withTranslation">Übersetze den Satz ins Schweizerdeutsche und klicke auf das Speichersymbol
+          <app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofonsymbol <app-mic-symbol></app-mic-symbol>
+          und lies den übersetzten Satz laut vor.</span>
+      </ng-container>
+      <span *ngIf="this.elementType2 === 'TEXT'">Übersetze den Satz ins Schweizerdeutsche und klicke auf das
+        Speichersymbol<app-save-symbol></app-save-symbol>.</span>
+    </ng-container>
+    <ng-container *ngIf="this.elementType1 === 'IMAGE'">
+      <ng-container *ngIf="this.elementType2 === 'AUDIO'">
+        <span *ngIf="!withTranslation">Überlege dir einen zum Bild passenden schweizerdeutschen Satz. Spreche ihn,
+          sobald du bereit bist ein, indem du auf das Mikrofon Symbol <app-mic-symbol></app-mic-symbol> klickst.</span>
+        <span *ngIf="withTranslation">Schreibe einen passenden schweizerdeutschen Satz und klicke auf das Speicher Symbol
+          <app-save-symbol></app-save-symbol>. Klicke danach auf das Mikrofonsymbol<app-mic-symbol></app-mic-symbol>
+          und lies den Satz laut vor.</span>
+      </ng-container>
+      <span *ngIf=" this.elementType2 === 'TEXT'">Schreibe einen passenden schweizerdeutschen Satz und klicke auf das
+        Speicher Symbol<app-save-symbol></app-save-symbol>.</span>
+    </ng-container>
+    <ng-container *ngIf="this.elementType1 === 'AUDIO' && this.elementType2 === 'TEXT'">
+      <span>Höre dir die Aufnahme an, indem du die auf Play klickst, und transkribiere nachher die Aufnahme.</span>
+    </ng-container>
   </div>
   <br/>
   <!-- The Two Data Elements and the optional translate element -->
   <mat-card class="center">
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'TEXT'"><app-excerpt
-            [excerptText]="textDto1.text" [isDeactivated]="false"></app-excerpt><app-translate
-            (uploaded)="resetAndNext($event)" [otherDataElement]="dataElement1"
-            [otherElementType]="elementType1"></app-translate></span>
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && !withTranslation"><app-excerpt
-            [excerptText]="textDto1.text" [isDeactivated]="false"></app-excerpt><app-recording
-            (uploaded)="resetAndNext($event)" [otherDataElement]="dataElement1"
-            [otherElementType]="elementType1"></app-recording></span>
-    <span *ngIf="this.elementType1 === 'TEXT' && this.elementType2 === 'AUDIO' && withTranslation"><app-excerpt
-            [excerptText]="textDto1.text" [isDeactivated]="isTranslated"></app-excerpt><app-translate
-            (uploaded)="triggerRecord($event)" [otherDataElement]="dataElement1"
-            [otherElementType]="elementType1"></app-translate><app-recording (uploaded)="resetAndNext($event)"
-                                                                             *ngIf="isTranslated"
-                                                                             [otherDataElement]="dataElementTranslation"
-                                                                             [otherElementType]="elementTypeTranslation"></app-recording></span>
-    <span *ngIf="this.elementType1 === 'AUDIO' && this.elementType2 === 'TEXT'"><app-audio
-            [dataElementId]="dataElement1.id"></app-audio><br/><br/><app-translate (uploaded)="resetAndNext($event)"
-                                                                                   [otherDataElement]="dataElement1"
-                                                                                   [otherElementType]="elementType1"></app-translate></span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && !withTranslation"><app-image
-            [dataElementId]="dataElement1.id"></app-image><br/><br/><app-recording (uploaded)="resetAndNext($event)"
-                                                                                   [otherDataElement]="dataElement1"
-                                                                                   [otherElementType]="elementType1"></app-recording></span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'TEXT'"><app-image
-            [dataElementId]="dataElement1.id"></app-image><br/><br/><app-translate (uploaded)="resetAndNext($event)"
-                                                                                   [otherDataElement]="dataElement1"
-                                                                                   [otherElementType]="elementType1"></app-translate></span>
-    <span *ngIf="this.elementType1 === 'IMAGE' && this.elementType2 === 'AUDIO' && withTranslation"><app-image
-            [dataElementId]="dataElement1.id"></app-image><br/><br/><app-translate (uploaded)="triggerRecord($event)"
-                                                                                   [otherDataElement]="dataElement1"
-                                                                                   [otherElementType]="elementType1"></app-translate><app-recording
-            (uploaded)="resetAndNext($event)" *ngIf="isTranslated" [otherDataElement]="dataElementTranslation"
-            [otherElementType]="elementTypeTranslation"></app-recording></span>
+    <ng-container *ngIf="this.elementType1 === 'TEXT'">
+      <ng-container *ngIf="this.elementType2 === 'AUDIO'">
+        <span *ngIf="!withTranslation">
+          <app-excerpt [excerptText]="textDto1.text" [isDeactivated]="false"></app-excerpt>
+          <app-recording (uploaded)="resetAndNext()" [otherDataElement]="dataElement1"
+                         [otherElementType]="elementType1"></app-recording>
+        </span>
+        <span *ngIf="withTranslation">
+          <app-excerpt [excerptText]="textDto1.text" [isDeactivated]="isTranslated"></app-excerpt>
+          <app-translate (uploaded)="triggerRecord($event)" [otherDataElement]="dataElement1"
+                         [otherElementType]="elementType1"></app-translate>
+          <app-recording (uploaded)="resetAndNext()" *ngIf="isTranslated"
+                         [otherDataElement]="dataElementTranslation"
+                         [otherElementType]="elementTypeTranslation"></app-recording>
+        </span>
+      </ng-container>
+      <span *ngIf="this.elementType2 === 'TEXT'">
+        <app-excerpt [excerptText]="textDto1.text" [isDeactivated]="false"></app-excerpt>
+        <app-translate (uploaded)="resetAndNext()" [otherDataElement]="dataElement1"
+                       [otherElementType]="elementType1"></app-translate>
+      </span>
+    </ng-container>
+    <ng-container *ngIf="this.elementType1 === 'IMAGE'">
+      <ng-container *ngIf="this.elementType2 === 'AUDIO'">
+         <span *ngIf="!withTranslation">
+           <app-image [dataElementId]="dataElement1.id"></app-image><br/><br/>
+           <app-recording (uploaded)="resetAndNext()" [otherDataElement]="dataElement1"
+                          [otherElementType]="elementType1"></app-recording>
+         </span>
+        <span *ngIf="withTranslation">
+          <app-image [dataElementId]="dataElement1.id"></app-image><br/><br/>
+          <app-translate (uploaded)="triggerRecord($event)" [otherDataElement]="dataElement1"
+                         [otherElementType]="elementType1"></app-translate>
+          <app-recording (uploaded)="resetAndNext()" *ngIf="isTranslated"
+                         [otherDataElement]="dataElementTranslation"
+                         [otherElementType]="elementTypeTranslation"></app-recording>
+        </span>
+      </ng-container>
+      <span *ngIf="this.elementType2 === 'TEXT'">
+        <app-image [dataElementId]="dataElement1.id"></app-image><br/><br/>
+        <app-translate (uploaded)="resetAndNext()" [otherDataElement]="dataElement1"
+                       [otherElementType]="elementType1"></app-translate>
+      </span>
+    </ng-container>
+    <span *ngIf="this.elementType1 === 'AUDIO' && this.elementType2 === 'TEXT'">
+      <app-audio [dataElementId]="dataElement1.id"></app-audio><br/><br/>
+      <app-translate (uploaded)="resetAndNext()" [otherDataElement]="dataElement1"
+                     [otherElementType]="elementType1"></app-translate>
+    </span>
   </mat-card>
   <br/>
   <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>

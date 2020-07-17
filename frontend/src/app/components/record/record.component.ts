@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { CheckedDataElementType } from '../../models/checked-data-element-type';
 import { RecordingDto } from '../../models/recording-dto';
 import { TextDto } from '../../models/text-dto';
+import { FeaturesService } from '../../services/features.service';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { UserGroupService } from '../../services/user-group.service';
 
@@ -32,8 +33,7 @@ export class RecordComponent implements OnInit {
   dataElementTranslation: DataElementDto;
   achievementWrapper: AchievementWrapper;
 
-  // Depending on the current mode only two
-  // of the fields below will be != null
+  // Depending on the current mode only two of the fields below will be != null
   textDto1: TextDto = null;
   textDto2: TextDto = null;
   textDtoTranslation: TextDto;
@@ -48,23 +48,26 @@ export class RecordComponent implements OnInit {
   isPrivate = false;
 
   // controlfields
-  withTranslation = true;
+  withTranslation = false;
   isTranslated = false;
-
+  additionalData = true;
   // this controls the visibility of the selector component
   isDebug = false;
   user: CustomUserDetails;
   private groupId = 1;
 
   constructor(
-      public authService: AuthService, private snackBarService: SnackBarService,
-      private httpClient: HttpClient,
-      private userGroupService: UserGroupService,
-      private numAchievementsService: NumAchievementsService) {
+      public authService: AuthService, private snackBarService: SnackBarService, private httpClient: HttpClient,
+      private userGroupService: UserGroupService, private numAchievementsService: NumAchievementsService,
+      private featuresService: FeaturesService) {
     this.groupId = this.userGroupService.userGroupId;
     authService.getUser().subscribe((user) => {
       this.user = user.principal;
       this.user.gamificationOn = user.principal.user.gamificationOn;
+    });
+    featuresService.getFeatureFlags().subscribe(v => {
+      this.withTranslation = v.swissGermanText;
+      this.additionalData = v.additionalData;
     });
   }
 
@@ -72,6 +75,7 @@ export class RecordComponent implements OnInit {
     this.getNext();
   }
 
+  // TODO not sure if we should just add this to the excerpt sub component?
   private() {
     this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
       this.snackBarService.openMessage('marked as private');
@@ -86,6 +90,7 @@ export class RecordComponent implements OnInit {
     });
   }
 
+  // TODO not sure if we should just add this to the excerpt sub component?
   sentenceError() {
     this.check(CheckedDataElementType.SENTENCE_ERROR).subscribe(() => {
       this.snackBarService.openMessage('marked as "Not a sentence"');
@@ -93,19 +98,19 @@ export class RecordComponent implements OnInit {
     });
   }
 
-  selectorUpdate($event) {
+  selectorUpdate(selectedElement: ElementType) {
     this.resetFields();
-    this.selectedElement = $event;
+    this.selectedElement = selectedElement;
     this.getNext();
   }
 
-  translationUpdate($event) {
+  translationUpdate(withTranslation: boolean) {
     this.resetFields();
-    this.withTranslation = $event;
+    this.withTranslation = withTranslation;
     this.getNext();
   }
 
-  resetAndNext(elem: ReturnWrapper) {
+  resetAndNext() {
     this.resetFields();
     this.getNext();
   }
@@ -143,10 +148,8 @@ export class RecordComponent implements OnInit {
   private getNext() {
     const formData = new FormData();
     formData.append(`selectedElement`, JSON.stringify(this.selectedElement));
-    this.httpClient
-        .post<ReturnWrapper>(
-            `${environment.url}user_group/${this.groupId}/next`, formData)
-        .subscribe((value) => {
+    this.httpClient.post<ReturnWrapper>(`${environment.url}user_group/${this.groupId}/next`, formData)
+        .subscribe(value => {
           this.dataElement1 = value.dataElementDto;
           this.textDto1 = value.textDto;
           this.recordingDto1 = value.recordingDto;

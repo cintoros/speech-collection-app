@@ -171,8 +171,8 @@ public class UserGroupService {
     public ReturnWrapper getNext(long groupId, ElementType selectedElement) {
         checkAllowed(groupId);
 
-        long dataElementID = 0;
-        ElementType eType = null;
+        long dataElementID;
+        ElementType eType;
         ImageDto image = null;
         AudioDto recording = null;
 
@@ -194,16 +194,14 @@ public class UserGroupService {
                 eType = ElementType.IMAGE;
                 break;
             default:
-                // create random choice of Text or Image
-                java.util.Random random = new java.util.Random();
-                if (random.nextInt(10) > 2) {
-                    text = getExcerpt(groupId);
-                    dataElementID = text.getDataElementId();
-                    eType = ElementType.TEXT;
-                } else {
+                if (speechCollectionAppConfig.getFeatures().isImages() && ThreadLocalRandom.current().nextInt(10) <= 2) {
                     image = getImageDto(groupId);
                     dataElementID = image.getDataElementId();
                     eType = ElementType.IMAGE;
+                } else {
+                    text = getExcerpt(groupId);
+                    dataElementID = text.getDataElementId();
+                    eType = ElementType.TEXT;
                 }
                 break;
         }

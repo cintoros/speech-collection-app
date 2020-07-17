@@ -246,6 +246,7 @@ public class AchievementsService {
                 .fetchInto(UserAchievementDto.class);
     }
 
+    //FIXME nullpointer in case the user has not visited the home/achievemnts page before record component and/or time based?
     public UserAchievementDto getUserAchievement(Long userId, Long achievementId) {
         return dslContext.select().from(USER_ACHIEVEMENTS)
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)))

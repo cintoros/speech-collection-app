@@ -8,11 +8,13 @@ import { RecordingDto, RecordingNoiseLevel, RecordingQuality } from 'src/app/mod
 import { UserGroupService } from 'src/app/services/user-group.service';
 import { environment } from 'src/environments/environment';
 
+//TODO mostly replace with old logic
 @Component({
   selector: 'app-recording',
   templateUrl: './recording.component.html',
   styleUrls: ['./recording.component.scss'],
 })
+// FIXME there is a bug sumit is only possible after audio is stopped/finished
 export class RecordingComponent implements OnInit {
   blobUrl: SafeUrl;
   isRecording = false;  // is true when there is an active recording
@@ -20,10 +22,14 @@ export class RecordingComponent implements OnInit {
   @Input() otherDataElement: DataElementDto;
   @Input() otherElementType: ElementType;
   @Output() uploaded = new EventEmitter<string>();
+  elapsedTime = 0;
+  recordingQuality = AudioQuality;
+  recordingNoiseLevel = AudioNoiseLevel;
+  selectedQuality = AudioQuality.INTEGRATED;
+  selectedNoiseLevel = AudioNoiseLevel.MODERATE_NOISE;
   private audioChunks = [];
   // @ts-ignore
   private mediaRecorder: MediaRecorder;
-  private elapsedTime = 0;
   private groupId = 1;
   private subscription: Subscription;
   private numberObservable: Observable<number>;
@@ -73,23 +79,34 @@ export class RecordingComponent implements OnInit {
   }
 
   submit_recording(): void {
-    const recording = new RecordingDto(
-        -1, -1, -1, '', RecordingQuality.INTEGRATED,
+    const recording = new RecordingDto(-1, -1, -1, '', RecordingQuality.INTEGRATED,
         RecordingNoiseLevel.MODERATE_NOISE, '', -1, -1);
     const formData = new FormData();
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
     formData.append('recording', JSON.stringify(recording));
     formData.append('otherDataElement', JSON.stringify(this.otherDataElement));
     formData.append('otherElementType', JSON.stringify(this.otherElementType));
-    this.httpClient
-        .post(
-            `${environment.url}user_group/${this.groupId}/recording`, formData)
-        .subscribe(() => {
-          this.submitable = false;
-          this.audioChunks = [];
+    this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
+      this.submitable = false;
+      this.audioChunks = [];
+      this.blobUrl = undefined;
+      this.uploaded.emit('complete');
+    });
+  }
 
-          this.blobUrl = undefined;
-          this.uploaded.emit('complete');
-        });
+  skip() {
+
+  }
+
+  sentenceError() {
+
+  }
+
+  private() {
+
+  }
+
+  submit() {
+
   }
 }

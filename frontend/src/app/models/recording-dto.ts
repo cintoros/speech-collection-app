@@ -1,4 +1,4 @@
-export class RecordingDto {
+export class RecordingDto {//TODO does this even represent the backend?
   id: number;
   dialectId: number;
   dataElementId: number;

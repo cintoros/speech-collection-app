@@ -19,5 +19,6 @@ speech-collection-app:
     email-integration: false
     additional-data: true
     swiss-german-text: false
+    images: false
   min-num-checks: 3
   num-random-select: 40

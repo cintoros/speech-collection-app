@@ -98,6 +98,7 @@ public class SpeechCollectionAppConfig {
         private boolean emailIntegration;
         private boolean swissGermanText;
         private boolean additionalData;
+        private boolean images;
 
         public boolean isEmailIntegration() {
             return emailIntegration;
@@ -121,6 +122,14 @@ public class SpeechCollectionAppConfig {
 
         public void setAdditionalData(boolean additionalData) {
             this.additionalData = additionalData;
+        }
+
+        public boolean isImages() {
+            return images;
+        }
+
+        public void setImages(boolean images) {
+            this.images = images;
         }
     }
 }
