@@ -1,5 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.user;
 
+import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
+import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig.Features.GamificationMode;
 import ch.fhnw.speech_collection_app.features.email.EmailSenderService;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.*;
@@ -36,13 +38,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final Map<String, String> zipCodes;
     private final EmailSenderService emailSenderService;
     private final DSLContext dslContext;
+    private final SpeechCollectionAppConfig speechCollectionAppConfig;
 
     @Autowired
-    public CustomUserDetailsService(PasswordEncoder passwordEncoder, EmailSenderService emailSenderService,
-                                    DSLContext dslContext) throws IOException {
+    public CustomUserDetailsService(
+            PasswordEncoder passwordEncoder, EmailSenderService emailSenderService, DSLContext dslContext,
+            SpeechCollectionAppConfig speechCollectionAppConfig) throws IOException {
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
         this.dslContext = dslContext;
+        this.speechCollectionAppConfig = speechCollectionAppConfig;
         // based on https://download.geonames.org/export/zip/
         this.zipCodes = Resources.readLines(Resources.getResource("ch_zip_distinct.csv"), StandardCharsets.UTF_8)
                 .stream().distinct().map(l -> l.split(",")).distinct().collect(Collectors.toMap(s -> s[0], s -> s[1]));
@@ -134,6 +139,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Boolean getGamification() {
+        var gamificationMode = speechCollectionAppConfig.getFeatures().getGamificationMode();
+        if (gamificationMode == GamificationMode.DISABLED) {
+            return false;
+        }
+        if (gamificationMode == GamificationMode.ENABLED) {
+            return true;
+        }
         Long withGamification = dslContext.selectCount()
                 .from(USER.join(USER_GROUP_ROLE).on(USER.ID.eq(USER_GROUP_ROLE.USER_ID)))
                 .where(USER.GAMIFICATION_ON.eq(true).and(USER_GROUP_ROLE.USER_GROUP_ID.eq(1L))

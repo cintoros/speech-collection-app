@@ -99,6 +99,7 @@ public class SpeechCollectionAppConfig {
         private boolean swissGermanText;
         private boolean additionalData;
         private boolean images;
+        private GamificationMode gamificationMode;
 
         public boolean isEmailIntegration() {
             return emailIntegration;
@@ -131,5 +132,15 @@ public class SpeechCollectionAppConfig {
         public void setImages(boolean images) {
             this.images = images;
         }
+
+        public GamificationMode getGamificationMode() {
+            return gamificationMode;
+        }
+
+        public void setGamificationMode(GamificationMode gamificationMode) {
+            this.gamificationMode = gamificationMode;
+        }
+
+        public enum GamificationMode {DISABLED, HALF_ENABLED, ENABLED}
     }
 }

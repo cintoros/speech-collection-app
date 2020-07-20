@@ -20,5 +20,6 @@ speech-collection-app:
     additional-data: true
     swiss-german-text: false
     images: false
+    gamification-mode: enabled
   min-num-checks: 3
   num-random-select: 40
