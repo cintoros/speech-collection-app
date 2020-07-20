@@ -346,6 +346,34 @@ public class UserGroupService {
         checked.setUserId(customUserDetailsService.getLoggedInUserId());
         checked.setType(type);
         checked.store();
+
+        var tupleType = dslContext.selectFrom(DATA_TUPLE).where(DATA_TUPLE.ID.eq(checkedOccurrence.id)).fetchOne(DATA_TUPLE.TYPE);
+        achievementsService.createAutomaticAchievements();
+        AchievementsDependsOn achievementType;
+        switch (tupleType) {
+            case AUDIO_AUDIO:
+                achievementType = AchievementsDependsOn.AUDIO_AUDIO_CHECKED;
+                break;
+            case AUDIO_TEXT:
+                achievementType = AchievementsDependsOn.AUDIO_TEXT_CHECKED;
+                break;
+            case IMAGE_AUDIO:
+                achievementType = AchievementsDependsOn.IMAGE_AUDIO_CHECKED;
+                break;
+            case IMAGE_TEXT:
+                achievementType = AchievementsDependsOn.IMAGE_TEXT_CHECKED;
+                break;
+            case TEXT_AUDIO:
+                achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
+                break;
+            case TEXT_TEXT:
+                achievementType = AchievementsDependsOn.TEXT_TEXT_CHECKED;
+                break;
+            default:
+                achievementType = AchievementsDependsOn.TOTAL_CHECKED;
+                break;
+        }
+        achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(), achievementType, -1L);
     }
 
     /**
@@ -428,46 +456,5 @@ public class UserGroupService {
     private void checkAllowed(long userGroupId) {
         if (!customUserDetailsService.isAllowedOnProject(userGroupId, false))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-
-    public void postCheckedDataTuple(long groupId, TupleDto tuple, CheckedDataTuple checkedDataTuple) {
-        checkAllowed(groupId);
-        var checked = dslContext.newRecord(CHECKED_DATA_TUPLE);
-        checked.setDataTupleId(tuple.getId());
-        checked.setUserId(customUserDetailsService.getLoggedInUserId());
-        var type = CheckedDataTupleType.valueOf(checkedDataTuple.getType().toString());
-        checked.setType(type);
-        checked.store();
-
-        achievementsService.createAutomaticAchievements();
-
-        AchievementsDependsOn achievementType;
-
-        switch (tuple.getType()) {
-            case AUDIO_AUDIO:
-                achievementType = AchievementsDependsOn.AUDIO_AUDIO_CHECKED;
-                break;
-            case AUDIO_TEXT:
-                achievementType = AchievementsDependsOn.AUDIO_TEXT_CHECKED;
-                break;
-            case IMAGE_AUDIO:
-                achievementType = AchievementsDependsOn.IMAGE_AUDIO_CHECKED;
-                break;
-            case IMAGE_TEXT:
-                achievementType = AchievementsDependsOn.IMAGE_TEXT_CHECKED;
-                break;
-            case TEXT_AUDIO:
-                achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
-                break;
-            case TEXT_TEXT:
-                achievementType = AchievementsDependsOn.TEXT_TEXT_CHECKED;
-                break;
-            default:
-                achievementType = AchievementsDependsOn.TOTAL_CHECKED;
-                break;
-        }
-
-        achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(), achievementType,
-                -1L);
     }
 }

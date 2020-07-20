@@ -1,8 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,14 +36,15 @@ public class UserGroupRestApiController {
     }
 
     @PostMapping("element/{dataElementId}/checked")
-    public void postCheckedDataElement(@PathVariable long groupId, @PathVariable long dataElementId,
-                                       @RequestParam CheckedDataElementType type) {
+    public void postCheckedDataElement(
+            @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam CheckedDataElementType type) {
         userGroupService.postCheckedDataElement(groupId, dataElementId, type);
     }
 
     @PostMapping("excerpt")
-    public ReturnWrapper postExcerpt(@PathVariable long groupId, @RequestParam String text,
-                                     @RequestParam String otherDataElement, @RequestParam String otherElementType) throws IOException {
+    public ReturnWrapper postExcerpt(
+            @PathVariable long groupId, @RequestParam String text, @RequestParam String otherDataElement,
+            @RequestParam String otherElementType) throws IOException {
         return userGroupService.postExcerpt(groupId, objectMapper.readValue(text, TextDto.class),
                 objectMapper.readValue(otherDataElement, DataElementDto.class),
                 ReturnWrapper.stringToElementType(otherElementType));
@@ -54,13 +53,6 @@ public class UserGroupRestApiController {
     @PostMapping("next")
     public ReturnWrapper getNext(@PathVariable long groupId, @RequestParam String selectedElement) {
         return userGroupService.getNext(groupId, ReturnWrapper.stringToElementType(selectedElement));
-    }
-
-    @PostMapping("checked-data-tuple")
-    public void postCheckedDataTuple(@PathVariable long groupId, @RequestParam String tuple,
-                                     @RequestParam String checkedDataTuple) throws JsonMappingException, JsonProcessingException {
-        userGroupService.postCheckedDataTuple(groupId, objectMapper.readValue(tuple, TupleDto.class),
-                objectMapper.readValue(checkedDataTuple, CheckedDataTuple.class));
     }
 
     @GetMapping("excerpt")

@@ -53,13 +53,14 @@ import { DailyGoalComponent } from './components/gamification/daily-goal/daily-g
 import { GamificationComponent } from './components/gamification/gamification.component';
 import { GlyphiconsBatchComponent } from './components/gamification/glyphicons-batch/glyphicons-batch.component';
 import { MapComponent } from './components/gamification/map/map.component';
-import { NumNewAchievementsComponent } from './components/gamification/num-new-achievements/num-new-achievements.component';
 import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
 import { SmallMedalComponent } from './components/gamification/small-medal/small-medal.component';
 import { CheckAnimationComponent } from './components/home/check-animation/check-animation.component';
 import { HomeComponent } from './components/home/home.component';
 import { RecordAnimationComponent } from './components/home/record-animation/record-animation.component';
 import { LoginComponent } from './components/login/login.component';
+import { BarChartComponent } from './components/multi-use/bar-chart/bar-chart.component';
+import { LineChartComponent } from './components/multi-use/line-chart/line-chart.component';
 import { ProfileEditorComponent } from './components/multi-use/profile-editor/profile-editor.component';
 import { UserGroupRoleComponent } from './components/multi-use/user-group-role/user-group-role.component';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
@@ -81,8 +82,6 @@ import { GroupAdminGuardService } from './guards/group-admin-guard.service';
 import { AuthHeaderInterceptorService } from './services/auth-header-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { LoadingInterceptorService } from './services/loading-interceptor.service';
-import { LineChartComponent } from './components/multi-use/line-chart/line-chart.component';
-import { BarChartComponent } from './components/multi-use/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -124,7 +123,6 @@ import { BarChartComponent } from './components/multi-use/bar-chart/bar-chart.co
     CheckAnimationComponent,
     ProgressbarComponent,
     DailyGoalComponent,
-    NumNewAchievementsComponent,
     SmallMedalComponent,
     MapComponent,
     LineChartComponent,

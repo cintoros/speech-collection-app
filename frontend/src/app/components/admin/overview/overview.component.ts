@@ -5,8 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { environment } from '../../../../environments/environment';
 import { UserGroupService } from '../../../services/user-group.service';
-import { OccurrenceMode } from '../../check/check/check.component';
 import { OverviewOccurrence } from './overview-occurrence';
+import {OccurrenceMode} from '../../../models/occurrence-mode';
 
 @Component({
   selector: 'app-overview',

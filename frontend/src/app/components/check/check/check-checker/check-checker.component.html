@@ -1,11 +1,22 @@
-<div class="row" id="navigation-button-container">
-
-  <button (click)="buttonClicked(wrong)" class="btn btn-danger button">
-    <span class="glyphicon glyphicon-remove-sign"></span>
+<!--<div class="row" id="navigation-button-container">-->
+  <button (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)" mat-raised-button
+          style="border-color: green;border-style: solid;border-width: 2px; ">
+    <mat-icon style="color: green">thumb_up</mat-icon>
+    <span>&nbsp;Correct [c]</span>
   </button>
-
-
-  <button (click)="buttonClicked(correct)" class="btn btn-success button">
-    <span class="glyphicon glyphicon-ok-sign"></span>
+  <button (click)="setCheckedType(checkedOccurrenceLabel.WRONG)"
+          class="check-navigation-button" mat-raised-button
+          style="border-color: red;border-style: solid;border-width: 2px; ">
+    <mat-icon style="color: red">thumb_down</mat-icon>
+    <span>&nbsp;Wrong [w]</span>
   </button>
-</div>
+  <br>
+  <button (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)"
+          class="check-navigation-button" mat-raised-button>
+    <span>&nbsp;Not a Single Standard German Sentence</span>
+  </button>
+  <button (click)="setCheckedType(checkedOccurrenceLabel.PRIVATE)"
+          class="check-navigation-button" mat-raised-button>
+    <span>&nbsp;Sensitive Data</span>
+  </button>
+<!--</div>-->

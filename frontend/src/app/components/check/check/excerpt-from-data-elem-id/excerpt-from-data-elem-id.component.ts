@@ -14,9 +14,7 @@ export class ExcerptFromDataElemIdComponent implements OnInit, OnChanges {
   groupId: number;
   textDto: TextDto;
 
-  constructor(
-      private httpClient: HttpClient,
-      private userGroupService: UserGroupService) {
+  constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -29,14 +27,9 @@ export class ExcerptFromDataElemIdComponent implements OnInit, OnChanges {
   }
 
   private loadTextDto(): void {
-    if (!this.dataElementId) {
-      return;
+    if (this.dataElementId) {
+      this.httpClient.get<TextDto>(`${environment.url}user_group/${this.groupId}/textDto/${this.dataElementId}`)
+          .subscribe(v => this.textDto = v);
     }
-    this.httpClient
-        .get<TextDto>(`${environment.url}user_group/${this.groupId}/textDto/${
-            this.dataElementId}`)
-        .subscribe((resp) => {
-          this.textDto = resp;
-        });
   }
 }

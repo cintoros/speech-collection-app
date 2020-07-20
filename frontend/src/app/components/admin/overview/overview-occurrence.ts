@@ -1,4 +1,4 @@
-import { OccurrenceMode } from '../../check/check/check.component';
+import { OccurrenceMode } from '../../../models/occurrence-mode';
 
 export interface OverviewOccurrence {
   text: string;

@@ -12,11 +12,6 @@ import { AuthService } from '../../../services/auth.service';
 import { SnackBarService } from '../../../services/snack-bar.service';
 import { UserGroupService } from '../../../services/user-group.service';
 
-export enum OccurrenceMode {
-  RECORDING = 'RECORDING',
-  TEXT_AUDIO = 'TEXT_AUDIO',
-}
-
 @Component({
   selector: 'app-check',
   templateUrl: './check.component.html',
@@ -39,7 +34,7 @@ export class CheckComponent implements OnInit {
       private snackBarService: SnackBarService,
       private numAchievementsService: NumAchievementsService) {
     this.groupId = this.userGroupService.userGroupId;
-    authService.getUser().subscribe((user) => {
+    authService.getUser().subscribe(user => {
       this.user = user.principal;
       this.user.gamificationOn = user.principal.user.gamificationOn;
     });
@@ -49,24 +44,20 @@ export class CheckComponent implements OnInit {
     this.authService.getUser().subscribe(
         (user) => (this.userId = user.principal.user.id));
     this.isDebug ? this.getTupleWithSelection() : this.getTuple();
-    this.numAchievementsService.currentMessage.subscribe(
-        message => this.message = message);
+    this.numAchievementsService.currentMessage.subscribe(message => this.message = message);
   }
 
   getTuple() {
-    this.httpClient
-        .get<CheckWrapper>(
-            `${environment.url}user_group/${this.groupId}/check-next`)
-        .subscribe((value: CheckWrapper) => {
-          const res: CheckWrapper = value;
+    this.httpClient.get<CheckWrapper>(`${environment.url}user_group/${this.groupId}/check-next`)
+        .subscribe(value => {
           this.tuple = value.tupleDto;
           this.achievementWrapper = value.achievementWrapper;
           this.numAchievementsService.getNumber();
         });
   }
 
-  onSelectorChange($event) {
-    this.selectedTupleType = $event;
+  onSelectorChange(tupleType: TupleType) {
+    this.selectedTupleType = tupleType;
     this.isDebug ? this.getTupleWithSelection() : this.getTuple();
   }
 
@@ -77,12 +68,9 @@ export class CheckComponent implements OnInit {
 
   private getTupleWithSelection() {
     const formData = new FormData();
-    formData.append(
-        `selectedTupleType`, JSON.stringify(this.selectedTupleType));
-    this.httpClient
-        .post<CheckWrapper>(
-            `${environment.url}user_group/${this.groupId}/check-next`, formData)
-        .subscribe((value: CheckWrapper) => {
+    formData.append(`selectedTupleType`, JSON.stringify(this.selectedTupleType));
+    this.httpClient.post<CheckWrapper>(`${environment.url}user_group/${this.groupId}/check-next`, formData)
+        .subscribe(value => {
           this.tuple = value.tupleDto;
           this.achievementWrapper = value.achievementWrapper;
         });
