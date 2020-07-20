@@ -31,6 +31,7 @@ export class NumAchievementsService {
             `${environment.url}user_group/${this.groupId}/numNewAchievements`)
         .subscribe(res => {
           this.currentMessage.next(res.toString());
+          // FIXME this does not work...
           if (res > this.oldnumber && this.user.gamificationOn) {
             this.snackBarService.openMessage('Neue Errungenschaft freigeschaltet');
           }
