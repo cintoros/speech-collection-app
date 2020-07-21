@@ -8,7 +8,6 @@
         <a (click)="redirectToPage('/record')" class="nav-link">Record</a>
         <a (click)="redirectToPage('/check')" class="nav-link">Check</a>
         <a (click)="redirectToPage('/profile')" class="nav-link">{{this.user?.username}}</a>
-        <!--TODO change it so the gamification is on by default.-->
         <a (click)="redirectToPage('/gamification')" *ngIf="this.user?.gamificationOn" class="nav-link">
           Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="true"></app-small-medal>
         </a>

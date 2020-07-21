@@ -3,6 +3,8 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.features.base.user_group.CantonClass.CantonEnum;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Achievements;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserAchievements;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
@@ -36,7 +39,7 @@ public class AchievementsService {
                                   String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
                                   AchievementsDependsOn depends_on, Boolean isVisible) {
 
-        AchievementDto batch = dslContext.select().from(ACHIEVEMENTS)
+        var batch = dslContext.select().from(ACHIEVEMENTS)
                 .where(ACHIEVEMENTS.NAME.eq(name).and(ACHIEVEMENTS.BATCH_NAME.eq(batch_name))
                         .and(ACHIEVEMENTS.TITLE.eq(title)).and(ACHIEVEMENTS.DESCRIPTION_LVL1.eq(description_lvl1))
                         .and(ACHIEVEMENTS.DESCRIPTION_LVL2.eq(description_lvl2))
@@ -44,7 +47,7 @@ public class AchievementsService {
                         .and(ACHIEVEMENTS.DESCRIPTION_LVL4.eq(description_lvl4))
                         .and(ACHIEVEMENTS.START_TIME.eq(start_time)).and(ACHIEVEMENTS.END_TIME.eq(end_time))
                         .and(ACHIEVEMENTS.DEPENDS_ON.eq(depends_on)))
-                .limit(1).fetchOneInto(AchievementDto.class);
+                .limit(1).fetchOneInto(Achievements.class);
 
         if (!(batch == null))
             return batch.getId();
@@ -185,14 +188,11 @@ public class AchievementsService {
         userAchievement.setPoints(userAchievement.getPoints() + amount);
         userAchievement.store();
 
-        AchievementDto achievementDto = getAchievement(achievementId);
-        Long user_points = userAchievement.getPoints();
-        Long lvl1 = achievementDto.getPoints_lvl1();
-        Long lvl2 = achievementDto.getPoints_lvl1();
-        Long lvl3 = achievementDto.getPoints_lvl1();
-        Long lvl4 = achievementDto.getPoints_lvl1();
-
-        if ((user_points == lvl1 || user_points == lvl2 || user_points == lvl3 || user_points == lvl4) && amount != 0) {
+        var achievement = getAchievement(achievementId);
+        var userPoints = userAchievement.getPoints();
+        var b = Stream.of(achievement.getPointsLvl1(), achievement.getPointsLvl2(), achievement.getPointsLvl3(), achievement.getPointsLvl4())
+                .anyMatch(aLong -> aLong == userPoints);
+        if (b && amount != 0) {
             userAchievement.setIsNew(true);
             userAchievement.store();
         }
@@ -243,24 +243,19 @@ public class AchievementsService {
         }
     }
 
-    public List<UserAchievementDto> getUserAchievements(Long userId) {
-        return dslContext.select().from(USER_ACHIEVEMENTS).where(USER_ACHIEVEMENTS.USER_ID.eq(userId))
-                .fetchInto(UserAchievementDto.class);
-    }
-
     //FIXME nullpointer in case the user has not visited the home/achievemnts page before record component and/or time based?
-    public UserAchievementDto getUserAchievement(Long userId, Long achievementId) {
+    public UserAchievements getUserAchievement(Long userId, Long achievementId) {
         return dslContext.select().from(USER_ACHIEVEMENTS)
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)))
-                .limit(1).fetchOneInto(UserAchievementDto.class);
+                .limit(1).fetchOneInto(UserAchievements.class);
     }
 
-    public AchievementDto getAchievement(Long achievementId) {
+    public Achievements getAchievement(Long achievementId) {
         return dslContext.select().from(ACHIEVEMENTS).where(ACHIEVEMENTS.ID.eq(achievementId)).limit(1)
-                .fetchOneInto(AchievementDto.class);
+                .fetchOneInto(Achievements.class);
     }
 
-    public List<UserAchievementDto> getActiveUserAchievements(Long userId) {
+    public List<UserAchievements> getActiveUserAchievements(Long userId) {
         createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
@@ -270,10 +265,10 @@ public class AchievementsService {
                         .and(ACHIEVEMENTS.START_TIME.le(time))
                         .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
-                .fetchInto(UserAchievementDto.class);
+                .fetchInto(UserAchievements.class);
     }
 
-    public List<UserAchievementDto> getNonActiveUserAchievements(Long userId) {
+    public List<UserAchievements> getNonActiveUserAchievements(Long userId) {
         createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
@@ -282,25 +277,25 @@ public class AchievementsService {
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId)
                         .and((ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))
                                 .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))))
-                .fetchInto(UserAchievementDto.class);
+                .fetchInto(UserAchievements.class);
     }
 
     public AchievementWrapper getActiveAchievement() {
         createAutomaticAchievements();
-        UserAchievementDto userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
-        return new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
-                getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement)));
+        var userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
+        return new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
+                getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement)));
     }
 
-    public Long getLevel(UserAchievementDto userAchievement) {
-        AchievementDto achiev = getAchievement(userAchievement.getAchievements_id());
-        if (achiev.getPoints_lvl4() <= userAchievement.getPoints())
+    public Long getLevel(UserAchievements userAchievement) {
+        var achievement = getAchievement(userAchievement.getAchievementsId());
+        if (achievement.getPointsLvl4() <= userAchievement.getPoints())
             return 4L;
-        if (achiev.getPoints_lvl3() <= userAchievement.getPoints())
+        if (achievement.getPointsLvl3() <= userAchievement.getPoints())
             return 3L;
-        if (achiev.getPoints_lvl2() <= userAchievement.getPoints())
+        if (achievement.getPointsLvl2() <= userAchievement.getPoints())
             return 2L;
-        if (achiev.getPoints_lvl1() <= userAchievement.getPoints())
+        if (achievement.getPointsLvl1() <= userAchievement.getPoints())
             return 1L;
         return 1L;
     }
@@ -338,12 +333,11 @@ public class AchievementsService {
                             .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL4)))
                     .limit(1).fetchOneInto(Long.class);
         }
-        long res = (long) ((achieved / total) * 100f);
-        return res;
+        return (long) ((achieved / total) * 100f);
 
     }
 
-    private UserAchievementDto getActiveUserAchievement(Long userId) {
+    private UserAchievements getActiveUserAchievement(Long userId) {
         createAutomaticAchievements();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
@@ -353,20 +347,19 @@ public class AchievementsService {
                         .and(ACHIEVEMENTS.START_TIME.le(time))
                         .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievementDto.class);
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievements.class);
     }
 
     public List<AchievementWrapper> getActiveAchievements() {
         createAutomaticAchievements();
-        List<UserAchievementDto> userAchievements = getActiveUserAchievements(
-                customUserDetailsService.getLoggedInUserId());
-        List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
-        for (UserAchievementDto userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
-                    getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement))));
+        var userAchievements = getActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
+        var res = new ArrayList<AchievementWrapper>();
+        for (var userAchievement : userAchievements) {
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
+                    getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement))));
         }
         for (AchievementWrapper aw : res) {
-            Long id = aw.getUserAchievementDto().getId();
+            Long id = aw.userAchievements.getId();
             markUserAchievementAsNotNew(id);
         }
         return res;
@@ -375,15 +368,14 @@ public class AchievementsService {
     //TODO this does not return anything?
     public List<AchievementWrapper> getNonActiveAchievements() {
         createAutomaticAchievements();
-        List<UserAchievementDto> userAchievements = getNonActiveUserAchievements(
-                customUserDetailsService.getLoggedInUserId());
+        var userAchievements = getNonActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
-        for (UserAchievementDto userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievements_id()), userAchievement,
-                    getAchievementPercent(userAchievement.getAchievements_id(), getLevel(userAchievement))));
+        for (var userAchievement : userAchievements) {
+            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
+                    getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement))));
         }
         for (AchievementWrapper aw : res) {
-            Long id = aw.getUserAchievementDto().getId();
+            Long id = aw.userAchievements.getId();
             markUserAchievementAsNotNew(id);
         }
         return res;

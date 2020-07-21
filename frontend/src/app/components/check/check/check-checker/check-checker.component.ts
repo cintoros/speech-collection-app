@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TupleDto } from 'src/app/models/tuple-dto';
+import { DataTuple } from 'src/app/models/data-tuple';
 import { UserGroupService } from 'src/app/services/user-group.service';
 import { environment } from 'src/environments/environment';
 import { SnackBarService } from '../../../../services/snack-bar.service';
@@ -13,7 +13,7 @@ import { CheckedOccurrence, CheckedOccurrenceLabel } from '../../../../models/ch
 })
 
 export class CheckCheckerComponent {
-  @Input() tuple: TupleDto;
+  @Input() tuple: DataTuple;
   // TODO output is ignored anyway.
   @Output() completed = new EventEmitter<any>();
   groupId: any;
@@ -26,7 +26,7 @@ export class CheckCheckerComponent {
 
   setCheckedType(checkType: CheckedOccurrenceLabel): void {
     if ((checkType === CheckedOccurrenceLabel.SENTENCE_ERROR || checkType === CheckedOccurrenceLabel.PRIVATE)) {
-      const url = `${environment.url}user_group/${this.groupId}/element/${this.tuple.data_element_id_1}/checked?type=${checkType}`;
+      const url = `${environment.url}user_group/${this.groupId}/element/${this.tuple.dataElementId_1}/checked?type=${checkType}`;
       this.httpClient.post(url, {}).subscribe(value => this.snackBarService.openMessage('data successfully flagged.'));
     } else {
       const cta = new CheckedOccurrence(this.tuple.id, checkType);

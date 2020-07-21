@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 import { CheckWrapper } from 'src/app/models/check-wrapper';
+import { DataTuple, TupleType } from 'src/app/models/data-tuple';
 import { CustomUserDetails } from 'src/app/models/spring-principal';
-import { TupleDto, TupleType } from 'src/app/models/tuple-dto';
 import { NumAchievementsService } from 'src/app/services/num-achievements.service';
 import { environment } from '../../../../environments/environment';
 import { CheckedOccurrence, CheckedOccurrenceLabel } from '../../../models/checked-occurrence';
@@ -20,7 +20,7 @@ import { UserGroupService } from '../../../services/user-group.service';
 })
 export class CheckComponent implements OnInit {
   selectedTupleType = TupleType.TEXT_TEXT;
-  tuple: TupleDto;
+  tuple: DataTuple;
   isDebug = false;
   achievementWrapper: AchievementWrapper;
   message: string;
@@ -52,7 +52,7 @@ export class CheckComponent implements OnInit {
   getTuple() {
     this.httpClient.get<CheckWrapper>(`${environment.url}user_group/${this.groupId}/check-next`)
         .subscribe(value => {
-          this.tuple = value.tupleDto;
+          this.tuple = value.dataTuple;
           this.achievementWrapper = value.achievementWrapper;
           this.numAchievementsService.getNumber();
         });
@@ -74,7 +74,7 @@ export class CheckComponent implements OnInit {
   setCheckedType(checkType: CheckedOccurrenceLabel): void {
     // only trigger this method if the user has played the audio at least once to prevent accidental button presses
     if ((checkType === CheckedOccurrenceLabel.SENTENCE_ERROR || checkType === CheckedOccurrenceLabel.PRIVATE)) {
-      const url = `${environment.url}user_group/${this.groupId}/element/${this.tuple.data_element_id_1}/checked?type=${checkType}`;
+      const url = `${environment.url}user_group/${this.groupId}/element/${this.tuple.dataElementId_1}/checked?type=${checkType}`;
       this.httpClient.post(url, {})
           .subscribe(value => this.snackBarService.openMessage('data successfully flagged.'));
     } else {
@@ -87,10 +87,10 @@ export class CheckComponent implements OnInit {
 
   private getTupleWithSelection() {
     const formData = new FormData();
-    formData.append(`selectedTupleType`, JSON.stringify(this.selectedTupleType));
+    formData.append(`selectedTupleType`, this.selectedTupleType);
     this.httpClient.post<CheckWrapper>(`${environment.url}user_group/${this.groupId}/check-next`, formData)
         .subscribe(value => {
-          this.tuple = value.tupleDto;
+          this.tuple = value.dataTuple;
           this.achievementWrapper = value.achievementWrapper;
         });
   }

@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-glyphicons-batch',
-  templateUrl: './glyphicons-batch.component.html',
-  styleUrls: ['./glyphicons-batch.component.scss']
+  selector: 'app-glyphicons-badge',
+  templateUrl: './glyphicons-badge.component.html',
+  styleUrls: ['./glyphicons-badge.component.scss']
 })
-export class GlyphiconsBatchComponent implements OnInit, OnChanges {
+export class GlyphiconsBadgeComponent implements OnInit, OnChanges {
   @Input() glyph: string;
   @Input() level: number;
   @Input() text: string;
@@ -21,6 +21,7 @@ export class GlyphiconsBatchComponent implements OnInit, OnChanges {
     this.getColor();
   }
 
+  // TODO simplify
   getColor() {
     switch (this.level) {
       case 0:

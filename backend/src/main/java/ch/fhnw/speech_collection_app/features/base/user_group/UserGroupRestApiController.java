@@ -1,6 +1,10 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
+import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.DataElement;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Image;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,8 +35,8 @@ public class UserGroupRestApiController {
                               @RequestParam MultipartFile file, @RequestParam String otherDataElement,
                               @RequestParam String otherElementType) throws IOException {
         userGroupService.postRecording(groupId, objectMapper.readValue(recording, RecordingDto.class), file,
-                objectMapper.readValue(otherDataElement, DataElementDto.class),
-                ReturnWrapper.stringToElementType(otherElementType));
+                objectMapper.readValue(otherDataElement, DataElement.class),
+                ElementType.valueOf(otherElementType));
     }
 
     @PostMapping("element/{dataElementId}/checked")
@@ -45,29 +49,30 @@ public class UserGroupRestApiController {
     public ReturnWrapper postExcerpt(
             @PathVariable long groupId, @RequestParam String text, @RequestParam String otherDataElement,
             @RequestParam String otherElementType) throws IOException {
-        return userGroupService.postExcerpt(groupId, objectMapper.readValue(text, TextDto.class),
-                objectMapper.readValue(otherDataElement, DataElementDto.class),
-                ReturnWrapper.stringToElementType(otherElementType));
+        return userGroupService.postExcerpt(groupId, objectMapper.readValue(text, Text.class),
+                objectMapper.readValue(otherDataElement, DataElement.class),
+                ElementType.valueOf(otherElementType));
     }
 
     @PostMapping("next")
     public ReturnWrapper getNext(@PathVariable long groupId, @RequestParam String selectedElement) {
-        return userGroupService.getNext(groupId, ReturnWrapper.stringToElementType(selectedElement));
+        System.out.println(selectedElement);
+        return userGroupService.getNext(groupId, ElementType.valueOf(selectedElement));
     }
 
     @GetMapping("excerpt")
-    public TextDto getExcerpt(@PathVariable long groupId) {
+    public Text getExcerpt(@PathVariable long groupId) {
         return userGroupService.getExcerpt(groupId);
     }
 
     @GetMapping("textDto/{dataElementId}")
-    public TextDto getTextDto(@PathVariable long dataElementId) {
+    public Text getTextDto(@PathVariable long dataElementId) {
         return userGroupService.getTextDto(dataElementId);
     }
 
     @GetMapping("image_dto")
-    public ImageDto getImageDto(@PathVariable long groupId) {
-        return userGroupService.getImageDto(groupId);
+    public Image getImageDto(@PathVariable long groupId) {
+        return userGroupService.getImage(groupId);
     }
 
     @PostMapping("occurrence/check")
@@ -82,7 +87,7 @@ public class UserGroupRestApiController {
 
     @PostMapping("check-next")
     public CheckWrapper getNextTuple(@PathVariable long groupId, @RequestParam String selectedTupleType) {
-        return userGroupService.getNextTuple(groupId, TupleDto.stringToDataTupleType(selectedTupleType));
+        return userGroupService.getNextTuple(groupId, DataTupleType.valueOf(selectedTupleType));
     }
 
     @GetMapping("check-next")

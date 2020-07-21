@@ -1,28 +1,17 @@
 import { AchievementWrapper } from './achievement-wrapper';
-import { DataElementDto } from './data-element-dto';
+import { DataElement } from './data-element';
 import { ElementType } from './element-type';
-import { ImageDto } from './image-dto';
+import { Image } from './image';
 import { RecordingDto } from './recording-dto';
-import { TextDto } from './text-dto';
+import { Text } from './text';
 
-// FIXME wtf does this do? see java wrapper
+// FIXME what is even used of these?
 export class ReturnWrapper {
-  dataElementDto: DataElementDto;
-  textDto: TextDto;
+  dataElement: DataElement;
+  text: Text;
+  // FIXME is this even used? see audio
   recordingDto: RecordingDto;
-  imageDto: ImageDto;
+  image: Image;
   elementType: ElementType;
   achievementWrapper: AchievementWrapper;
-
-  constructor(
-      $dataElementDto: DataElementDto, $textDto: TextDto,
-      $recordingDto: RecordingDto, $imageDto: ImageDto,
-      $elementType: ElementType, $achievementWrapper: AchievementWrapper) {
-    this.dataElementDto = $dataElementDto;
-    this.textDto = $textDto;
-    this.recordingDto = $recordingDto;
-    this.imageDto = $imageDto;
-    this.elementType = $elementType;
-    this.achievementWrapper = $achievementWrapper;
-  }
 }

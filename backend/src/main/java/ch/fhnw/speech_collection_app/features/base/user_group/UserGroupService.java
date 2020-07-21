@@ -2,11 +2,11 @@ package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
-import ch.fhnw.speech_collection_app.features.base.user_group.ReturnWrapper.ElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataTupleType;
 import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
+import ch.fhnw.speech_collection_app.jooq.tables.pojos.*;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class UserGroupService {
         this.achievementsService = achievementsService;
     }
 
-    public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElementDto otherDataElement,
+    public void postRecording(long groupId, RecordingDto recording, MultipartFile file, DataElement otherDataElement,
                               ElementType otherElementType) throws IOException {
         checkAllowed(groupId);
 
@@ -106,7 +106,7 @@ public class UserGroupService {
                 .fetchOneInto(Long.class);
     }
 
-    public ReturnWrapper postExcerpt(long groupId, TextDto textDto, DataElementDto otherDataElement,
+    public ReturnWrapper postExcerpt(long groupId, Text textDto, DataElement otherDataElement,
                                      ElementType otherElementType) {
         checkAllowed(groupId);
 
@@ -157,13 +157,13 @@ public class UserGroupService {
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
-        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
-        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+        var achievements = achievementsService.getAchievement(achievementId);
+        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        ReturnWrapper result = new ReturnWrapper(getDataElementDto(element.getId()), getTextDto(element.getId()), null,
+        ReturnWrapper result = new ReturnWrapper(getDataElement(element.getId()), getTextDto(element.getId()), null,
                 null, ElementType.TEXT,
-                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
-                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
+                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
+                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
 
         return result;
     }
@@ -173,10 +173,10 @@ public class UserGroupService {
 
         long dataElementID;
         ElementType eType;
-        ImageDto image = null;
-        AudioDto recording = null;
+        Image image = null;
+        Audio recording = null;
+        Text text = null;
 
-        TextDto text = null;
         switch (selectedElement) {
             case TEXT:
                 text = getExcerpt(groupId);
@@ -189,13 +189,13 @@ public class UserGroupService {
                 eType = ElementType.AUDIO;
                 break;
             case IMAGE:
-                image = getImageDto(groupId);
+                image = getImage(groupId);
                 dataElementID = image.getDataElementId();
                 eType = ElementType.IMAGE;
                 break;
             default:
                 if (speechCollectionAppConfig.getFeatures().isImages() && ThreadLocalRandom.current().nextInt(10) <= 2) {
-                    image = getImageDto(groupId);
+                    image = getImage(groupId);
                     dataElementID = image.getDataElementId();
                     eType = ElementType.IMAGE;
                 } else {
@@ -206,39 +206,39 @@ public class UserGroupService {
                 break;
         }
 
-        DataElementDto data = getDataElementDto(dataElementID);
+        var data = getDataElement(dataElementID);
 
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
-        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
-        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+        var achievements = achievementsService.getAchievement(achievementId);
+        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
         return new ReturnWrapper(data, text, recording, image, eType,
-                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
-                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
+                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
+                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
     }
 
     public CheckWrapper getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
         checkAllowed(groupId);
-        TupleDto tupleDto = dslContext.select().from(DATA_TUPLE).where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+        var dataTuple = dslContext.select().from(DATA_TUPLE).where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector))
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(DataTuple.class);
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
-        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+        var achievements = achievementsService.getAchievement(achievementId);
+        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(tupleDto,
-                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
-                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
+        return new CheckWrapper(dataTuple,
+                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
+                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
     }
 
     public CheckWrapper getNextTuple(long groupId) {
         checkAllowed(groupId);
         Long userId = customUserDetailsService.getLoggedInUserId();
 
-        TupleDto tupleDto = dslContext.select(DATA_TUPLE.asterisk()).from(DATA_TUPLE)
+        var dataTuple = dslContext.select(DATA_TUPLE.asterisk()).from(DATA_TUPLE)
                 .except(dslContext.select(DATA_TUPLE.asterisk())
                         .from(DATA_TUPLE.join(CHECKED_DATA_TUPLE)
                                 .on(DATA_TUPLE.ID.eq(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)))
@@ -246,23 +246,23 @@ public class UserGroupService {
                 .except(dslContext.select(DATA_TUPLE.asterisk())
                         .from(DATA_TUPLE.join(DATA_ELEMENT).on(DATA_TUPLE.DATA_ELEMENT_ID_2.eq(DATA_ELEMENT.ID)))
                         .where(DATA_ELEMENT.USER_ID.eq(userId)))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(TupleDto.class);
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(DataTuple.class);
 
         Date date = new Date();
 
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        AchievementDto achievementDto = achievementsService.getAchievement(achievementId);
-        UserAchievementDto userAchievementDto = achievementsService.getUserAchievement(userId, achievementId);
+        var achievements = achievementsService.getAchievement(achievementId);
+        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(tupleDto,
-                new AchievementWrapper(achievementDto, userAchievementDto, achievementsService.getAchievementPercent(
-                        userAchievementDto.getAchievements_id(), achievementsService.getLevel(userAchievementDto))));
+        return new CheckWrapper(dataTuple,
+                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
+                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
     }
 
-    public AudioDto getAudio(Long groupId) {
+    public Audio getAudio(Long groupId) {
         checkAllowed(groupId);
         return dslContext.select(AUDIO.asterisk()).from(AUDIO.innerJoin(DATA_ELEMENT).onKey()).orderBy(DSL.rand())
-                .limit(1).fetchOneInto(AudioDto.class);
+                .limit(1).fetchOneInto(Audio.class);
     }
 
     /**
@@ -272,7 +272,7 @@ public class UserGroupService {
      * 3. the text was not already recorded<br>
      * 4. the text was not already skipped by the user.<br>
      */
-    public TextDto getExcerpt(Long groupId) {
+    public Text getExcerpt(Long groupId) {
         checkAllowed(groupId);
         //TODO is is sentence error etc. even used anymore
         var res = dslContext.select(TEXT.ID, TEXT.DIALECT_ID, TEXT.DATA_ELEMENT_ID, TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
@@ -291,7 +291,7 @@ public class UserGroupService {
                                         .from(CHECKED_DATA_ELEMENT)
                                         .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))))
-                .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(TextDto.class);
+                .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(Text.class);
         return res.get(ThreadLocalRandom.current().nextInt(res.size()));
     }
 
@@ -301,7 +301,7 @@ public class UserGroupService {
      * 2. the image was not already recorded with the same dialect<br>
      * 3. the image was not already skipped by the user.<br>
      */
-    public ImageDto getImageDto(Long groupId) {
+    public Image getImage(Long groupId) {
         checkAllowed(groupId);
         return dslContext
                 .select(IMAGE.asterisk()).from(
@@ -325,17 +325,17 @@ public class UserGroupService {
                                         .where(CHECKED_DATA_ELEMENT.TYPE.eq(CheckedDataElementType.SKIPPED)
                                                 .and(CHECKED_DATA_ELEMENT.USER_ID
                                                         .eq(customUserDetailsService.getLoggedInUserId())))))))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(ImageDto.class);
+                .orderBy(DSL.rand()).limit(1).fetchOneInto(Image.class);
     }
 
-    public DataElementDto getDataElementDto(Long dataElementID) {
+    public DataElement getDataElement(Long dataElementID) {
         return dslContext.select().from(DATA_ELEMENT).where(DATA_ELEMENT.ID.eq(dataElementID))
-                .fetchOneInto(DataElementDto.class);
+                .fetchOneInto(DataElement.class);
     }
 
-    public TextDto getTextDto(Long dataElementID) {
+    public Text getTextDto(Long dataElementID) {
         return dslContext.select().from(TEXT.innerJoin(DATA_ELEMENT).onKey()).where(DATA_ELEMENT.ID.eq(dataElementID))
-                .fetchOneInto(TextDto.class);
+                .fetchOneInto(Text.class);
     }
 
     public void postCheckedOccurrence(long groupId, CheckedOccurrence checkedOccurrence) {

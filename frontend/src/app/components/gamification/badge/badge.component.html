@@ -1,11 +1,11 @@
 <mat-card *ngIf="achievementWrapper">
-  <h3>{{achievementWrapper.achievementDto.title}}</h3>
+  <h3>{{achievementWrapper.achievements.title}}</h3>
   <p *ngIf="getLevel(achievementWrapper) > 0">
     {{getDescription(achievementWrapper)}}
   </p>
-  <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name" [level]="getLevel(achievementWrapper)"
-                        [text]="achievementWrapper.achievementDto.name">
-  </app-glyphicons-batch>
+  <app-glyphicons-badge [glyph]="achievementWrapper.achievements.batchName" [level]="getLevel(achievementWrapper)"
+                        [text]="achievementWrapper.achievements.name">
+  </app-glyphicons-badge>
   <div *ngIf="getLevel(achievementWrapper) < 4">
     <p>Remaining time: {{getRemainingDays(achievementWrapper)}} Day
       <span *ngIf="getRemainingDays(achievementWrapper) > 1">s</span>

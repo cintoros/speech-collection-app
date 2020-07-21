@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
-import { DataElementDto } from 'src/app/models/data-element-dto';
+import { DataElement } from 'src/app/models/data-element';
 import { ElementType } from 'src/app/models/element-type';
-import { ImageDto } from 'src/app/models/image-dto';
+import { Image } from 'src/app/models/image';
 import { ReturnWrapper } from 'src/app/models/return-wrapper';
 import { CustomUserDetails } from 'src/app/models/spring-principal';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,7 +11,7 @@ import { NumAchievementsService } from 'src/app/services/num-achievements.servic
 import { environment } from '../../../environments/environment';
 import { CheckedDataElementType } from '../../models/checked-data-element-type';
 import { RecordingDto } from '../../models/recording-dto';
-import { TextDto } from '../../models/text-dto';
+import { Text } from '../../models/text';
 import { FeaturesService } from '../../services/features.service';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { UserGroupService } from '../../services/user-group.service';
@@ -26,19 +26,19 @@ import { UserGroupService } from '../../services/user-group.service';
 export class RecordComponent implements OnInit {
   selectedElement = ElementType.TEXT_OR_IMAGE;
 
-  dataElement1: DataElementDto = null;
-  dataElement2: DataElementDto = null;
-  dataElementTranslation: DataElementDto;
+  dataElement1: DataElement = null;
+  dataElement2: DataElement = null;
+  dataElementTranslation: DataElement;
   achievementWrapper: AchievementWrapper;
 
   // Depending on the current mode only two of the fields below will be != null
-  textDto1: TextDto = null;
-  textDto2: TextDto = null;
-  textDtoTranslation: TextDto;
+  textDto1: Text = null;
+  textDto2: Text = null;
+  textDtoTranslation: Text;
   recordingDto1: RecordingDto = null;
   recordingDto2: RecordingDto = null;
-  imageDto1: ImageDto = null;
-  imageDto2: ImageDto = null;
+  imageDto1: Image = null;
+  imageDto2: Image = null;
   elementType1: ElementType = null;
   elementType2: ElementType = null;
   elementTypeTranslation: ElementType;
@@ -99,8 +99,8 @@ export class RecordComponent implements OnInit {
   }
 
   triggerRecord(elem: ReturnWrapper) {
-    this.dataElementTranslation = elem.dataElementDto;
-    this.textDtoTranslation = elem.textDto;
+    this.dataElementTranslation = elem.dataElement;
+    this.textDtoTranslation = elem.text;
     this.elementTypeTranslation = elem.elementType;
     this.isTranslated = true;
   }
@@ -125,13 +125,13 @@ export class RecordComponent implements OnInit {
 
   private getNext() {
     const formData = new FormData();
-    formData.append(`selectedElement`, JSON.stringify(this.selectedElement));
+    formData.append(`selectedElement`, this.selectedElement);
     this.httpClient.post<ReturnWrapper>(`${environment.url}user_group/${this.groupId}/next`, formData)
         .subscribe(value => {
-          this.dataElement1 = value.dataElementDto;
-          this.textDto1 = value.textDto;
+          this.dataElement1 = value.dataElement;
+          this.textDto1 = value.text;
           this.recordingDto1 = value.recordingDto;
-          this.imageDto1 = value.imageDto;
+          this.imageDto1 = value.image;
           this.elementType1 = value.elementType;
           if (this.elementType1 === ElementType.TEXT) {
             this.elementType2 = ElementType.AUDIO;

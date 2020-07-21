@@ -4,7 +4,7 @@
     <div *ngFor="let achievementWrapper of activeAchievementsWrapper; index as i" class="col-sm-4"
          style="padding: 15px;">
       <p>{{achievementWrapper.percentOfUsers}}% of users have unlocked this achievement.</p>
-      <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
+      <app-badge [achievementWrapper]="achievementWrapper"></app-badge>
     </div>
   </div>
   <h2 *ngIf="nonActiveAchievementsWrapper.length > 0">Your Completed Achievements</h2>
@@ -12,7 +12,7 @@
     <div *ngFor="let achievementWrapper of nonActiveAchievementsWrapper; index as i" class="col-sm-4"
          style="padding: 15px;">
       <p>{{achievementWrapper.percentOfUsers}}% of users have unlocked this achievement.</p>
-      <app-batch [achievementWrapper]="achievementWrapper"></app-batch>
+      <app-badge [achievementWrapper]="achievementWrapper"></app-badge>
     </div>
   </div>
 </ng-container>

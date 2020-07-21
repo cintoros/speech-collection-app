@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TupleType } from 'src/app/models/tuple-dto';
+import { TupleType } from 'src/app/models/data-tuple';
 
 @Component({
   selector: 'app-tuple-selector',

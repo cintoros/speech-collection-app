@@ -31,11 +31,11 @@ export class ProgressbarComponent implements OnInit {
   }
 
   getLevel(achievementWrapper: AchievementWrapper): number {
-    const points = achievementWrapper.userAchievementDto.points;
-    const lvl1 = achievementWrapper.achievementDto.points_lvl1;
-    const lvl2 = achievementWrapper.achievementDto.points_lvl2;
-    const lvl3 = achievementWrapper.achievementDto.points_lvl3;
-    const lvl4 = achievementWrapper.achievementDto.points_lvl4;
+    const points = achievementWrapper.userAchievements.points;
+    const lvl1 = achievementWrapper.achievements.pointsLvl1;
+    const lvl2 = achievementWrapper.achievements.pointsLvl2;
+    const lvl3 = achievementWrapper.achievements.pointsLvl3;
+    const lvl4 = achievementWrapper.achievements.pointsLvl4;
 
     if (points - lvl4 >= 0) {
       return 4;
@@ -57,44 +57,44 @@ export class ProgressbarComponent implements OnInit {
     if (lvl === 4) {
       return 100;
     }
-    const points = achievementWrapper.userAchievementDto.points;
+    const points = achievementWrapper.userAchievements.points;
     if (lvl === 3) {
-      return (points / achievementWrapper.achievementDto.points_lvl4) * 100;
+      return (points / achievementWrapper.achievements.pointsLvl4) * 100;
     }
     if (lvl === 2) {
-      return (points / achievementWrapper.achievementDto.points_lvl3) * 100;
+      return (points / achievementWrapper.achievements.pointsLvl3) * 100;
     }
     if (lvl === 1) {
-      return (points / achievementWrapper.achievementDto.points_lvl2) * 100;
+      return (points / achievementWrapper.achievements.pointsLvl2) * 100;
     }
     if (lvl === 0) {
-      return (points / achievementWrapper.achievementDto.points_lvl1) * 100;
+      return (points / achievementWrapper.achievements.pointsLvl1) * 100;
     }
     return 0;
   }
 
   getRemainingPoints(achievementWrapper: AchievementWrapper): string {
     const lvl = this.getLevel(achievementWrapper);
-    const points = achievementWrapper.userAchievementDto.points.toString();
+    const points = achievementWrapper.userAchievements.points.toString();
     if (lvl === 4) {
       return points;
     }
 
     if (lvl === 3) {
       return points + '/' +
-          achievementWrapper.achievementDto.points_lvl4.toString();
+          achievementWrapper.achievements.pointsLvl4.toString();
     }
     if (lvl === 2) {
       return points + '/' +
-          achievementWrapper.achievementDto.points_lvl3.toString();
+          achievementWrapper.achievements.pointsLvl3.toString();
     }
     if (lvl === 1) {
       return points + '/' +
-          achievementWrapper.achievementDto.points_lvl2.toString();
+          achievementWrapper.achievements.pointsLvl2.toString();
     }
     if (lvl === 0) {
       return points + '/' +
-          achievementWrapper.achievementDto.points_lvl1.toString();
+          achievementWrapper.achievements.pointsLvl1.toString();
     }
     return '0';
   }

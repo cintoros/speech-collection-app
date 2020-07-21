@@ -48,10 +48,10 @@ import { CheckComponent } from './components/check/check/check.component';
 import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
 import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
 import { ShortcutComponent } from './components/check/shortcut/shortcut.component';
-import { BatchComponent } from './components/gamification/batch/batch.component';
+import { BadgeComponent } from './components/gamification/badge/badge.component';
 import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
 import { GamificationComponent } from './components/gamification/gamification.component';
-import { GlyphiconsBatchComponent } from './components/gamification/glyphicons-batch/glyphicons-batch.component';
+import { GlyphiconsBadgeComponent } from './components/gamification/glyphicons-badge/glyphicons-badge.component';
 import { MapComponent } from './components/gamification/map/map.component';
 import { ProgressbarComponent } from './components/gamification/progressbar/progressbar.component';
 import { SmallMedalComponent } from './components/gamification/small-medal/small-medal.component';
@@ -118,8 +118,8 @@ import { PublicStatsComponent } from './components/multi-use/public-stats/public
     ExcerptFromDataElemIdComponent,
     CheckCheckerComponent,
     GamificationComponent,
-    GlyphiconsBatchComponent,
-    BatchComponent,
+    GlyphiconsBadgeComponent,
+    BadgeComponent,
     RecordAnimationComponent,
     CheckAnimationComponent,
     ProgressbarComponent,

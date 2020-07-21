@@ -1,12 +1,7 @@
 import { AchievementWrapper } from './achievement-wrapper';
-import { TupleDto } from './tuple-dto';
+import { DataTuple } from './data-tuple';
 
-export class CheckWrapper {
-  tupleDto: TupleDto;
+export interface CheckWrapper {
+  dataTuple: DataTuple;
   achievementWrapper: AchievementWrapper;
-
-  constructor($tupleDto: TupleDto, $achievementWrapper: AchievementWrapper) {
-    this.tupleDto = $tupleDto;
-    this.achievementWrapper = $achievementWrapper;
-  }
 }

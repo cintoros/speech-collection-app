@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable, Subscription, timer } from 'rxjs';
-import { DataElementDto } from 'src/app/models/data-element-dto';
+import { DataElement } from 'src/app/models/data-element';
 import { ElementType } from 'src/app/models/element-type';
 import { AudioNoiseLevel, AudioQuality, RecordingDto } from 'src/app/models/recording-dto';
 import { UserGroupService } from 'src/app/services/user-group.service';
@@ -18,7 +18,7 @@ import { SnackBarService } from '../../../services/snack-bar.service';
 export class RecordingComponent implements OnInit {
   blobUrl: SafeUrl;
   isRecording = false;  // is true when there is an active recording
-  @Input() otherDataElement: DataElementDto;
+  @Input() otherDataElement: DataElement;
   @Input() otherElementType: ElementType;
   @Output() uploaded = new EventEmitter<string>();
   elapsedTime = 0;
@@ -81,7 +81,7 @@ export class RecordingComponent implements OnInit {
     formData.append(`file`, new Blob(this.audioChunks), 'audio');
     formData.append('recording', JSON.stringify(recording));
     formData.append('otherDataElement', JSON.stringify(this.otherDataElement));
-    formData.append('otherElementType', JSON.stringify(this.otherElementType));
+    formData.append('otherElementType', this.otherElementType);
     this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
       // TODO this does not trigger the reload correctly ;(
       this.getNext();

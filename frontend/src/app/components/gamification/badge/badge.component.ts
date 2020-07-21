@@ -2,19 +2,19 @@ import { Component, Input } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
-  selector: 'app-batch',
-  templateUrl: './batch.component.html',
-  styleUrls: ['./batch.component.scss']
+  selector: 'app-badge',
+  templateUrl: './badge.component.html',
+  styleUrls: ['./badge.component.scss']
 })
-export class BatchComponent {
+export class BadgeComponent {
   @Input() achievementWrapper: AchievementWrapper;
 
   getLevel(achievementWrapper: AchievementWrapper): number {
-    const points = achievementWrapper.userAchievementDto.points;
-    const lvl1 = achievementWrapper.achievementDto.points_lvl1;
-    const lvl2 = achievementWrapper.achievementDto.points_lvl2;
-    const lvl3 = achievementWrapper.achievementDto.points_lvl3;
-    const lvl4 = achievementWrapper.achievementDto.points_lvl4;
+    const points = achievementWrapper.userAchievements.points;
+    const lvl1 = achievementWrapper.achievements.pointsLvl1;
+    const lvl2 = achievementWrapper.achievements.pointsLvl2;
+    const lvl3 = achievementWrapper.achievements.pointsLvl3;
+    const lvl4 = achievementWrapper.achievements.pointsLvl4;
 
     if (points - lvl4 >= 0) {
       return 4;
@@ -37,45 +37,45 @@ export class BatchComponent {
     switch (lvl) {
       case 0:
       case 1:
-        return achievementWrapper.achievementDto.description_lvl1;
+        return achievementWrapper.achievements.descriptionLvl1;
       case 2:
-        return achievementWrapper.achievementDto.description_lvl2;
+        return achievementWrapper.achievements.descriptionLvl2;
       case 3:
-        return achievementWrapper.achievementDto.description_lvl3;
+        return achievementWrapper.achievements.descriptionLvl3;
       case 4:
       default:
-        return achievementWrapper.achievementDto.description_lvl4;
+        return achievementWrapper.achievements.descriptionLvl4;
     }
   }
 
   getPoints(achievementWrapper: AchievementWrapper): string {
-    return achievementWrapper.userAchievementDto.points.toString();
+    return achievementWrapper.userAchievements.points.toString();
   }
 
 
   getNextLevelPoints(achievementWrapper: AchievementWrapper): string {
     const lvl = this.getLevel(achievementWrapper);
     if (lvl === 4) {
-      return achievementWrapper.achievementDto.points_lvl4.toString();
+      return achievementWrapper.achievements.pointsLvl4.toString();
     }
     if (lvl === 3) {
-      return achievementWrapper.achievementDto.points_lvl4.toString();
+      return achievementWrapper.achievements.pointsLvl4.toString();
     }
     if (lvl === 2) {
-      return achievementWrapper.achievementDto.points_lvl3.toString();
+      return achievementWrapper.achievements.pointsLvl3.toString();
     }
     if (lvl === 1) {
-      return achievementWrapper.achievementDto.points_lvl2.toString();
+      return achievementWrapper.achievements.pointsLvl2.toString();
     }
     if (lvl === 0) {
-      return achievementWrapper.achievementDto.points_lvl1.toString();
+      return achievementWrapper.achievements.pointsLvl1.toString();
     }
     return '0';
   }
 
 
   getRemainingDays(achievementWrapper: AchievementWrapper): number {
-    const s = new Date(achievementWrapper.achievementDto.end_time);
+    const s = new Date(achievementWrapper.achievements.endTime);
     return this.millisecondsToDays(s.valueOf() - Date.now().valueOf());
   }
 
