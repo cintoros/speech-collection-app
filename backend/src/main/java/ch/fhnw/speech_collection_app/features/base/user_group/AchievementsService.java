@@ -17,12 +17,12 @@ import java.util.stream.Stream;
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
-//TODO cleanup most description names are set in the frontend.
+//TODO cleanup most description names are set/hacked in the frontend.
 public class AchievementsService {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
-    //TODO not sure if we want to add this to the config?
+    //TODO not sure if we want to add this to the config instead -> probably an array with 4 values ...
     private final Long LVL1 = 10L;
     private final Long LVL2 = 20L;
     private final Long LVL3 = 50L;
@@ -98,6 +98,7 @@ public class AchievementsService {
                 LVL4, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on, true);
     }
 
+    //TODO why are daily achievements not visible :)
     public Long createDayAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
                                      String description_lvl2, String description_lvl3, String description_lvl4,
                                      AchievementsDependsOn depends_on) {

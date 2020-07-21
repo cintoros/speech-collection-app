@@ -7,19 +7,19 @@ export interface AchievementWrapper {
 export interface Achievements {
   id: number;
   domainId: number;
-  name: Text;
-  batchName: Text;
-  title: Text;
+  name: string;
+  batchName: string;
+  title: string;
   startTime: Date;
   endTime: Date;
   pointsLvl1: number;
   pointsLvl2: number;
   pointsLvl3: number;
   pointsLvl4: number;
-  descriptionLvl1: Text;
-  descriptionLvl2: Text;
-  descriptionLvl3: Text;
-  descriptionLvl4: Text;
+  descriptionLvl1: string;
+  descriptionLvl2: string;
+  descriptionLvl3: string;
+  descriptionLvl4: string;
   dependsOn: DependsOnType;
 }
 
