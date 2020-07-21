@@ -1,5 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
+import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
 import ch.fhnw.speech_collection_app.features.base.user.CustomUserDetailsService;
 import ch.fhnw.speech_collection_app.features.base.user_group.CantonClass.CantonEnum;
 import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
@@ -12,39 +13,33 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
-//TODO cleanup most description names are set/hacked in the frontend.
+//TODO maybe remove descriptions etc. from database?
 public class AchievementsService {
-
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
-    //TODO not sure if we want to add this to the config instead -> probably an array with 4 values ...
-    private final Long LVL1 = 10L;
-    private final Long LVL2 = 20L;
-    private final Long LVL3 = 50L;
-    private final Long LVL4 = 100L;
+    private final SpeechCollectionAppConfig.Features.Gamification gamification;
 
     @Autowired
-    public AchievementsService(CustomUserDetailsService customUserDetailsService, DSLContext dslContext) {
+    public AchievementsService(
+            CustomUserDetailsService customUserDetailsService, DSLContext dslContext,
+            SpeechCollectionAppConfig speechCollectionAppConfig) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
+        this.gamification = speechCollectionAppConfig.getFeatures().getGamification();
     }
 
-    public Long createAchievement(String name, String batch_name, String title, Long domain_id, Timestamp start_time,
-                                  Timestamp end_time, Long points_lvl1, Long points_lvl2, Long points_lvl3, Long points_lvl4,
-                                  String description_lvl1, String description_lvl2, String description_lvl3, String description_lvl4,
-                                  AchievementsDependsOn depends_on, Boolean isVisible) {
+    //TODO ensure that the achievment names are unique ;)
+    public Long createAchievement(
+            String name, String batch_name, String title, Long domain_id, Timestamp start_time, Timestamp end_time,
+            AchievementsDependsOn depends_on, Boolean isVisible) {
 
         var batch = dslContext.select().from(ACHIEVEMENTS)
                 .where(ACHIEVEMENTS.NAME.eq(name).and(ACHIEVEMENTS.BATCH_NAME.eq(batch_name))
-                        .and(ACHIEVEMENTS.TITLE.eq(title)).and(ACHIEVEMENTS.DESCRIPTION_LVL1.eq(description_lvl1))
-                        .and(ACHIEVEMENTS.DESCRIPTION_LVL2.eq(description_lvl2))
-                        .and(ACHIEVEMENTS.DESCRIPTION_LVL3.eq(description_lvl3))
-                        .and(ACHIEVEMENTS.DESCRIPTION_LVL4.eq(description_lvl4))
+                        .and(ACHIEVEMENTS.TITLE.eq(title))
                         .and(ACHIEVEMENTS.START_TIME.eq(start_time)).and(ACHIEVEMENTS.END_TIME.eq(end_time))
                         .and(ACHIEVEMENTS.DEPENDS_ON.eq(depends_on)))
                 .limit(1).fetchOneInto(Achievements.class);
@@ -56,18 +51,10 @@ public class AchievementsService {
         achievement.setName(name);
         achievement.setTitle(title);
         achievement.setBatchName(batch_name);
-        achievement.setDescriptionLvl1(description_lvl1);
-        achievement.setDescriptionLvl2(description_lvl2);
-        achievement.setDescriptionLvl3(description_lvl3);
-        achievement.setDescriptionLvl4(description_lvl4);
         if (!(domain_id == -1L))
             achievement.setDomainId(domain_id);
         achievement.setStartTime(start_time);
         achievement.setEndTime(end_time);
-        achievement.setPointsLvl1(points_lvl1);
-        achievement.setPointsLvl2(points_lvl2);
-        achievement.setPointsLvl3(points_lvl3);
-        achievement.setPointsLvl4(points_lvl4);
         achievement.setDependsOn(depends_on);
         achievement.setIsVisible(isVisible);
         achievement.store();
@@ -75,9 +62,7 @@ public class AchievementsService {
         return achievement.getId();
     }
 
-    public Long createMonthAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
-                                       String description_lvl2, String description_lvl3, String description_lvl4,
-                                       AchievementsDependsOn depends_on) {
+    public Long createMonthAchievement(Timestamp time, String batch_name, String title, AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
@@ -94,14 +79,11 @@ public class AchievementsService {
         cal.add(Calendar.SECOND, -1);
         Timestamp end_time = new Timestamp(cal.getTimeInMillis());
 
-        return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, LVL1, LVL2, LVL3,
-                LVL4, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on, true);
+        return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, depends_on, true);
     }
 
     //TODO why are daily achievements not visible :)
-    public Long createDayAchievement(Timestamp time, String batch_name, String title, String description_lvl1,
-                                     String description_lvl2, String description_lvl3, String description_lvl4,
-                                     AchievementsDependsOn depends_on) {
+    public Long createDayAchievement(Timestamp time, String batch_name, String title, AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
         String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMAN);
@@ -117,60 +99,28 @@ public class AchievementsService {
         cal.add(Calendar.SECOND, -1);
         Timestamp end_time = new Timestamp(cal.getTimeInMillis());
 
-        return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, LVL1 / 2, LVL2 / 2,
-                LVL3 / 2, LVL4 / 2, description_lvl1, description_lvl2, description_lvl3, description_lvl4, depends_on,
-                false);
+        return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, depends_on, false);
     }
 
     //TODO it would be nice to do this in the frontend. so it can be translated using 18n etc.
     private Long getMonthTextAchievement(Timestamp time) {
-        String des1 = "Du hast in diesem Monat " + LVL1 + " Übersetzungen geschrieben.";
-        String des2 = "Du hast in diesem Monat " + LVL2 + " Übersetzungen geschrieben.";
-        String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen geschrieben.";
-        String des4 = "Du hast in diesem Monat " + LVL4 + " Übersetzungen geschrieben.";
-
-        return createMonthAchievement(time, "edit", "Fleissiger Schreiber", des1, des2, des3, des4,
-                AchievementsDependsOn.TEXT_CREATED);
+        return createMonthAchievement(time, "edit", "Fleissiger Schreiber", AchievementsDependsOn.TEXT_CREATED);
     }
 
     private Long getMonthAudioAchievement(Timestamp time) {
-        String des1 = "Du hast in diesem Monat " + LVL1 + " Übersetzungen aufgenommen.";
-        String des2 = "Du hast in diesem Monat " + LVL2 + " Übersetzungen aufgenommen.";
-        String des3 = "Du hast in diesem Monat " + LVL3 + " Übersetzungen aufgenommen.";
-        String des4 = "Du hast in diesem Monat " + LVL4 + " Übersetzungen aufgenommen.";
-
-        return createMonthAchievement(time, "microphone-alt", "Fleissiger Sprecher", des1, des2, des3, des4,
-                AchievementsDependsOn.AUDIO_CREATED);
+        return createMonthAchievement(time, "microphone-alt", "Fleissiger Sprecher", AchievementsDependsOn.AUDIO_CREATED);
     }
 
     private Long getMonthCheckAchievement(Timestamp time) {
-        String des1 = "Du hast in diesem Monat " + LVL1 + " Tupel geprüft.";
-        String des2 = "Du hast in diesem Monat " + LVL2 + " Tupel geprüft.";
-        String des3 = "Du hast in diesem Monat " + LVL3 + " Tupel geprüft.";
-        String des4 = "Du hast in diesem Monat " + LVL4 + " Tupel geprüft.";
-
-        return createMonthAchievement(time, "check-square", "Fleissiger Prüfer", des1, des2, des3, des4,
-                AchievementsDependsOn.TOTAL_CHECKED);
+        return createMonthAchievement(time, "check-square", "Fleissiger Prüfer", AchievementsDependsOn.TOTAL_CHECKED);
     }
 
     Long getDayCheckAchievement(Timestamp time) {
-        String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel geprüft.";
-        String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel geprüft.";
-        String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel geprüft.";
-        String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel geprüft.";
-
-        return createDayAchievement(time, "check-square", "Tagesziel prüfen", des1, des2, des3, des4,
-                AchievementsDependsOn.TOTAL_CHECKED);
+        return createDayAchievement(time, "check-square", "Tagesziel prüfen", AchievementsDependsOn.TOTAL_CHECKED);
     }
 
     Long getDayCreateAchievement(Timestamp time) {
-        String des1 = "Du hast an diesem Tag " + LVL1 / 2 + " Tupel erschaffen.";
-        String des2 = "Du hast an diesem Tag " + LVL2 / 2 + " Tupel erschaffen.";
-        String des3 = "Du hast an diesem Tag " + LVL3 / 2 + " Tupel erschaffen.";
-        String des4 = "Du hast an diesem Tag " + LVL4 / 2 + " Tupel erschaffen.";
-
-        return createDayAchievement(time, "equals", "Tagesziel erschaffen", des1, des2, des3, des4,
-                AchievementsDependsOn.TOTAL_CREATED);
+        return createDayAchievement(time, "equals", "Tagesziel erschaffen", AchievementsDependsOn.TOTAL_CREATED);
     }
 
     public void updateUserAchievement(Long userId, Long achievementId, Long amount) {
@@ -189,10 +139,8 @@ public class AchievementsService {
         userAchievement.setPoints(userAchievement.getPoints() + amount);
         userAchievement.store();
 
-        var achievement = getAchievement(achievementId);
         var userPoints = userAchievement.getPoints();
-        var b = Stream.of(achievement.getPointsLvl1(), achievement.getPointsLvl2(), achievement.getPointsLvl3(), achievement.getPointsLvl4())
-                .anyMatch(aLong -> aLong == userPoints);
+        var b = Arrays.stream(gamification.getPointPerLevel()).filter(i -> i > 0).anyMatch(aLong -> aLong == userPoints);
         if (b && amount != 0) {
             userAchievement.setIsNew(true);
             userAchievement.store();
@@ -284,24 +232,20 @@ public class AchievementsService {
     public AchievementWrapper getActiveAchievement() {
         createAutomaticAchievements();
         var userAchievement = getActiveUserAchievement(customUserDetailsService.getLoggedInUserId());
-        return new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
-                getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement)));
+        return getAchievementWrapper(userAchievement);
     }
 
-    public Long getLevel(UserAchievements userAchievement) {
-        var achievement = getAchievement(userAchievement.getAchievementsId());
-        if (achievement.getPointsLvl4() <= userAchievement.getPoints())
-            return 4L;
-        if (achievement.getPointsLvl3() <= userAchievement.getPoints())
-            return 3L;
-        if (achievement.getPointsLvl2() <= userAchievement.getPoints())
-            return 2L;
-        if (achievement.getPointsLvl1() <= userAchievement.getPoints())
-            return 1L;
-        return 1L;
+    private int getLevel(UserAchievements userAchievement) {
+        int[] pointPerLevel = gamification.getPointPerLevel();
+        for (int i = 4; i >= 0; i--) {
+            if (pointPerLevel[i] <= userAchievement.getPoints()) {
+                return i;
+            }
+        }
+        return 0;
     }
 
-    public long getAchievementPercent(Long achievementId, Long level) {
+    public long getAchievementPercent(long achievementId, long level) {
         float total = dslContext.selectCount().from(USER_ACHIEVEMENTS)
                 .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)).limit(1).fetchOneInto(Long.class);
         float achieved = total;
@@ -356,8 +300,7 @@ public class AchievementsService {
         var userAchievements = getActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
         var res = new ArrayList<AchievementWrapper>();
         for (var userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
-                    getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement))));
+            res.add(getAchievementWrapper(userAchievement));
         }
         for (AchievementWrapper aw : res) {
             Long id = aw.userAchievements.getId();
@@ -372,8 +315,7 @@ public class AchievementsService {
         var userAchievements = getNonActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
         List<AchievementWrapper> res = new ArrayList<AchievementWrapper>();
         for (var userAchievement : userAchievements) {
-            res.add(new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
-                    getAchievementPercent(userAchievement.getAchievementsId(), getLevel(userAchievement))));
+            res.add(getAchievementWrapper(userAchievement));
         }
         for (AchievementWrapper aw : res) {
             Long id = aw.userAchievements.getId();
@@ -420,5 +362,11 @@ public class AchievementsService {
             result.add(new MapWrapper(canton, sum));
         }
         return result;
+    }
+
+    AchievementWrapper getAchievementWrapper(UserAchievements userAchievement) {
+        int level = getLevel(userAchievement);
+        return new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
+                getAchievementPercent(userAchievement.getAchievementsId(), Math.min(level, 1)), level);
     }
 }

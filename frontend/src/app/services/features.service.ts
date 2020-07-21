@@ -7,6 +7,17 @@ interface Features {
   emailIntegration: boolean;
   swissGermanText: boolean;
   additionalData: boolean;
+  gamification: Gamification;
+}
+
+interface Gamification {
+  mode: Mode;
+  pointPerLevel: number[];
+  dailyDivisor: number;
+}
+
+enum Mode {
+  DISABLED = 'DISABLED', HALF_ENABLED = 'HALF_ENABLED', ENABLED = 'ENABLED'
 }
 
 @Injectable({

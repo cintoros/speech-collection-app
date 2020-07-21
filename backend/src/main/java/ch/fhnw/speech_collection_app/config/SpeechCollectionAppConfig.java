@@ -97,11 +97,10 @@ public class SpeechCollectionAppConfig {
     public static class Features {
         private boolean emailIntegration;
         //TODO actually use the new flags to switch between behaviours
-        //TODO maybe add addtional gamiification settings like level points etc.
         private boolean swissGermanText;
         private boolean additionalData;
         private boolean images;
-        private GamificationMode gamificationMode;
+        private Gamification gamification;
 
         public boolean isEmailIntegration() {
             return emailIntegration;
@@ -135,14 +134,44 @@ public class SpeechCollectionAppConfig {
             this.images = images;
         }
 
-        public GamificationMode getGamificationMode() {
-            return gamificationMode;
+        public Gamification getGamification() {
+            return gamification;
         }
 
-        public void setGamificationMode(GamificationMode gamificationMode) {
-            this.gamificationMode = gamificationMode;
+        public void setGamification(Gamification gamification) {
+            this.gamification = gamification;
         }
 
-        public enum GamificationMode {DISABLED, HALF_ENABLED, ENABLED}
+        public static class Gamification {
+            private Mode mode;
+            private int[] pointPerLevel;
+            private int dailyDivisor;
+
+            public Mode getMode() {
+                return mode;
+            }
+
+            public void setMode(Mode mode) {
+                this.mode = mode;
+            }
+
+            public int[] getPointPerLevel() {
+                return pointPerLevel;
+            }
+
+            public void setPointPerLevel(int[] pointPerLevel) {
+                this.pointPerLevel = pointPerLevel;
+            }
+
+            public int getDailyDivisor() {
+                return dailyDivisor;
+            }
+
+            public void setDailyDivisor(int dailyDivisor) {
+                this.dailyDivisor = dailyDivisor;
+            }
+
+            public enum Mode {DISABLED, HALF_ENABLED, ENABLED}
+        }
     }
 }

@@ -1,7 +1,7 @@
 package ch.fhnw.speech_collection_app.features.base.user;
 
 import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig;
-import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig.Features.GamificationMode;
+import ch.fhnw.speech_collection_app.config.SpeechCollectionAppConfig.Features.Gamification.Mode;
 import ch.fhnw.speech_collection_app.features.email.EmailSenderService;
 import ch.fhnw.speech_collection_app.jooq.enums.UserGroupRoleRole;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.*;
@@ -139,11 +139,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Boolean getGamification() {
-        var gamificationMode = speechCollectionAppConfig.getFeatures().getGamificationMode();
-        if (gamificationMode == GamificationMode.DISABLED) {
+        var gamificationMode = speechCollectionAppConfig.getFeatures().getGamification().getMode();
+        if (gamificationMode == Mode.DISABLED) {
             return false;
         }
-        if (gamificationMode == GamificationMode.ENABLED) {
+        if (gamificationMode == Mode.ENABLED) {
             return true;
         }
         Long withGamification = dslContext.selectCount()

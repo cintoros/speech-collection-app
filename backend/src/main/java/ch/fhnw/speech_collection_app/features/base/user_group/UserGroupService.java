@@ -157,15 +157,10 @@ public class UserGroupService {
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
-        var achievements = achievementsService.getAchievement(achievementId);
         var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        ReturnWrapper result = new ReturnWrapper(getDataElement(element.getId()), getTextDto(element.getId()), null,
-                null, ElementType.TEXT,
-                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
-                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
-
-        return result;
+        return new ReturnWrapper(getDataElement(element.getId()), getTextDto(element.getId()), null,
+                null, ElementType.TEXT, achievementsService.getAchievementWrapper(userAchievements));
     }
 
     public ReturnWrapper getNext(long groupId, ElementType selectedElement) {
@@ -211,12 +206,9 @@ public class UserGroupService {
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCreateAchievement(new Timestamp(date.getTime()));
-        var achievements = achievementsService.getAchievement(achievementId);
         var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new ReturnWrapper(data, text, recording, image, eType,
-                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
-                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
+        return new ReturnWrapper(data, text, recording, image, eType, achievementsService.getAchievementWrapper(userAchievements));
     }
 
     public CheckWrapper getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
@@ -226,12 +218,9 @@ public class UserGroupService {
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        var achievements = achievementsService.getAchievement(achievementId);
         var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(dataTuple,
-                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
-                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
+        return new CheckWrapper(dataTuple, achievementsService.getAchievementWrapper(userAchievements));
     }
 
     public CheckWrapper getNextTuple(long groupId) {
@@ -251,12 +240,9 @@ public class UserGroupService {
         Date date = new Date();
 
         Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        var achievements = achievementsService.getAchievement(achievementId);
         var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
 
-        return new CheckWrapper(dataTuple,
-                new AchievementWrapper(achievements, userAchievements, achievementsService.getAchievementPercent(
-                        userAchievements.getAchievementsId(), achievementsService.getLevel(userAchievements))));
+        return new CheckWrapper(dataTuple, achievementsService.getAchievementWrapper(userAchievements));
     }
 
     public Audio getAudio(Long groupId) {

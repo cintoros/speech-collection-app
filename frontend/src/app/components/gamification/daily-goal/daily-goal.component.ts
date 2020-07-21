@@ -11,25 +11,8 @@ export class DailyGoalComponent implements OnChanges {
   level = 0;
 
   ngOnChanges(): void {
-    // TODO simplify?
     if (this.achievementWrapper) {
-      const points = this.achievementWrapper.userAchievements.points;
-      const lvl1 = this.achievementWrapper.achievements.pointsLvl1;
-      const lvl2 = this.achievementWrapper.achievements.pointsLvl2;
-      const lvl3 = this.achievementWrapper.achievements.pointsLvl3;
-      const lvl4 = this.achievementWrapper.achievements.pointsLvl4;
-
-      if (points - lvl4 >= 0) {
-        this.level = 4;
-      } else if (points - lvl3 >= 0) {
-        this.level = 3;
-      } else if (points - lvl2 >= 0) {
-        this.level = 2;
-      } else if (points - lvl1 >= 0) {
-        this.level = 1;
-      } else {
-        this.level = 0;
-      }
+      this.level = this.achievementWrapper.level;
     }
   }
 }
