@@ -1,6 +1,8 @@
-<mat-card>
+<mat-card *ngIf="achievementWrapper">
   <h3>{{achievementWrapper.achievementDto.title}}</h3>
-  <p *ngIf="getLevel(achievementWrapper) > 0">{{getDescription(achievementWrapper)}}</p>
+  <p *ngIf="getLevel(achievementWrapper) > 0">
+    {{getDescription(achievementWrapper)}}
+  </p>
   <app-glyphicons-batch [glyph]="achievementWrapper.achievementDto.batch_name" [level]="getLevel(achievementWrapper)"
                         [text]="achievementWrapper.achievementDto.name">
   </app-glyphicons-batch>

@@ -14,11 +14,12 @@ import java.util.*;
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
 @Service
+//TODO cleanup most description names are set in the frontend.
 public class AchievementsService {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
-
+    //TODO not sure if we want to add this to the config?
     private final Long LVL1 = 10L;
     private final Long LVL2 = 20L;
     private final Long LVL3 = 50L;
@@ -371,6 +372,7 @@ public class AchievementsService {
         return res;
     }
 
+    //TODO this does not return anything?
     public List<AchievementWrapper> getNonActiveAchievements() {
         createAutomaticAchievements();
         List<UserAchievementDto> userAchievements = getNonActiveUserAchievements(
