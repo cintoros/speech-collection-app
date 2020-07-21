@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { UserGroupService } from 'src/app/services/user-group.service';
 import { environment } from '../../../../environments/environment';
 
@@ -8,16 +9,14 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './audio.component.html',
   styleUrls: ['./audio.component.scss'],
 })
-// TODO semi-replace with a normal audio player?
 export class AudioComponent implements OnInit {
   isPlaying = false;
-  audioProgress = 0;
   @Input() dataElementId: number;
-  private audioPlayer = new Audio();
-  private isReady = false;
+  blobUrl: any;
   private groupId = 1;
 
-  constructor(private httpClient: HttpClient, private userGroupService: UserGroupService) {
+  constructor(
+      private httpClient: HttpClient, private userGroupService: UserGroupService, private domSanitizer: DomSanitizer) {
     this.groupId = this.userGroupService.userGroupId;
   }
 
@@ -26,7 +25,6 @@ export class AudioComponent implements OnInit {
   }
 
   togglePlay() {
-    this.isReady = true;
     if (this.isPlaying) {
       this.stop();
     } else {
@@ -34,25 +32,25 @@ export class AudioComponent implements OnInit {
     }
   }
 
+  private audioPlayer = (): HTMLAudioElement => (document.getElementById('htmlAudioPlayer') as HTMLAudioElement);
+
   private play() {
-    this.audioPlayer.play();
+    this.audioPlayer().play();
     this.isPlaying = true;
   }
 
   private stop() {
-    this.audioPlayer.pause();
-    this.audioPlayer.currentTime = 0;
-    this.audioProgress = 0;
+    this.audioPlayer().pause();
+    this.audioPlayer().currentTime = 0;
     this.isPlaying = false;
   }
 
   private loadAudioBlob(): void {
     this.httpClient
         .get(`${environment.url}user_group/${this.groupId}/occurrence/audio/${this.dataElementId}`, {responseType: 'blob'})
-        .subscribe((resp) => {
-          this.audioPlayer = new Audio(URL.createObjectURL(resp));
-          this.audioPlayer.onended = () => (this.isPlaying = false);
-          this.audioPlayer.ontimeupdate = () => (this.audioProgress = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100);
+        .subscribe(resp => {
+          this.blobUrl = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(resp));
+          this.audioPlayer().onended = () => this.isPlaying = false;
         });
   }
 }

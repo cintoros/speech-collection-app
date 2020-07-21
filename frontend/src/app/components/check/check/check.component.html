@@ -32,7 +32,7 @@
   <!--  TODO not sure where we want to add the additional buttons-->
   <!--  FIXME why is this here faster to switch and not the recording?-->
   <!-- The card component -->
-  <mat-card class="center">
+  <mat-card *ngIf="tuple.type !== 'TEXT_AUDIO'" class="center">
     <span *ngIf="tuple.type === 'TEXT_TEXT'">
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
             <br/>
@@ -41,12 +41,6 @@
         </span>
     <span *ngIf="tuple.type === 'AUDIO_AUDIO'">
             <app-audio [dataElementId]="tuple.data_element_id_1"></app-audio>
-            <br/>
-            <br/>
-            <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
-        </span>
-    <span *ngIf="tuple.type === 'TEXT_AUDIO'">
-            <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
             <br/>
             <br/>
             <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
@@ -69,6 +63,22 @@
             <br/>
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_2"></app-excerpt-from-data-elem-id>
         </span>
+    <br/>
+    <!--FIXME why is this a seperate component?-->
+    <app-check-checker (completed)="afterCheck()" [tuple]="tuple"></app-check-checker>
+  </mat-card>
+  <mat-card *ngIf="tuple.type === 'TEXT_AUDIO'" class="center">
+    <div>
+      <app-excerpt-from-data-elem-id [dataElementId]="tuple.data_element_id_1"></app-excerpt-from-data-elem-id>
+      <br/>
+      <br/>
+      <app-audio [dataElementId]="tuple.data_element_id_2"></app-audio>
+      <button (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)"
+              class="check-navigation-button" mat-raised-button>
+        <mat-icon>skip_next</mat-icon>
+        <span>&nbsp;Skip</span>
+      </button>
+    </div>
     <br/>
     <!--FIXME why is this a seperate component?-->
     <app-check-checker (completed)="afterCheck()" [tuple]="tuple"></app-check-checker>

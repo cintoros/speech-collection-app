@@ -82,6 +82,7 @@ import { GroupAdminGuardService } from './guards/group-admin-guard.service';
 import { AuthHeaderInterceptorService } from './services/auth-header-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { LoadingInterceptorService } from './services/loading-interceptor.service';
+import { PublicStatsComponent } from './components/multi-use/public-stats/public-stats.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +128,7 @@ import { LoadingInterceptorService } from './services/loading-interceptor.servic
     MapComponent,
     LineChartComponent,
     BarChartComponent,
+    PublicStatsComponent,
   ],
   imports: [
     BrowserModule,

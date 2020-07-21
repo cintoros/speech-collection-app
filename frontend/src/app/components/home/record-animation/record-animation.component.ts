@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-record-animation',
   templateUrl: './record-animation.component.html',
   styleUrls: ['./record-animation.component.scss']
 })
-export class RecordAnimationComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+export class RecordAnimationComponent {
 }

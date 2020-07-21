@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 import { CustomUserDetails } from 'src/app/models/spring-principal';
 import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
+import { UserGroup } from '../../models/user-group';
 import { UserGroupService } from '../../services/user-group.service';
 
 @Component({
@@ -11,33 +10,23 @@ import { UserGroupService } from '../../services/user-group.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-// TODO fix undefined errors etc.
 export class HomeComponent implements OnInit {
   user: CustomUserDetails;
-  activeAchievementWrapper: AchievementWrapper;
+  userGroups: UserGroup[] = [];
   private groupId = 1;
 
   constructor(
-      public authService: AuthService, private httpClient: HttpClient,
-      private userGroupService: UserGroupService) {
+      public authService: AuthService, private httpClient: HttpClient, public userGroupService: UserGroupService) {
     this.groupId = this.userGroupService.userGroupId;
-    authService.getUser().subscribe((user) => {
-      this.user = user.principal;
-      this.user.gamificationOn = user.principal.user.gamificationOn;
-    });
+    authService.getUser().subscribe(user => this.user = user.principal);
   }
 
   ngOnInit(): void {
-    this.getActiveAchievement();
+    this.userGroupService.getUserGroups().subscribe(v => this.userGroups = v);
   }
 
-
-  private getActiveAchievement(): void {
-    this.httpClient
-        .get<AchievementWrapper>(
-            `${environment.url}user_group/${this.groupId}/achievement/active`)
-        .subscribe((value) => {
-          this.activeAchievementWrapper = value;
-        });
+  getSelectedGroupDescription() {
+    const userGroup = this.userGroups.find(value => value.id === this.userGroupService.userGroupId);
+    return userGroup ? userGroup.description : undefined;
   }
 }

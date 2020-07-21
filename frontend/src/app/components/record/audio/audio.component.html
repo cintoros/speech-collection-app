@@ -1,6 +1,11 @@
-<button (click)="togglePlay()" *ngIf="!isPlaying" class="btn btn-primary" mat-raised-button>
+<audio #htmlAudioPlayer [src]="blobUrl" controls id="htmlAudioPlayer"></audio>
+<br/>
+<!--TODO not sure if this makes sense anymore-->
+<button (click)="togglePlay();" *ngIf=" !isPlaying" class="check-navigation-button" mat-raised-button>
   <mat-icon>play_arrow</mat-icon>
+  Play
 </button>
-<button (click)="togglePlay()" *ngIf="isPlaying" class="btn btn-secondary" mat-raised-button>
+<button (click)="togglePlay();" *ngIf="isPlaying" class="check-navigation-button" mat-raised-button>
   <mat-icon>pause</mat-icon>
+  Pause
 </button>

@@ -96,6 +96,7 @@ public class SpeechCollectionAppConfig {
 
     public static class Features {
         private boolean emailIntegration;
+        //TODO actually use the new flags to switch between behaviours
         private boolean swissGermanText;
         private boolean additionalData;
         private boolean images;
