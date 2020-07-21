@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 
 @Component({
@@ -6,45 +6,28 @@ import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
   templateUrl: './daily-goal.component.html',
   styleUrls: ['./daily-goal.component.scss']
 })
-export class DailyGoalComponent {
+export class DailyGoalComponent implements OnChanges {
   @Input() achievementWrapper: AchievementWrapper;
+  level = 0;
 
-  getLevel(achievementWrapper: AchievementWrapper): number {
-    const points = achievementWrapper.userAchievementDto.points;
-    const lvl1 = achievementWrapper.achievementDto.points_lvl1;
-    const lvl2 = achievementWrapper.achievementDto.points_lvl2;
-    const lvl3 = achievementWrapper.achievementDto.points_lvl3;
-    const lvl4 = achievementWrapper.achievementDto.points_lvl4;
+  ngOnChanges(): void {
+    // TODO simplify?
+    const points = this.achievementWrapper.userAchievementDto.points;
+    const lvl1 = this.achievementWrapper.achievementDto.points_lvl1;
+    const lvl2 = this.achievementWrapper.achievementDto.points_lvl2;
+    const lvl3 = this.achievementWrapper.achievementDto.points_lvl3;
+    const lvl4 = this.achievementWrapper.achievementDto.points_lvl4;
 
     if (points - lvl4 >= 0) {
-      return 4;
-    }
-    if (points - lvl3 >= 0) {
-      return 3;
-    }
-    if (points - lvl2 >= 0) {
-      return 2;
-    }
-    if (points - lvl1 >= 0) {
-      return 1;
-    }
-    return 0;
-  }
-
-  getColorofNextLevel(achievementWrapper: AchievementWrapper): string {
-    const lvl = this.getLevel(achievementWrapper);
-    switch (lvl) {
-      case 0:
-        return 'Bronze';
-      case 1:
-        return 'Silber';
-      case 2:
-        return 'Gold';
-      case 3:
-        return 'Platin';
-      case 4:
-      default:
-        return '???';
+      this.level = 4;
+    } else if (points - lvl3 >= 0) {
+      this.level = 3;
+    } else if (points - lvl2 >= 0) {
+      this.level = 2;
+    } else if (points - lvl1 >= 0) {
+      this.level = 1;
+    } else {
+      this.level = 0;
     }
   }
 }

@@ -117,6 +117,7 @@ public class AchievementsService {
                 false);
     }
 
+    //TODO it would be nice to do this in the frontend. so it can be translated using 18n etc.
     private Long getMonthTextAchievement(Timestamp time) {
         String des1 = "Du hast in diesem Monat " + LVL1 + " Übersetzungen geschrieben.";
         String des2 = "Du hast in diesem Monat " + LVL2 + " Übersetzungen geschrieben.";

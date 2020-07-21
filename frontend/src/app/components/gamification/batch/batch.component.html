@@ -5,15 +5,14 @@
                         [text]="achievementWrapper.achievementDto.name">
   </app-glyphicons-batch>
   <div *ngIf="getLevel(achievementWrapper) < 4">
-    <p>
-      Verbleibende Zeit: {{getRemainingDays(achievementWrapper)}} Tag<span
-            *ngIf="getRemainingDays(achievementWrapper) > 1">e</span>
+    <p>Remaining time: {{getRemainingDays(achievementWrapper)}} Day
+      <span *ngIf="getRemainingDays(achievementWrapper) > 1">s</span>
     </p>
     <p>
-      Du bekommst die
-      <span *ngIf="getLevel(achievementWrapper) > 0">nächste </span>Auszeichnung mit
-      {{getNextLevelPoints(achievementWrapper)}} Punkten. </p>
-    <p> Du hast bis jetzt: {{getPoints(achievementWrapper)}}</p>
+      You get the
+      <span *ngIf="getLevel(achievementWrapper) > 0">next </span>achievement with
+      {{getNextLevelPoints(achievementWrapper)}} points. </p>
+    <p> You have until now: {{getPoints(achievementWrapper)}}</p>
     <app-progressbar [achievementWrapper]="achievementWrapper"></app-progressbar>
   </div>
 </mat-card>
