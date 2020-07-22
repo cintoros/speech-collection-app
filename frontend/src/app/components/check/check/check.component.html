@@ -1,6 +1,3 @@
-<app-tuple-selector (elementTypeClicked)="onSelectorChange($event)" *ngIf="isDebug" [elementType]="selectedTupleType">
-</app-tuple-selector>
-
 <div *ngIf="tuple">
   <!-- instructions -->
   <p *ngIf="tuple.type !== 'TEXT_AUDIO'" class="card">
@@ -65,7 +62,7 @@
         </span>
     <br/>
     <!--FIXME why is this a seperate component?-->
-    <app-check-checker (completed)="afterCheck()" [tuple]="tuple"></app-check-checker>
+    <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
   </mat-card>
   <mat-card *ngIf="tuple.type === 'TEXT_AUDIO'" class="center">
     <div>
@@ -81,10 +78,10 @@
     </div>
     <br/>
     <!--FIXME why is this a seperate component?-->
-    <app-check-checker (completed)="afterCheck()" [tuple]="tuple"></app-check-checker>
+    <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
   </mat-card>
   <br/>
-  <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
+  <app-daily-goal *ngIf="this.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
 </div>
 <div *ngIf="!tuple">
   <div style="height: calc(100% - 90px);">

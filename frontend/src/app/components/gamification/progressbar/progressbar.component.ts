@@ -9,7 +9,7 @@ import { FeaturesService } from '../../../services/features.service';
 })
 export class ProgressbarComponent {
   @Input() achievementWrapper: AchievementWrapper;
-  private pointPerLevel: number[];
+  private pointPerLevel = [0, 10, 20, 50, 100];
   private colors = ['bronze', 'silver', 'gold', 'green', 'green'];
 
   constructor(private featuresService: FeaturesService) {

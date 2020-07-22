@@ -1,7 +1,3 @@
-<app-element-selector (elementTypeClicked)="selectorUpdate($event)" *ngIf="isDebug" [elementType]="selectedElement">
-</app-element-selector>
-<app-triplet-selector (threeTupleClicked)="translationUpdate($event)" *ngIf="isDebug" [isThreeTuple]="withTranslation">
-</app-triplet-selector>
 <div *ngIf="dataElement1">
   <!-- Instructions-->
   <div class="center">
@@ -103,7 +99,7 @@
     </span>
   </mat-card>
   <br/>
-  <app-daily-goal *ngIf="this.user.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
+  <app-daily-goal *ngIf="this.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
   <br>
   <br>
   <p class="skip">Skip</p>

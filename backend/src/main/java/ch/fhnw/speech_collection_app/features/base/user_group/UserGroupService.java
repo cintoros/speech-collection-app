@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -211,37 +210,31 @@ public class UserGroupService {
         return new ReturnWrapper(data, text, recording, image, eType, achievementsService.getAchievementWrapper(userAchievements));
     }
 
-    public CheckWrapper getNextTuple(long groupId, DataTupleType dataTupleTypeSelector) {
+    /**
+     * returns the next occurrence to check based on the groupId and available data.<br>
+     * occurrences are labeled until it is clear that they clearly wrong|correct.<br>
+     */
+    public CheckWrapper checkNext(long groupId) {
         checkAllowed(groupId);
-        var dataTuple = dslContext.select().from(DATA_TUPLE).where(DATA_TUPLE.TYPE.eq(dataTupleTypeSelector))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(DataTuple.class);
-        Date date = new Date();
-        Long userId = customUserDetailsService.getLoggedInUserId();
-        Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
-
-        return new CheckWrapper(dataTuple, achievementsService.getAchievementWrapper(userAchievements));
-    }
-
-    public CheckWrapper getNextTuple(long groupId) {
-        checkAllowed(groupId);
-        Long userId = customUserDetailsService.getLoggedInUserId();
-
-        var dataTuple = dslContext.select(DATA_TUPLE.asterisk()).from(DATA_TUPLE)
-                .except(dslContext.select(DATA_TUPLE.asterisk())
-                        .from(DATA_TUPLE.join(CHECKED_DATA_TUPLE)
-                                .on(DATA_TUPLE.ID.eq(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)))
-                        .where(CHECKED_DATA_TUPLE.USER_ID.eq(userId)))
+        var loggedInUserId = customUserDetailsService.getLoggedInUserId();
+        Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(new Date().getTime()));
+        var userAchievements = achievementsService.getUserAchievement(loggedInUserId, achievementId);
+        var res = dslContext.select(DATA_TUPLE.asterisk())
+                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
+                        .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID))
+                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).lessThan(speechCollectionAppConfig.getMinNumChecks())
+                        .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
+                        //.and(DATA_TUPLE.FINISHED.isFalse())
+                        // user should only check once
+                        .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
+                                .from(CHECKED_DATA_TUPLE)
+                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(loggedInUserId)))))
+                // user should not check self-generated data
                 .except(dslContext.select(DATA_TUPLE.asterisk())
                         .from(DATA_TUPLE.join(DATA_ELEMENT).on(DATA_TUPLE.DATA_ELEMENT_ID_2.eq(DATA_ELEMENT.ID)))
-                        .where(DATA_ELEMENT.USER_ID.eq(userId)))
-                .orderBy(DSL.rand()).limit(1).fetchOneInto(DataTuple.class);
-
-        Date date = new Date();
-
-        Long achievementId = achievementsService.getDayCheckAchievement(new Timestamp(date.getTime()));
-        var userAchievements = achievementsService.getUserAchievement(userId, achievementId);
-
+                        .where(DATA_ELEMENT.USER_ID.eq(loggedInUserId)))
+                .limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(DataTuple.class);
+        var dataTuple = res.isEmpty() ? null : res.get(ThreadLocalRandom.current().nextInt(res.size()));
         return new CheckWrapper(dataTuple, achievementsService.getAchievementWrapper(userAchievements));
     }
 
@@ -384,29 +377,6 @@ public class UserGroupService {
                 ).limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(Occurrence.class);
         if (res.isEmpty()) return Optional.empty();
         return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
-    }
-
-    //TODO check if the ceck-component still works -> probalby not.
-    public List<Occurrence> getNextOccurrences2(long groupId) {
-        checkAllowed(groupId);
-        var image_element = DATA_TUPLE.as("image_element");
-        return dslContext
-                .select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_,
-                        DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"),
-                        image_element.DATA_ELEMENT_ID_1.as("image_element_id"))
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1).join(TEXT)
-                        .onKey(TEXT.DATA_ELEMENT_ID).leftJoin(image_element)
-                        .on(image_element.DATA_ELEMENT_ID_2.eq(DATA_ELEMENT.ID)
-                                .and(image_element.TYPE.eq(DataTupleType.IMAGE_AUDIO))))
-                .where(DSL.abs(DATA_TUPLE.WRONG.minus(DATA_TUPLE.CORRECT))
-                        .le(speechCollectionAppConfig.getMinNumChecks()).and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
-                        .and(DATA_TUPLE.TYPE
-                                .eq(DataTupleType.RECORDING).or(DATA_TUPLE.TYPE.eq(DataTupleType.TEXT_AUDIO)))
-                        .and(DATA_TUPLE.FINISHED.isFalse())
-                        .and(DATA_TUPLE.ID.notIn(
-                                dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID).from(CHECKED_DATA_TUPLE).where(
-                                        CHECKED_DATA_TUPLE.USER_ID.eq(customUserDetailsService.getLoggedInUserId())))))
-                .orderBy(DSL.rand()).limit(10).fetchInto(Occurrence.class);
     }
 
     public byte[] getAudio(long groupId, long dataElementId) throws IOException {

@@ -1,7 +1,6 @@
 package ch.fhnw.speech_collection_app.features.base.user_group;
 
 import ch.fhnw.speech_collection_app.jooq.enums.CheckedDataElementType;
-import ch.fhnw.speech_collection_app.jooq.enums.DataTupleType;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.DataElement;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Image;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+//TODO cleanup no longer used endpoints
 @RestController
 @RequestMapping("/api/user_group/{groupId}/")
 public class UserGroupRestApiController {
@@ -69,6 +69,7 @@ public class UserGroupRestApiController {
         return userGroupService.getTextDto(dataElementId);
     }
 
+    //TODO unused?
     @GetMapping("image_dto")
     public Image getImageDto(@PathVariable long groupId) {
         return userGroupService.getImage(groupId);
@@ -79,19 +80,15 @@ public class UserGroupRestApiController {
         userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
     }
 
+    //TODO unused?
     @GetMapping("occurrence/next")
     public Optional<Occurrence> getNextOccurrences(@PathVariable long groupId) {
         return userGroupService.getNextOccurrence(groupId);
     }
 
-    @PostMapping("check-next")
-    public CheckWrapper getNextTuple(@PathVariable long groupId, @RequestParam String selectedTupleType) {
-        return userGroupService.getNextTuple(groupId, DataTupleType.valueOf(selectedTupleType));
-    }
-
     @GetMapping("check-next")
-    public CheckWrapper getNextTuple(@PathVariable long groupId) {
-        return userGroupService.getNextTuple(groupId);
+    public CheckWrapper checkNext(@PathVariable long groupId) {
+        return userGroupService.checkNext(groupId);
     }
 
     @GetMapping(value = "occurrence/audio/{dataElementId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -106,6 +103,7 @@ public class UserGroupRestApiController {
         return userGroupService.getImage(groupId, dataElementId);
     }
 
+    //TODO probably move into separate feature endpoint ...
     @GetMapping(value = "achievements/active")
     public List<AchievementWrapper> getActiveAchievements() {
         return achievementsService.getActiveAchievements();

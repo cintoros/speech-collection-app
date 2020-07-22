@@ -5,7 +5,6 @@ import { DataElement } from 'src/app/models/data-element';
 import { ElementType } from 'src/app/models/element-type';
 import { Image } from 'src/app/models/image';
 import { ReturnWrapper } from 'src/app/models/return-wrapper';
-import { CustomUserDetails } from 'src/app/models/spring-principal';
 import { AuthService } from 'src/app/services/auth.service';
 import { NumAchievementsService } from 'src/app/services/num-achievements.service';
 import { environment } from '../../../environments/environment';
@@ -49,9 +48,7 @@ export class RecordComponent implements OnInit {
   withTranslation = false;
   isTranslated = false;
   additionalData = true;
-  // this controls the visibility of the selector component
-  isDebug = false;
-  user: CustomUserDetails;
+  gamificationOn = false;
   private groupId = 1;
 
   constructor(
@@ -59,10 +56,7 @@ export class RecordComponent implements OnInit {
       private userGroupService: UserGroupService, private numAchievementsService: NumAchievementsService,
       private featuresService: FeaturesService) {
     this.groupId = this.userGroupService.userGroupId;
-    authService.getUser().subscribe((user) => {
-      this.user = user.principal;
-      this.user.gamificationOn = user.principal.user.gamificationOn;
-    });
+    authService.getUser().subscribe(user => this.gamificationOn = user.principal.user.gamificationOn);
     featuresService.getFeatureFlags().subscribe(v => {
       this.withTranslation = v.swissGermanText;
       this.additionalData = v.additionalData;
@@ -79,18 +73,6 @@ export class RecordComponent implements OnInit {
       this.snackBarService.openMessage('marked as skipped');
       this.getNext();
     });
-  }
-
-  selectorUpdate(selectedElement: ElementType) {
-    this.resetFields();
-    this.selectedElement = selectedElement;
-    this.getNext();
-  }
-
-  translationUpdate(withTranslation: boolean) {
-    this.resetFields();
-    this.withTranslation = withTranslation;
-    this.getNext();
   }
 
   resetAndNext() {

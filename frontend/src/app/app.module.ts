@@ -46,7 +46,6 @@ import { StatisticsComponent } from './components/admin/statistics/statistics.co
 import { CheckCheckerComponent } from './components/check/check/check-checker/check-checker.component';
 import { CheckComponent } from './components/check/check/check.component';
 import { ExcerptFromDataElemIdComponent } from './components/check/check/excerpt-from-data-elem-id/excerpt-from-data-elem-id.component';
-import { TupleSelectorComponent } from './components/check/check/tuple-selector/tuple-selector.component';
 import { ShortcutComponent } from './components/check/shortcut/shortcut.component';
 import { BadgeComponent } from './components/gamification/badge/badge.component';
 import { DailyGoalComponent } from './components/gamification/daily-goal/daily-goal.component';
@@ -62,11 +61,11 @@ import { LoginComponent } from './components/login/login.component';
 import { BarChartComponent } from './components/multi-use/bar-chart/bar-chart.component';
 import { LineChartComponent } from './components/multi-use/line-chart/line-chart.component';
 import { ProfileEditorComponent } from './components/multi-use/profile-editor/profile-editor.component';
+import { PublicStatsComponent } from './components/multi-use/public-stats/public-stats.component';
 import { UserGroupRoleComponent } from './components/multi-use/user-group-role/user-group-role.component';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AudioComponent } from './components/record/audio/audio.component';
-import { ElementSelectorComponent } from './components/record/element-selector/element-selector.component';
 import { ExcerptComponent } from './components/record/excerpt/excerpt.component';
 import { ImageComponent } from './components/record/image/image.component';
 import { MicSymbolComponent } from './components/record/mic-symbol/mic-symbol.component';
@@ -74,7 +73,6 @@ import { RecordComponent } from './components/record/record.component';
 import { RecordingComponent } from './components/record/recording/recording.component';
 import { SaveSymbolComponent } from './components/record/save-symbol/save-symbol.component';
 import { TranslateComponent } from './components/record/translate/translate.component';
-import { TripletSelectorComponent } from './components/record/triplet-selector/triplet-selector.component';
 import { VerificationTokenComponent } from './components/verification-token/verification-token.component';
 import { AdminGuardService } from './guards/admin-guard.service';
 import { AuthGuardService } from './guards/auth-guard.service';
@@ -82,7 +80,6 @@ import { GroupAdminGuardService } from './guards/group-admin-guard.service';
 import { AuthHeaderInterceptorService } from './services/auth-header-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { LoadingInterceptorService } from './services/loading-interceptor.service';
-import { PublicStatsComponent } from './components/multi-use/public-stats/public-stats.component';
 
 @NgModule({
   declarations: [
@@ -112,9 +109,6 @@ import { PublicStatsComponent } from './components/multi-use/public-stats/public
     ImageComponent,
     RecordingComponent,
     TranslateComponent,
-    TripletSelectorComponent,
-    ElementSelectorComponent,
-    TupleSelectorComponent,
     ExcerptFromDataElemIdComponent,
     CheckCheckerComponent,
     GamificationComponent,

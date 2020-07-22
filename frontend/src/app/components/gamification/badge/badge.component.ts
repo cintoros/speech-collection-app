@@ -9,7 +9,7 @@ import { FeaturesService } from '../../../services/features.service';
 })
 export class BadgeComponent {
   @Input() achievementWrapper: AchievementWrapper;
-  private pointPerLevel: number[];
+  private pointPerLevel = [0, 10, 20, 50, 100];
 
   constructor(private featuresService: FeaturesService) {
     featuresService.getFeatureFlags().subscribe(value => this.pointPerLevel = value.gamification.pointPerLevel);
