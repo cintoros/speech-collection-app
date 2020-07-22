@@ -56,7 +56,6 @@ public class UserGroupRestApiController {
 
     @PostMapping("next")
     public ReturnWrapper getNext(@PathVariable long groupId, @RequestParam String selectedElement) {
-        System.out.println(selectedElement);
         return userGroupService.getNext(groupId, ElementType.valueOf(selectedElement));
     }
 

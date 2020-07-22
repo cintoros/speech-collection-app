@@ -260,7 +260,6 @@ public class UserGroupService {
      */
     public Text getExcerpt(Long groupId) {
         checkAllowed(groupId);
-        //TODO is is sentence error etc. even used anymore
         var res = dslContext.select(TEXT.ID, TEXT.DIALECT_ID, TEXT.DATA_ELEMENT_ID, TEXT.IS_SENTENCE_ERROR, TEXT.TEXT_)
                 .from(TEXT.innerJoin(DATA_ELEMENT).onKey())
                 .where(DATA_ELEMENT.USER_GROUP_ID.eq(groupId)

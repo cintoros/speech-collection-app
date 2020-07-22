@@ -16,8 +16,17 @@ import java.util.*;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 
+/**
+ * service that creates/manages the achievements of the user,
+ * daily achievements are not displayed, only monthly achievements are displayed.
+ * the following achievements are created:
+ * day: TOTAL_CHECKED,TOTAL_CREATED
+ * month: TEXT_CREATED,AUDIO_CREATED,TOTAL_CHECKED
+ */
 @Service
-//TODO maybe remove descriptions etc. from database?
+//TODO maybe remove descriptions,title etc. from database?
+//TODO maybe rename batch names?
+//TODO not sure why there are so many achievements dependsOn/types -> maybe streamline as only TOTAL_CHECKED,TOTAL_CREATED are useful.
 public class AchievementsService {
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
@@ -32,7 +41,6 @@ public class AchievementsService {
         this.gamification = speechCollectionAppConfig.getFeatures().getGamification();
     }
 
-    //TODO ensure that the achievment names are unique ;)
     public Long createAchievement(
             String name, String batch_name, String title, Long domain_id, Timestamp start_time, Timestamp end_time,
             AchievementsDependsOn depends_on, Boolean isVisible) {
@@ -82,7 +90,6 @@ public class AchievementsService {
         return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, depends_on, true);
     }
 
-    //TODO why are daily achievements not visible :)
     public Long createDayAchievement(Timestamp time, String batch_name, String title, AchievementsDependsOn depends_on) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(time);
@@ -102,7 +109,6 @@ public class AchievementsService {
         return createAchievement(month, batch_name, title + " " + year, -1L, start_time, end_time, depends_on, false);
     }
 
-    //TODO it would be nice to do this in the frontend. so it can be translated using 18n etc.
     private Long getMonthTextAchievement(Timestamp time) {
         return createMonthAchievement(time, "edit", "Fleissiger Schreiber", AchievementsDependsOn.TEXT_CREATED);
     }
@@ -192,7 +198,6 @@ public class AchievementsService {
         }
     }
 
-    //FIXME nullpointer in case the user has not visited the home/achievemnts page before record component and/or time based?
     public UserAchievements getUserAchievement(Long userId, Long achievementId) {
         return dslContext.select().from(USER_ACHIEVEMENTS)
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)))
@@ -309,7 +314,6 @@ public class AchievementsService {
         return res;
     }
 
-    //TODO this does not return anything?
     public List<AchievementWrapper> getNonActiveAchievements() {
         createAutomaticAchievements();
         var userAchievements = getNonActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
