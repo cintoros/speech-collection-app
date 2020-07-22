@@ -50,11 +50,7 @@ public class DocumentService {
         isAllowed(groupId);
         var parser = new AutoDetectParser(TikaConfig.getDefaultConfig());
         var path = speechCollectionAppConfig.getBasePath().resolve("extracted_text");
-        try {
-            Files.createDirectories(path);
-        } catch (IOException e) {
-            logger.error("unexpected Exception: ", e);
-        }
+        var rpath = speechCollectionAppConfig.getBasePath().resolve("original_text");
         String collect = Arrays.stream(files).map(file -> {
             try {
                 //NOTE: -1 disables the write limit -> as spring already limit the upload to 1MB -> note ngingx etc. may also have a file limit
@@ -75,8 +71,9 @@ public class DocumentService {
                 source.setUserGroupId(groupId);
                 source.store();
                 var id = source.getId();
-                var rawFilePath = Paths.get("original_text", id + ".bin");
+                var rawFilePath = rpath.resolve(id + ".bin");
                 source.setPathToRawFile(rawFilePath.toString());
+                //FIXME why?
                 rawFilePath = speechCollectionAppConfig.getBasePath().resolve(rawFilePath);
                 Files.write(rawFilePath, file.getBytes());
                 source.store();
@@ -101,11 +98,6 @@ public class DocumentService {
 
     public void postImageSource(long groupId, long domainId, MultipartFile[] files, String documentLicence) {
         isAllowed(groupId);
-        try {
-            Files.createDirectories(speechCollectionAppConfig.getBasePath().resolve("images"));
-        } catch (IOException e) {
-            logger.error("unexpected Exception: ", e);
-        }
         var source = dslContext.newRecord(SOURCE);
         source.setUserGroupId(groupId);
         source.setDomainId(domainId);
