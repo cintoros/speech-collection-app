@@ -9,46 +9,22 @@ export class GlyphiconsBadgeComponent implements OnInit, OnChanges {
   @Input() glyph: string;
   @Input() level: number;
   @Input() text: string;
-  color: string;
-  color2: string;
-  color3: string;
+  color = 'bronze';
+  color2 = 'bronzeB';
+  color3 = 'bronzeD';
+  private colors = ['bronze', 'bronze', 'silver', 'gold', 'green'];
 
   ngOnInit(): void {
-    this.getColor();
+    this.setColors();
   }
 
   ngOnChanges(): void {
-    this.getColor();
+    this.setColors();
   }
 
-  // TODO simplify
-  getColor() {
-    switch (this.level) {
-      case 0:
-        this.color = 'bronze';
-        this.color2 = 'bronzeB';
-        this.color3 = 'bronzeD';
-        break;
-      case 1:
-        this.color = 'bronze';
-        this.color2 = 'bronzeB';
-        this.color3 = 'bronzeD';
-        break;
-      case 2:
-        this.color = 'silver';
-        this.color2 = 'silverB';
-        this.color3 = 'silverD';
-        break;
-      case 3:
-        this.color = 'gold';
-        this.color2 = 'goldB';
-        this.color3 = 'goldD';
-        break;
-      case 4:
-        this.color = 'green';
-        this.color2 = 'greenB';
-        this.color3 = 'greenD';
-        break;
-    }
+  private setColors() {
+    this.color = this.colors[this.level];
+    this.color2 = `${this.color}B`;
+    this.color3 = `${this.color}D`;
   }
 }

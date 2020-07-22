@@ -1,30 +1,38 @@
 <div *ngIf="tuple">
   <!-- instructions -->
-  <p *ngIf="tuple.type !== 'TEXT_AUDIO'" class="card">
-    <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
-    <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
-    <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
-    <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
-    <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
-    <!-- Universal case -->
-    Dann klicke auf das
-    <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br/>
-    sonst auf das
-    <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
-  </p>
-  <div *ngIf="tuple.type === 'TEXT_AUDIO'" class="card" style="color: grey;font-size: 1em;text-align: left">
-    <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a
-      correct Swiss German translation.</strong>
-    <ul>
-      <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
-      <li>Wrong: Recording is not a correct Swiss German translation</li>
-      <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
-      <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or
-        phrase. In a pre-processing step, longer texts are automatically split to sentences, so use this button also
-        if you suspect that the sentence splitting went wrong.
-      </li>
-      <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
-    </ul>
+  <div class="card-header" id="headingOne">
+    <a aria-controls="collapseOne" aria-expanded="false" class="" data-target="#collapseOne"
+       data-toggle="collapse">About</a>
+  </div>
+  <div aria-labelledby="headingOne" class="collapse card" id="collapseOne">
+    <mat-card>
+      <p *ngIf="tuple.type !== 'TEXT_AUDIO'" class="card">
+        <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
+        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
+        <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
+        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
+        <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
+        <!-- Universal case -->
+        Dann klicke auf das
+        <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br/>
+        sonst auf das
+        <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
+      </p>
+      <div *ngIf="tuple.type === 'TEXT_AUDIO'" class="card" style="color: grey;font-size: 1em;text-align: left">
+        <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a
+          correct Swiss German translation.</strong>
+        <ul>
+          <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
+          <li>Wrong: Recording is not a correct Swiss German translation</li>
+          <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
+          <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or
+            phrase. In a pre-processing step, longer texts are automatically split to sentences, so use this button also
+            if you suspect that the sentence splitting went wrong.
+          </li>
+          <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
+        </ul>
+      </div>
+    </mat-card>
   </div>
   <!--  TODO not sure where we want to add the additional buttons-->
   <!--  FIXME why is this here faster to switch and not the recording?-->
@@ -61,7 +69,6 @@
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_2"></app-excerpt-from-data-elem-id>
         </span>
     <br/>
-    <!--FIXME why is this a seperate component?-->
     <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
   </mat-card>
   <mat-card *ngIf="tuple.type === 'TEXT_AUDIO'" class="center">
@@ -76,8 +83,6 @@
         <span>&nbsp;Skip</span>
       </button>
     </div>
-    <br/>
-    <!--FIXME why is this a seperate component?-->
     <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
   </mat-card>
   <br/>
