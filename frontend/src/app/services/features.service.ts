@@ -24,6 +24,7 @@ enum Mode {
   providedIn: 'root'
 })
 export class FeaturesService {
+  // FIXME probably use a behaviour subject -> or just @input everything?
   private features: Observable<Features>;
 
   constructor(private httpClient: HttpClient) {

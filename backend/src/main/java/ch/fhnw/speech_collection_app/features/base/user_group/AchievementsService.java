@@ -30,7 +30,7 @@ import static ch.fhnw.speech_collection_app.jooq.Tables.*;
 public class AchievementsService {
     private final CustomUserDetailsService customUserDetailsService;
     private final DSLContext dslContext;
-    private final SpeechCollectionAppConfig.Features.Gamification gamification;
+    private final int[] pointPerLevel;
 
     @Autowired
     public AchievementsService(
@@ -38,7 +38,7 @@ public class AchievementsService {
             SpeechCollectionAppConfig speechCollectionAppConfig) {
         this.customUserDetailsService = customUserDetailsService;
         this.dslContext = dslContext;
-        this.gamification = speechCollectionAppConfig.getFeatures().getGamification();
+        this.pointPerLevel = speechCollectionAppConfig.getFeatures().getGamification().getPointPerLevel();
     }
 
     public Long createAchievement(
@@ -146,7 +146,7 @@ public class AchievementsService {
         userAchievement.store();
 
         var userPoints = userAchievement.getPoints();
-        var b = Arrays.stream(gamification.getPointPerLevel()).filter(i -> i > 0).anyMatch(aLong -> aLong == userPoints);
+        var b = Arrays.stream(pointPerLevel).filter(i -> i > 0).anyMatch(aLong -> aLong == userPoints);
         if (b && amount != 0) {
             userAchievement.setIsNew(true);
             userAchievement.store();
@@ -217,7 +217,7 @@ public class AchievementsService {
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
                         .and(ACHIEVEMENTS.START_TIME.le(time))
-                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
+                        .and(USER_ACHIEVEMENTS.POINTS.lessThan((long) pointPerLevel[4]))
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
                 .fetchInto(UserAchievements.class);
     }
@@ -229,7 +229,8 @@ public class AchievementsService {
 
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId)
-                        .and((ACHIEVEMENTS.END_TIME.le(time)).or(ACHIEVEMENTS.POINTS_LVL4.le(USER_ACHIEVEMENTS.POINTS))
+                        .and((ACHIEVEMENTS.END_TIME.le(time))
+                                .or(USER_ACHIEVEMENTS.POINTS.greaterOrEqual((long) pointPerLevel[4]))
                                 .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))))
                 .fetchInto(UserAchievements.class);
     }
@@ -241,7 +242,7 @@ public class AchievementsService {
     }
 
     private int getLevel(UserAchievements userAchievement) {
-        int[] pointPerLevel = gamification.getPointPerLevel();
+        int[] pointPerLevel = this.pointPerLevel;
         for (int i = 4; i >= 0; i--) {
             if (pointPerLevel[i] <= userAchievement.getPoints()) {
                 return i;
@@ -250,39 +251,14 @@ public class AchievementsService {
         return 0;
     }
 
-    public long getAchievementPercent(long achievementId, long level) {
-        float total = dslContext.selectCount().from(USER_ACHIEVEMENTS)
-                .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)).limit(1).fetchOneInto(Long.class);
-        float achieved = total;
-        if (level == 1) {
-            achieved = dslContext.selectCount()
-                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
-                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
-                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
-                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL1)))
-                    .limit(1).fetchOneInto(Long.class);
-        } else if (level == 2) {
-            achieved = dslContext.selectCount()
-                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
-                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
-                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
-                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL2)))
-                    .limit(1).fetchOneInto(Long.class);
-        } else if (level == 3) {
-            achieved = dslContext.selectCount()
-                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
-                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
-                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
-                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL3)))
-                    .limit(1).fetchOneInto(Long.class);
-        } else if (level == 4) {
-            achieved = dslContext.selectCount()
-                    .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS)
-                            .on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
-                    .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
-                            .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL4)))
-                    .limit(1).fetchOneInto(Long.class);
-        }
+    public long getAchievementPercent(long achievementId, int level) {
+        float total = dslContext.fetchCount(USER);
+        var lvl = Math.max(level, 1);
+        float achieved = dslContext.selectCount()
+                .from(USER_ACHIEVEMENTS.join(ACHIEVEMENTS).on(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(ACHIEVEMENTS.ID)))
+                .where(USER_ACHIEVEMENTS.ACHIEVEMENTS_ID.eq(achievementId)
+                        .and(USER_ACHIEVEMENTS.POINTS.ge((long) pointPerLevel[lvl])))
+                .fetchOneInto(Long.class);
         return (long) ((achieved / total) * 100f);
 
     }
@@ -295,11 +271,13 @@ public class AchievementsService {
         return dslContext.select(USER_ACHIEVEMENTS.asterisk()).from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(ACHIEVEMENTS.END_TIME.ge(time))
                         .and(ACHIEVEMENTS.START_TIME.le(time))
-                        .and(ACHIEVEMENTS.POINTS_LVL4.ge(USER_ACHIEVEMENTS.POINTS))
+                        .and(USER_ACHIEVEMENTS.POINTS.lessThan((long) pointPerLevel[4]))
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true)))
                 .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievements.class);
     }
 
+    //FIXME to much refactoring ;)
+    //TODO clear database to ensure correct behaviour ;)
     public List<AchievementWrapper> getActiveAchievements() {
         createAutomaticAchievements();
         var userAchievements = getActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
@@ -343,7 +321,7 @@ public class AchievementsService {
         return dslContext.selectCount().from(USER_ACHIEVEMENTS.innerJoin(ACHIEVEMENTS).onKey())
                 .where(USER_ACHIEVEMENTS.USER_ID.eq(userId).and(USER_ACHIEVEMENTS.IS_NEW.eq(true))
                         .and(ACHIEVEMENTS.IS_VISIBLE.eq(true))
-                        .and(USER_ACHIEVEMENTS.POINTS.ge(ACHIEVEMENTS.POINTS_LVL1)))
+                        .and(USER_ACHIEVEMENTS.POINTS.greaterOrEqual((long) pointPerLevel[1])))
                 .limit(1).fetchOneInto(Long.class);
     }
 
@@ -368,9 +346,12 @@ public class AchievementsService {
         return result;
     }
 
+    //FIXME to much refactoring ;)
+    //NOTE: two problems 5x instead of 3x
+    //second everything is 100% ;)
     AchievementWrapper getAchievementWrapper(UserAchievements userAchievement) {
         int level = getLevel(userAchievement);
         return new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,
-                getAchievementPercent(userAchievement.getAchievementsId(), Math.min(level, 1)), level);
+                getAchievementPercent(userAchievement.getAchievementsId(), level), level);
     }
 }

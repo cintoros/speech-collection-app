@@ -145,7 +145,6 @@ public class SpeechCollectionAppConfig {
         public static class Gamification {
             private Mode mode;
             private int[] pointPerLevel;
-            private int dailyDivisor;
 
             public Mode getMode() {
                 return mode;
@@ -161,14 +160,6 @@ public class SpeechCollectionAppConfig {
 
             public void setPointPerLevel(int[] pointPerLevel) {
                 this.pointPerLevel = pointPerLevel;
-            }
-
-            public int getDailyDivisor() {
-                return dailyDivisor;
-            }
-
-            public void setDailyDivisor(int dailyDivisor) {
-                this.dailyDivisor = dailyDivisor;
             }
 
             public enum Mode {DISABLED, HALF_ENABLED, ENABLED}
