@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 import { DataElement } from 'src/app/models/data-element';
 import { ElementType } from 'src/app/models/element-type';
@@ -54,7 +54,7 @@ export class RecordComponent implements OnInit {
   constructor(
       public authService: AuthService, private snackBarService: SnackBarService, private httpClient: HttpClient,
       private userGroupService: UserGroupService, private numAchievementsService: NumAchievementsService,
-      private featuresService: FeaturesService) {
+      private featuresService: FeaturesService, private changeDetectorRef: ChangeDetectorRef) {
     this.groupId = this.userGroupService.userGroupId;
     authService.getUser().subscribe(user => this.gamificationOn = user.principal.user.gamificationOn);
     featuresService.getFeatureFlags().subscribe(v => {
@@ -129,6 +129,7 @@ export class RecordComponent implements OnInit {
           }
           this.achievementWrapper = value.achievementWrapper;
           this.numAchievementsService.getNumber();
+          this.changeDetectorRef.detectChanges();
         });
   }
 }

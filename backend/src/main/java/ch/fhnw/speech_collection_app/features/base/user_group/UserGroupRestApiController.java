@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 //TODO cleanup no longer used endpoints
 @RestController
@@ -78,12 +77,6 @@ public class UserGroupRestApiController {
     @PostMapping("occurrence/check")
     public void postCheckedOccurrence(@PathVariable long groupId, @RequestBody CheckedOccurrence checkedOccurrence) {
         userGroupService.postCheckedOccurrence(groupId, checkedOccurrence);
-    }
-
-    //TODO unused?
-    @GetMapping("occurrence/next")
-    public Optional<Occurrence> getNextOccurrences(@PathVariable long groupId) {
-        return userGroupService.getNextOccurrence(groupId);
     }
 
     @GetMapping("check-next")

@@ -83,7 +83,6 @@ export class RecordingComponent implements OnInit {
     formData.append('otherDataElement', JSON.stringify(this.otherDataElement));
     formData.append('otherElementType', this.otherElementType);
     this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
-      // TODO this does not trigger the reload correctly ;(
       this.getNext();
     });
   }

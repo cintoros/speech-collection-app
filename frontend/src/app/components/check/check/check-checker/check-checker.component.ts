@@ -3,18 +3,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataTuple } from 'src/app/models/data-tuple';
 import { UserGroupService } from 'src/app/services/user-group.service';
 import { environment } from 'src/environments/environment';
-import { SnackBarService } from '../../../../services/snack-bar.service';
 import { CheckedOccurrence, CheckedOccurrenceLabel } from '../../../../models/checked-occurrence';
+import { SnackBarService } from '../../../../services/snack-bar.service';
 
 @Component({
   selector: 'app-check-checker',
   templateUrl: './check-checker.component.html',
   styleUrls: ['./check-checker.component.scss']
 })
-
 export class CheckCheckerComponent {
   @Input() tuple: DataTuple;
-  // TODO output is ignored anyway.
   @Output() completed = new EventEmitter<any>();
   groupId: any;
 

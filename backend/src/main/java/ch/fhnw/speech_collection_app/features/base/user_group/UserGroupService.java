@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static ch.fhnw.speech_collection_app.jooq.Tables.*;
@@ -352,31 +351,6 @@ public class UserGroupService {
                 break;
         }
         achievementsService.updateAllUserAchievements(customUserDetailsService.getLoggedInUserId(), achievementType, -1L);
-    }
-
-    /**
-     * returns the next occurrence to check based on the groupId and available data.<br>
-     * occurrences are labeled until it is clear that they clearly wrong|correct.<br>
-     */
-    //TODO this is probably no longer used? see check-next method?
-    public Optional<Occurrence> getNextOccurrence(long groupId) {
-        checkAllowed(groupId);
-        var loggedInUserId = customUserDetailsService.getLoggedInUserId();
-        var audio_element = DATA_ELEMENT.as("audio_element");
-        var res = dslContext.select(DATA_TUPLE.ID, DATA_TUPLE.DATA_ELEMENT_ID_1, DATA_TUPLE.DATA_ELEMENT_ID_2, TEXT.TEXT_, DSL.inline(OccurrenceMode.TEXT_AUDIO.name()).as("mode"))
-                .from(DATA_TUPLE.join(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_1)
-                        .join(TEXT).onKey(TEXT.DATA_ELEMENT_ID)
-                        .join(audio_element).on(audio_element.ID.eq(DATA_TUPLE.DATA_ELEMENT_ID_2)))
-                .where(DSL.abs(DATA_TUPLE.WRONG.plus(DATA_TUPLE.CORRECT)).lessThan(speechCollectionAppConfig.getMinNumChecks())
-                        .and(DATA_ELEMENT.USER_GROUP_ID.eq(groupId))
-                        .and(DATA_TUPLE.FINISHED.isFalse())
-                        .and(audio_element.USER_ID.notEqual(loggedInUserId))
-                        .and(DATA_TUPLE.ID.notIn(dslContext.select(CHECKED_DATA_TUPLE.DATA_TUPLE_ID)
-                                .from(CHECKED_DATA_TUPLE)
-                                .where(CHECKED_DATA_TUPLE.USER_ID.eq(loggedInUserId))))
-                ).limit(speechCollectionAppConfig.getNumRandomSelect()).fetchInto(Occurrence.class);
-        if (res.isEmpty()) return Optional.empty();
-        return Optional.of(res.get(ThreadLocalRandom.current().nextInt(res.size())));
     }
 
     public byte[] getAudio(long groupId, long dataElementId) throws IOException {
