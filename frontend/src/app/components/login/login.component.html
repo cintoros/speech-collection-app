@@ -4,13 +4,13 @@
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <div>
         <mat-form-field style="width: 100%;">
-          <input autocomplete="username" formControlName="email" matInput placeholder="Benutzername" type="text">
+          <input autocomplete="username" formControlName="email" matInput placeholder="Username" type="text">
           <mat-error *ngIf="loginForm.invalid">{{getEmailErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field style="width: 100%;">
-          <input autocomplete="password" formControlName="password" matInput placeholder="Passwort" type="password">
+          <input autocomplete="password" formControlName="password" matInput placeholder="Password" type="password">
           <mat-error *ngIf="loginForm.invalid">{{getPasswordErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
@@ -20,8 +20,8 @@
       </div>
     </form>
     <p>
-      <span>Noch kein Konto? Registriere dich </span>
-      <a (click)="toggleIsLogin()" href="#">Hier</a>
+      <span>Not registered yet? Register </span>
+      <a (click)="toggleIsLogin()" href="#">here</a>
       <span>!</span>
     </p>
     <div *ngIf="emailIntegration">

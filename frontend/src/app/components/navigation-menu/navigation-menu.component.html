@@ -2,13 +2,13 @@
 <!--source: https://getbootstrap.com/docs/4.4/examples/cover/ -->
 <header class="masthead mb-auto">
   <div class="inner">
-    <h3 (click)="redirectToPage('/home')" class="masthead-brand">Speech Collection App</h3>
+    <h3 routerLink="/home" class="masthead-brand">Speech Collection App</h3>
     <nav class="nav nav-masthead justify-content-center">
       <ng-container *ngIf="authService.checkAuthenticated()">
-        <a (click)="redirectToPage('/record')" class="nav-link">Record</a>
-        <a (click)="redirectToPage('/check')" class="nav-link">Check</a>
-        <a (click)="redirectToPage('/profile')" class="nav-link">{{this.user?.username}}</a>
-        <a (click)="redirectToPage('/gamification')" *ngIf="this.user?.gamificationOn" class="nav-link">
+        <a routerLink="/record" class="nav-link">Record</a>
+        <a routerLink="/check" class="nav-link">Check</a>
+        <a routerLink="/profile" class="nav-link">{{this.user?.username}}</a>
+        <a routerLink="/gamification" *ngIf="this.user?.gamificationOn" class="nav-link">
           Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="true"></app-small-medal>
         </a>
       </ng-container>
@@ -23,15 +23,15 @@
 </div>
 <footer class="mastfoot mt-auto">
   <p>
-    <a (click)="redirectToPage('/about')">About</a>
+    <a routerLink="/about">About</a>
   </p>
   <ng-container *ngIf="isGroupAdmin()">
-    <a (click)="redirectToPage('/admin/overview')" class="admin-links">Check Overview</a>
-    <a (click)="redirectToPage('/admin/document_overview')" class="admin-links">Document Overview</a>
-    <a (click)="redirectToPage('/admin/user_group')" class="admin-links">User Group</a>
+    <a routerLink="/admin/overview" class="admin-links">Check Overview</a>
+    <a routerLink="/admin/document_overview" class="admin-links">Document Overview</a>
+    <a routerLink="/admin/user_group" class="admin-links">User Group</a>
   </ng-container>
   <ng-container *ngIf="isAdmin()">
-    <a (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()" class="admin-links">Admin</a>
-    <a (click)="redirectToPage('/admin/statistics')" *ngIf="isAdmin()" class="admin-links">Statistics</a>
+    <a routerLink="/admin/admin" *ngIf="isAdmin()" class="admin-links">Admin</a>
+    <a routerLink="/admin/statistics" *ngIf="isAdmin()" class="admin-links">Statistics</a>
   </ng-container>
 </footer>

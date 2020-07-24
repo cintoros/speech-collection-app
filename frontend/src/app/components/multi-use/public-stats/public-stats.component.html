@@ -5,17 +5,17 @@
     <app-badge [achievementWrapper]="activeAchievementWrapper"></app-badge>
   </div>
   <div class="col-sm-8">
-    <h3>Clash of the cantons.</h3>
-    <p>The graphic shows the cantons with the most points per inhabitant. Help your canton by diligently recording,
-      generating translations and checking recordings</p>
+    <h3>Clash of the Cantons</h3>
+    <p>The graphic shows the cantons with the most points per inhabitant. Help your canton by recording sentences and
+      checking recordings</p>
     <app-map></app-map>
   </div>
 </ng-container>
-<div class="col-sm-6">
+<div class="col-sm-10">
   <app-bar-chart [results]="single1" [xAxisLabel]="'User'" [yAxisLabel]="'Number of recordings'"
                  h3="Top 3 Users (recording)"></app-bar-chart>
 </div>
-<div class="col-sm-6">
+<div class="col-sm-10">
   <app-bar-chart [results]="single2" [xAxisLabel]="'User'" [yAxisLabel]="'Number of checked recordings'"
                  h3="Top 3 Users (checking)"></app-bar-chart>
 </div>

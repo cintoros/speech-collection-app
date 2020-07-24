@@ -1,21 +1,20 @@
 <mat-card *ngIf="achievementWrapper">
-    <h3 *ngIf="getType()==='microphone-alt'">Diligent Speaker</h3>
-    <h3 *ngIf="getType()==='edit'">Diligent Writer</h3>
-    <h3 *ngIf="getType()==='check-square'">Diligent Checker</h3>
-    <ng-container *ngIf="getLevel() > 0">
-        <p *ngIf="getType()==='microphone-alt'">You recorded {{getLastLevelPoints()}} translations this month.</p>
-        <p *ngIf="getType()==='edit'">You have written {{getLastLevelPoints()}} translations this month.</p>
-        <p *ngIf="getType()==='check-square'">You checked {{getLastLevelPoints()}} tuples this month.</p>
-    </ng-container>
-    <app-glyphicons-badge [glyph]="achievementWrapper.achievements.batchName" [level]="getLevel()"
-                          [text]="achievementWrapper.achievements.name">
-    </app-glyphicons-badge>
-    <div *ngIf="getLevel() < 4">
-        <p>Remaining time: {{getRemainingDays()}} Day
-            <span *ngIf="getRemainingDays() > 1">s</span>
-        </p>
-        <p>You get the <span *ngIf="getLevel() > 0">next </span>achievement with {{getNextLevelPoints()}} points. </p>
-        <p> You have until now: {{getPoints()}}</p>
-        <app-progressbar [achievementWrapper]="achievementWrapper"></app-progressbar>
-    </div>
+  <h3 *ngIf="getType()==='microphone-alt'">Diligent Speaker</h3>
+  <h3 *ngIf="getType()==='edit'">Diligent Writer</h3>
+  <h3 *ngIf="getType()==='check-square'">Diligent Checker</h3>
+  <ng-container *ngIf="getLevel() > 0">
+    <p *ngIf="getType()==='microphone-alt'">You recorded {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="getType()==='edit'">You have written {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="getType()==='check-square'">You checked {{getLastLevelPoints()}} tuples this month.</p>
+  </ng-container>
+  <app-glyphicons-badge [glyph]="achievementWrapper.achievements.batchName" [level]="getLevel()"
+                        [text]="achievementWrapper.achievements.name">
+  </app-glyphicons-badge>
+  <div *ngIf="getLevel() < 4">
+    <p>Remaining time: {{getRemainingDays()}} day<span *ngIf="getRemainingDays() > 1">s</span>
+    </p>
+    <p>You get the <span *ngIf="getLevel() > 0">next </span>achievement with {{getNextLevelPoints()}} points. </p>
+    <p> You have until now: {{getPoints()}}</p>
+    <app-progressbar [achievementWrapper]="achievementWrapper"></app-progressbar>
+  </div>
 </mat-card>

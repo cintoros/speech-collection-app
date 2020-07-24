@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NumAchievementsService } from 'src/app/services/num-achievements.service';
 import { CustomUserDetails, UserGroupRoleRole } from '../../models/spring-principal';
 import { AuthService } from '../../services/auth.service';
@@ -15,8 +14,7 @@ export class NavigationMenuComponent implements OnInit {
   message: string;
 
   constructor(
-      public authService: AuthService, public router: Router,
-      private userGroupService: UserGroupService,
+      public authService: AuthService, private userGroupService: UserGroupService,
       private numAchievementsService: NumAchievementsService) {
     authService.getUser().subscribe(user => {
       this.user = user.principal;
@@ -28,10 +26,6 @@ export class NavigationMenuComponent implements OnInit {
     this.numAchievementsService.currentMessage.subscribe(
         message => this.message = message);
     this.numAchievementsService.getNumber();
-  }
-
-  redirectToPage(route: string): void {
-    this.router.navigate(['/' + route]);
   }
 
   isGroupAdmin() {
