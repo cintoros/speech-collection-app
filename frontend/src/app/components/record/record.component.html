@@ -1,10 +1,13 @@
 <div *ngIf="dataElement1">
   <!-- Instructions-->
   <div class="card-header" id="headingOne">
-    <a aria-controls="collapseOne" aria-expanded="true" class="" data-target="#collapseOne"
-       data-toggle="collapse">Help</a> <!--TODO button with symbol-->
+    <button (click)="visible=!visible" mat-flat-button>
+      <mat-icon *ngIf="visible">expand_less</mat-icon>
+      <mat-icon *ngIf="!visible">expand_more</mat-icon>
+      Help
+    </button>
   </div>
-  <div aria-labelledby="headingOne" class="collapse card" id="collapseOne">
+  <div *ngIf="visible" class=" card ">
     <mat-card>
       <div class="center">
         <ng-container *ngIf="this.elementType1 === 'TEXT'">

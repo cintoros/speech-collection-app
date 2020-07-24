@@ -49,6 +49,7 @@ export class RecordComponent implements OnInit {
   isTranslated = false;
   additionalData = true;
   gamificationOn = false;
+  visible = true;
   private groupId = 1;
 
   constructor(

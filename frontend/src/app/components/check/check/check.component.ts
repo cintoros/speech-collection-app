@@ -20,6 +20,7 @@ export class CheckComponent implements OnInit {
   achievementWrapper: AchievementWrapper;
   checkedOccurrenceLabel = CheckedOccurrenceLabel;
   gamificationOn = false;
+  visible = true;
   private groupId = 1;
 
   constructor(
