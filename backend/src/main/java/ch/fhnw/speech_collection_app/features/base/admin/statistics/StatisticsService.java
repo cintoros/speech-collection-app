@@ -85,18 +85,29 @@ public class StatisticsService {
         }
     }
 
+    /**
+     * fetches the query from the database and returns it ready to be displayed by the frontend.
+     *
+     * @implNote this implementation only makes sense for relatively small queries as else a lot of dates have to be filled with zeroes
+     */
     public List<SeriesDto> getAudioDurationStatisticsSince(LocalDate since) {
         Timestamp timestamp = Timestamp.valueOf(since.atStartOfDay());
         var date = DSL.date(DATA_ELEMENT.CREATED_TIME);
-        var select1 = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
+
+        var sinceDate = since.atStartOfDay();
+        var allDates = sinceDate.toLocalDate().datesUntil(LocalDate.now().plusDays(1))
+                .collect(Collectors.toMap(localDate -> localDate, o -> 0.0));
+        var datesWithData = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID)))
                 .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)))
                 .groupBy(date)
                 .fetch()
                 .stream()
                 .filter(r -> r.component1() != null)
-                .map(r -> new SeriesValueDto(r.component1().toLocalDate(), r.component2()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(r -> r.component1().toLocalDate(), r -> r.component2().doubleValue()));
+        allDates.putAll(datesWithData);
+        var select1 = allDates.entrySet().stream().map(r -> new SeriesValueDto(r.getKey(), r.getValue())).collect(Collectors.toList());
+        //TODO change..
 
         var select2 = dslContext.select(USER.USERNAME, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
