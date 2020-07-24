@@ -107,7 +107,6 @@ public class StatisticsService {
                 .collect(Collectors.toMap(r -> r.component1().toLocalDate(), r -> r.component2().doubleValue()));
         allDates.putAll(datesWithData);
         var select1 = allDates.entrySet().stream().map(r -> new SeriesValueDto(r.getKey(), r.getValue())).collect(Collectors.toList());
-        //TODO change..
 
         var select2 = dslContext.select(USER.USERNAME, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
