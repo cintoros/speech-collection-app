@@ -110,6 +110,8 @@ public class AchievementsService {
     }
 
     private Long getMonthTextAchievement(Timestamp time) {
+        //TODO disable this one ;)
+        //TODO maybe also just filer when returning?
         return createMonthAchievement(time, "edit", "Fleissiger Schreiber", AchievementsDependsOn.TEXT_CREATED);
     }
 
@@ -309,6 +311,7 @@ public class AchievementsService {
     public void createAutomaticAchievements() {
         Date date = new Date();
         Long userId = customUserDetailsService.getLoggedInUserId();
+        //TODO simplify ;)
         updateUserAchievement(userId, getMonthAudioAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getMonthTextAchievement(new Timestamp(date.getTime())), 0L);
         updateUserAchievement(userId, getMonthCheckAchievement(new Timestamp(date.getTime())), 0L);

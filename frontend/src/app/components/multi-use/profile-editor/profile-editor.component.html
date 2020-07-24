@@ -79,16 +79,18 @@
   </mat-card>
 
   <br>
-  <div class="card-header" id="headingOne">
-    <a aria-controls="collapseOne" aria-expanded="false" class="" data-target="#collapseOne"
-       data-toggle="collapse">About</a>
-  </div>
-  <div aria-labelledby="headingOne" class="collapse" id="collapseOne">
-    <mat-card>
-      <app-about></app-about>
-    </mat-card>
-  </div>
-  <br>
+  <ng-container *ngIf="isNewUser">
+    <div class="card-header" id="headingOne">
+      <a aria-controls="collapseOne" aria-expanded="false" class="" data-target="#collapseOne"
+         data-toggle="collapse">About</a>
+    </div>
+    <div aria-labelledby="headingOne" class="collapse" id="collapseOne">
+      <mat-card>
+        <app-about></app-about>
+      </mat-card>
+    </div>
+    <br>
+  </ng-container>
 
   <div *ngIf="!disabled">
     <button (click)="cancel()" class="btn btn-default" type="button">Cancel</button>
