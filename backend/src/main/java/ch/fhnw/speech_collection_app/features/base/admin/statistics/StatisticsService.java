@@ -111,6 +111,7 @@ public class StatisticsService {
         return List.of(new SeriesDto("audio in h", select1), new SeriesDto("recordings in h per user", select2));
     }
 
+    //TODO change it so we also have the zeroes ;)
     private SeriesDto toSeriesDto(SelectConditionStep<Record2<Date, Integer>> select, String checked_texts, LocalDate since, Field<Date> date) {
         var res = select.groupBy(date)
                 .fetch()
