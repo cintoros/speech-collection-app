@@ -41,9 +41,9 @@ export class MapComponent implements OnInit {
           const maxScore = Math.max(...s);
           value.forEach(value1 => {
             const i = this.countries.indexOf(value1.canton.toString());
-            this.scores[i] = Math.floor(this.score0percent - ((value1.points * this.countryWeights[i]) / maxScore)
-                * (this.score0percent - this.score100percent));
-            this.classes[i] = 'cantonColor_' + this.scores[i];
+            this.scores[i] = ((value1.points * this.countryWeights[i]) / maxScore);
+            this.classes[i] = 'cantonColor_' +
+                Math.floor(this.score0percent - this.scores[i] * (this.score0percent - this.score100percent));
           });
         });
   }
