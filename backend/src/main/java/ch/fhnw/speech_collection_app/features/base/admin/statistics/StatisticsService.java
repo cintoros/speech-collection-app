@@ -45,20 +45,20 @@ public class StatisticsService {
                 .from(CHECKED_DATA_ELEMENT)
                 .where(CHECKED_DATA_ELEMENT.TYPE.notEqual(CheckedDataElementType.SKIPPED)
                         .and(CHECKED_DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)));
-        var checkedTexts = toSeriesDto(select, "checked texts", date);
+        var checkedTexts = toSeriesDto(select, "checked texts", since, date);
 
         date = DSL.date(CHECKED_DATA_TUPLE.CREATED_TIME);
         select = dslContext.select(date, DSL.count())
                 .from(CHECKED_DATA_TUPLE)
                 .where(CHECKED_DATA_TUPLE.TYPE.notEqual(CheckedDataTupleType.SKIPPED)
                         .and(CHECKED_DATA_TUPLE.CREATED_TIME.greaterOrEqual(timestamp)));
-        var checkedRecordings = toSeriesDto(select, "checked recordings", date);
+        var checkedRecordings = toSeriesDto(select, "checked recordings", since, date);
 
         date = DSL.date(DATA_ELEMENT.CREATED_TIME);
         select = dslContext.select(date, DSL.count())
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID)))
                 .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)));
-        var recordings = toSeriesDto(select, "recordings", date);
+        var recordings = toSeriesDto(select, "recordings", since, date);
 
         return List.of(checkedTexts, checkedRecordings, recordings);
     }
@@ -85,18 +85,28 @@ public class StatisticsService {
         }
     }
 
+    /**
+     * fetches the query from the database and returns it ready to be displayed by the frontend.
+     *
+     * @implNote this implementation only makes sense for relatively small queries as else a lot of dates have to be filled with zeroes
+     */
     public List<SeriesDto> getAudioDurationStatisticsSince(LocalDate since) {
         Timestamp timestamp = Timestamp.valueOf(since.atStartOfDay());
         var date = DSL.date(DATA_ELEMENT.CREATED_TIME);
-        var select1 = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
+
+        var sinceDate = since.atStartOfDay();
+        var allDates = sinceDate.toLocalDate().datesUntil(LocalDate.now().plusDays(1))
+                .collect(Collectors.toMap(localDate -> localDate, o -> 0.0));
+        var datesWithData = dslContext.select(date, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID)))
                 .where((DATA_ELEMENT.CREATED_TIME.greaterOrEqual(timestamp)))
                 .groupBy(date)
                 .fetch()
                 .stream()
                 .filter(r -> r.component1() != null)
-                .map(r -> new SeriesValueDto(r.component1().toLocalDate(), r.component2()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(r -> r.component1().toLocalDate(), r -> r.component2().doubleValue()));
+        allDates.putAll(datesWithData);
+        var select1 = allDates.entrySet().stream().map(r -> new SeriesValueDto(r.getKey(), r.getValue())).collect(Collectors.toList());
 
         var select2 = dslContext.select(USER.USERNAME, DSL.sum(AUDIO.DURATION).divide(3600))
                 .from(DATA_ELEMENT.innerJoin(AUDIO).on(AUDIO.DATA_ELEMENT_ID.eq(DATA_ELEMENT.ID))
@@ -111,19 +121,22 @@ public class StatisticsService {
         return List.of(new SeriesDto("audio in h", select1), new SeriesDto("recordings in h per user", select2));
     }
 
-    private SeriesDto toSeriesDto(SelectConditionStep<Record2<Date, Integer>> select, String checked_texts, Field<Date> date) {
-        var res = select.groupBy(date)
+    /**
+     * fetches the query from the database and returns it ready to be displayed by the frontend.
+     *
+     * @implNote this implementation only makes sense for relatively small queries as else a lot of dates have to be filled with zeroes.
+     */
+    private SeriesDto toSeriesDto(SelectConditionStep<Record2<Date, Integer>> select, String checked_texts, LocalDate since, Field<Date> date) {
+        var sinceDate = since.atStartOfDay();
+        var allDates = sinceDate.toLocalDate().datesUntil(LocalDate.now().plusDays(1))
+                .collect(Collectors.toMap(localDate -> localDate, o -> 0));
+        var datesWithData = select.groupBy(date)
                 .fetch()
                 .stream()
                 .filter(r -> r.component1() != null)
-                .map(r -> new SeriesValueDto(r.component1().toLocalDate(), r.component2()))
-                .collect(Collectors.toList());
-        //we need add a second data-point as else we cannot display the line chart.
-        if (res.size() == 1) {
-            var localDate = (LocalDate) res.get(0).name;
-            var name = (localDate.isEqual(LocalDate.now())) ? localDate.minusDays(1) : localDate.plusDays(1);
-            res.add(new SeriesValueDto(name, 0));
-        }
+                .collect(Collectors.toMap(r -> r.component1().toLocalDate(), Record2::component2));
+        allDates.putAll(datesWithData);
+        var res = allDates.entrySet().stream().map(r -> new SeriesValueDto(r.getKey(), r.getValue())).collect(Collectors.toList());
         return new SeriesDto(checked_texts, res);
     }
 

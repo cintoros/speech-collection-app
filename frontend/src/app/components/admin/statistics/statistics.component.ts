@@ -34,18 +34,20 @@ export class StatisticsComponent implements OnInit {
   private toIsoString = (date: Date) => `${date.getFullYear()}-${this.toIsoNumber(date.getMonth() + 1)}-${this.toIsoNumber(date.getDate())}T00:00:00.000Z`;
   private toIsoNumber = (i: number) => `${i < 10 ? '0' : ''}${i}`;
   private getSeriesDto = (endpoint: string, date: Date) => this.httpClient.get<SeriesDto[]>(`${environment.url}admin/statistics/${endpoint}?since=${this.toIsoString(date)}`);
+  /**
+   *  convert the json date-string into a javascript date so it can be correctly displayed by the charts library.
+   */
+  private convertJsonToDate = (v: SeriesDto) => v.series.forEach(v1 => v1.name = new Date(v1.name));
 
   private reload(date: Date) {
-    this.getSeriesDto('basic', date)
-        .subscribe(array => {
-          // we need to convert the json date-string into a javascript string
-          array.forEach(v => v.series.forEach(v1 => v1.name = new Date(v1.name)));
-          this.multi = array;
-        });
-    this.getSeriesDto('audio_duration_statistics', date)
-        .subscribe(array => {
-          this.multi2 = [array[0]];
-          this.single1 = array[1].series;
-        });
+    this.getSeriesDto('basic', date).subscribe(array => {
+      array.forEach(v => this.convertJsonToDate(v));
+      this.multi = array;
+    });
+    this.getSeriesDto('audio_duration_statistics', date).subscribe(array => {
+      this.convertJsonToDate(array[0]);
+      this.multi2 = [array[0]];
+      this.single1 = array[1].series;
+    });
   }
 }
