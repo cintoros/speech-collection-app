@@ -7,10 +7,12 @@ import ch.fhnw.speech_collection_app.jooq.enums.AchievementsDependsOn;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Achievements;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.UserAchievements;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -278,8 +280,6 @@ public class AchievementsService {
                 .orderBy(DSL.rand()).limit(1).fetchOneInto(UserAchievements.class);
     }
 
-    //FIXME to much refactoring ;)
-    //TODO clear database to ensure correct behaviour ;)
     public List<AchievementWrapper> getActiveAchievements() {
         createAutomaticAchievements();
         var userAchievements = getActiveUserAchievements(customUserDetailsService.getLoggedInUserId());
@@ -337,21 +337,19 @@ public class AchievementsService {
         List<MapWrapper> result = new ArrayList<>();
         for (CantonEnum canton : CantonEnum.values()) {
             String county_id = CantonClass.enumToCountyId(canton);
-            List<Long> res = dslContext.select(USER_ACHIEVEMENTS.POINTS)
+            var sum = dslContext.select(DSL.sum(USER_ACHIEVEMENTS.POINTS))
                     .from(USER_ACHIEVEMENTS.join(USER).on(USER_ACHIEVEMENTS.USER_ID.eq(USER.ID)).join(DIALECT)
                             .on(USER.DIALECT_ID.eq(DIALECT.ID)))
-                    .where(DIALECT.COUNTY_ID.eq(county_id)).fetchInto(Long.class);
-            Long sum = 0L;
-            for (Long value : res)
-                sum += value;
+                    .where(DIALECT.COUNTY_ID.eq(county_id))
+                    .fetchOptional()
+                    //NOTE: empty cantons return null
+                    .map(Record1::component1).filter(Objects::nonNull)
+                    .map(BigDecimal::longValue).orElse(0L);
             result.add(new MapWrapper(canton, sum));
         }
         return result;
     }
 
-    //FIXME to much refactoring ;)
-    //NOTE: two problems 5x instead of 3x
-    //second everything is 100% ;)
     AchievementWrapper getAchievementWrapper(UserAchievements userAchievement) {
         int level = getLevel(userAchievement);
         return new AchievementWrapper(getAchievement(userAchievement.getAchievementsId()), userAchievement,

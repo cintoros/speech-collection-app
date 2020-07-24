@@ -34,12 +34,12 @@ subprojects {
   dependencyManagement {
     dependencies {
       dependency 'org.apache.tika:tika-parsers:1.24.1'
-      dependency 'org.flywaydb:flyway-core:6.5.1'
+      dependency 'org.flywaydb:flyway-core:6.5.2'
       dependencySet(group: 'org.jooq', version: '3.13.2') {
         entry 'jooq'
         entry 'jooq-codegen'
       }
-      dependency 'org.mariadb.jdbc:mariadb-java-client:2.6.1'
+      dependency 'org.mariadb.jdbc:mariadb-java-client:2.6.2'
     }
   }
 }
