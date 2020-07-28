@@ -73,7 +73,6 @@ public class DocumentService {
                 var id = source.getId();
                 var rawFilePath = rpath.resolve(id + ".bin");
                 source.setPathToRawFile(rawFilePath.toString());
-                //FIXME why?
                 rawFilePath = speechCollectionAppConfig.getBasePath().resolve(rawFilePath);
                 Files.write(rawFilePath, file.getBytes());
                 source.store();

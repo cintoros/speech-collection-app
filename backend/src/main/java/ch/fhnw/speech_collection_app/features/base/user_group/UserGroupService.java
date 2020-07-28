@@ -262,7 +262,6 @@ public class UserGroupService {
                         .and(DATA_ELEMENT.ID.notIn(dslContext.select(DATA_TUPLE.DATA_ELEMENT_ID_1)
                                 .from(DATA_TUPLE.innerJoin(DATA_ELEMENT).onKey(DATA_TUPLE.DATA_ELEMENT_ID_2).innerJoin(AUDIO).onKey(AUDIO.DATA_ELEMENT_ID))
                                 //only show the ones that need an additional dialect
-                                //TODO test if this actually works
                                 .where(DATA_TUPLE.TYPE.in(DataTupleType.RECORDING, DataTupleType.TEXT_AUDIO)))
                                 //only show the ones that are not already skipped.
                                 .and(DATA_ELEMENT.ID.notIn(dslContext.select(CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID)

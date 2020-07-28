@@ -5,7 +5,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.pojos.DataElement;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Image;
 import ch.fhnw.speech_collection_app.jooq.tables.pojos.Text;
 
-//FIXME this is not even the same as the typescript one.
+//TODO this is not even the same as the typescript one.
 //TODO not sure what is even used of all this stuff...
 public class ReturnWrapper {
     public final DataElement dataElement;
