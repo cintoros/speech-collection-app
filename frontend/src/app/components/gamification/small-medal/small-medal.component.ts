@@ -7,24 +7,10 @@ import { Component, Input } from '@angular/core';
 })
 export class SmallMedalComponent {
   @Input() withRibons = false;
-  @Input() message = '';
   @Input() level = 0;
+  private classes = [undefined, 'bronze', 'silver', 'gold', 'platin', 'red'];
 
   getClass() {
-    if (this.level === 1) {
-      return 'quiz-medal__circle--bronze';
-    }
-    if (this.level === 2) {
-      return 'quiz-medal__circle--silver';
-    }
-    if (this.level === 3) {
-      return 'quiz-medal__circle--gold';
-    }
-    if (this.level === 4) {
-      return 'quiz-medal__circle--platin';
-    }
-    if (this.level === 5) {
-      return 'quiz-medal__circle--red';
-    }
+    return this.level === 0 ? undefined : `quiz-medal__circle--${this.classes[this.level]}`;
   }
 }

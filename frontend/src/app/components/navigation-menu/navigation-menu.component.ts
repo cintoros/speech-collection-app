@@ -23,8 +23,7 @@ export class NavigationMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.numAchievementsService.currentMessage.subscribe(
-        message => this.message = message);
+    this.numAchievementsService.currentMessage.subscribe(message => this.message = message);
     this.numAchievementsService.getNumber();
   }
 

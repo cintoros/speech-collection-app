@@ -2,14 +2,14 @@
 <!--source: https://getbootstrap.com/docs/4.4/examples/cover/ -->
 <header class="masthead mb-auto">
   <div class="inner">
-    <h3 routerLink="/home" class="masthead-brand">Speech Collection App</h3>
+    <h3 class="masthead-brand" routerLink="/home">Speech Collection App</h3>
     <nav class="nav nav-masthead justify-content-center">
       <ng-container *ngIf="authService.checkAuthenticated()">
-        <a routerLink="/record" class="nav-link">Record</a>
-        <a routerLink="/check" class="nav-link">Check</a>
-        <a routerLink="/profile" class="nav-link">{{this.user?.username}}</a>
-        <a routerLink="/gamification" *ngIf="this.user?.gamificationOn" class="nav-link">
-          Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5" [message]="message" [withRibons]="true"></app-small-medal>
+        <a class="nav-link" routerLink="/record">Record</a>
+        <a class="nav-link" routerLink="/check">Check</a>
+        <a class="nav-link" routerLink="/profile">{{this.user?.username}}</a>
+        <a *ngIf="this.user?.gamificationOn" class="nav-link" routerLink="/gamification">
+          Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5"  [withRibons]="true"></app-small-medal>
         </a>
       </ng-container>
     </nav>
@@ -26,12 +26,12 @@
     <a routerLink="/about">About</a>
   </p>
   <ng-container *ngIf="isGroupAdmin()">
-    <a routerLink="/admin/overview" class="admin-links">Check Overview</a>
-    <a routerLink="/admin/document_overview" class="admin-links">Document Overview</a>
-    <a routerLink="/admin/user_group" class="admin-links">User Group</a>
+    <a class="admin-links" routerLink="/admin/overview">Check Overview</a>
+    <a class="admin-links" routerLink="/admin/document_overview">Document Overview</a>
+    <a class="admin-links" routerLink="/admin/user_group">User Group</a>
   </ng-container>
   <ng-container *ngIf="isAdmin()">
-    <a routerLink="/admin/admin" *ngIf="isAdmin()" class="admin-links">Admin</a>
-    <a routerLink="/admin/statistics" *ngIf="isAdmin()" class="admin-links">Statistics</a>
+    <a *ngIf="isAdmin()" class="admin-links" routerLink="/admin/admin">Admin</a>
+    <a *ngIf="isAdmin()" class="admin-links" routerLink="/admin/statistics">Statistics</a>
   </ng-container>
 </footer>

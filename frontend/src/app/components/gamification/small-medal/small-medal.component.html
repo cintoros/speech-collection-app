@@ -1,8 +1,6 @@
 <div class="quiz-medal">
   <div [class]="getClass()" class="quiz-medal__circle">
-        <span>
-            {{message}}
-        </span>
+    <span *ngIf="level==5">1</span>
   </div>
   <div *ngIf="withRibons" class="quiz-medal__ribbon quiz-medal__ribbon--left"></div>
   <div *ngIf="withRibons" class="quiz-medal__ribbon quiz-medal__ribbon--right"></div>

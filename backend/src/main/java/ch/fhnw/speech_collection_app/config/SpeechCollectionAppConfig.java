@@ -145,6 +145,7 @@ public class SpeechCollectionAppConfig {
         public static class Gamification {
             private Mode mode;
             private int[] pointPerLevel;
+            private String[] activeAchievements;
 
             public Mode getMode() {
                 return mode;
@@ -160,6 +161,14 @@ public class SpeechCollectionAppConfig {
 
             public void setPointPerLevel(int[] pointPerLevel) {
                 this.pointPerLevel = pointPerLevel;
+            }
+
+            public String[] getActiveAchievements() {
+                return activeAchievements;
+            }
+
+            public void setActiveAchievements(String[] activeAchievements) {
+                this.activeAchievements = activeAchievements;
             }
 
             public enum Mode {DISABLED, HALF_ENABLED, ENABLED}

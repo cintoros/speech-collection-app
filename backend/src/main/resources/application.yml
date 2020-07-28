@@ -23,5 +23,6 @@ speech-collection-app:
     gamification:
       mode: enabled
       point-per-level: [0,10,20,50,100]
+      active-achievements: ["create-day","audio-month","check-day","check-month"]
   min-num-checks: 3
   num-random-select: 40

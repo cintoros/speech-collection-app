@@ -1,13 +1,13 @@
 <mat-card *ngIf="achievementWrapper">
-  <h3 *ngIf="getType()==='microphone-alt'">Diligent Speaker</h3>
-  <h3 *ngIf="getType()==='edit'">Diligent Writer</h3>
-  <h3 *ngIf="getType()==='check-square'">Diligent Checker</h3>
+  <h3 *ngIf="indexOf===0">Diligent Speaker</h3>
+  <h3 *ngIf="indexOf===1">Diligent Writer</h3>
+  <h3 *ngIf="indexOf===2">Diligent Checker</h3>
   <ng-container *ngIf="getLevel() > 0">
-    <p *ngIf="getType()==='microphone-alt'">You recorded {{getLastLevelPoints()}} translations this month.</p>
-    <p *ngIf="getType()==='edit'">You have written {{getLastLevelPoints()}} translations this month.</p>
-    <p *ngIf="getType()==='check-square'">You checked {{getLastLevelPoints()}} tuples this month.</p>
+    <p *ngIf="indexOf===0">You recorded {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="indexOf===1">You have written {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="indexOf===2">You checked {{getLastLevelPoints()}} tuples this month.</p>
   </ng-container>
-  <app-glyphicons-badge [glyph]="achievementWrapper.achievements.batchName" [level]="getLevel()"
+  <app-glyphicons-badge [glyph]="getGlyph()" [level]="getLevel()"
                         [text]="achievementWrapper.achievements.name">
   </app-glyphicons-badge>
   <div *ngIf="getLevel() < 4">
