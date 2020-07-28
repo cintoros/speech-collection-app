@@ -145,6 +145,7 @@
   },
   "defaultProject": "speech_collection_app",
   "cli": {
-    "analytics": "a8c4d9fe-4fe7-4758-a4f0-277f9a9f1ae7"
+    "analytics": "a8c4d9fe-4fe7-4758-a4f0-277f9a9f1ae7",
+    "packageManager": "yarn"
   }
 }

@@ -67,15 +67,15 @@ jooq {
   }
 }
 task buildProd {
-  dependsOn ':frontend:npmBuildProd'
+  dependsOn ':frontend:yarnBuildProd'
   finalizedBy 'build'
 }
 task buildProd2 {
-  dependsOn ':frontend:npmBuildProd2'
+  dependsOn ':frontend:yarnBuildProd2'
   finalizedBy 'build'
 }
 task buildProd3 {
-  dependsOn ':frontend:npmBuildProd3'
+  dependsOn ':frontend:yarnBuildProd3'
   finalizedBy 'build'
 }
 //angular resources
