@@ -10,7 +10,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
-  scores = Array(26).map(() => 0.0);
+  private scores = Array(26).map(() => 0.0);
+  private points = Array(26).map(() => 0.0);
   private score100percent = 53;
   private score0percent = 95;
   classes = Array(26).map(() => 'cantonColor_' + this.score0percent);
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit {
     this.getCantonsScores();
   }
 
+  getScoreText = (index: number) => this.scores[index] + '% / ' + this.points[index];
   private getCountyWeight = (county: CantonEnum) => this.countryWeights[this.countries.indexOf(county.toString())];
 
   private getCantonsScores(): void {
@@ -42,6 +44,7 @@ export class MapComponent implements OnInit {
           value.forEach(value1 => {
             const i = this.countries.indexOf(value1.canton.toString());
             const score = ((value1.points * this.countryWeights[i]) / maxScore);
+            this.points[i] = value1.points;
             this.scores[i] = Math.floor(score * 100);
             this.classes[i] = 'cantonColor_' +
                 Math.floor(this.score0percent - score * (this.score0percent - this.score100percent));
