@@ -10,11 +10,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
+  classes = Array(26).map(() => 'cantonColor_' + 95);
   private scores = Array(26).map(() => 0.0);
   private points = Array(26).map(() => 0.0);
-  private score100percent = 53;
-  private score0percent = 95;
-  classes = Array(26).map(() => 'cantonColor_' + this.score0percent);
   private countries = ['CH_AG', 'CH_AI', 'CH_AR', 'CH_BL', 'CH_BE', 'CH_BS', 'CH_FR', 'CH_GE', 'CH_GL', 'CH_GR', 'CH_JU',
     'CH_LU', 'CH_NE', 'CH_NW', 'CH_OW', 'CH_SG', 'CH_SH', 'CH_SO', 'CH_SZ', 'CH_TG', 'CH_TI', 'CH_UR', 'CH_VD', 'CH_VS',
     'CH_ZG', 'CH_ZH'];
@@ -38,8 +36,9 @@ export class MapComponent implements OnInit {
             const score = value1.points / sum;
             this.points[i] = value1.points;
             this.scores[i] = Math.floor(score * 100);
-            this.classes[i] = 'cantonColor_' +
-                Math.floor(this.score0percent - score * (this.score0percent - this.score100percent));
+            // calculate the color based on the score see the map.component.scss for details on how the coloring works
+            // the color ranges from 95(light blue) to 53(dark blue)
+            this.classes[i] = 'cantonColor_' + Math.floor(95 - score * (95 - 53));
           });
         });
   }
