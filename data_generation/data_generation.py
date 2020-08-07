@@ -210,7 +210,7 @@ class ThreadedApiFetcher:
     def request_all(self):
         threads = list()
         # TODO manually add batch ids
-        apis = [[GoogleApi(), 7], [MicrosoftApi(), 8], [AwsApi(), 9]]
+        apis = [[GoogleApi(), 10], [MicrosoftApi(), 11], [AwsApi(), 12]]
         for api_fetcher, batch_id in apis:
             thread = threading.Thread(target=self.request_all_batch, args=[api_fetcher, batch_id])
             threads.append(thread)
