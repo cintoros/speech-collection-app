@@ -1,35 +1,39 @@
-<div class="margin">
-  <a href="https://www.fhnw.ch/en/about-fhnw/schools/school-of-engineering/institutes/institute-for-data-science"><img
-    alt="Institute for Data Science | FHNW" class="small-logo cropped " src="assets/logos/fhnw.jpg"
-    title="Institute for Data Science | FHNW"></a>
-  <span class="margin"></span>
-  <a href="https://www.zhaw.ch/en/engineering/institutes-centres/init/"><img
-    alt="Institute of Applied Information Technology | ZHAW" class="small-logo cropped " src="assets/logos/zhaw.jpg"
-    title="Institute of Applied Information Technology | ZHAW"></a>
-  <span class="margin"></span>
-  <a href="https://www.uzh.ch/cmsssl/en.html"><img
-    alt="University of Zurich" class="small-logo cropped "
-    src="assets/logos/uzh_logo_e_pos_web_main.jpg"
-    title="University of Zurich"></a>
-  <span class="margin"></span>
-  <a href="https://swissnlp.org/"><img
-    alt="Swiss Association for Natural Language Processing" class="small-logo cropped "
-    src="assets/logos/SwissNLP-Logo.jpg"
-    title="Swiss Association for Natural Language Processing"></a>
-</div>
-<div class="margin">
-  Welcome to the Speech Collection App.<br/>
-  This web application was built for the purpose of collecting Swiss German speech with the corresponding Standard
-  German transcript to train Swiss German speech-to-text models.<br/>
-  You can help us build a freely available Swiss German speech-to-text model by providing speech (Record function) or by
-  doublechecking the recordings of other users (Check function).<br/>
-  Any contribution is much appreciated!<br/>
-  <br/>
-  <button class="big-button" color="primary" mat-raised-button routerLink="/record">Start Recording</button>
-  <br/><br/>
-  <button class="big-button" color="primary" mat-raised-button routerLink="/check">Start Checking</button>
-  <br/>
-  <br/>
+<app-logos></app-logos>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6">
+      <a routerLink="/record">
+        <app-record-animation></app-record-animation>
+        <button class="btn btn-primary btn-lg btn-block" type="button">Record now</button>
+      </a>
+    </div>
+    <div class="col-sm-6">
+      <a routerLink="/check">
+        <app-check-animation></app-check-animation>
+        <button class="btn btn-primary btn-lg btn-block" type="button">Check now</button>
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <img alt="image loading failed :(" class="img-responsive" src="assets/img/sva.png"/>
+    </div>
+    <div class="col-sm-6">
+      <h3>Our Concern</h3>
+      <div style="text-align: left">
+        Welcome to the Speech Collection App.<br/>
+        This web application was built for the purpose of collecting Swiss German speech with the corresponding Standard
+        German transcript to train Swiss German speech-to-text models.<br/>
+        You can help us build a freely available Swiss German speech-to-text model by providing speech (Record function)
+        or by
+        doublechecking the recordings of other users (Check function).<br/>
+        Any contribution is much appreciated!<br/>
+      </div>
+    </div>
+  </div>
+  <app-public-stats></app-public-stats>
+  <br>
   <div *ngIf="userGroups.length>1">
     <h3>Multiple user groups available:</h3>
     <mat-form-field>
@@ -39,35 +43,9 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <br>
-  <mat-divider></mat-divider>
-  <br>
-  <markdown [data]="getSelectedGroupDescription()"></markdown>
+  <ng-container *ngIf="getSelectedGroupDescription()">
+    <mat-divider></mat-divider>
+    <br>
+    <markdown [data]="getSelectedGroupDescription()"></markdown>
+  </ng-container>
 </div>
-<div class="margin">
-  <p *ngFor="let count of counts"><strong>{{count.name}}: </strong><i>{{count.value}}</i></p>
-</div>
-<mat-grid-list cols="3" rowHeight="fit" style="height: 40%; width: 100%">
-  <mat-grid-tile>
-    <mat-card style="height: 90%;width: 90%">
-      <mat-card-header><h3>Top 3 Users (recording) </h3><br></mat-card-header>
-      <mat-card-content style="height: 70%;">
-        <ngx-charts-bar-vertical [results]="single1" [showXAxisLabel]="true"
-                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
-                                 [yAxisLabel]="'Number of recordings'" [yAxis]="true">
-        </ngx-charts-bar-vertical>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-card style="height: 90%;width: 90%">
-      <mat-card-header><h3>Top 3 Users (checking) </h3><br></mat-card-header>
-      <mat-card-content style="height: 70%;">
-        <ngx-charts-bar-vertical [results]="single2" [showXAxisLabel]="true"
-                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
-                                 [yAxisLabel]="'Number of checked recordings'" [yAxis]="true">
-        </ngx-charts-bar-vertical>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>

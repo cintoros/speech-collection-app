@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {ChangePassword} from '../../models/change-password';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 enum VerificationModus {
   EMAIL_FORM, EMAIL_VERIFIED, EMAIL_TOKEN_EXPIRED, PASSWORD_FORM, PASSWORD_CHANGING, PASSWORD_CHANGED, PASSWORD_TOKEN_EXPIRED, EMAIL_SENDED

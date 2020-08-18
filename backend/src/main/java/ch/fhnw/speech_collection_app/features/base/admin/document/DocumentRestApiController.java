@@ -21,6 +21,11 @@ public class DocumentRestApiController {
         documentService.postDocumentSource(groupId, domainId, files, documentLicence);
     }
 
+    @PostMapping("image")
+    public void postImageSource(@PathVariable long groupId, @RequestParam long domainId, @RequestParam MultipartFile[] files, @RequestParam String documentLicence) {
+        documentService.postImageSource(groupId, domainId, files, documentLicence);
+    }
+
     @GetMapping
     public List<Source> getDocumentSource(@PathVariable long groupId) {
         return documentService.getDocumentSource(groupId);
@@ -36,7 +41,7 @@ public class DocumentRestApiController {
             @PathVariable long groupId, @PathVariable long dataElementId, @RequestParam long lastId,
             @RequestParam long pageSize, @RequestParam boolean before
     ) {
-        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize,before);
+        return documentService.getTextElement(groupId, dataElementId, lastId, pageSize, before);
     }
 
     @DeleteMapping("{sourceId}/element/{dataElementId}")

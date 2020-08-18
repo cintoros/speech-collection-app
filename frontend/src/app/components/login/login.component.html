@@ -1,7 +1,6 @@
-<div style="display: flex; align-items: center; justify-content: center; height: calc(100% - 70px);">
-  <mat-card *ngIf="isLogin" style="width: 500px;">
-    <mat-toolbar color="primary">Login</mat-toolbar>
-
+<div style="display: flex; align-items: center; justify-content: center;  height: calc(100%);min-height: 85rem;">
+  <mat-card *ngIf="isLogin" style="max-width: 500px;width: 90%;">
+    <mat-toolbar style="background-color: #428bca; color: azure;">Login</mat-toolbar>
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <div>
         <mat-form-field style="width: 100%;">
@@ -20,7 +19,6 @@
         </button>
       </div>
     </form>
-
     <p>
       <span>Not registered yet? Register </span>
       <a (click)="toggleIsLogin()" href="#">here</a>
@@ -39,12 +37,8 @@
       </p>
     </div>
   </mat-card>
-  <mat-card *ngIf="!isLogin" style="width: 500px;">
-    <br>
-    <mat-toolbar color="primary">Register</mat-toolbar>
-    <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true"
-                        [user]="newUser()"></app-profile-editor>
+  <mat-card *ngIf="!isLogin" style="max-width: 500px; width: 90%;">
+    <mat-toolbar style="background-color: #428bca; color: azure;">Registrieren</mat-toolbar>
+    <app-profile-editor (output)="toggleIsLogin()" [isNewUser]="true" [user]="newUser()"></app-profile-editor>
   </mat-card>
-
 </div>
-

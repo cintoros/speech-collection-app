@@ -46,8 +46,14 @@ public class UserGroupAdminRestApiController {
         userGroupAdminService.deleteUserGroupRole(id);
     }
 
+    @GetMapping("user_group_role/changeGame/{userName}")
+    public void changeGameMode(@PathVariable long groupId, @PathVariable String userName) {
+        userGroupAdminService.changeGameMode(groupId, userName);
+    }
+
     @PostMapping("user_group_role")
-    public boolean postUserGroupRole(@PathVariable long groupId, @RequestParam String email, @RequestParam UserGroupRoleRole mode) {
+    public boolean postUserGroupRole(@PathVariable long groupId, @RequestParam String email,
+                                     @RequestParam UserGroupRoleRole mode) {
         return userGroupAdminService.postUserGroupRole(email, mode, groupId);
     }
 

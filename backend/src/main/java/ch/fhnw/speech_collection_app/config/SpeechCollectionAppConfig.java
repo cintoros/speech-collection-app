@@ -96,6 +96,11 @@ public class SpeechCollectionAppConfig {
 
     public static class Features {
         private boolean emailIntegration;
+        //TODO actually use the new flags to switch between behaviours
+        private boolean swissGermanText;
+        private boolean additionalData;
+        private boolean images;
+        private Gamification gamification;
 
         public boolean isEmailIntegration() {
             return emailIntegration;
@@ -103,6 +108,70 @@ public class SpeechCollectionAppConfig {
 
         public void setEmailIntegration(boolean emailIntegration) {
             this.emailIntegration = emailIntegration;
+        }
+
+        public boolean isSwissGermanText() {
+            return swissGermanText;
+        }
+
+        public void setSwissGermanText(boolean swissGermanText) {
+            this.swissGermanText = swissGermanText;
+        }
+
+        public boolean isAdditionalData() {
+            return additionalData;
+        }
+
+        public void setAdditionalData(boolean additionalData) {
+            this.additionalData = additionalData;
+        }
+
+        public boolean isImages() {
+            return images;
+        }
+
+        public void setImages(boolean images) {
+            this.images = images;
+        }
+
+        public Gamification getGamification() {
+            return gamification;
+        }
+
+        public void setGamification(Gamification gamification) {
+            this.gamification = gamification;
+        }
+
+        public static class Gamification {
+            private Mode mode;
+            private int[] pointPerLevel;
+            private String[] activeAchievements;
+
+            public Mode getMode() {
+                return mode;
+            }
+
+            public void setMode(Mode mode) {
+                this.mode = mode;
+            }
+
+            public int[] getPointPerLevel() {
+                return pointPerLevel;
+            }
+
+            public void setPointPerLevel(int[] pointPerLevel) {
+                this.pointPerLevel = pointPerLevel;
+            }
+
+            public String[] getActiveAchievements() {
+                return activeAchievements;
+            }
+
+            public void setActiveAchievements(String[] activeAchievements) {
+                this.activeAchievements = activeAchievements;
+            }
+
+            public enum Mode {DISABLED, HALF_ENABLED, ENABLED}
         }
     }
 }

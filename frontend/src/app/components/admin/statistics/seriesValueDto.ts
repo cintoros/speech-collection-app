@@ -1,4 +1,4 @@
 export interface SeriesValueDto {
-  name: Date
-  value: number
+  name: Date;
+  value: number;
 }

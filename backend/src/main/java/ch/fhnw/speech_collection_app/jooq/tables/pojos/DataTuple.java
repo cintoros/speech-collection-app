@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DataTuple implements Serializable {
 
-    private static final long serialVersionUID = 2652025;
+    private static final long serialVersionUID = 2040726939;
 
     private Long          id;
     private Long          dataElementId_1;
@@ -84,7 +84,6 @@ public class DataTuple implements Serializable {
         this.dataElementId_2 = dataElementId_2;
     }
 
-    @NotNull
     public DataTupleType getType() {
         return this.type;
     }

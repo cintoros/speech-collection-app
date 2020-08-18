@@ -1,0 +1,10 @@
+<h3>Daily goal
+  <app-small-medal *ngIf="level > 0 " [level]="level"></app-small-medal>
+</h3>
+<p *ngIf="level===0">You will soon have reached the bronze level of your daily goal.</p>
+<p *ngIf="level===1">You will soon have reached the silver level of your daily goal.</p>
+<p *ngIf="level===2">You will soon have reached the gold level of your daily goal.</p>
+<p *ngIf="level===3">You will soon have reached the platinum level of your daily goal.</p>
+<p *ngIf="level===4">You have reached the platinum level of your daily goal.</p>
+<app-progressbar *ngIf=" level < 4 " [achievementWrapper]=" achievementWrapper">
+</app-progressbar>

@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {UserGroupService} from '../../services/user-group.service';
-import {UserGroup} from '../../models/user-group';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {SeriesValueDto} from '../admin/statistics/seriesValueDto';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { CustomUserDetails } from 'src/app/models/spring-principal';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserGroup } from '../../models/user-group';
+import { UserGroupService } from '../../services/user-group.service';
 
 @Component({
   selector: 'app-home',
@@ -11,29 +11,22 @@ import {SeriesValueDto} from '../admin/statistics/seriesValueDto';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  user: CustomUserDetails;
   userGroups: UserGroup[] = [];
-  counts: SeriesValueDto[];
-  single1: SeriesValueDto[];
-  single2: SeriesValueDto[];
+  private groupId = 1;
 
-  constructor(public userGroupService: UserGroupService, private httpClient: HttpClient) {
+  constructor(
+      public authService: AuthService, private httpClient: HttpClient, public userGroupService: UserGroupService) {
+    this.groupId = this.userGroupService.userGroupId;
+    authService.getUser().subscribe(user => this.user = user.principal);
   }
 
   ngOnInit(): void {
     this.userGroupService.getUserGroups().subscribe(v => this.userGroups = v);
-    this.reload();
   }
 
   getSelectedGroupDescription() {
     const userGroup = this.userGroups.find(value => value.id === this.userGroupService.userGroupId);
     return userGroup ? userGroup.description : undefined;
-  }
-
-  private reload() {
-    this.httpClient.get<SeriesValueDto[]>(`${environment.url}statistics/cumulative_counts`).subscribe(v => this.counts = v);
-    this.httpClient.get<SeriesValueDto[][]>(`${environment.url}statistics/top_3_user`).subscribe(v => {
-      this.single1 = v[0];
-      this.single2 = v[1];
-    });
   }
 }

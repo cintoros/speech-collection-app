@@ -1,0 +1,17 @@
+svg {
+  width: auto;
+}
+
+path {
+  fill: lightgrey;
+  stroke: black;
+}
+
+@for $i from 53 to 101 {
+  path.cantonColor_#{$i} {
+    fill: hsl(208, 56%, $i);
+  }
+}
+
+
+

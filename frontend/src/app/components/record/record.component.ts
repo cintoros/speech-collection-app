@@ -1,105 +1,137 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {AudioNoiseLevel, AudioQuality, RecordingDto} from '../../models/recording-dto';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {SnackBarService} from '../../services/snack-bar.service';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {TextDto} from '../../models/text-dto';
-import {UserGroupService} from '../../services/user-group.service';
-import {Observable, Subscription, timer} from 'rxjs';
-import {CheckedDataElementType} from '../../models/checked-data-element-type';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
+import { DataElement } from 'src/app/models/data-element';
+import { ElementType } from 'src/app/models/element-type';
+import { Image } from 'src/app/models/image';
+import { ReturnWrapper } from 'src/app/models/return-wrapper';
+import { AuthService } from 'src/app/services/auth.service';
+import { NumAchievementsService } from 'src/app/services/num-achievements.service';
+import { environment } from '../../../environments/environment';
+import { CheckedDataElementType } from '../../models/checked-data-element-type';
+import { RecordingDto } from '../../models/recording-dto';
+import { Text } from '../../models/text';
+import { FeaturesService } from '../../services/features.service';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { UserGroupService } from '../../services/user-group.service';
 
 @Component({
   selector: 'app-record',
   templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss']
+  styleUrls: ['./record.component.scss'],
 })
+// TODO simplify logic with backend?
+// TODO test all modi ald & new?
 export class RecordComponent implements OnInit {
-  textDto: TextDto = null;
-  isRecording = false;
-  blobUrl: SafeUrl;
-  recordingQuality = AudioQuality;
-  recordingNoiseLevel = AudioNoiseLevel;
-  selectedQuality = AudioQuality.INTEGRATED;
-  selectedNoiseLevel = AudioNoiseLevel.MODERATE_NOISE;
-  // @ts-ignore
-  private mediaRecorder: MediaRecorder;
-  private audioChunks: Blob[] = [];
+  selectedElement = ElementType.TEXT_OR_IMAGE;
+
+  dataElement1: DataElement = null;
+  dataElement2: DataElement = null;
+  dataElementTranslation: DataElement;
+  achievementWrapper: AchievementWrapper;
+
+  // Depending on the current mode only two of the fields below will be != null
+  textDto1: Text = null;
+  textDto2: Text = null;
+  textDtoTranslation: Text;
+  recordingDto1: RecordingDto = null;
+  recordingDto2: RecordingDto = null;
+  imageDto1: Image = null;
+  imageDto2: Image = null;
+  elementType1: ElementType = null;
+  elementType2: ElementType = null;
+  elementTypeTranslation: ElementType;
+
+  isPrivate = false;
+
+  // controlfields
+  withTranslation = false;
+  isTranslated = false;
+  additionalData = true;
+  gamificationOn = false;
+  visible = true;
   private groupId = 1;
-  private elapsedTime = 0;
-  private numberObservable: Observable<number>;
-  private subscription: Subscription;
-  private browserVersion: string;
 
   constructor(
-    private snackBarService: SnackBarService, private detector: ChangeDetectorRef, private httpClient: HttpClient,
-    private domSanitizer: DomSanitizer, private userGroupService: UserGroupService
-  ) {
+      public authService: AuthService, private snackBarService: SnackBarService, private httpClient: HttpClient,
+      private userGroupService: UserGroupService, private numAchievementsService: NumAchievementsService,
+      private featuresService: FeaturesService, private changeDetectorRef: ChangeDetectorRef) {
     this.groupId = this.userGroupService.userGroupId;
+    authService.getUser().subscribe(user => this.gamificationOn = user.principal.user.gamificationOn);
+    featuresService.getFeatureFlags().subscribe(v => {
+      this.withTranslation = v.swissGermanText;
+      this.additionalData = v.additionalData;
+    });
   }
 
   ngOnInit() {
-    this.browserVersion = window.navigator.userAgent;
     this.getNext();
-    navigator.mediaDevices.getUserMedia({audio: true})
-      .then(stream => {
-        // @ts-ignore
-        this.mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/webm'});
-        this.mediaRecorder.ondataavailable = event => this.audioChunks.push(event.data);
-        this.mediaRecorder.onstop = () => {
-          this.blobUrl = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.audioChunks)));
-          this.detector.detectChanges();
-        };
-      });
-    this.numberObservable = timer(0, 1000);
   }
 
-  startRecord(): void {
-    this.audioChunks = [];
-    this.mediaRecorder.start();
-    this.elapsedTime = 0;
-    this.isRecording = true;
-    this.subscription = this.numberObservable.subscribe(value => this.elapsedTime = value);
-  }
-
-  stopRecord(): void {
-    this.subscription.unsubscribe();
-    this.mediaRecorder.stop();
-    this.isRecording = false;
-  }
-
-  submit(): void {
-    const recording = new RecordingDto(this.textDto.id, this.selectedQuality, this.selectedNoiseLevel, this.browserVersion);
-    const formData = new FormData();
-    formData.append(`file`, new Blob(this.audioChunks), 'audio');
-    formData.append('recording', JSON.stringify(recording));
-    this.httpClient.post(`${environment.url}user_group/${this.groupId}/recording`, formData).subscribe(() => {
-      this.audioChunks = [];
-      this.blobUrl = undefined;
-      this.snackBarService.openMessage('Successfully uploaded recording');
+  skip() {
+    const url = `${environment.url}user_group/${this.groupId}/element/${this.dataElement1.id}/checked?type=${CheckedDataElementType.SKIPPED}`;
+    this.httpClient.post<void>(url, {}).subscribe(() => {
+      this.snackBarService.openMessage('marked as skipped');
       this.getNext();
     });
   }
 
-  private() {
-    this.check(CheckedDataElementType.PRIVATE).subscribe(() => {
-      this.snackBarService.openMessage('data successfully flagged.');
-      this.textDto.isPrivate = true;
-    });
+  resetAndNext() {
+    this.resetFields();
+    this.getNext();
   }
 
-  sentenceError() {
-    this.check(CheckedDataElementType.SENTENCE_ERROR).subscribe(() => {
-      this.snackBarService.openMessage('data successfully flagged.');
-      this.getNext();
-    });
+  triggerRecord(elem: ReturnWrapper) {
+    this.dataElementTranslation = elem.dataElement;
+    this.textDtoTranslation = elem.text;
+    this.elementTypeTranslation = elem.elementType;
+    this.isTranslated = true;
   }
 
-  skip = () => this.check(CheckedDataElementType.SKIPPED).subscribe(() => this.getNext());
-  isReady = () => this.audioChunks.length > 0;
-  private check = (type: CheckedDataElementType) => this.httpClient.post<void>(`${environment.url}user_group/${this.groupId}/element/${this.textDto.id}/checked?type=${type}`, {});
+  private resetFields() {
+    this.dataElement1 = null;
+    this.dataElement2 = null;
+    this.textDto1 = null;
+    this.textDto2 = null;
+    this.recordingDto1 = null;
+    this.recordingDto2 = null;
+    this.imageDto1 = null;
+    this.imageDto2 = null;
+    this.elementType1 = null;
+    this.elementType2 = null;
+    this.isPrivate = false;
+    this.dataElementTranslation = null;
+    this.textDtoTranslation = null;
+    this.elementTypeTranslation = null;
+    this.isTranslated = false;
+  }
 
   private getNext() {
-    this.httpClient.get<TextDto>(`${environment.url}user_group/${this.groupId}/excerpt`).subscribe(value => this.textDto = value);
+    const formData = new FormData();
+    formData.append(`selectedElement`, this.selectedElement);
+    this.httpClient.post<ReturnWrapper>(`${environment.url}user_group/${this.groupId}/next`, formData)
+        .subscribe(value => {
+          this.dataElement1 = value.dataElement;
+          this.textDto1 = value.text;
+          this.recordingDto1 = value.recordingDto;
+          this.imageDto1 = value.image;
+          this.elementType1 = value.elementType;
+          if (this.elementType1 === ElementType.TEXT) {
+            this.elementType2 = ElementType.AUDIO;
+          }
+          if (this.elementType1 === ElementType.IMAGE) {
+            this.elementType2 = ElementType.AUDIO;
+          }
+          if (this.elementType1 === ElementType.AUDIO) {
+            this.elementType2 = ElementType.TEXT;
+          }
+          if (this.elementType2 === ElementType.TEXT) {
+            this.withTranslation = false;
+          }
+          this.achievementWrapper = value.achievementWrapper;
+          this.numAchievementsService.getNumber();
+          this.changeDetectorRef.detectChanges();
+        });
   }
 }
+

@@ -1,0 +1,41 @@
+<mat-form-field class="max-width">
+  <mat-label>Noise level</mat-label>
+  <mat-select [(ngModel)]="selectedNoiseLevel">
+    <mat-option [value]="recordingNoiseLevel.NO_NOISE">No noise</mat-option>
+    <mat-option [value]="recordingNoiseLevel.MODERATE_NOISE">Moderate noise</mat-option>
+    <mat-option [value]="recordingNoiseLevel.VERY_NOISY">Very Noisy</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field class="max-width">
+  <mat-label>Mic quality</mat-label>
+  <mat-select [(ngModel)]="selectedQuality">
+    <mat-option [value]="recordingQuality.INTEGRATED">Integrated</mat-option>
+    <mat-option [value]="recordingQuality.DEDICATED">Dedicated</mat-option>
+  </mat-select>
+</mat-form-field>
+<br/>
+<audio [src]="blobUrl" controls></audio>
+<br/>
+<br/>
+<button (click)="startRecord()" *ngIf="!this.isRecording" mat-raised-button title="Start recording">
+  <app-mic-symbol class="symbol"></app-mic-symbol>
+  <span>&nbsp;Start</span>
+</button>
+<button (click)="stopRecord()" *ngIf="this.isRecording" mat-raised-button title="Stop recording">
+  <mat-icon>stop</mat-icon>
+  <span>&nbsp;Stop</span>
+</button>
+<button (click)="skip()" mat-raised-button title="Skip">
+  <mat-icon>skip_next</mat-icon>
+  <span>&nbsp;Skip</span>
+</button>
+<br>
+<button (click)="sentenceError()" mat-raised-button title="Mark as 'Not a Single Standard German Sentence'">
+  <span>&nbsp;Not a Single Standard German Sentence</span>
+</button>
+<button (click)="private()" [disabled]="isPrivate" mat-raised-button title="Mark as private">
+  <span>&nbsp;Sensitive Data</span>
+</button>
+<button (click)="submit()" *ngIf="isReady()" color="primary" mat-raised-button title="Submit your recording">Submit
+</button>
+<span *ngIf="isRecording"> &ensp; Recorded {{ elapsedTime }} Seconds</span>

@@ -1,69 +1,98 @@
-<mat-card class="header-card"><h1>Check</h1>
-  <div style="color: grey;font-size: 1em">
-    <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a correct
-      Swiss German translation.</strong>
-    <ul>
-      <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
-      <li>Wrong: Recording is not a correct Swiss German translation</li>
-      <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
-      <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or phrase. In a pre-processing
-        step, longer texts are automatically split to sentences, so use this button also if you suspect that the
-        sentence
-        splitting went wrong.
-      </li>
-      <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
-    </ul>
+<div *ngIf="tuple">
+  <!-- instructions -->
+  <div class="card-header" id="headingOne">
+    <button (click)="visible=!visible" mat-flat-button>
+      <mat-icon *ngIf="visible">expand_less</mat-icon>
+      <mat-icon *ngIf="!visible">expand_more</mat-icon>
+      Help
+    </button>
   </div>
-</mat-card>
-<div *ngIf="!occurrence" style="height: calc(100% - 100px);">
-  <div style="height: calc(100% - 90px);">
-    <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
-      <div style="font-weight: bold; font-size: 36px;">No more Data available</div>
+  <div *ngIf="visible" class=" card ">
+    <mat-card>
+      <p *ngIf="tuple.type !== 'TEXT_AUDIO'" class="card">
+        <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
+        <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
+        <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
+        <span *ngIf="tuple.type === 'IMAGE_AUDIO'">Passt das Bild und die Aufnahme zusammen?</span>
+        <span *ngIf="tuple.type === 'IMAGE_TEXT'">Passt das Bild und der Satz zusammen?</span>
+        <!-- Universal case -->
+        Dann klicke auf das
+        <span class="glyphicon glyphicon-ok-sign"></span> Symbol, <br/>
+        sonst auf das
+        <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
+      </p>
+      <div *ngIf="tuple.type === 'TEXT_AUDIO'" class="card" style="color: grey;font-size: 1em;text-align: left">
+        <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a
+          correct Swiss German translation.</strong>
+        <ul>
+          <li>Correct: Transcript is a Standard German sentence and recording is a correct Swiss German translation</li>
+          <li>Wrong: Recording is not a correct Swiss German translation</li>
+          <li>Skip: Unsure whether recording is a correct Swiss German translation or not</li>
+          <li>Not a Single Standard German Sentence: Transcript is not Standard German or is not a single sentence or
+            phrase. In a pre-processing step, longer texts are automatically split to sentences, so use this button also
+            if you suspect that the sentence splitting went wrong.
+          </li>
+          <li>Sensitive data: Transcript and / or recording contains sensitive data and should not be published.</li>
+        </ul>
+      </div>
     </mat-card>
   </div>
+  <!-- The card component -->
+  <mat-card *ngIf="tuple.type !== 'TEXT_AUDIO'" class="center">
+    <span *ngIf="tuple.type === 'TEXT_TEXT'">
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_1"></app-excerpt-from-data-elem-id>
+            <br/>
+            <br/>
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_2"></app-excerpt-from-data-elem-id>
+        </span>
+    <span *ngIf="tuple.type === 'AUDIO_AUDIO'">
+            <app-audio [dataElementId]="tuple.dataElementId_1"></app-audio>
+            <br/>
+            <br/>
+            <app-audio [dataElementId]="tuple.dataElementId_2"></app-audio>
+        </span>
+    <span *ngIf="tuple.type === 'AUDIO_TEXT'">
+            <app-audio [dataElementId]="tuple.dataElementId_1"></app-audio>
+            <br/>
+            <br/>
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_2"></app-excerpt-from-data-elem-id>
+        </span>
+    <span *ngIf="tuple.type === 'IMAGE_AUDIO'">
+            <app-image [dataElementId]="tuple.dataElementId_1"></app-image>
+            <br/>
+            <br/>
+            <app-audio [dataElementId]="tuple.dataElementId_2"></app-audio>
+        </span>
+    <span *ngIf="tuple.type === 'IMAGE_TEXT'">
+            <app-image [dataElementId]="tuple.dataElementId_1"></app-image>
+            <br/>
+            <br/>
+            <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_2"></app-excerpt-from-data-elem-id>
+        </span>
+    <br/>
+    <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
+  </mat-card>
+  <mat-card *ngIf="tuple.type === 'TEXT_AUDIO'" class="center">
+    <div>
+      <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_1"></app-excerpt-from-data-elem-id>
+      <br/>
+      <br/>
+      <app-audio [dataElementId]="tuple.dataElementId_2"></app-audio>
+      <button (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)"
+              class="check-navigation-button" mat-raised-button>
+        <mat-icon>skip_next</mat-icon>
+        <span>&nbsp;Skip</span>
+      </button>
+    </div>
+    <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
+  </mat-card>
+  <br/>
+  <app-daily-goal *ngIf="this.gamificationOn" [achievementWrapper]="achievementWrapper"></app-daily-goal>
 </div>
-<div *ngIf="occurrence" class="margin">
-  <b>Excerpt: </b><span>{{occurrence.text}}</span>
-  <br>
-  <audio #htmlAudioPlayer [src]="blobUrl" controls id="htmlAudioPlayer"></audio>
-  <br>
-  <button (click)="togglePlay();" *ngIf=" !isPlaying" class="check-navigation-button" mat-raised-button>
-    <mat-icon>play_arrow</mat-icon>
-    Play [p]
-  </button>
-  <button (click)="togglePlay();" *ngIf="isPlaying" class="check-navigation-button" mat-raised-button>
-    <mat-icon>pause</mat-icon>
-    Pause [p]
-  </button>
-  <button (click)="setCheckedType(checkedOccurrenceLabel.SKIPPED)" [disabled]="!this.isReady"
-          class="check-navigation-button" mat-raised-button>
-    <mat-icon>skip_next</mat-icon>
-    <span>&nbsp;Skip [s]</span>
-  </button>
-  <br>
-  <button (click)="setCheckedType(checkedOccurrenceLabel.CORRECT)" [disabled]="!this.isReady" mat-raised-button
-          style="border-color: green;border-style: solid;border-width: 2px; ">
-    <mat-icon style="color: green">thumb_up</mat-icon>
-    <span>&nbsp;Correct [c]</span>
-  </button>
-  <button (click)="setCheckedType(checkedOccurrenceLabel.WRONG)" [disabled]="!this.isReady"
-          class="check-navigation-button" mat-raised-button
-          style="border-color: red;border-style: solid;border-width: 2px; ">
-    <mat-icon style="color: red">thumb_down</mat-icon>
-    <span>&nbsp;Wrong [w]</span>
-  </button>
-  <br>
-  <button (click)="setCheckedType(checkedOccurrenceLabel.SENTENCE_ERROR)" [disabled]="!this.isReady"
-          class="check-navigation-button" mat-raised-button>
-    <span>&nbsp;Not a Single Standard German Sentence</span>
-  </button>
-  <button (click)="setCheckedType(checkedOccurrenceLabel.PRIVATE)" [disabled]="!this.isReady"
-          class="check-navigation-button" mat-raised-button>
-    <span>&nbsp;Sensitive Data</span>
-  </button>
-</div>
-<div class="shortcut-button">
-  <button (click)="openShortcutDialog()" mat-raised-button>
-    <mat-icon>keyboard</mat-icon>
-  </button>
+<div *ngIf="!tuple">
+  <div style="height: calc(100% - 90px);">
+    <mat-card style="margin: 15px; height: 100%; display: flex; align-items: center; justify-content: center;">
+      <div style="font-weight: bold; font-size: 36px;">We're done for today.</div>
+    </mat-card>
+  </div>
 </div>

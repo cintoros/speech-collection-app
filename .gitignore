@@ -3,8 +3,13 @@ build
 .idea
 *.iml
 data
+bin
 __pycache__
 backend/src/test/resources/application-dev-test.yml
 data_import/config.py
 data_generation/config.py
 .ipynb_checkpoints
+.project
+.classpath
+.vscode
+.settings
