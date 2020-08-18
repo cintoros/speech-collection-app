@@ -343,6 +343,9 @@ public class UserGroupService {
             case TEXT_AUDIO:
                 achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
                 break;
+            case RECORDING:
+                achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
+                break;
             case TEXT_TEXT:
                 achievementType = AchievementsDependsOn.TEXT_TEXT_CHECKED;
                 break;

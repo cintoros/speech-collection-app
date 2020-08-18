@@ -9,7 +9,7 @@
   </div>
   <div *ngIf="visible" class=" card ">
     <mat-card>
-      <p *ngIf="tuple.type !== 'TEXT_AUDIO'" class="card">
+      <p *ngIf="!isRecording()" class="card">
         <span *ngIf="tuple.type === 'TEXT_TEXT'">Passen die zwei Sätze zusammen?</span>
         <span *ngIf="tuple.type === 'AUDIO_AUDIO'">Passen die zwei Aufnahmen zusammen?</span>
         <span *ngIf="tuple.type === 'AUDIO_TEXT'">Passt der Satz und die Aufnahme zusammen?</span>
@@ -21,7 +21,7 @@
         sonst auf das
         <span class="glyphicon glyphicon-remove-sign"></span> Symbol.
       </p>
-      <div *ngIf="tuple.type === 'TEXT_AUDIO'" class="card" style="color: grey;font-size: 1em;text-align: left">
+      <div *ngIf="isRecording()" class="card" style="color: grey;font-size: 1em;text-align: left">
         <strong>Doublecheck whether a transcript is a Standard German sentence and the corresponding recording is a
           correct Swiss German translation.</strong>
         <ul>
@@ -38,7 +38,7 @@
     </mat-card>
   </div>
   <!-- The card component -->
-  <mat-card *ngIf="tuple.type !== 'TEXT_AUDIO'" class="center">
+  <mat-card *ngIf="!isRecording()" class="center">
     <span *ngIf="tuple.type === 'TEXT_TEXT'">
             <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_1"></app-excerpt-from-data-elem-id>
             <br/>
@@ -72,7 +72,7 @@
     <br/>
     <app-check-checker (completed)="checkNext()" [tuple]="tuple"></app-check-checker>
   </mat-card>
-  <mat-card *ngIf="tuple.type === 'TEXT_AUDIO'" class="center">
+  <mat-card *ngIf="isRecording()" class="center">
     <div>
       <app-excerpt-from-data-elem-id [dataElementId]="tuple.dataElementId_1"></app-excerpt-from-data-elem-id>
       <br/>
