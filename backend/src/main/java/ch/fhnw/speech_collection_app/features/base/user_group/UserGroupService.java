@@ -101,7 +101,7 @@ public class UserGroupService {
 
     private Long getDomainIdFromSourceId(Long sourceId) {
         return dslContext.select(SOURCE.DOMAIN_ID).from(SOURCE).where(SOURCE.ID.eq(sourceId)).limit(1)
-                .fetchOneInto(Long.class);
+                .fetchOptionalInto(Long.class).orElse(-1L);
     }
 
     public ReturnWrapper postExcerpt(long groupId, Text textDto, DataElement otherDataElement,
@@ -341,6 +341,9 @@ public class UserGroupService {
                 achievementType = AchievementsDependsOn.IMAGE_TEXT_CHECKED;
                 break;
             case TEXT_AUDIO:
+                achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
+                break;
+            case RECORDING:
                 achievementType = AchievementsDependsOn.TEXT_AUDIO_CHECKED;
                 break;
             case TEXT_TEXT:

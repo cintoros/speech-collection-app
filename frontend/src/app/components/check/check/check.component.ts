@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AchievementWrapper } from 'src/app/models/achievement-wrapper';
 import { CheckWrapper } from 'src/app/models/check-wrapper';
-import { DataTuple } from 'src/app/models/data-tuple';
+import { DataTuple, DataTupleType } from 'src/app/models/data-tuple';
 import { NumAchievementsService } from 'src/app/services/num-achievements.service';
 import { environment } from '../../../../environments/environment';
 import { CheckedOccurrence, CheckedOccurrenceLabel } from '../../../models/checked-occurrence';
@@ -60,4 +60,6 @@ export class CheckComponent implements OnInit {
           .subscribe(() => this.checkNext());
     }
   }
+
+  isRecording = () => this.tuple.type === DataTupleType.TEXT_AUDIO || this.tuple.type === DataTupleType.RECORDING;
 }
