@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {OccurrenceMode} from '../../check/check/check.component';
-import {UserGroupService} from '../../../services/user-group.service';
-import {OverviewOccurrence} from './overview-occurrence';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { environment } from '../../../../environments/environment';
+import { UserGroupService } from '../../../services/user-group.service';
+import { OverviewOccurrence } from './overview-occurrence';
+import {OccurrenceMode} from '../../../models/occurrence-mode';
 
 @Component({
   selector: 'app-overview',
@@ -47,11 +47,11 @@ export class OverviewComponent implements OnInit {
 
   play(occurrence: OverviewOccurrence) {
     this.httpClient.get(`${this.baseUrl}occurrence/audio/${occurrence.dataElementId_2}`, {responseType: 'blob'})
-      .subscribe(resp => {
-        this.audioPlayer.pause();
-        this.audioPlayer = new Audio(URL.createObjectURL(resp));
-        this.audioPlayer.play();
-      });
+        .subscribe(resp => {
+          this.audioPlayer.pause();
+          this.audioPlayer = new Audio(URL.createObjectURL(resp));
+          this.audioPlayer.play();
+        });
   }
 
   private getTextAudios = () => this.httpClient.get<OverviewOccurrence[]>(`${this.baseUrl}admin/overview_occurrence`);

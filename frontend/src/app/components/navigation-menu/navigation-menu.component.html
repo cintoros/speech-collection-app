@@ -1,76 +1,37 @@
-<mat-toolbar color="primary" id="navigation-toolbar">
-  <mat-button-toggle (click)="toggleSidenav()"
-    style="position: absolute; height: 32px; border-radius: 50%; width: 32px; top: 8px; background: none; border: none;"
-    title="Navigation menu">
-    <mat-icon style="position: absolute; top: -19px; left: 0; color: white;">
-      menu
-    </mat-icon>
-  </mat-button-toggle>
-  <div style="margin-left: 45px;">
-    <h1 style="float: left;">Speech Collection App</h1>
+<!--TODO why bootstrap 4.4 when we are using 3.4-->
+<!--source: https://getbootstrap.com/docs/4.4/examples/cover/ -->
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand" routerLink="/home">Speech Collection App</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      <ng-container *ngIf="authService.checkAuthenticated()">
+        <a class="nav-link" routerLink="/record">Record</a>
+        <a class="nav-link" routerLink="/check">Check</a>
+        <a class="nav-link" routerLink="/profile">{{this.user?.username}}</a>
+        <a *ngIf="this.user?.gamificationOn" class="nav-link" routerLink="/gamification">
+          Achievements &nbsp;<app-small-medal *ngIf="message > 0" [level]="5"  [withRibons]="true"></app-small-medal>
+        </a>
+      </ng-container>
+    </nav>
   </div>
-  <span *ngIf="!authService.checkAuthenticated() && !router.url.includes('login')"
-    [routerLink]="['/login']" style="position: absolute; right: 30px; cursor: pointer;">
-    Login
-  </span>
-  <ng-container *ngIf="authService.checkAuthenticated()">
-    <app-avatar *ngIf="user" [hover]="'pointer'" [matMenuTriggerFor]="menu"  [username]="this.user.username"
-      style="float: right;"></app-avatar>
-    <mat-menu #menu>
-      <mat-list style="padding: 0;">
-        <mat-list-item [routerLink]="['/profile']">Profile</mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item (click)="authService.logout(true)">Log Out</mat-list-item>
-      </mat-list>
-    </mat-menu>
-  </ng-container>
-</mat-toolbar>
-<mat-sidenav-container id="sidenav-container">
-  <mat-sidenav #sidenav fixedInViewport mode="side">
-    <div>
-      <mat-list>
-        <ng-container *ngIf="authService.checkAuthenticated()">
-          <mat-list-item (click)="redirectToPage('/home')">
-            <mat-icon>home</mat-icon>
-            <span>Home</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/record')">
-            <mat-icon>record_voice_over</mat-icon>
-            <span>Record</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/check')">
-            <mat-icon>check</mat-icon>
-            <span>Check</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/about')" >
-            <mat-icon>contact_mail</mat-icon>
-            <span>About</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/admin/overview')" *ngIf="isGroupAdmin()">
-            <mat-icon>view_list</mat-icon>
-            <span>Overview</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/admin/document_overview')" *ngIf="isGroupAdmin()">
-            <mat-icon>view_list</mat-icon>
-            <span>Document Overview</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/admin/user_group')" *ngIf="isGroupAdmin()">
-            <mat-icon>people</mat-icon>
-            <span>User Group</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/admin/admin')" *ngIf="isAdmin()" >
-            <mat-icon>supervised_user_circle</mat-icon>
-            <span>Admin</span>
-          </mat-list-item>
-          <mat-list-item (click)="redirectToPage('/admin/statistics')" *ngIf="isAdmin()" >
-            <mat-icon>show_chart</mat-icon>
-            <span>Statistics</span>
-          </mat-list-item>
-        </ng-container>
-      </mat-list>
-    </div>
-  </mat-sidenav>
-  <mat-sidenav-content style="margin-top: 45px;">
+</header>
+<div class="container"></div>
+<div class="main">
+  <div class="container">
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</div>
+<footer class="mastfoot mt-auto">
+  <p>
+    <a routerLink="/about">About</a>
+  </p>
+  <ng-container *ngIf="isGroupAdmin()">
+    <a class="admin-links" routerLink="/admin/overview">Check Overview</a>
+    <a class="admin-links" routerLink="/admin/document_overview">Document Overview</a>
+    <a class="admin-links" routerLink="/admin/user_group">User Group</a>
+  </ng-container>
+  <ng-container *ngIf="isAdmin()">
+    <a *ngIf="isAdmin()" class="admin-links" routerLink="/admin/admin">Admin</a>
+    <a *ngIf="isAdmin()" class="admin-links" routerLink="/admin/statistics">Statistics</a>
+  </ng-container>
+</footer>

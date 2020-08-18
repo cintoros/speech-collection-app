@@ -1,11 +1,13 @@
-.big-button {
-  font-size: 2em !important;
+p {
+  font-size: larger;
+  text-align: justify;
 }
 
-.small-logo {
-  height: 4em;
-  vertical-align: top
+.col-sm-6 {
+  margin-bottom: 6rem;
 }
-.cropped {
-  object-fit: cover;
+
+h3 {
+  text-align: left;
+  margin-top: 0;
 }

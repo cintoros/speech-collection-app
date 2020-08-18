@@ -16,15 +16,15 @@ import javax.validation.constraints.Size;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record14;
-import org.jooq.Row14;
+import org.jooq.Record15;
+import org.jooq.Row15;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> {
+public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Record15<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp, Boolean> {
 
-    private static final long serialVersionUID = 1510011383;
+    private static final long serialVersionUID = 485125888;
 
     public void setId(Long value) {
         set(0, value);
@@ -148,6 +148,14 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         return (Timestamp) get(13);
     }
 
+    public void setGamificationOn(Boolean value) {
+        set(14, value);
+    }
+
+    public Boolean getGamificationOn() {
+        return (Boolean) get(14);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -158,17 +166,17 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     // -------------------------------------------------------------------------
-    // Record14 type implementation
+    // Record15 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> fieldsRow() {
-        return (Row14) super.fieldsRow();
+    public Row15<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp, Boolean> fieldsRow() {
+        return (Row15) super.fieldsRow();
     }
 
     @Override
-    public Row14<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp> valuesRow() {
-        return (Row14) super.valuesRow();
+    public Row15<Long, String, String, String, String, String, UserSex, UserLicence, UserAge, Boolean, Long, Boolean, String, Timestamp, Boolean> valuesRow() {
+        return (Row15) super.valuesRow();
     }
 
     @Override
@@ -242,6 +250,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
+    public Field<Boolean> field15() {
+        return User.USER.GAMIFICATION_ON;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -312,6 +325,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
+    public Boolean component15() {
+        return getGamificationOn();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -379,6 +397,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     @Override
     public Timestamp value14() {
         return getLastOnline();
+    }
+
+    @Override
+    public Boolean value15() {
+        return getGamificationOn();
     }
 
     @Override
@@ -466,7 +489,13 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     @Override
-    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, Boolean value12, String value13, Timestamp value14) {
+    public UserRecord value15(Boolean value) {
+        setGamificationOn(value);
+        return this;
+    }
+
+    @Override
+    public UserRecord values(Long value1, String value2, String value3, String value4, String value5, String value6, UserSex value7, UserLicence value8, UserAge value9, Boolean value10, Long value11, Boolean value12, String value13, Timestamp value14, Boolean value15) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -481,6 +510,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         value12(value12);
         value13(value13);
         value14(value14);
+        value15(value15);
         return this;
     }
 
@@ -492,7 +522,7 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         super(User.USER);
     }
 
-    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, Boolean notCh, String zipCode, Timestamp lastOnline) {
+    public UserRecord(Long id, String firstName, String lastName, String email, String username, String password, UserSex sex, UserLicence licence, UserAge age, Boolean enabled, Long dialectId, Boolean notCh, String zipCode, Timestamp lastOnline, Boolean gamificationOn) {
         super(User.USER);
 
         set(0, id);
@@ -509,5 +539,6 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
         set(11, notCh);
         set(12, zipCode);
         set(13, lastOnline);
+        set(14, gamificationOn);
     }
 }

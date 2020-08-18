@@ -1,10 +1,10 @@
+import os
+import re
+import sys
 import wave
 
 import mysql.connector
-import os
-import re
 import spacy
-import sys
 from pydub import AudioSegment
 
 from config import *
@@ -38,10 +38,10 @@ def get_last_insert_id(cursor):
 if __name__ == '__main__':
     command = sys.argv[1]
     connection = mysql.connector.connect(
-        host=host,
-        database=database,
-        user=user,
-        password=password,
+        host=HOST,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD,
     )
     connection.autocommit = False
     cursor = connection.cursor(dictionary=True)
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         if command == "1":
             fileIds = sys.argv[2].split(',')
             for fileId in fileIds:
-                fp = os.path.join(base_dir, 'extracted_text', fileId + ".txt")
+                fp = os.path.join(BASE_DIR, 'extracted_text', fileId + ".txt")
                 sentences = split_to_sentences(open(fp, encoding="utf-8").read())
                 for excerpt in sentences:
                     cursor.execute(
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                 [text_audio_id])
             text_audio = cursor.fetchone()
             audio = text_audio['path_to_raw_file']
-            audio = os.path.join(base_dir, audio)
+            audio = os.path.join(BASE_DIR, audio)
             audio_start = text_audio['audio_start']
             audio_end = text_audio['audio_end']
             duration_seconds = audio_end - audio_start
@@ -87,7 +87,7 @@ if __name__ == '__main__':
                     channels=f_wave.getnchannels(),
                 )
                 audio_segment = audio_segment.set_channels(1)
-                audio_segment.export(os.path.join(base_dir, "text_audio", audio_path_to_file),
+                audio_segment.export(os.path.join(BASE_DIR, "text_audio", audio_path_to_file),
                                      format='flac')
             connection.commit()
         # calculate the duration of all recordings that are not calculated already. this is needed because:
@@ -98,7 +98,7 @@ if __name__ == '__main__':
             cursor.execute("select id,path from audio where duration=0")
             paths = cursor.fetchall()
             for path in paths:
-                seconds = len(AudioSegment.from_file(os.path.join(base_dir, path['path']))) / 1000
+                seconds = len(AudioSegment.from_file(os.path.join(BASE_DIR, path['path']))) / 1000
                 cursor.execute('update audio set duration=%s where audio.id = %s', [seconds, path['id']])
             connection.commit()
     finally:

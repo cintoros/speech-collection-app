@@ -1,11 +1,11 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import WaveSurfer from 'wavesurfer.js';
-import {HttpClient} from '@angular/common/http';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
-import {TextAudioDto} from '../../../../models/text-audio-dto';
-import {environment} from '../../../../../environments/environment';
-import {OverviewOccurrence} from '../overview-occurrence';
-import {UserGroupService} from '../../../../services/user-group.service';
+import { environment } from '../../../../../environments/environment';
+import { TextAudioDto } from '../../../../models/text-audio-dto';
+import { UserGroupService } from '../../../../services/user-group.service';
+import { OverviewOccurrence } from '../overview-occurrence';
 
 @Component({
   selector: 'app-edit-text-audio',

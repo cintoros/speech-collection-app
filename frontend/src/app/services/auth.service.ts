@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {EmailPassword} from '../models/email-password';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {SpringPrincipal} from '../models/spring-principal';
-import {SnackBarService} from './snack-bar.service';
-import {filter} from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { EmailPassword } from '../models/email-password';
+import { SpringPrincipal } from '../models/spring-principal';
+import { SnackBarService } from './snack-bar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -54,11 +54,11 @@ export class AuthService {
     }, () => {
     }, () => {
       this.router.navigate(['/login'])
-        .finally(() => {
-          if (b) {
-            location.reload();
-          }
-        });
+          .finally(() => {
+            if (b) {
+              location.reload();
+            }
+          });
     });
 
   }

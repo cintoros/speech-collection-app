@@ -1,47 +1,29 @@
-#navigation-toolbar {
-  height: 48px;
-  position: fixed;
-  z-index: 2;
+/* Source: https://codepen.io/ViRPo/pen/WNNoRKB */
+
+html {
+  box-sizing: border-box;
 }
 
-#navigation-toolbar div {
-  width: 100%;
-}
-
-#navigation-toolbar div div:first-child {
-  float: left;
-  margin-top: 4px;
-}
-
-#navigation-toolbar div div:first-child mat-icon {
+a {
   cursor: pointer;
 }
 
-#sidenav-container {
-  position: fixed;
-  height: 100%;
-  min-height: 100%;
-  width: 100%;
-  min-width: 100%;
+.main {
+  margin-top: 3em;
 }
 
-#sidenav-container mat-sidenav {
-  width: 200px;
-  margin-top: 48px;
+.admin-links {
+  margin: 1em;
+  margin-bottom: 3em;
 }
 
-#sidenav-container mat-sidenav div {
-  padding: 0 5px 0 5px;
+footer {
+  margin-top: 3em;
 }
 
-mat-list-item {
-  cursor: pointer;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
-mat-list-item span {
-  margin-left: 15px;
-}
-
-mat-sidenav-content {
-  margin-top: 65px;
-}

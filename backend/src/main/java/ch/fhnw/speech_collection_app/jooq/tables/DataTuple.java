@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DataTuple extends TableImpl<DataTupleRecord> {
 
-    private static final long serialVersionUID = 1788346647;
+    private static final long serialVersionUID = 1596686072;
 
     public static final DataTuple DATA_TUPLE = new DataTuple();
 
@@ -47,7 +47,7 @@ public class DataTuple extends TableImpl<DataTupleRecord> {
 
     public final TableField<DataTupleRecord, Long> DATA_ELEMENT_ID_2 = createField(DSL.name("data_element_id_2"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
-    public final TableField<DataTupleRecord, DataTupleType> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(11).nullable(false).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.DataTupleType.class), this, "");
+    public final TableField<DataTupleRecord, DataTupleType> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(11).defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(ch.fhnw.speech_collection_app.jooq.enums.DataTupleType.class), this, "");
 
     public final TableField<DataTupleRecord, Boolean> FINISHED = createField(DSL.name("finished"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 

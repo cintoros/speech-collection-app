@@ -1,11 +1,16 @@
 apply plugin: 'com.moowork.node'
-
 node {
-  version = '12.13.0'
+  version = '14.5.0'
 }
-
-task npmBuild(type: NpmTask) {
-  dependsOn npmInstall
-  args = ['run', 'buildProd']
+task yarnBuildProd(type: YarnTask) {
+  dependsOn yarn
+  args = ['buildProd']
 }
-
+task yarnBuildProd2(type: YarnTask) {
+  dependsOn yarn
+  args = ['buildProd2']
+}
+task yarnBuildProd3(type: YarnTask) {
+  dependsOn yarn
+  args = ['buildProd3']
+}

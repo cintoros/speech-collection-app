@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable} from 'rxjs';
-import {AuthService} from '../services/auth.service';
-import {map} from 'rxjs/operators';
-import {UserGroupRoleRole} from '../models/spring-principal';
-import {UserGroupService} from '../services/user-group.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { UserGroupRoleRole } from '../models/spring-principal';
+import { AuthService } from '../services/auth.service';
+import { UserGroupService } from '../services/user-group.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,6 +4,7 @@
 package ch.fhnw.speech_collection_app.jooq;
 
 
+import ch.fhnw.speech_collection_app.jooq.tables.Achievements;
 import ch.fhnw.speech_collection_app.jooq.tables.Audio;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataElement;
 import ch.fhnw.speech_collection_app.jooq.tables.CheckedDataTuple;
@@ -15,6 +16,7 @@ import ch.fhnw.speech_collection_app.jooq.tables.Image;
 import ch.fhnw.speech_collection_app.jooq.tables.Source;
 import ch.fhnw.speech_collection_app.jooq.tables.Text;
 import ch.fhnw.speech_collection_app.jooq.tables.User;
+import ch.fhnw.speech_collection_app.jooq.tables.UserAchievements;
 import ch.fhnw.speech_collection_app.jooq.tables.UserGroupRole;
 import ch.fhnw.speech_collection_app.jooq.tables.VerificationToken;
 
@@ -30,6 +32,7 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index ACHIEVEMENTS_DOMAIN_ID = Indexes0.ACHIEVEMENTS_DOMAIN_ID;
     public static final Index AUDIO_DATA_ELEMENT_ID = Indexes0.AUDIO_DATA_ELEMENT_ID;
     public static final Index AUDIO_DIALECT_ID = Indexes0.AUDIO_DIALECT_ID;
     public static final Index CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID = Indexes0.CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID;
@@ -51,6 +54,8 @@ public class Indexes {
     public static final Index TEXT_DATA_ELEMENT_ID = Indexes0.TEXT_DATA_ELEMENT_ID;
     public static final Index TEXT_DIALECT_ID = Indexes0.TEXT_DIALECT_ID;
     public static final Index USER_DIALECT_ID = Indexes0.USER_DIALECT_ID;
+    public static final Index USER_ACHIEVEMENTS_ACHIEVEMENTS_ID = Indexes0.USER_ACHIEVEMENTS_ACHIEVEMENTS_ID;
+    public static final Index USER_ACHIEVEMENTS_USER_ID = Indexes0.USER_ACHIEVEMENTS_USER_ID;
     public static final Index USER_GROUP_ROLE_USER_GROUP_ID = Indexes0.USER_GROUP_ROLE_USER_GROUP_ID;
     public static final Index USER_GROUP_ROLE_USER_ID = Indexes0.USER_GROUP_ROLE_USER_ID;
     public static final Index VERIFICATION_TOKEN_USER_ID = Indexes0.VERIFICATION_TOKEN_USER_ID;
@@ -60,6 +65,7 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
+        public static Index ACHIEVEMENTS_DOMAIN_ID = Internal.createIndex("domain_id", Achievements.ACHIEVEMENTS, new OrderField[] { Achievements.ACHIEVEMENTS.DOMAIN_ID }, false);
         public static Index AUDIO_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", Audio.AUDIO, new OrderField[] { Audio.AUDIO.DATA_ELEMENT_ID }, false);
         public static Index AUDIO_DIALECT_ID = Internal.createIndex("dialect_id", Audio.AUDIO, new OrderField[] { Audio.AUDIO.DIALECT_ID }, false);
         public static Index CHECKED_DATA_ELEMENT_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", CheckedDataElement.CHECKED_DATA_ELEMENT, new OrderField[] { CheckedDataElement.CHECKED_DATA_ELEMENT.DATA_ELEMENT_ID }, false);
@@ -81,6 +87,8 @@ public class Indexes {
         public static Index TEXT_DATA_ELEMENT_ID = Internal.createIndex("data_element_id", Text.TEXT, new OrderField[] { Text.TEXT.DATA_ELEMENT_ID }, false);
         public static Index TEXT_DIALECT_ID = Internal.createIndex("dialect_id", Text.TEXT, new OrderField[] { Text.TEXT.DIALECT_ID }, false);
         public static Index USER_DIALECT_ID = Internal.createIndex("dialect_id", User.USER, new OrderField[] { User.USER.DIALECT_ID }, false);
+        public static Index USER_ACHIEVEMENTS_ACHIEVEMENTS_ID = Internal.createIndex("achievements_id", UserAchievements.USER_ACHIEVEMENTS, new OrderField[] { UserAchievements.USER_ACHIEVEMENTS.ACHIEVEMENTS_ID }, false);
+        public static Index USER_ACHIEVEMENTS_USER_ID = Internal.createIndex("user_id", UserAchievements.USER_ACHIEVEMENTS, new OrderField[] { UserAchievements.USER_ACHIEVEMENTS.USER_ID }, false);
         public static Index USER_GROUP_ROLE_USER_GROUP_ID = Internal.createIndex("user_group_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_GROUP_ID }, false);
         public static Index USER_GROUP_ROLE_USER_ID = Internal.createIndex("user_id", UserGroupRole.USER_GROUP_ROLE, new OrderField[] { UserGroupRole.USER_GROUP_ROLE.USER_ID }, false);
         public static Index VERIFICATION_TOKEN_USER_ID = Internal.createIndex("user_id", VerificationToken.VERIFICATION_TOKEN, new OrderField[] { VerificationToken.VERIFICATION_TOKEN.USER_ID }, false);

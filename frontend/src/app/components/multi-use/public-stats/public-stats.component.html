@@ -1,0 +1,22 @@
+<ng-container *ngIf="this.gamificationOn">
+  <div class="col-sm-4">
+    <h3>Next achievement</h3>
+    <p>You can find more achievements in the Achievements section.</p>
+    <app-badge [achievementWrapper]="activeAchievementWrapper"></app-badge>
+  </div>
+  <div class="col-sm-8">
+    <app-map></app-map>
+  </div>
+</ng-container>
+<div class="col-sm-10">
+  <app-bar-chart [results]="single1" [xAxisLabel]="'User'" [yAxisLabel]="'Number of recordings'"
+                 h3="Top 3 Users (recording)"></app-bar-chart>
+</div>
+<div class="col-sm-10">
+  <app-bar-chart [results]="single2" [xAxisLabel]="'User'" [yAxisLabel]="'Number of checked recordings'"
+                 h3="Top 3 Users (checking)"></app-bar-chart>
+</div>
+<div class="col-sm-4">
+  <h4>Public Statistics</h4>
+  <p *ngFor="let count of counts"><strong>{{count.name}}: </strong><i>{{count.value}}</i></p>
+</div>

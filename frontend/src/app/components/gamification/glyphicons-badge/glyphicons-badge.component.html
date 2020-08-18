@@ -1,0 +1,10 @@
+<div [class]="level == 0 ? 'medals-occluded':''" class="medals">
+  <fa-layers>
+    <fa-icon [icon]="['fas', 'circle']" class="{{this.color}}" stackItemSize="1x" transform="left-2"></fa-icon>
+    <fa-icon [icon]="['fas', 'circle']" class={{this.color2}} stackItemSize="1x" transform="shrink-3 left-2">
+    </fa-icon>
+    <fa-icon [icon]="['fas', this.glyph]" class={{this.color}} stackItemSize="1x" transform="left-2 shrink-9 up-1">
+    </fa-icon>
+    <fa-layers-text class={{color3}} content="{{text}}" transform="shrink-14 down-4"></fa-layers-text>
+  </fa-layers>
+</div>

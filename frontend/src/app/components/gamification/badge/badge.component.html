@@ -1,0 +1,20 @@
+<mat-card *ngIf="achievementWrapper">
+  <h3 *ngIf="indexOf===0">Diligent Speaker</h3>
+  <h3 *ngIf="indexOf===1">Diligent Writer</h3>
+  <h3 *ngIf="indexOf===2">Diligent Checker</h3>
+  <ng-container *ngIf="getLevel() > 0">
+    <p *ngIf="indexOf===0">You recorded {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="indexOf===1">You have written {{getLastLevelPoints()}} translations this month.</p>
+    <p *ngIf="indexOf===2">You checked {{getLastLevelPoints()}} tuples this month.</p>
+  </ng-container>
+  <app-glyphicons-badge [glyph]="getGlyph()" [level]="getLevel()"
+                        [text]="achievementWrapper.achievements.name">
+  </app-glyphicons-badge>
+  <div *ngIf="getLevel() < 4">
+    <p>Remaining time: {{getRemainingDays()}} day<span *ngIf="getRemainingDays() > 1">s</span>
+    </p>
+    <p>You get the <span *ngIf="getLevel() > 0">next </span>achievement with {{getNextLevelPoints()}} points. </p>
+    <p> You have until now: {{getPoints()}}</p>
+    <app-progressbar [achievementWrapper]="achievementWrapper"></app-progressbar>
+  </div>
+</mat-card>

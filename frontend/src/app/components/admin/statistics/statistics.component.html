@@ -8,46 +8,14 @@
   </mat-form-field>
 
 </div>
-<mat-grid-list cols="2" rowHeight="fit" style="height: 75%;">
-  <mat-grid-tile>
-    <mat-card style="height: 90%;width: 90%">
-      <mat-card-header><h3>Basic Statistics</h3><br></mat-card-header>
-      <mat-card-content style="height: 70%;">
-        <ngx-charts-line-chart [results]="multi" [showXAxisLabel]="true" [showYAxisLabel]="true"
-                               [xAxisLabel]="'Day'" [xAxis]="true"
-                               [yAxisLabel]="'Count per Day'" [yAxis]="true" legend="true" showRefLabels="true">
-        </ngx-charts-line-chart>
-      </mat-card-content>
-      <p>
-        "checked recording" are for the recordings/tuples i.e. correct/wrong.<br>
-        "checked texts" are for the texts i.e. sentence_error/private
-      </p>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-card style="height: 90%;width: 90%">
-      <mat-card-header><h3>Audio per Date </h3><br></mat-card-header>
-      <mat-card-content style="height: 70%;">
-        <ngx-charts-line-chart [results]="multi2" [showXAxisLabel]="true"
-                               [showYAxisLabel]="true" [xAxisLabel]="'Day'" [xAxis]="true"
-                               [yAxisLabel]="'Audio hours per day'" [yAxis]="true" showRefLabels="true">
-        </ngx-charts-line-chart>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-card style="height: 90%;width: 90%">
-      <mat-card-header><h3>Audio per User </h3><br></mat-card-header>
-      <mat-card-content style="height: 70%;">
-        <ngx-charts-bar-vertical [results]="single1" [showXAxisLabel]="true"
-                                 [showYAxisLabel]="true" [xAxisLabel]="'User'" [xAxis]="true"
-                                 [yAxisLabel]="'Audio hours'" [yAxis]="true">
-        </ngx-charts-bar-vertical>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>
 
-
-
-
+<app-line-chart [results]="multi" [xAxisLabel]="'Day'" [yAxisLabel]="'Count per Day'"
+                h3="Basic Statistics"></app-line-chart>
+<p>
+  "checked recording" are for the recordings/tuples i.e. correct/wrong.<br>
+  "checked texts" are for the texts i.e. sentence_error/private
+</p>
+<app-line-chart [results]="multi2" [xAxisLabel]="'Day'" [yAxisLabel]="'Audio hours per day'"
+                h3="Audio per Date"></app-line-chart>
+<app-bar-chart [results]="single1" [xAxisLabel]="'User'" [yAxisLabel]="'Audio hours'"
+               h3="Audio per User"></app-bar-chart>

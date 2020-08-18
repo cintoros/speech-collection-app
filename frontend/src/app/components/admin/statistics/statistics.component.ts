@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {SeriesValueDto} from './seriesValueDto';
-import {SeriesDto} from './seriesDto';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { environment } from '../../../../environments/environment';
+import { SeriesDto } from './seriesDto';
+import { SeriesValueDto } from './seriesValueDto';
 
 @Component({
   selector: 'app-statistics',
@@ -13,7 +13,7 @@ import {SeriesDto} from './seriesDto';
 export class StatisticsComponent implements OnInit {
   myDate: Date;
   multi: SeriesDto[] = [];
-  multi2: SeriesDto[];
+  multi2: SeriesDto[] = [];
   single1: SeriesValueDto[] = [];
 
   constructor(private httpClient: HttpClient) {

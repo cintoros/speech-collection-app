@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {UserGroup} from '../../../models/user-group';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {UserGroupService} from '../../../services/user-group.service';
-import {Router} from '@angular/router';
-import {UserGroupRoleRole} from '../../../models/spring-principal';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { UserGroupRoleRole } from '../../../models/spring-principal';
+import { UserGroup } from '../../../models/user-group';
+import { UserGroupService } from '../../../services/user-group.service';
 
 @Component({
   selector: 'app-groups-admin',
